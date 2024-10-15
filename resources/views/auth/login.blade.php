@@ -45,9 +45,8 @@
                                             <a class="btn btn-link" href="{{ route('password.request') }}">{{ __('¿Olvidaste tu contraseña?') }}</a>
                                         @endif
                                         <div class="pt-1 mb-4">
-                                            <button class="btn btn-dark btn-lg btn-block" type="submit">Login</button>
+                                            <button class="btn btn-primary btn-lg btn-block" type="submit" style="background-color: #0d6efd; border-color: #0d6efd;">Login</button>
                                         </div>
-                                        
                                         <a href="#" class="small text-muted">Términos de uso</a>
                                         <a href="#" class="small text-muted">Política de privacidad</a>
                                     </form>
@@ -60,3 +59,4 @@
         </div>
     </section>
 </x-guest-layout>
+
