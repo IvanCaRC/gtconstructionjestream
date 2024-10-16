@@ -13,13 +13,11 @@
                             <div class="col-md-6 col-lg-7 d-flex align-items-center">
                                 <div class="card-body p-4 p-lg-5 text-black">
 
-                                    <!-- Mensajes de Error de Validación -->
+                                    <!-- Mensajes de Error de Validación con flash message-->
                                     @if ($errors->any())
                                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
                                             <ul>
-                                                @foreach ($errors->all() as $error)
-                                                    <li>{{ $error }}</li>
-                                                @endforeach
+                                                    <li>{{ 'Verifica correo y/o contraseña'}}</li>
                                             </ul>
                                             <button type="button" class="btn-close" data-bs-dismiss="alert"
                                                 aria-label="Close"></button>
