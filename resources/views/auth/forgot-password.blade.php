@@ -37,7 +37,7 @@
                                 <div class="p-5 w-100">
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-2">¿Olvidaste tu contraseña?</h1>
-                                        <p class="mb-4">Ingresa tu dirección de correo electrónico y espera a que el administrador valide tu cambio.</p>
+                                        <p class="mb-4">Ingresa tu dirección de correo electrónico y espera a recibir un correo para su restablecimiento.</p>
                                     </div>
                                     <form method="POST" action="{{ route('password.email') }}">
                                         @csrf
