@@ -58,7 +58,7 @@
                                                 autofocus autocomplete="username" />
                                             @error('email')
                                                 <div class="invalid-feedback">
-                                                    {{ $message }}
+                                                    {{ 'Verifica tu correo' }}
                                                 </div>
                                             @enderror
                                         </div>
@@ -67,7 +67,7 @@
                                             <input type="password" name="password"
                                                 class="form-control form-control-lg rounded @error('password') is-invalid @enderror"
                                                 placeholder="*****" required autocomplete="current-password" />
-                                            @error('email')
+                                            @error('password')
                                                 <div class="invalid-feedback">
                                                     {{ $message }}
                                                 </div>
