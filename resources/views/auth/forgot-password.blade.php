@@ -1,5 +1,4 @@
 <x-guest-layout>
-
     <head>
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -8,41 +7,27 @@
         <meta name="author" content="">
         <title>Recuperar contraseña</title>
         <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet" type="text/css">
-        <link
-            href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-            rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
         <link href="css/sb-admin-2.min.css" rel="stylesheet">
     </head>
-
     <body class="bg-primary" style="background-color: #0d6efd;">
         <div class="container">
             <div class="row justify-content-center">
                 <div class="col-xl-5 col-lg-12 col-md-9">
                     @if (session('success'))
-                        <div class="alert alert-success alert-dismissible fade show" role="alert">
-                            {{ session('success') }}
+                        <div class="alert alert-success alert-dismissible fade show text-center" role="alert">
+                            {{ 'Solicitud de restablecimiento enviada ¡Revisa tu correo!' }}
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
                     @endif
                     @if (session('error'))
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                        <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
                             {{ session('error') }}
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
-                        </div>
-                    @endif
-
-                    <!-- Mensajes de Error de Validación con flash message-->
-                    @if ($errors->any())
-                        <div class="alert alert-danger alert-dismissible fade show text-center" role="alert">
-                            <ul>
-                                <li>{{ 'Error al generar tu solicitud' }}</li>
-                            </ul>
-                            <button type="button" class="btn-close" data-bs-dismiss="alert"
-                                aria-label="Close"></button>
                         </div>
                     @endif
                     <div class="card o-hidden border-0 shadow-lg my-5">
@@ -52,16 +37,12 @@
                                 <div class="p-5 w-100">
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-2">¿Olvidaste tu contraseña?</h1>
-                                        <p class="mb-4">Ingresa tu dirección de correo electrónico para el
-                                            restablecimiento de tu contraseña.</p>
+                                        <p class="mb-4">Ingresa tu dirección de correo electrónico para el restablecimiento de tu contraseña.</p>
                                     </div>
                                     <form method="POST" action="{{ route('password.email') }}">
                                         @csrf
                                         <div class="form-group mb-3">
-                                            <input type="email" name="email"
-                                                class="form-control rounded @error('email') is-invalid @enderror"
-                                                id="email" placeholder="Tu dirección de correo..."
-                                                :value="old('email')" required autofocus autocomplete="username" />
+                                            <input type="email" name="email" class="form-control rounded @error('email') is-invalid @enderror" id="email" placeholder="Tu dirección de correo..." :value="old('email')" required autofocus autocomplete="username" />
                                         </div>
                                         <button class="btn btn-primary btn-user btn-block mt-3 rounded" type="submit">
                                             Restablecer Contraseña
