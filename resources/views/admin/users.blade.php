@@ -1,7 +1,8 @@
 @extends('layouts.app')
 
-@section('title', 'Users')
+@section('title', 'Uusaios')
+@section('activeAdministracion', 'inactive')
 @section('activeUsuarios', 'active')
 @section('contend')
-<h1>Esta es la imagen del usuarios</h1>
+@livewire('show-users')
 @endsection

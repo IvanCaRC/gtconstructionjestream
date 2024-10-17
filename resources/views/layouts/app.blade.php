@@ -26,6 +26,28 @@
     @livewireStyles
     <!-- Styles -->
     @livewireStyles
+    <style>
+        .img-redonda {
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+        }
+        .table th, .table td {
+            border-top: 1px solid #dee2e6;
+            border-left: none;
+            border-right: none;
+        }
+        .btn-custom {
+            font-size: 1rem;
+            padding: 0.45rem .75rem;
+        }
+        .table-responsive .btn {
+            margin-left: -10%; /* Ajusta el margen para acercar los botones entre sí */
+        }
+    
+    </style>
+    
 </head>
 
 <body class="font-sans antialiased">
@@ -335,7 +357,7 @@
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; Your Website 2019</span>
+                        <span>Copyright &copy; GTConstructions 2019</span>
                     </div>
                 </div>
             </footer>
