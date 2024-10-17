@@ -4,15 +4,15 @@
             style="background-color: #4c72de; color: white;">Agregar Usuario</button>
     </div>
 
-    <x-jet-dialog-modal wire:model="open">
+    <x-dialog-modal wire:model="open">
         <x-slot name='title'>
-
+            Título del Modal
         </x-slot>
         <x-slot name='content'>
-
+            Contenido del Modal
         </x-slot>
         <x-slot name='footer'>
-
+            Pie de página del Modal
         </x-slot>
-    </x-jet-dialog-modal>
+    </x-dialog-modal>
 </div>
