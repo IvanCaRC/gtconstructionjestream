@@ -65,8 +65,13 @@
                             <tbody>
                                 @foreach ($users as $user)
                                     <tr>
-                                        <td><img src="https://via.placeholder.com/50" class="img-redonda"
-                                                alt="Imagen de ejemplo"></td>
+                                        <td class="align-middle">
+                                            @if ($user->image && $user->image !== 'users/')
+                                                <img src="{{ asset('storage/' . $user->image) }}" alt="Imagen" style="width: 50px; height: 50px; border-radius: 50%;">
+                                            @else
+                                                <img src="{{ asset('storage/StockImages/stockUser.png') }}" alt="Imagen por Defecto" style="width: 50px; height: 50px; border-radius: 50%;">
+                                            @endif
+                                        </td>
                                         <td class="align-middle">{{ $user->first_last_name }}
                                             {{ $user->second_last_name }} {{ $user->name }}</td>
                                         <td class="align-middle d-none d-md-table-cell">{{ $user->email }}</td>

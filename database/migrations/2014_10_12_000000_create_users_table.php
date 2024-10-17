@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+            $table->string('image')->nullable();
             $table->string('name');
             $table->string('first_last_name');
             $table->string('second_last_name')->nullable();
@@ -24,6 +25,7 @@ return new class extends Migration
             $table->rememberToken();
             $table->timestamps();        
         });
+        
     }
 
     /**

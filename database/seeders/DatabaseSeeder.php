@@ -6,6 +6,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
+
 class DatabaseSeeder extends Seeder
 {
     /**
@@ -14,8 +15,8 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
 
-    
-
+        Storage::deleteDirectory('users');
+        Storage::makeDirectory('users');
          \App\Models\User::factory(30)->create();
 
 

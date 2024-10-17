@@ -33,21 +33,25 @@
             height: 50px;
             object-fit: cover;
         }
-        .table th, .table td {
+
+        .table th,
+        .table td {
             border-top: 1px solid #dee2e6;
             border-left: none;
             border-right: none;
         }
+
         .btn-custom {
             font-size: 1rem;
             padding: 0.45rem .75rem;
         }
+
         .table-responsive .btn {
-            margin-left: -10%; /* Ajusta el margen para acercar los botones entre sí */
+            margin-left: -10%;
+            /* Ajusta el margen para acercar los botones entre sí */
         }
-    
     </style>
-    
+
 </head>
 
 <body class="font-sans antialiased">
@@ -422,7 +426,7 @@
     <script src="{{ asset('js/demo/chart-pie-demo.js') }}"></script>
 
     @livewireScripts
-    
+   
 
 
 

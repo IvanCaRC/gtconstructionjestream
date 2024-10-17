@@ -21,6 +21,7 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
+            'image' => 'users/' . $this->faker->image('public/storage/users',640,480,null,false),
             'name' => $this->faker->firstName,
             'first_last_name' => $this->faker->lastName,
             'second_last_name' => $this->faker->lastName,

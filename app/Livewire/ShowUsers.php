@@ -12,7 +12,7 @@ class ShowUsers extends Component
     public $sort = 'id';
     public $direction = 'desc';
     protected $listeners = ['userAdded' => 'render'];
-
+    
     public function render()
     {
         $users = User::where('name', 'LIKE', "%$this->searchTerm%")
