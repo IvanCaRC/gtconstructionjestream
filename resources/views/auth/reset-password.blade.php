@@ -29,7 +29,7 @@
                                 <div class="p-5 w-100">
                                     <div class="text-center">
                                         <h1 class="h4 text-gray-900 mb-2">¡Registra tu nueva contraseña!</h1>
-                                        <p class="mb-4">Ingresa tu nueva contraseña de usuario, asegúrate de recordarla</p>
+                                        <p class="mb-4">Ingresa tu nueva contraseña de usuario,¡asegúrate de recordarla!</p>
                                     </div>
                                     <x-validation-errors class="mb-4" />
                                     <form method="POST" action="{{ route('password.update') }}">
