@@ -105,14 +105,6 @@
                 </a>
             </li>
 
-            <!-- Nav Item - Icono de cambio de Contraseña -->
-            <li class="nav-item @yield('activeCambios')">
-                <a class="nav-link" href="usuarios.html">
-                    <i class="fas fa-fw fa-key"></i>
-                    <span>Cambios de contraseña</span>
-                </a>
-            </li>
-
             <!-- Nav Item - Pagina colapsada de departamentos-->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
@@ -130,7 +122,7 @@
                             onmouseout="this.style.backgroundColor='';">Ventas</a>
                         <a class="collapse-item @yield('activeAforgot') text-white" href="forgot-password.html"
                             onmouseover="this.style.backgroundColor='#003366';"
-                            onmouseout="this.style.backgroundColor='';">Finanzas</a>
+                            onmouseout="this.style.backgroundColor='';">Contabilidad</a>
                         <div class="collapse-divider"></div>
                     </div>
                 </div>
@@ -203,7 +195,7 @@
                             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="alertsDropdown">
                                 <h6 class="dropdown-header">
-                                    Alerts Center
+                                    Notificaciones
                                 </h6>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="mr-3">
@@ -212,9 +204,8 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <div class="small text-gray-500">December 12, 2019</div>
-                                        <span class="font-weight-bold">A new monthly report is ready to
-                                            download!</span>
+                                        <div class="small text-gray-500">Diciembre 9, 2024</div>
+                                        <span class="font-weight-bold">¡Tu nuevo informe mensual esta listo!</span>
                                     </div>
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
@@ -224,8 +215,8 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <div class="small text-gray-500">December 7, 2019</div>
-                                        $290.29 has been deposited into your account!
+                                        <div class="small text-gray-500">Diciembre 3, 2024</div>
+                                        Se ha cerrado un proyecto por $200,000!!!
                                     </div>
                                 </a>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
@@ -235,12 +226,11 @@
                                         </div>
                                     </div>
                                     <div>
-                                        <div class="small text-gray-500">December 2, 2019</div>
-                                        Spending Alert: We've noticed unusually high spending for your account.
+                                        <div class="small text-gray-500">Diciembre 3, 2024</div>
+                                        Se a genera un nuevo gasto.
                                     </div>
                                 </a>
-                                <a class="dropdown-item text-center small text-gray-500" href="#">Show All
-                                    Alerts</a>
+                                <a class="dropdown-item text-center small text-gray-500" href="#">Ver todas las notificaciones</a>
                             </div>
                         </li>
 
@@ -250,13 +240,13 @@
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-envelope fa-fw"></i>
                                 <!-- Counter - Messages -->
-                                <span class="badge badge-danger badge-counter">7</span>
+                                <span class="badge badge-danger badge-counter">4</span>
                             </a>
                             <!-- Dropdown - Messages -->
                             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="messagesDropdown">
                                 <h6 class="dropdown-header">
-                                    Message Center
+                                    Mensajes
                                 </h6>
                                 <a class="dropdown-item d-flex align-items-center" href="#">
                                     <div class="dropdown-list-image mr-3">
@@ -306,8 +296,7 @@
                                         <div class="small text-gray-500">Chicken the Dog · 2w</div>
                                     </div>
                                 </a>
-                                <a class="dropdown-item text-center small text-gray-500" href="#">Read More
-                                    Messages</a>
+                                <a class="dropdown-item text-center small text-gray-500" href="#">Ver todos los mensajes</a>
                             </div>
                         </li>
 
@@ -325,21 +314,21 @@
                                 aria-labelledby="userDropdown">
                                 <a class="dropdown-item" href="{{ route('profile.show') }}">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Profile
+                                    Mi perfil
                                 </a>
                                 <a class="dropdown-item" href="#">
                                     <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Settings
+                                    Configuracion
                                 </a>
                                 <a class="dropdown-item" href="#">
                                     <i class="fas fa-list fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Activity Log
+                                    Registro de actividad
                                 </a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#" data-toggle="modal"
                                     data-target="#logoutModal">
                                     <i class="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
-                                    Logout
+                                    Cerrar sesión
                                 </a>
                             </div>
                         </li>
@@ -360,7 +349,7 @@
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; GTConstructions 2019</span>
+                        <span>Copyright &copy; GTConstructions 2025</span>
                     </div>
                 </div>
             </footer>
@@ -383,13 +372,13 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">¿Listo para salir?</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">¿Deseas cerrar tu sesion?</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
                 <div class="modal-body">
-                    Selecciona "Cerrar sesión" a continuación si estás listo para finalizar tu sesión actual.
+                    Selecciona "Cerrar sesión" para finaliza tu sesión en este dispositivo.
                 </div>
                 <div class="modal-footer">
                     <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancelar</button>

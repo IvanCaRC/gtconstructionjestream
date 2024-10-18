@@ -13,6 +13,13 @@ class CreateUser extends Component
     use WithFileUploads;
     public $open = false;
     public $name, $first_last_name, $second_last_name, $email, $number, $status = true, $password, $image;
+    protected $rules= [
+        'name' => 'required',
+        'first_last_name' => 'required',
+        'email' => 'required',
+        'status' => 'required',
+        'password' => 'required'
+    ];
 
     public function render()
     {
@@ -21,6 +28,9 @@ class CreateUser extends Component
 
     public function save()
     {
+
+        $this->validate();
+
         $image = null;
         if ($this->image) {
             $image = $this->image->store('users', 'public');

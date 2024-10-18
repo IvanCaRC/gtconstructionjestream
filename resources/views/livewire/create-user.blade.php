@@ -9,13 +9,12 @@
         </x-slot>
         <x-slot name='content'>
             <form>
-                <label for="name">{{$image}}</label>
+                <label for="name">{{ $image }}</label>
                 <div class="form-group">
 
                     <div class="mb-3 d-flex align-items-center">
 
                         @if ($image)
-                        
                             <img src="{{ $image->temporaryUrl() }}" alt="Imagen"
                                 style="width: 50px; height: 50px; border-radius: 50%; margin-right: 10px;">
                         @else
@@ -23,21 +22,36 @@
                                 style="width: 50px; height: 50px; border-radius: 50%; margin-right: 10px;">
                         @endif
                         <label class="btn btn-primary btn-file">
-                            Elegir archivo <input type="file" wire:model="image" name="image" >
+                            Elegir archivo <input type="file" wire:model="image" name="image">
                         </label>
                     </div>
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-4">
                         <label for="name">Nombre</label>
-                        <input type="text" id="name" class="form-control" wire:model.defer="name">
+                        <input type="text" id="name"
+                            class="form-control @error('name') required-field @enderror" wire:model.defer="name">
+
+                        @error('name')
+                            <span class="error-message">
+                                {{ $message }}
+                            </span>
+                        @enderror
 
                     </div>
 
                     <div class="form-group col-md-4">
                         <label for="first_last_name">Primer Apellido</label>
-                        <input type="text" id="first_last_name" class="form-control"
+                        <input type="text" id="first_last_name"
+                            class="form-control @error('first_last_name') required-field @enderror"
                             wire:model.defer="first_last_name">
+
+                        @error('first_last_name')
+                            <span class="error-message">
+                                {{ $message }}
+                            </span>
+                        @enderror
+
                     </div>
                     <div class="form-group col-md-4">
                         <label for="second_last_name">Segundo Apellido</label>
@@ -47,7 +61,15 @@
                 </div>
                 <div class="form-group">
                     <label for="email">Correo Electrónico</label>
-                    <input type="email" id="email" class="form-control" wire:model.defer="email">
+                    <input type="email" id="email" class="form-control @error('email') required-field @enderror"
+                        wire:model.defer="email">
+
+                    @error('email')
+                        <span class="error-message">
+                            {{ $message }}
+                        </span>
+                    @enderror
+
                 </div>
                 <div class="form-group">
                     <label for="number">Teléfono</label>
@@ -66,12 +88,21 @@
                         <select id="department" class="form-control">
                             <option value="ventas">Ventas</option>
                             <option value="compras">Compras</option>
+                            <option value="finanzas">Finanzas</option>
                         </select>
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="password">Contraseña</label>
-                    <input type="text" id="password" class="form-control" wire:model.defer="password">
+                    <input type="text" id="password"
+                        class="form-control @error('password') required-field @enderror" wire:model.defer="password">
+
+                    @error('password')
+                        <span class="error-message">
+                            {{ $message }}
+                        </span>
+                    @enderror
+
                 </div>
             </form>
         </x-slot>
@@ -110,6 +141,14 @@
             background: white;
             cursor: inherit;
             display: block;
+        }
+
+        .error-message {
+            color: red;
+        }
+
+        .required-field {
+            border-color: red;
         }
     </style>
 

@@ -7,9 +7,9 @@
 
         <!-- Page Heading -->
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
-            <h1 class="h3 mb-0 text-gray-800">Dashboard</h1>
+            <h1 class="h3 mb-0 text-gray-800">Bienvenido de vuelta</h1>
             <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                    class="fas fa-download fa-sm text-white-50"></i> Generate Report</a>
+                    class="fas fa-download fa-sm text-white-50"></i> Generar Reporte</a>
         </div>
 
         <!-- Content Row -->
@@ -22,7 +22,7 @@
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
                                 <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
-                                    Earnings (Monthly)</div>
+                                    Utilidades (Mensuales)</div>
                                 <div class="h5 mb-0 font-weight-bold text-gray-800">$40,000</div>
                             </div>
                             <div class="col-auto">
@@ -40,7 +40,7 @@
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
                                 <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
-                                    Earnings (Annual)</div>
+                                    Utilidades (Anuales)</div>
                                 <div class="h5 mb-0 font-weight-bold text-gray-800">$215,000</div>
                             </div>
                             <div class="col-auto">
@@ -57,11 +57,11 @@
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
-                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Tasks
+                                <div class="text-xs font-weight-bold text-info text-uppercase mb-1">Proyectos
                                 </div>
                                 <div class="row no-gutters align-items-center">
                                     <div class="col-auto">
-                                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">50%</div>
+                                        <div class="h5 mb-0 mr-3 font-weight-bold text-gray-800">30%</div>
                                     </div>
                                     <div class="col">
                                         <div class="progress progress-sm mr-2">
@@ -86,8 +86,8 @@
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
                                 <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
-                                    Pending Requests</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">18</div>
+                                    Pendientes</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">3</div>
                             </div>
                             <div class="col-auto">
                                 <i class="fas fa-comments fa-2x text-gray-300"></i>
@@ -107,7 +107,7 @@
                 <div class="card shadow mb-4">
                     <!-- Card Header - Dropdown -->
                     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                        <h6 class="m-0 font-weight-bold text-primary">Earnings Overview</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">Estado de Ganancias</h6>
                         <div class="dropdown no-arrow">
                             <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -137,7 +137,7 @@
                 <div class="card shadow mb-4">
                     <!-- Card Header - Dropdown -->
                     <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                        <h6 class="m-0 font-weight-bold text-primary">Revenue Sources</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">Estado de Proyectos</h6>
                         <div class="dropdown no-arrow">
                             <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -160,13 +160,13 @@
                         </div>
                         <div class="mt-4 text-center small">
                             <span class="mr-2">
-                                <i class="fas fa-circle text-primary"></i> Direct
+                                <i class="fas fa-circle text-primary"></i> En proceso
                             </span>
                             <span class="mr-2">
-                                <i class="fas fa-circle text-success"></i> Social
+                                <i class="fas fa-circle text-success"></i> Cancelados
                             </span>
                             <span class="mr-2">
-                                <i class="fas fa-circle text-info"></i> Referral
+                                <i class="fas fa-circle text-info"></i> Concretados
                             </span>
                         </div>
                     </div>
@@ -183,30 +183,30 @@
                 <!-- Project Card Example -->
                 <div class="card shadow mb-4">
                     <div class="card-header py-3">
-                        <h6 class="m-0 font-weight-bold text-primary">Projects</h6>
+                        <h6 class="m-0 font-weight-bold text-primary">Proyectos (Porcentaje de Cierre)</h6>
                     </div>
                     <div class="card-body">
-                        <h4 class="small font-weight-bold">Server Migration <span class="float-right">20%</span></h4>
+                        <h4 class="small font-weight-bold">Suministro de Lamina de acero y de PVC <span class="float-right">20%</span></h4>
                         <div class="progress mb-4">
                             <div class="progress-bar bg-danger" role="progressbar" style="width: 20%" aria-valuenow="20"
                                 aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
-                        <h4 class="small font-weight-bold">Sales Tracking <span class="float-right">40%</span></h4>
+                        <h4 class="small font-weight-bold">Montaje de lamina de acero en Granjas Avicolas <span class="float-right">40%</span></h4>
                         <div class="progress mb-4">
                             <div class="progress-bar bg-warning" role="progressbar" style="width: 40%"
                                 aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
-                        <h4 class="small font-weight-bold">Customer Database <span class="float-right">60%</span></h4>
+                        <h4 class="small font-weight-bold">Suministro de Multypanel <span class="float-right">60%</span></h4>
                         <div class="progress mb-4">
                             <div class="progress-bar" role="progressbar" style="width: 60%" aria-valuenow="60"
                                 aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
-                        <h4 class="small font-weight-bold">Payout Details <span class="float-right">80%</span></h4>
+                        <h4 class="small font-weight-bold">Montaje de perfiles de acero para paneles solares <span class="float-right">80%</span></h4>
                         <div class="progress mb-4">
                             <div class="progress-bar bg-info" role="progressbar" style="width: 80%" aria-valuenow="80"
                                 aria-valuemin="0" aria-valuemax="100"></div>
                         </div>
-                        <h4 class="small font-weight-bold">Account Setup <span class="float-right">Complete!</span>
+                        <h4 class="small font-weight-bold">Estructura de perfiles de acero y muros de lamina R-101 <span class="float-right">Complete!</span>
                         </h4>
                         <div class="progress">
                             <div class="progress-bar bg-success" role="progressbar" style="width: 100%"
