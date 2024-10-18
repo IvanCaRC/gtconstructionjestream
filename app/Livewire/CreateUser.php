@@ -52,6 +52,7 @@ class CreateUser extends Component
     }
     public function resetManual() {
         $this->reset('open', 'name', 'first_last_name', 'second_last_name', 'email', 'number', 'status', 'password', 'image');
+        $this->resetValidation();
         $this->dispatch('userAdded');
     }
 }
