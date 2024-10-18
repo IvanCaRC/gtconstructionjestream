@@ -65,13 +65,12 @@ class ShowUsers extends Component
         ]);
 
         $user = User::find($this->userEditId);
-        if ($this->userEdit['image']) {
-            if (is_string($this->userEdit['image'])) {
-                $this->userEdit['image'] = $user->image;
-            } else {
-                $imagePath = $this->userEdit['image']->store('users', 'public');
-                $this->userEdit['image'] = $imagePath;
-            }
+
+        if ($this->userEdit['image'] && $this->userEdit['image']) {
+            $imagePath = $this->userEdit['image']->store('users', 'public');
+            $this->userEdit['image'] = $imagePath;
+        } else {
+            $this->userEdit['image'] = $user->image;
         }
 
         $user->update([
@@ -89,13 +88,13 @@ class ShowUsers extends Component
         $this->dispatch('userAdded');
     }
 
-
-    public function destroy($userId)
-    {
+    public function destroy($userId) {
         $user = User::find($userId);
         $user->delete();
         $this->dispatch('userAdded');
     }
+
+
 
     public function edit($userId)
     {
