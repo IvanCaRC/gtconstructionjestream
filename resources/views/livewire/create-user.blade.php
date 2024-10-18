@@ -9,12 +9,12 @@
         </x-slot>
         <x-slot name='content'>
             <form>
-                <label for="name">{{$image}}</label>
+                <label for="name">Imagen de Usuario</label>
                 <div class="form-group">
 
                     <div class="mb-3 d-flex align-items-center">
 
-                        @if ($image)
+                        @if ($image) 
                         
                             <img src="{{ $image->temporaryUrl() }}" alt="Imagen"
                                 style="width: 50px; height: 50px; border-radius: 50%; margin-right: 10px;">
