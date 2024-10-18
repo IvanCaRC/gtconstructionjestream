@@ -50,4 +50,8 @@ class CreateUser extends Component
         $this->reset('open', 'name', 'first_last_name', 'second_last_name', 'email', 'number', 'status', 'password', 'image');
         $this->dispatch('userAdded');
     }
+    public function resetManual() {
+        $this->reset('open', 'name', 'first_last_name', 'second_last_name', 'email', 'number', 'status', 'password', 'image');
+        $this->dispatch('userAdded');
+    }
 }

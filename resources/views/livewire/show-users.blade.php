@@ -227,7 +227,7 @@
             </form>
         </x-slot>
         <x-slot name='footer'>
-            <button class="btn btn-secondary mr-2 disabled:opacity-50" wire:click="$set('open', false)"
+            <button class="btn btn-secondary mr-2 disabled:opacity-50" wire:click="resetManual"
                 wire:loading.attr="disabled">Cancelar</button>
             <button wire:click="update"class="btn btn-primary disabled:opacity-50"
                 wire:loading.attr="disabled">Actualizar</button>

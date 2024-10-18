@@ -5,6 +5,7 @@ namespace App\Livewire;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use App\Models\User;
+use Illuminate\Support\Facades\DB;
 
 class ShowUsers extends Component
 {
@@ -43,6 +44,7 @@ class ShowUsers extends Component
         $users = User::where('name', 'LIKE', "%$this->searchTerm%")
             ->orWhere('first_last_name', 'LIKE', "%$this->searchTerm%")
             ->orWhere('second_last_name', 'LIKE', "%$this->searchTerm%")
+            ->orWhere(DB::raw("CONCAT(name, ' ', first_last_name, ' ', second_last_name)"), 'LIKE', "%$this->searchTerm%")
             ->orWhere('email', 'LIKE', "%$this->searchTerm%")
             ->orWhere('number', 'LIKE', "%$this->searchTerm%")
             ->orderBy($this->sort, $this->direction)
@@ -93,7 +95,10 @@ class ShowUsers extends Component
         $user->delete();
         $this->dispatch('userAdded');
     }
-
+    public function resetManual() {
+        $this->reset('open', 'name', 'first_last_name', 'second_last_name', 'email', 'number', 'status', 'password', 'image');
+        $this->dispatch('userAdded');
+    }
 
 
     public function edit($userId)
