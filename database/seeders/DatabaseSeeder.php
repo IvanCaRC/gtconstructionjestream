@@ -21,13 +21,13 @@ class DatabaseSeeder extends Seeder
 
 
          \App\Models\User::factory()->create([
-             'name' => 'Miguel Angel',
-             'first_last_name' => 'Gomez',
-             'second_last_name' => 'Romero',
-             'email' => 'MiguelAngelp@gmail.com',
-             'number' => '9516105949',
+             'name' => 'Marisela',
+             'first_last_name' => 'Gonzalez',
+             'second_last_name' => 'Torres',
+             'email' => 'administracion@gtcgroup.com.mx',
+             'number' => '+52 12291750175',
              'status' => true,
-             'password' => Hash::make('miguelangel'),
+             'password' => Hash::make('gtconstructions'),
          ]);
          
     }
