@@ -87,6 +87,12 @@ class ShowUsers extends Component
         ]);
 
         $this->reset('open');
+        
+        $this->dispatch('userAdded');
+    }
+
+    public function resetManual() {
+        $this->reset('open');
         $this->resetValidation();
         $this->dispatch('userAdded');
     }
