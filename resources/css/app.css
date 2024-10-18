@@ -5,8 +5,3 @@
 [x-cloak] {
     display: none;
 }
-
-.required-field {
-    border-color: red;
-    background-color: #ffe6e6; /* Esto agrega un fondo rojo claro para mayor visibilidad */
-}
