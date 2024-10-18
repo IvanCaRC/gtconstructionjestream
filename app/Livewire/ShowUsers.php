@@ -27,6 +27,15 @@ class ShowUsers extends Component
         'password' => '',
     ];
 
+    protected $rules = [
+        'userEdit.name' => 'required',
+        'userEdit.first_last_name' => 'required',
+        'userEdit.email' => 'required|email',
+        'userEdit.status' => 'required',
+        'userEdit.password' => 'required'
+    ];
+
+
     protected $listeners = ['userAdded' => 'render'];
 
     public function render()
@@ -46,13 +55,23 @@ class ShowUsers extends Component
 
     public function update()
     {
-        $user = User::find($this->userEditId);
+        // Validar los datos del formulario primero
+        $this->validate([
+            'userEdit.name' => 'required',
+            'userEdit.first_last_name' => 'required',
+            'userEdit.email' => 'required|email|unique:users,email,' . $this->userEditId,
+            'userEdit.status' => 'required',
+            'userEdit.password' => 'required'
+        ]);
 
-        if ($this->userEdit['image'] && $this->userEdit['image']) {
-            $imagePath = $this->userEdit['image']->store('users', 'public');
-            $this->userEdit['image'] = $imagePath;
-        } else {
-            $this->userEdit['image'] = $user->image;
+        $user = User::find($this->userEditId);
+        if ($this->userEdit['image']) {
+            if (is_string($this->userEdit['image'])) {
+                $this->userEdit['image'] = $user->image;
+            } else {
+                $imagePath = $this->userEdit['image']->store('users', 'public');
+                $this->userEdit['image'] = $imagePath;
+            }
         }
 
         $user->update([
@@ -70,13 +89,13 @@ class ShowUsers extends Component
         $this->dispatch('userAdded');
     }
 
-    public function destroy($userId) {
+
+    public function destroy($userId)
+    {
         $user = User::find($userId);
         $user->delete();
         $this->dispatch('userAdded');
     }
-
-
 
     public function edit($userId)
     {
