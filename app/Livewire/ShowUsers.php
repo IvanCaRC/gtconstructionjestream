@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Livewire;
 
 use Livewire\Component;
@@ -41,15 +42,13 @@ class ShowUsers extends Component
         return view('livewire.show-users', compact('users'));
     }
 
-    public function search()
-    {
-    }
+    public function search() {}
 
     public function update()
     {
         $user = User::find($this->userEditId);
 
-        if ($this->userEdit['image'] && $this->userEdit['image'] ) {
+        if ($this->userEdit['image'] && $this->userEdit['image']) {
             $imagePath = $this->userEdit['image']->store('users', 'public');
             $this->userEdit['image'] = $imagePath;
         } else {
@@ -70,6 +69,14 @@ class ShowUsers extends Component
         $this->reset('open');
         $this->dispatch('userAdded');
     }
+
+    public function destroy($userId) {
+        $user = User::find($userId);
+        $user->delete();
+        $this->dispatch('userAdded');
+    }
+
+
 
     public function edit($userId)
     {

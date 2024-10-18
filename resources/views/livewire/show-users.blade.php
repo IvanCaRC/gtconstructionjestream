@@ -94,7 +94,8 @@
                                                 wire:click="edit({{ $user->id }})"><i
                                                     class="fas fa-edit"></i></button>
                                         </td>
-                                        <td><button class="btn btn-danger btn-custom"><i
+                                        <td><button class="btn btn-danger btn-custom"
+                                            wire:click="destroy({{ $user->id }})"><i
                                                     class="fas fa-trash-alt"></i></button></td>
                                     </tr>
                                 @endforeach
