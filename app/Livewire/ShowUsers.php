@@ -87,6 +87,7 @@ class ShowUsers extends Component
         ]);
 
         $this->reset('open');
+        $this->resetValidation();
         $this->dispatch('userAdded');
     }
 
