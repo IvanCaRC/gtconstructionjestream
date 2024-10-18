@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use App\Models\User;
 use DragonCode\PrettyArray\Services\Formatters\Php;
+use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\WithFileUploads;
 
@@ -33,7 +34,7 @@ class CreateUser extends Component
             'email' => $this->email,
             'number' => $this->number,
             'status' =>  $this->status,
-            'password' => $this->password,
+            'password' => Hash::make($this->password),
         ]);
 
         $this->reset('open', 'name', 'first_last_name', 'second_last_name', 'email', 'number', 'status', 'password', 'image');
