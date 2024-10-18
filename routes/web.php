@@ -31,3 +31,5 @@ Route::middleware([
 
 Route::get('admin/dashboardAdmin', [adminController::class, 'index'])->middleware('auth', 'nocache')->name('admin.dashboardAdmin');
 Route::get('admin/users', [UserController::class, 'index'])->middleware('auth', 'nocache')->name('admin.users');
+
+Route::get('admin/userView/{iduser}', [UserController::class, 'verUsuario'])->middleware('auth', 'nocache')->name('admin.usersView');

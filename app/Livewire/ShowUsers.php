@@ -48,11 +48,16 @@ class ShowUsers extends Component
     {
         $user = User::find($this->userEditId);
 
-        if ($this->userEdit['image'] && $this->userEdit['image']) {
-            $imagePath = $this->userEdit['image']->store('users', 'public');
-            $this->userEdit['image'] = $imagePath;
-        } else {
-            $this->userEdit['image'] = $user->image;
+        if ($this->userEdit['image']) {
+            // Verifica si el valor de imagen es un archivo subido
+            if (is_string($this->userEdit['image'])) {
+                // Si no hay cambios en la imagen, usa la imagen existente
+                $this->userEdit['image'] = $user->image;
+            } else {
+                // Si hay un nuevo archivo, almacénalo
+                $imagePath = $this->userEdit['image']->store('users', 'public');
+                $this->userEdit['image'] = $imagePath;
+            }
         }
 
         $user->update([
@@ -67,12 +72,6 @@ class ShowUsers extends Component
         ]);
 
         $this->reset('open');
-        $this->dispatch('userAdded');
-    }
-
-    public function destroy($userId) {
-        $user = User::find($userId);
-        $user->delete();
         $this->dispatch('userAdded');
     }
 
