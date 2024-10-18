@@ -27,6 +27,15 @@ class ShowUsers extends Component
         'password' => '',
     ];
 
+    protected $rules = [
+        'userEdit.name' => 'required',
+        'userEdit.first_last_name' => 'required',
+        'userEdit.email' => 'required|email',
+        'userEdit.status' => 'required',
+        'userEdit.password' => 'required'
+    ];
+
+
     protected $listeners = ['userAdded' => 'render'];
 
     public function render()
@@ -46,18 +55,22 @@ class ShowUsers extends Component
 
     public function update()
     {
+        // Validar los datos del formulario primero
+        $this->validate([
+            'userEdit.name' => 'required',
+            'userEdit.first_last_name' => 'required',
+            'userEdit.email' => 'required|email|unique:users,email,' . $this->userEditId,
+            'userEdit.status' => 'required',
+            'userEdit.password' => 'required'
+        ]);
+
         $user = User::find($this->userEditId);
 
-        if ($this->userEdit['image']) {
-            // Verifica si el valor de imagen es un archivo subido
-            if (is_string($this->userEdit['image'])) {
-                // Si no hay cambios en la imagen, usa la imagen existente
-                $this->userEdit['image'] = $user->image;
-            } else {
-                // Si hay un nuevo archivo, almacénalo
-                $imagePath = $this->userEdit['image']->store('users', 'public');
-                $this->userEdit['image'] = $imagePath;
-            }
+        if ($this->userEdit['image'] && $this->userEdit['image']) {
+            $imagePath = $this->userEdit['image']->store('users', 'public');
+            $this->userEdit['image'] = $imagePath;
+        } else {
+            $this->userEdit['image'] = $user->image;
         }
 
         $user->update([
@@ -72,6 +85,12 @@ class ShowUsers extends Component
         ]);
 
         $this->reset('open');
+        $this->dispatch('userAdded');
+    }
+
+    public function destroy($userId) {
+        $user = User::find($userId);
+        $user->delete();
         $this->dispatch('userAdded');
     }
 

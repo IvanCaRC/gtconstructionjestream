@@ -1,14 +1,15 @@
 <div>
-    <h1 class="pl-4">Usuarios</h1>
+    <h1 class="pl-4">Usuarios registrados</h1>
     <div class="container-fluid px-4 sm:px-6 lg:px-8 py-12">
         <div class="card">
             <div class="card-body">
                 @livewire('create-user')
+                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
                 <div class="table-responsive">
                     <div class="d-flex justify-content-between mb-3">
                         <!-- Input de búsqueda -->
                         <input type="text" class="form-control mr-2" id="searchInput" wire:model='searchTerm'
-                            wire:keydown='search' placeholder="Buscar usuarios...">
+                            wire:keydown='search' placeholder="Buscar usuario...">
                     </div>
 
                     @if ($users->count() > 0)
@@ -95,8 +96,35 @@
                                                     class="fas fa-edit"></i></button>
                                         </td>
                                         <td><button class="btn btn-danger btn-custom"
-                                            wire:click="destroy({{ $user->id }})"><i
-                                                    class="fas fa-trash-alt"></i></button></td>
+                                                onclick="confirmDeletion({{ $user->id }}, '{{ $user->name }}', '{{ $user->first_last_name }}')">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+
+                                            <script>
+                                                function confirmDeletion(userId, userName, userFirstLastName) {
+                                                    Swal.fire({
+                                                        title: `¿Estás seguro de que deseas eliminar a ${userName} ${userFirstLastName}?`,
+                                                        text: "¡No podrás revertir esto!",
+                                                        icon: 'warning',
+                                                        showCancelButton: true,
+                                                        confirmButtonColor: '#d33',
+                                                        cancelButtonColor: '#3085d6',
+                                                        confirmButtonText: 'Sí, eliminar',
+                                                        cancelButtonText: 'Cancelar'
+                                                    }).then((result) => {
+                                                        if (result.isConfirmed) {
+                                                            @this.call('destroy', userId);
+                                                            Swal.fire(
+                                                                'Eliminado!',
+                                                                `${userName} ${userFirstLastName} ha sido eliminado.`,
+                                                                'success'
+                                                            )
+                                                        }
+                                                    })
+                                                }
+                                            </script>
+
+                                        </td>
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -145,14 +173,21 @@
                 <div class="form-row">
                     <div class="form-group col-md-4">
                         <label for="name">Nombre</label>
-                        <input type="text" id="name" class="form-control" wire:model.defer="userEdit.name">
-
+                        <input type="text" id="name"
+                            class="form-control @error('userEdit.name') is-invalid @enderror"
+                            wire:model.defer="userEdit.name">
+                        @error('userEdit.name')
+                            <span class="invalid-feedback">{{ 'Este campo es obligatorio' }}</span>
+                        @enderror
                     </div>
 
                     <div class="form-group col-md-4">
                         <label for="first_last_name">Primer Apellido</label>
-                        <input type="text" id="first_last_name" class="form-control"
+                        <input type="text" id="first_last_name" class="form-control @error('userEdit.first_last_name') is-invalid @enderror"
                             wire:model.defer="userEdit.first_last_name">
+                        @error('userEdit.first_last_name')
+                            <span class="invalid-feedback">{{ 'Este campo es obligatorio' }}</span>
+                        @enderror 
                     </div>
                     <div class="form-group col-md-4">
                         <label for="second_last_name">Segundo Apellido</label>
@@ -162,7 +197,10 @@
                 </div>
                 <div class="form-group">
                     <label for="email">Correo Electrónico</label>
-                    <input type="email" id="email" class="form-control" wire:model.defer="userEdit.email">
+                    <input type="email" id="email" class="form-control @error('userEdit.email') is-invalid @enderror" wire:model.defer="userEdit.email">
+                    @error('userEdit.email')
+                            <span class="invalid-feedback">{{ $message }}</span>
+                        @enderror 
                 </div>
                 <div class="form-group">
                     <label for="number">Teléfono</label>
@@ -181,6 +219,7 @@
                         <select id="department" class="form-control">
                             <option value="ventas">Ventas</option>
                             <option value="compras">Compras</option>
+                            <option value="finanzas">Finanzas</option>
                         </select>
                     </div>
                 </div>

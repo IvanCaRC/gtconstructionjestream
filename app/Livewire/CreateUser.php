@@ -16,7 +16,7 @@ class CreateUser extends Component
     protected $rules= [
         'name' => 'required',
         'first_last_name' => 'required',
-        'email' => 'required',
+        'email' => 'required|email|unique:users,email',
         'status' => 'required',
         'password' => 'required'
     ];

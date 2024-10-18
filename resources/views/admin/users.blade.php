@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Uusaios')
+@section('title', 'Usuarios')
 @section('activeAdministracion', 'inactive')
 @section('activeUsuarios', 'active')
 @section('contend')
