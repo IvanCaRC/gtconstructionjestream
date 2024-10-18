@@ -4,7 +4,7 @@
         <div class="card">
             <div class="card-body">
                 @livewire('create-user')
-                <div class="table-responsive">                    
+                <div class="table-responsive">
                     <div class="d-flex justify-content-between mb-3">
                         <!-- Input de búsqueda -->
                         <input type="text" class="form-control mr-2" id="searchInput" wire:model='searchTerm'
@@ -67,9 +67,12 @@
                                     <tr>
                                         <td class="align-middle">
                                             @if ($user->image && $user->image !== 'users/')
-                                                <img src="{{ asset('storage/' . $user->image) }}" alt="Imagen" style="width: 50px; height: 50px; border-radius: 50%;">
+                                                <img src="{{ asset('storage/' . $user->image) }}" alt="Imagen"
+                                                    style="width: 50px; height: 50px; border-radius: 50%;">
                                             @else
-                                                <img src="{{ asset('storage/StockImages/stockUser.png') }}" alt="Imagen por Defecto" style="width: 50px; height: 50px; border-radius: 50%;">
+                                                <img src="{{ asset('storage/StockImages/stockUser.png') }}"
+                                                    alt="Imagen por Defecto"
+                                                    style="width: 50px; height: 50px; border-radius: 50%;">
                                             @endif
                                         </td>
                                         <td class="align-middle">{{ $user->first_last_name }}
@@ -84,10 +87,13 @@
                                             @endif
                                         </td>
                                         <td>Ventas</td>
-                                        <td><button class="btn btn-info btn-custom"><i class="fas fa-eye"></i></button>
+                                        <td> <button class="btn btn-info btn-custom"><i class="fas fa-eye"></i></button>
                                         </td>
-                                        <td><button class="btn btn-primary btn-custom"><i
-                                                    class="fas fa-edit"></i></button></td>
+                                        <td>
+                                            <button class="btn btn-primary btn-custom"
+                                                wire:click="edit({{ $user->id }})"><i
+                                                    class="fas fa-edit"></i></button>
+                                        </td>
                                         <td><button class="btn btn-danger btn-custom"><i
                                                     class="fas fa-trash-alt"></i></button></td>
                                     </tr>
@@ -104,5 +110,88 @@
             </div>
         </div>
     </div>
+
+    <x-dialog-modal wire:model="open">
+        <x-slot name='title'>
+            Editar Usuario
+        </x-slot>
+        <x-slot name='content'>
+            <form>
+                <label for="name">Imagen de usuario</label>
+                <div class="form-group">
+                    <div class="mb-3 d-flex align-items-center">
+                        @if ($userEdit['image'] && $userEdit['image'] !== 'users/')
+                            <img src="{{ asset('storage/' . $userEdit['image']) }}" alt="Imagen"
+                                style="width: 50px; height: 50px; border-radius: 50%; margin-right: 15px;">
+                        @else
+                            <img src="{{ asset('storage/StockImages/stockUser.png') }}" alt="Imagen por Defecto"
+                                style="width: 50px; height: 50px; border-radius: 50%; margin-right: 15px;">
+                        @endif
+                        <label class="btn btn-primary btn-file">
+                            Elegir archivo <input type="file" wire:model="userEdit.image" name="image">
+                        </label>
+                    </div>
+
+                    @if ($userEdit['image'] && $userEdit['image'] instanceof \Livewire\TemporaryUploadedFile)
+                        <div class="mt-3">
+                            <img src="{{ $userEdit['image']->temporaryUrl() }}" alt="Nueva Imagen"
+                                style="width: 50px; height: 50px; border-radius: 50%;">
+                        </div>
+                    @endif
+                </div>
+
+
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="name">Nombre</label>
+                        <input type="text" id="name" class="form-control" wire:model.defer="userEdit.name">
+
+                    </div>
+
+                    <div class="form-group col-md-4">
+                        <label for="first_last_name">Primer Apellido</label>
+                        <input type="text" id="first_last_name" class="form-control"
+                            wire:model.defer="userEdit.first_last_name">
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="second_last_name">Segundo Apellido</label>
+                        <input type="text" id="second_last_name" class="form-control"
+                            wire:model.defer="userEdit.second_last_name">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="email">Correo Electrónico</label>
+                    <input type="email" id="email" class="form-control" wire:model.defer="userEdit.email">
+                </div>
+                <div class="form-group">
+                    <label for="number">Teléfono</label>
+                    <input type="text" id="number" class="form-control" wire:model.defer="userEdit.number">
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="status">Estado</label>
+                        <select id="status" class="form-control" wire:model.defer="userEdit.status">
+                            <option value="1">Activo</option>
+                            <option value="0">Inactivo</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="department">Departamento</label>
+                        <select id="department" class="form-control">
+                            <option value="ventas">Ventas</option>
+                            <option value="compras">Compras</option>
+                        </select>
+                    </div>
+                </div>
+
+            </form>
+        </x-slot>
+        <x-slot name='footer'>
+            <button class="btn btn-secondary mr-2 disabled:opacity-50" wire:click="$set('open', false)"
+                wire:loading.attr="disabled">Cancelar</button>
+            <button wire:click="update"class="btn btn-primary disabled:opacity-50"
+                wire:loading.attr="disabled">Actualizar</button>
+        </x-slot>
+    </x-dialog-modal>
 
 </div>
