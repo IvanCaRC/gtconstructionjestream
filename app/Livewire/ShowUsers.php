@@ -86,17 +86,13 @@ class ShowUsers extends Component
             'image' => $this->userEdit['image'],
         ]);
 
-        $this->reset('open', 'name', 'first_last_name', 'second_last_name', 'email', 'number', 'status', 'password', 'image');
+        $this->reset('open');
         $this->dispatch('userAdded');
     }
 
     public function destroy($userId) {
         $user = User::find($userId);
         $user->delete();
-        $this->dispatch('userAdded');
-    }
-    public function resetManual() {
-        $this->reset('open', 'name', 'first_last_name', 'second_last_name', 'email', 'number', 'status', 'password', 'image');
         $this->dispatch('userAdded');
     }
 
