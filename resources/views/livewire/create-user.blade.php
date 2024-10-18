@@ -9,7 +9,7 @@
         </x-slot>
         <x-slot name='content'>
             <form>
-                <label for="name">{{$image}}</label>
+                <label for="name">Imagen de perfil</label>
                 <div class="form-group">
 
                     <div class="mb-3 d-flex align-items-center">
