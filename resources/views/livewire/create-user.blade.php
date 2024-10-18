@@ -9,12 +9,13 @@
         </x-slot>
         <x-slot name='content'>
             <form>
-                <label for="name">Imagen de usuario</label>
+                <label for="name">{{$image}}</label>
                 <div class="form-group">
 
                     <div class="mb-3 d-flex align-items-center">
 
                         @if ($image)
+                        
                             <img src="{{ $image->temporaryUrl() }}" alt="Imagen"
                                 style="width: 50px; height: 50px; border-radius: 50%; margin-right: 10px;">
                         @else
@@ -22,7 +23,7 @@
                                 style="width: 50px; height: 50px; border-radius: 50%; margin-right: 10px;">
                         @endif
                         <label class="btn btn-primary btn-file">
-                            Elegir archivo <input type="file" id="imageInput" name="image" style="display: none;" wire:model="image">
+                            Elegir archivo <input type="file" wire:model="image" name="image" >
                         </label>
                     </div>
                 </div>
