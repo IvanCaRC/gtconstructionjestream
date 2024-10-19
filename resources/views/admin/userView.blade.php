@@ -4,5 +4,5 @@
 @section('activeAdministracion', 'inactive')
 @section('activeUsuarios', 'active')
 @section('contend')
-@livewire('view-user')
+@livewire('view-user', ['iduser' => $iduser])
 @endsection

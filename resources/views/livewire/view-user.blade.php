@@ -1,6 +1,5 @@
 <div>
-
-    <div class="px-10 mt-5">
+    <div class="px-10">
         <div class="row">
             <div class="col-md-8">
                 <div class="card">
@@ -9,27 +8,36 @@
                     </div>
                     <div class="card-body d-flex">
                         <div class="mr-3 text-center">
-                            <img src="https://picsum.photos/150" alt="Imagen del Usuario" class="rounded-circle img-fluid">
+                            @if ($user->image && $user->image !== 'users/')
+                                <img src="{{ asset('storage/' . $user->image) }}" alt="Imagen del Usuario"
+                                    class="rounded-circle img-fluid" style="width: 200px; height: 200px;">
+                            @else
+                                <img src="{{ asset('storage/StockImages/stockUser.png') }}" alt="Imagen del Usuario"
+                                    class="rounded-circle img-fluid" style="width: 200px; height: 200px;">
+                            @endif
+
                         </div>
                         <div class="pl-3">
-                            <h1 class="mt-2">Juan Pérez Gómez</h1>
-                            <a href="#" class="d-block mb-3">Editar perfil</a>
-                            <h5 class="card-title mt-4">Rol: Administrador</h5>
-                            <h5 class="card-title mt-3">Estado: Activo</h5>
-                            <h5 class="card-title mt-3">Correo: juan.perez@example.com</h5>
-                            <h5 class="card-title mt-3">Número Telefónico: +52 123 456 7890</h5>
+                            <h1 class="mt-2">{{ $user->name }} {{ $user->first_last_name }}
+                                {{ $user->second_last_name }}</h1>
+                            <a href="#" class="d-block mb-3" wire:click="edit({{ $user->id }})">Editar
+                                perfil</a>
+                            <h5 class="card-title mt-4">Rol: {{ $user->role ?? 'Por definir' }}</h5>
+                            <h5 class="card-title mt-3">Estado: {{ $user->status == 1 ? 'Activo' : 'Inactivo' }}</h5>
+                            <h5 class="card-title mt-3">Correo: {{ $user->email ?? '' }}</h5>
+                            <h5 class="card-title mt-3">Número Telefónico: {{ $user->number ?? '' }}</h5>
                         </div>
                     </div>
                     <div class="card-footer text-right">
-                        <a href="#" class="text-danger">Eliminar usuario</a>
+                        <a href="#" class="text-danger" wire:click="destroy({{$user->id}})">Eliminar usuario</a>
                     </div>
                 </div>
+                
             </div>
-
             <!-- Columna adicional para las tarjetas -->
             <div class="col-md-4">
                 <!-- Earnings (Monthly) Card Example -->
-                <div class="card border-left-primary shadow h-25 py-2 mb-2" style="width: 18rem;">
+                <div class="card border-left-primary shadow mb-3" style="min-height: 100px;">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
@@ -43,7 +51,7 @@
                     </div>
                 </div>
                 <!-- Earnings (Annual) Card Example -->
-                <div class="card border-left-success shadow h-25 py-2 mb-2" style="width: 18rem;">
+                <div class="card border-left-success shadow mb-3" style="min-height: 100px;">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
@@ -57,7 +65,7 @@
                     </div>
                 </div>
                 <!-- Projects Card Example -->
-                <div class="card border-left-info shadow h-25 py-2 mb-2" style="width: 18rem;">
+                <div class="card border-left-info shadow mb-3" style="min-height: 100px;">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
@@ -80,7 +88,7 @@
                     </div>
                 </div>
                 <!-- Pending Requests Card Example -->
-                <div class="card border-left-warning shadow h-25 py-2 mb-2" style="width: 18rem;">
+                <div class="card border-left-warning shadow mb-3" style="min-height: 100px;">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
@@ -93,14 +101,171 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>
         </div>
+        <div class="row">
+
+            <!-- Area Chart -->
+            <div class="col-xl-8 col-lg-7">
+                <div class="card shadow mb-4">
+                    <!-- Card Header - Dropdown -->
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-primary">Estado de Ganancias</h6>
+                        <div class="dropdown no-arrow">
+                            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                                aria-labelledby="dropdownMenuLink">
+                                <div class="dropdown-header">Dropdown Header:</div>
+                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Card Body -->
+                    <div class="card-body">
+                        <div class="chart-area">
+                            <canvas id="myAreaChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pie Chart -->
+            <div class="col-xl-4 col-lg-5">
+                <div class="card shadow mb-4">
+                    <!-- Card Header - Dropdown -->
+                    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+                        <h6 class="m-0 font-weight-bold text-primary">Estado de Proyectos</h6>
+                        <div class="dropdown no-arrow">
+                            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
+                                aria-labelledby="dropdownMenuLink">
+                                <div class="dropdown-header">Dropdown Header:</div>
+                                <a class="dropdown-item" href="#">Action</a>
+                                <a class="dropdown-item" href="#">Another action</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#">Something else here</a>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Card Body -->
+                    <div class="card-body">
+                        <div class="chart-pie pt-4 pb-2">
+                            <canvas id="myPieChart"></canvas>
+                        </div>
+                        <div class="mt-4 text-center small">
+                            <span class="mr-2">
+                                <i class="fas fa-circle text-primary"></i> En proceso
+                            </span>
+                            <span class="mr-2">
+                                <i class="fas fa-circle text-success"></i> Cancelados
+                            </span>
+                            <span class="mr-2">
+                                <i class="fas fa-circle text-info"></i> Concretados
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+    
+    <x-dialog-modal wire:model="open">
+        <x-slot name='title'>
+            Editar Usuario
+        </x-slot>
+        <x-slot name='content'>
+            <form>
+                <label for="name">Imagen de usuario</label>
+                <div class="form-group">
+                    <div class="mb-3 d-flex align-items-center">
+                        <img src="{{ asset('storage/StockImages/stockUser.png') }}" alt="Imagen por Defecto"
+                            style="width: 50px; height: 50px; border-radius: 50%; margin-right: 15px;">
+
+                            <label class="btn btn-primary">
+                                Elegir archivo 
+                                <input type="file" wire:model="userEdit.image" name="image" style="display: none;">
+                            </label>
+                            
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="name">Nombre</label>
+                        <input type="text" id="name"
+                            class="form-control @error('userEdit.name') is-invalid @enderror"
+                            wire:model.defer="userEdit.name">
+                        @error('userEdit.name')
+                            <span class="invalid-feedback">{{ 'Este campo es obligatorio' }}</span>
+                        @enderror
+                    </div>
+
+                    <div class="form-group col-md-4">
+                        <label for="first_last_name">Primer Apellido</label>
+                        <input type="text" id="first_last_name"
+                            class="form-control @error('userEdit.first_last_name') is-invalid @enderror"
+                            wire:model.defer="userEdit.first_last_name">
+                        @error('userEdit.first_last_name')
+                            <span class="invalid-feedback">{{ 'Este campo es obligatorio' }}</span>
+                        @enderror
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="second_last_name">Segundo Apellido</label>
+                        <input type="text" id="second_last_name" class="form-control"
+                            wire:model.defer="userEdit.second_last_name">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="email">Correo Electrónico</label>
+                    <input type="email" id="email"
+                        class="form-control @error('userEdit.email') is-invalid @enderror"
+                        wire:model.defer="userEdit.email">
+                    @error('userEdit.email')
+                        <span class="invalid-feedback">{{ $message }}</span>
+                    @enderror
+                </div>
+                <div class="form-group">
+                    <label for="number">Teléfono</label>
+                    <input type="text" id="number" class="form-control" wire:model.defer="userEdit.number">
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-6">
+                        <label for="status">Estado</label>
+                        <select id="status" class="form-control" wire:model.defer="userEdit.status">
+                            <option value="1">Activo</option>
+                            <option value="0">Inactivo</option>
+                        </select>
+                    </div>
+                    <div class="form-group col-md-6">
+                        <label for="department">Departamento</label>
+                        <select id="department" class="form-control">
+                            <option value="ventas">Ventas</option>
+                            <option value="compras">Compras</option>
+                            <option value="finanzas">Finanzas</option>
+                        </select>
+                    </div>
+                </div>
+
+            </form>
+        </x-slot>
+        <x-slot name='footer'>
+            <button class="btn btn-secondary mr-2 disabled:opacity-50" wire:click="$set('open',false)"
+                wire:loading.attr="disabled">Cancelar</button>
+            <button wire:click="update"class="btn btn-primary disabled:opacity-50"
+                wire:loading.attr="disabled">Actualizar</button>
+        </x-slot>
+    </x-dialog-modal>
 
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
-
 </div>
-

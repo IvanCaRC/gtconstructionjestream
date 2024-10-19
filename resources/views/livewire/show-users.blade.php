@@ -88,8 +88,12 @@
                                             @endif
                                         </td>
                                         <td>Ventas</td>
-                                        <td> <button class="btn btn-info btn-custom"><i class="fas fa-eye"></i></button>
+                                        <td>
+                                            <button class="btn btn-info btn-custom" wire:click="viewUser({{ $user->id }})">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
                                         </td>
+                                        
                                         <td>
                                             <button class="btn btn-primary btn-custom"
                                                 wire:click="edit({{ $user->id }})"><i

@@ -12,9 +12,10 @@ class ShowUsers extends Component
     use WithFileUploads;
 
     public $searchTerm = '';
-    public $open = false;
+   
     public $sort = 'id';
     public $direction = 'desc';
+    public $open = false;
     public $userEditId = '';
     public $userEdit = [
         'id' => '',
@@ -36,6 +37,11 @@ class ShowUsers extends Component
         'userEdit.password' => 'required'
     ];
 
+
+    public function viewUser($userId)
+{
+    return redirect()->route('admin.usersView', ['iduser' => $userId]);
+}
 
     protected $listeners = ['userAdded' => 'render'];
 

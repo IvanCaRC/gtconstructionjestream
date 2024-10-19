@@ -11,10 +11,8 @@ class UserController extends Controller
         // Lógica para mostrar los usuarios
         return view('admin.users');
     }
-    public function verUsuario($idcurso)
+    public function verUsuario($iduser)
     {
-        // Lógica para mostrar los usuarios
-        
-        return view('admin.userView');
+        return view('admin.userView', ['iduser' => $iduser]);
     }
 }
