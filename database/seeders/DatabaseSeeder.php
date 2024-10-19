@@ -17,18 +17,19 @@ class DatabaseSeeder extends Seeder
 
         Storage::deleteDirectory('users');
         Storage::makeDirectory('users');
-         \App\Models\User::factory(30)->create();
+         \App\Models\User::factory(3)->create();
 
+        $this->call(RoleSeeder::class);
 
          \App\Models\User::factory()->create([
-             'name' => 'Miguel Angel',
-             'first_last_name' => 'Gomez',
-             'second_last_name' => 'Romero',
-             'email' => 'MiguelAngelp@gmail.com',
-             'number' => '9516105949',
+             'name' => 'Marisela',
+             'first_last_name' => 'Gonzalez',
+             'second_last_name' => 'Torres',
+             'email' => 'administracion@gtcgroup.com.mx',
+             'number' => '+52 12291750175',
              'status' => true,
-             'password' => Hash::make('miguelangel'),
-         ]);
+             'password' => Hash::make('gtconstructions'),
+         ])->assignRole('Administrador');
          
     }
 }
