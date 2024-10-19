@@ -17,8 +17,9 @@ class DatabaseSeeder extends Seeder
 
         Storage::deleteDirectory('users');
         Storage::makeDirectory('users');
-         \App\Models\User::factory(30)->create();
+         \App\Models\User::factory(3)->create();
 
+        $this->call(RoleSeeder::class);
 
          \App\Models\User::factory()->create([
              'name' => 'Marisela',
@@ -28,7 +29,7 @@ class DatabaseSeeder extends Seeder
              'number' => '+52 12291750175',
              'status' => true,
              'password' => Hash::make('gtconstructions'),
-         ]);
+         ])->assignRole('Administrador');
          
     }
 }
