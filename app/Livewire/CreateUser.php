@@ -3,17 +3,22 @@
 namespace App\Livewire;
 
 use App\Models\User;
-use DragonCode\PrettyArray\Services\Formatters\Php;
 use Illuminate\Support\Facades\Hash;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\WithFileUploads;
+use Spatie\Permission\Models\Role;
 
 class CreateUser extends Component
 {
     use WithFileUploads;
+
     public $open = false;
     public $name, $first_last_name, $second_last_name, $email, $number, $status = true, $password, $image;
-    protected $rules= [
+    public $role; // Agregar esta línea
+    public $roles;
+
+    protected $rules = [
+        'role' => 'required', 
         'name' => 'required',
         'first_last_name' => 'required',
         'email' => 'required|email|unique:users,email',
@@ -23,12 +28,13 @@ class CreateUser extends Component
 
     public function render()
     {
-        return view('livewire.create-user');
+        $this->role = '';
+        $this->roles = Role::where('id', '!=', 1)->get(); // Excluir rol de Administrador
+        return view('livewire.create-user', ['roles' => $this->roles]);
     }
 
     public function save()
     {
-
         $this->validate();
 
         $image = null;
@@ -36,23 +42,29 @@ class CreateUser extends Component
             $image = $this->image->store('users', 'public');
         }
 
-        User::create([
+        $user = User::create([
             'image' => $image,
             'name' => $this->name,
             'first_last_name' => $this->first_last_name,
             'second_last_name' => $this->second_last_name,
             'email' => $this->email,
             'number' => $this->number,
-            'status' =>  $this->status,
+            'status' => $this->status,
             'password' => Hash::make($this->password),
         ]);
 
-        $this->reset('open', 'name', 'first_last_name', 'second_last_name', 'email', 'number', 'status', 'password', 'image');
+        $user->assignRole($this->role); // Asignar el rol al usuario
+
+        session()->flash('message', 'Usuario creado con éxito.');
+        $this->reset('open', 'name', 'first_last_name', 'second_last_name', 'email', 'number', 'status', 'password', 'image', 'role');
         $this->dispatch('userAdded');
     }
-    public function resetManual() {
-        $this->reset('open', 'name', 'first_last_name', 'second_last_name', 'email', 'number', 'status', 'password', 'image');
+
+    public function resetManual()
+    {
+        $this->reset('open', 'name', 'first_last_name', 'second_last_name', 'email', 'number', 'status', 'password', 'image', 'role');
         $this->resetValidation();
         $this->dispatch('userAdded');
     }
 }
+

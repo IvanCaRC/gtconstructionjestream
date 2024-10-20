@@ -15,7 +15,6 @@
                     <div class="mb-3 d-flex align-items-center">
 
                         @if ($image)
-                        
                             <img src="{{ $image->temporaryUrl() }}" alt="Imagen"
                                 style="width: 50px; height: 50px; border-radius: 50%; margin-right: 10px;">
                         @else
@@ -86,11 +85,16 @@
                     </div>
                     <div class="form-group col-md-6">
                         <label for="department">Departamento</label>
-                        <select id="department" class="form-control">
-                            <option value="ventas">Ventas</option>
-                            <option value="compras">Compras</option>
-                            <option value="finanzas">Finanzas</option>
+                        <select id="role" class="form-control @error('role') required-field @enderror"
+                            wire:model.defer="role">
+                            <option value="" disabled selected>Asigne rol</option>
+                            @foreach ($roles as $role)
+                                <option value="{{ $role->name }}">{{ $role->name }}</option>
+                            @endforeach
                         </select>
+                        @error('role')
+                            <span class="error-message">{{ $message }}</span>
+                        @enderror
                     </div>
                 </div>
                 <div class="form-group">
