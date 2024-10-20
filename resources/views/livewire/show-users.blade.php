@@ -115,7 +115,7 @@
                                                         cancelButtonColor: '#3085d6',
                                                         confirmButtonText: 'Sí, eliminar',
                                                         cancelButtonText: 'Cancelar'
-                                                    }).then((result) => {
+                                                    }).then((result) => {ñ
                                                         if (result.isConfirmed) {
                                                             @this.call('destroy', userId);
                                                             Swal.fire(
