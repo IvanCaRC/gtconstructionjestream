@@ -24,22 +24,24 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td class="align-middle">Administrador</td>
-                                <td class="align-middle d-none d-md-table-cell">Se encarga de administrar el usuario
-                                </td>
-                                <td>
-                                    <button class="btn btn-info btn-sm" style="margin-left: 10px;">
-                                        <!-- Añadido margen para más espacio -->
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                </td>
-                                <td>
-                                    <button class="btn btn-primary btn-sm">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                </td>
-                            </tr>
+                            @foreach ($roles as $role)
+                                <tr>
+                                    <td class="align-middle">{{ $role->name }}</td>
+                                    <td class="align-middle d-none d-md-table-cell">{{ $role->description }}</td>
+                                    <td>
+                                        <button class="btn btn-info btn-sm" style="margin-left: 10px;">
+                                            <!-- Añadido margen para más espacio -->
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </td>
+                                    <td>
+                                        <button class="btn btn-primary btn-sm"
+                                            wire:click="editRole({{ $role->id }})">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            @endforeach
                         </tbody>
                     </table>
                 </div>
@@ -57,20 +59,20 @@
                 <div class="form-row">
                     <div class="form-group col-md-4">
                         <h2>Administrador</h2>
-                        
+
                     </div>
                 </div>
                 <div class="form-group">
                     <label for="description">Descripción</label>
                     <textarea id="description" class="form-control" rows="5"></textarea> <!-- Convertido a textarea -->
                 </div>
-                
-                
+
+
             </form>
         </x-slot>
         <x-slot name='footer'>
-            <button class="btn btn-secondary mr-2 disabled:opacity-50" >Cancelar</button>
-            <button class="btn btn-primary disabled:opacity-50" >Actualizar</button>
+            <button class="btn btn-secondary mr-2 disabled:opacity-50">Cancelar</button>
+            <button class="btn btn-primary disabled:opacity-50">Actualizar</button>
 
 
 
