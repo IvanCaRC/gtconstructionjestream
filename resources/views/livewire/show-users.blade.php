@@ -104,37 +104,39 @@
                                                 wire:click="edit({{ $user->id }})"><i
                                                     class="fas fa-edit"></i></button>
                                         </td>
-                                        <td><button class="btn btn-danger btn-custom"
-                                                onclick="confirmDeletion({{ $user->id }}, '{{ $user->name }}', '{{ $user->first_last_name }}')">
-                                                <i class="fas fa-trash-alt"></i>
-                                            </button>
+                                        @if (auth()->user()->id !== $user->id)
+                                            <td><button class="btn btn-danger btn-custom"
+                                                    onclick="confirmDeletion({{ $user->id }}, '{{ $user->name }}', '{{ $user->first_last_name }}')">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
 
-                                            <script>
-                                                function confirmDeletion(userId, userName, userFirstLastName) {
-                                                    Swal.fire({
-                                                        title: `¿Estás seguro de que deseas eliminar a ${userName} ${userFirstLastName}?`,
-                                                        text: "¡No podrás revertir esto!",
-                                                        icon: 'warning',
-                                                        showCancelButton: true,
-                                                        confirmButtonColor: '#d33',
-                                                        cancelButtonColor: '#3085d6',
-                                                        confirmButtonText: 'Sí, eliminar',
-                                                        cancelButtonText: 'Cancelar'
-                                                    }).then((result) => {
+                                                <script>
+                                                    function confirmDeletion(userId, userName, userFirstLastName) {
+                                                        Swal.fire({
+                                                            title: `¿Estás seguro de que deseas eliminar a ${userName} ${userFirstLastName}?`,
+                                                            text: "¡No podrás revertir esto!",
+                                                            icon: 'warning',
+                                                            showCancelButton: true,
+                                                            confirmButtonColor: '#d33',
+                                                            cancelButtonColor: '#3085d6',
+                                                            confirmButtonText: 'Sí, eliminar',
+                                                            cancelButtonText: 'Cancelar'
+                                                        }).then((result) => {
 
-                                                        if (result.isConfirmed) {
-                                                            @this.call('destroy', userId);
-                                                            Swal.fire(
-                                                                'Eliminado!',
-                                                                `${userName} ${userFirstLastName} ha sido eliminado.`,
-                                                                'success'
-                                                            )
-                                                        }
-                                                    })
-                                                }
-                                            </script>
+                                                            if (result.isConfirmed) {
+                                                                @this.call('destroy', userId);
+                                                                Swal.fire(
+                                                                    'Eliminado!',
+                                                                    `${userName} ${userFirstLastName} ha sido eliminado.`,
+                                                                    'success'
+                                                                )
+                                                            }
+                                                        })
+                                                    }
+                                                </script>
 
-                                        </td>
+                                            </td>
+                                        @endif
                                     </tr>
                                 @endforeach
                             </tbody>
@@ -147,10 +149,9 @@
                     @endif
                     @if ($users->hasPages())
                         <div class="px-6 py-3">
-                            {{$users->links()}}
+                            {{ $users->links() }}
                         </div>
-                        
-                    @endif                    
+                    @endif
                 </div>
             </div>
         </div>
@@ -222,29 +223,34 @@
                     <label for="number">Teléfono</label>
                     <input type="text" id="number" class="form-control" wire:model.defer="userEdit.number">
                 </div>
-                <div class="form-row">
-                    <div class="form-group col-md-6">
-                        <label for="status">Estado</label>
-                        <select id="status" class="form-control" wire:model.defer="userEdit.status">
-                            <option value="1">Activo</option>
-                            <option value="0">Inactivo</option>
-                        </select>
+                @if ($userEdit['id'] != $currentUserId)
+                    <div class="form-row">
+                        <div class="form-group col-md-6">
+                            <label for="status">Estado</label>
+                            <select id="status" class="form-control" wire:model.defer="userEdit.status">
+                                <option value="1">Activo</option>
+                                <option value="0">Inactivo</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="departamento">Departamento</label>
+                            <select id="role" class="form-control @error('role') required-field @enderror"
+                                wire:model.defer="role">
+                                <option value="" disabled selected>Asigne rol</option>
+                                @foreach ($roles as $role)
+                                    @if ($userEdit['id'] === $currentUserId)
+                                        <option value="Admin">Administrador</option>
+                                    @else
+                                        <option value="{{ $role->name }}">{{ $role->name }}</option>
+                                    @endif
+                                @endforeach
+                            </select>
+                            @error('role')
+                                <span class="invalid-feedback">{{ $message }}</span>
+                            @enderror
+                        </div>
                     </div>
-                    <div class="form-group col-md-6">
-                        <label for="departamento">Departamento</label>
-                        <select id="role" class="form-control @error('role') required-field @enderror"
-                            wire:model.defer="role">
-                            <option value="" disabled selected>Asigne rol</option>
-                            @foreach ($roles as $role)
-                                <option value="{{ $role->name }}">{{ $role->name }}</option>
-                            @endforeach
-                        </select>
-                        @error('role')
-                            <span class="invalid-feedback">{{ $message }}</span>
-                        @enderror
-                    </div>
-                </div>
-
+                @endif
             </form>
         </x-slot>
         <x-slot name='footer'>

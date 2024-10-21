@@ -8,12 +8,13 @@ use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use Livewire\WithPagination;
+use Illuminate\Support\Facades\Auth;
 
 class ShowUsers extends Component
 {
     use WithFileUploads;
     use WithPagination;
-
+    public $currentUserId;
     public $searchTerm = '';
     public $sort = 'id';
     public $image;
@@ -60,10 +61,15 @@ class ShowUsers extends Component
     {
         return redirect()->route('admin.usersView', ['iduser' => $userId]);
     }
-    public function updatingSearchTerm(){
+    public function updatingSearchTerm()
+    {
 
+        $this->resetPage();
     }
-
+    public function mount()
+    {
+        $this->currentUserId = Auth::user()->id;
+    }
     protected $listeners = ['userAdded' => 'render'];
 
     public function render()
@@ -84,7 +90,8 @@ class ShowUsers extends Component
             'roles' => $this->roles
         ]);
     }
-    public function search() {
+    public function search()
+    {
         $this->resetPage();
     }
 

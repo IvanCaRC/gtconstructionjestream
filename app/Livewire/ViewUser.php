@@ -6,11 +6,11 @@ use App\Models\User;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Spatie\Permission\Models\Role;
-
+use Illuminate\Support\Facades\Auth;
 class ViewUser extends Component
 {
     use WithFileUploads;
-
+    public $currentUserId;
     public $open = false;
     public $user;
     public $iduser;
@@ -48,6 +48,7 @@ class ViewUser extends Component
 
     public function mount($iduser)
     {
+        $this->currentUserId = Auth::user()->id;
         $this->user = User::findOrFail($iduser);
         $this->roles = Role::where('id', '!=', 1)->get(); // Excluir rol de Administrador
     }

@@ -30,38 +30,39 @@
                             <h5 class="card-title mt-3">Número Telefónico: {{ $user->number ?? '' }}</h5>
                         </div>
                     </div>
-                    <div class="card-footer text-right">
-                        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-                        @if (auth()->user()->id !== $user->id)
-                            <a href="#" class="text-danger"
-                                onclick="confirmDeletion({{ $user->id }}, '{{ $user->name }}', '{{ $user->first_last_name }}')">Eliminar
-                                usuario</a>
-                            <script>
-                                function confirmDeletion(userId, userName, userFirstLastName) {
-                                    Swal.fire({
-                                        title: `¿Estás seguro de que deseas eliminar a ${userName} ${userFirstLastName}?`,
-                                        text: "¡No podrás revertir esto!",
-                                        icon: 'warning',
-                                        showCancelButton: true,
-                                        confirmButtonColor: '#d33',
-                                        cancelButtonColor: '#3085d6',
-                                        confirmButtonText: 'Sí, eliminar',
-                                        cancelButtonText: 'Cancelar'
-                                    }).then((result) => {
-                                        if (result.isConfirmed) {
-                                            @this.call('destroy', userId);
-                                            Swal.fire(
-                                                'Eliminado!',
-                                                `${userName} ${userFirstLastName} ha sido eliminado.`,
-                                                'success'
-                                            );
-                                        }
-                                    });
-                                }
-                            </script>
-                        @endif
-                    </div>
-
+                    @if (auth()->user()->id !== $user->id)
+                        <div class="card-footer text-right">
+                            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                            
+                                <a href="#" class="text-danger"
+                                    onclick="confirmDeletion({{ $user->id }}, '{{ $user->name }}', '{{ $user->first_last_name }}')">Eliminar
+                                    usuario</a>
+                                <script>
+                                    function confirmDeletion(userId, userName, userFirstLastName) {
+                                        Swal.fire({
+                                            title: `¿Estás seguro de que deseas eliminar a ${userName} ${userFirstLastName}?`,
+                                            text: "¡No podrás revertir esto!",
+                                            icon: 'warning',
+                                            showCancelButton: true,
+                                            confirmButtonColor: '#d33',
+                                            cancelButtonColor: '#3085d6',
+                                            confirmButtonText: 'Sí, eliminar',
+                                            cancelButtonText: 'Cancelar'
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                @this.call('destroy', userId);
+                                                Swal.fire(
+                                                    'Eliminado!',
+                                                    `${userName} ${userFirstLastName} ha sido eliminado.`,
+                                                    'success'
+                                                );
+                                            }
+                                        });
+                                    }
+                                </script>
+                            
+                        </div>
+                    @endif
                 </div>
             </div>
 
@@ -269,6 +270,7 @@
                     <label for="number">Teléfono</label>
                     <input type="text" id="number" class="form-control" wire:model.defer="userEdit.number">
                 </div>
+                @if ($userEdit['id'] != $currentUserId)
                 <div class="form-row">
                     <div class="form-group col-md-6">
                         <label for="status">Estado</label>
@@ -283,7 +285,11 @@
                             wire:model.defer="role">
                             <option value="" disabled selected>Asigne rol</option>
                             @foreach ($roles as $role)
-                                <option value="{{ $role->name }}">{{ $role->name }}</option>
+                                @if ($userEdit['id'] === $currentUserId)
+                                    <option value="Admin">Administrador</option>
+                                @else
+                                    <option value="{{ $role->name }}">{{ $role->name }}</option>
+                                @endif
                             @endforeach
                         </select>
                         @error('role')
@@ -291,6 +297,7 @@
                         @enderror
                     </div>
                 </div>
+            @endif
 
             </form>
         </x-slot>
