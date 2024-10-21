@@ -48,19 +48,19 @@ class ShowUsers extends Component
     protected $listeners = ['userAdded' => 'render'];
 
     public function render()
-{
-    $users = User::where('name', 'LIKE', "%$this->searchTerm%")
-        ->orWhere('first_last_name', 'LIKE', "%$this->searchTerm%")
-        ->orWhere('second_last_name', 'LIKE', "%$this->searchTerm%")
-        ->orWhere(DB::raw("CONCAT(name, ' ', first_last_name, ' ', second_last_name)"), 'LIKE', "%$this->searchTerm%")
-        ->orWhere('email', 'LIKE', "%$this->searchTerm%")
-        ->orWhere('number', 'LIKE', "%$this->searchTerm%")
-        ->orderBy($this->sort, $this->direction)
-        ->with('roles') // Cargar la relación con los roles
-        ->get();
+    {
+        $users = User::where('name', 'LIKE', "%$this->searchTerm%")
+            ->orWhere('first_last_name', 'LIKE', "%$this->searchTerm%")
+            ->orWhere('second_last_name', 'LIKE', "%$this->searchTerm%")
+            ->orWhere(DB::raw("CONCAT(name, ' ', first_last_name, ' ', second_last_name)"), 'LIKE', "%$this->searchTerm%")
+            ->orWhere('email', 'LIKE', "%$this->searchTerm%")
+            ->orWhere('number', 'LIKE', "%$this->searchTerm%")
+            ->orderBy($this->sort, $this->direction)
+            ->with('roles') // Cargar la relación con los roles
+            ->get();
 
-    return view('livewire.show-users', compact('users'));
-}
+        return view('livewire.show-users', compact('users'));
+    }
 
 
     public function search() {}
@@ -104,7 +104,10 @@ class ShowUsers extends Component
 
         $this->reset('open', 'image');
         $this->dispatch('userAdded');
+
+        return true; // Indicar que la actualización fue exitosa
     }
+
 
 
 

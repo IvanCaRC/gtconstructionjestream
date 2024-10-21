@@ -245,20 +245,32 @@
                 onclick="confirmUpdate()">Actualizar</button>
 
 
-            <script>
-                function confirmUpdate() {
-                    // Aquí puedes llamar a la función update de Livewire
-                    @this.call('update');
-
-                    // Mostrar la alerta después de la actualización
-                    Swal.fire({
-                        title: 'Usuario actualizado',
-                        text: 'El usuario ha sido actualizado exitosamente.',
-                        icon: 'success',
-                        confirmButtonText: 'OK'
-                    });
-                }
-            </script>
+                <script>
+                    function confirmUpdate() {
+                        // Llamar al método update de Livewire
+                        @this.call('update').then(response => {
+                            if (response) {
+                                // Mostrar la alerta después de la actualización si todo es correcto
+                                Swal.fire({
+                                    title: 'Usuario actualizado',
+                                    text: 'El usuario ha sido actualizado exitosamente.',
+                                    icon: 'success',
+                                    confirmButtonText: 'OK'
+                                });
+                            }
+                        }).catch(error => {
+                            // Manejar error si es necesario
+                            Swal.fire({
+                                title: 'Error',
+                                text: 'Hubo un problema al actualizar el usuario.',
+                                icon: 'error',
+                                confirmButtonText: 'OK'
+                            });
+                        });
+                    }
+                </script>
+                
+                
 
         </x-slot>
     </x-dialog-modal>

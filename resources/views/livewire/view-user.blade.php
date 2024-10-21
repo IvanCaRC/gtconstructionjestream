@@ -301,18 +301,30 @@
     </x-dialog-modal>
     <script>
         function confirmUpdate2() {
-            // Aquí puedes llamar a la función update de Livewire
-            @this.call('update2');
-
-            // Mostrar la alerta después de la actualización
-            Swal.fire({
-                title: 'Usuario actualizado',
-                text: 'El usuario ha sido actualizado exitosamente.',
-                icon: 'success',
-                confirmButtonText: 'OK'
+            // Llamar al método update2 de Livewire
+            @this.call('update2').then(response => {
+                if (response) {
+                    // Mostrar la alerta después de la actualización si todo es correcto
+                    Swal.fire({
+                        title: 'Usuario actualizado',
+                        text: 'El usuario ha sido actualizado exitosamente.',
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            }).catch(error => {
+                // Manejar error si es necesario
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Hubo un problema al actualizar el usuario.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
             });
         }
     </script>
+    
+    
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
