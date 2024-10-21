@@ -121,7 +121,7 @@
                                                         confirmButtonText: 'Sí, eliminar',
                                                         cancelButtonText: 'Cancelar'
                                                     }).then((result) => {
-                                                        ñ
+                                                        
                                                         if (result.isConfirmed) {
                                                             @this.call('destroy', userId);
                                                             Swal.fire(
