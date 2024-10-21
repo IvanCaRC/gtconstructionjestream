@@ -116,6 +116,7 @@ class ShowUsers extends Component
 
         $this->reset('open', 'image', 'role');
         $this->dispatch('userAdded');
+        return true; // Indicar que la actualización fue exitosa
     }
 
 
