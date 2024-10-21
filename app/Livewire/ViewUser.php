@@ -4,15 +4,19 @@ namespace App\Livewire;
 
 use App\Models\User;
 use Livewire\Component;
-
+use Livewire\WithFileUploads;
 class ViewUser extends Component
 {
+    use WithFileUploads;
     public $open =false;
     public $user;
     public $iduser;
     public $userEditId = '';
     protected $listeners = ['userAddedEdit' => 'render'];
-
+    public $sort = 'id';
+    public $image;
+    public $direction = 'desc';
+    public $imageRecuperada;
     public $userEdit = [
         'id' => '',
         'image' => '',
@@ -35,7 +39,7 @@ class ViewUser extends Component
         return view('livewire.view-user', ['user' => $this->user]);
     }
 
-    public function update()
+    public function update2()
     {
         // Validar los datos del formulario primero
         $this->validate([
@@ -47,15 +51,22 @@ class ViewUser extends Component
         ]);
 
         $user = User::find($this->userEditId);
+        $image = null; // Mantener la imagen actual por defecto
 
-        // if ($this->userEdit['image'] && $this->userEdit['image']) {
-        //     $imagePath = $this->userEdit['image']->store('users', 'public');
-        //     $this->userEdit['image'] = $imagePath;
-        // } else {
-        //     $this->userEdit['image'] = $user->image;
-        // }
+        // Verificar si se subió una nueva imagen
+        if ($this->image) {
+            // Verificar si la nueva imagen es diferente de la imagen recuperada
+            if ($this->image != $this->imageRecuperada) {
+                $image = $this->image->store('users', 'public');
+            } else {
+                $image = $this->imageRecuperada; // Mantener la imagen recuperada si es igual
+            }
+        } else {
+            $image = $this->imageRecuperada; // Mantener la imagen recuperada si no hay nueva imagen
+        }
 
         $user->update([
+            'image' => $image,
             'name' => $this->userEdit['name'],
             'first_last_name' => $this->userEdit['first_last_name'],
             'second_last_name' => $this->userEdit['second_last_name'],
@@ -63,23 +74,29 @@ class ViewUser extends Component
             'number' => $this->userEdit['number'],
             'status' => $this->userEdit['status'],
             'password' => $this->userEdit['password'],
-            'image' => $this->userEdit['image'],
         ]);
 
-        $this->reset('open');
-        
+        $this->reset('open', 'image');
         $this->dispatch('userAddedEdit');
     }
-    public function destroy($iduser) {
-        $user = User::find($iduser);
-        $user->delete();
-        $this->dispatch('userAdded');
-    }
+    public function destroy($iduser)
+{
+    $user = User::find($iduser);
+    $user->delete();
+    $this->dispatch('userAddedEdit');
 
-    public function edit($iduser){
-        $this->userEditId = $iduser;
+    // Redirigir a la ruta especificada
+    return redirect()->route('admin.users');
+}
+
+
+    public function edit($userId)
+    {
         $this->open = true;
-        $user = User::find($iduser);
+
+        $this->userEditId = $userId;
+        $user = User::find($userId);
+
         $this->userEdit['id'] = $user->id;
         $this->userEdit['image'] = $user->image;
         $this->userEdit['name'] = $user->name;
@@ -89,6 +106,8 @@ class ViewUser extends Component
         $this->userEdit['number'] = $user->number;
         $this->userEdit['status'] = $user->status;
         $this->userEdit['password'] = $user->password;
+
+        $this->imageRecuperada = $user->image;
     }
     
 }

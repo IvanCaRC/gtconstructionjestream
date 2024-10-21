@@ -23,8 +23,7 @@
 
     <!-- Custom styles for this template-->
     <link href="{{ asset('css/sb-admin-2.min.css') }}" rel="stylesheet">
-    @livewireStyles
-    <!-- Styles -->
+
     @livewireStyles
     <style>
         .img-redonda {
@@ -230,7 +229,8 @@
                                         Se a genera un nuevo gasto.
                                     </div>
                                 </a>
-                                <a class="dropdown-item text-center small text-gray-500" href="#">Ver todas las notificaciones</a>
+                                <a class="dropdown-item text-center small text-gray-500" href="#">Ver todas las
+                                    notificaciones</a>
                             </div>
                         </li>
 
@@ -296,7 +296,8 @@
                                         <div class="small text-gray-500">Chicken the Dog · 2w</div>
                                     </div>
                                 </a>
-                                <a class="dropdown-item text-center small text-gray-500" href="#">Ver todos los mensajes</a>
+                                <a class="dropdown-item text-center small text-gray-500" href="#">Ver todos los
+                                    mensajes</a>
                             </div>
                         </li>
 
@@ -304,11 +305,14 @@
 
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
-                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ Auth::user()->name }}</span>
-                                <img class="img-profile rounded-circle" src="{{ Auth::user()->image ? asset('storage/' . Auth::user()->image) : 'https://source.unsplash.com/QAB-WJcbgJk/60x60' }}">
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span
+                                    class="mr-2 d-none d-lg-inline text-gray-600 small">{{ Auth::user()->name }}</span>
+                                <img class="img-profile rounded-circle"
+                                    src="{{ Auth::user()->image ? asset('storage/' . Auth::user()->image) : 'https://source.unsplash.com/QAB-WJcbgJk/60x60' }}">
                             </a>
-                            
+
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
@@ -414,7 +418,7 @@
     <script src="{{ asset('js/demo/chart-pie-demo.js') }}"></script>
 
     @livewireScripts
-   
+
 
 
 

@@ -12,11 +12,13 @@ class ShowUsers extends Component
     use WithFileUploads;
 
     public $searchTerm = '';
-   
+
     public $sort = 'id';
+    public $image;
     public $direction = 'desc';
     public $open = false;
     public $userEditId = '';
+    public $imageRecuperada;
     public $userEdit = [
         'id' => '',
         'image' => '',
@@ -39,25 +41,27 @@ class ShowUsers extends Component
 
 
     public function viewUser($userId)
-{
-    return redirect()->route('admin.usersView', ['iduser' => $userId]);
-}
+    {
+        return redirect()->route('admin.usersView', ['iduser' => $userId]);
+    }
 
     protected $listeners = ['userAdded' => 'render'];
 
     public function render()
-    {
-        $users = User::where('name', 'LIKE', "%$this->searchTerm%")
-            ->orWhere('first_last_name', 'LIKE', "%$this->searchTerm%")
-            ->orWhere('second_last_name', 'LIKE', "%$this->searchTerm%")
-            ->orWhere(DB::raw("CONCAT(name, ' ', first_last_name, ' ', second_last_name)"), 'LIKE', "%$this->searchTerm%")
-            ->orWhere('email', 'LIKE', "%$this->searchTerm%")
-            ->orWhere('number', 'LIKE', "%$this->searchTerm%")
-            ->orderBy($this->sort, $this->direction)
-            ->get();
+{
+    $users = User::where('name', 'LIKE', "%$this->searchTerm%")
+        ->orWhere('first_last_name', 'LIKE', "%$this->searchTerm%")
+        ->orWhere('second_last_name', 'LIKE', "%$this->searchTerm%")
+        ->orWhere(DB::raw("CONCAT(name, ' ', first_last_name, ' ', second_last_name)"), 'LIKE', "%$this->searchTerm%")
+        ->orWhere('email', 'LIKE', "%$this->searchTerm%")
+        ->orWhere('number', 'LIKE', "%$this->searchTerm%")
+        ->orderBy($this->sort, $this->direction)
+        ->with('roles') // Cargar la relación con los roles
+        ->get();
 
-        return view('livewire.show-users', compact('users'));
-    }
+    return view('livewire.show-users', compact('users'));
+}
+
 
     public function search() {}
 
@@ -73,15 +77,22 @@ class ShowUsers extends Component
         ]);
 
         $user = User::find($this->userEditId);
+        $image = null; // Mantener la imagen actual por defecto
 
-        if ($this->userEdit['image'] && $this->userEdit['image']) {
-            $imagePath = $this->userEdit['image']->store('users', 'public');
-            $this->userEdit['image'] = $imagePath;
+        // Verificar si se subió una nueva imagen
+        if ($this->image) {
+            // Verificar si la nueva imagen es diferente de la imagen recuperada
+            if ($this->image != $this->imageRecuperada) {
+                $image = $this->image->store('users', 'public');
+            } else {
+                $image = $this->imageRecuperada; // Mantener la imagen recuperada si es igual
+            }
         } else {
-            $this->userEdit['image'] = $user->image;
+            $image = $this->imageRecuperada; // Mantener la imagen recuperada si no hay nueva imagen
         }
 
         $user->update([
+            'image' => $image,
             'name' => $this->userEdit['name'],
             'first_last_name' => $this->userEdit['first_last_name'],
             'second_last_name' => $this->userEdit['second_last_name'],
@@ -89,21 +100,23 @@ class ShowUsers extends Component
             'number' => $this->userEdit['number'],
             'status' => $this->userEdit['status'],
             'password' => $this->userEdit['password'],
-            'image' => $this->userEdit['image'],
         ]);
 
-        $this->reset('open');
-        
+        $this->reset('open', 'image');
         $this->dispatch('userAdded');
     }
 
-    public function resetManual() {
+
+
+    public function resetManual()
+    {
         $this->reset('open');
         $this->resetValidation();
         $this->dispatch('userAdded');
     }
 
-    public function destroy($userId) {
+    public function destroy($userId)
+    {
         $user = User::find($userId);
         $user->delete();
         $this->dispatch('userAdded');
@@ -113,6 +126,7 @@ class ShowUsers extends Component
     public function edit($userId)
     {
         $this->open = true;
+
         $this->userEditId = $userId;
         $user = User::find($userId);
 
@@ -125,6 +139,8 @@ class ShowUsers extends Component
         $this->userEdit['number'] = $user->number;
         $this->userEdit['status'] = $user->status;
         $this->userEdit['password'] = $user->password;
+
+        $this->imageRecuperada = $user->image;
     }
 
     public function order($sort)

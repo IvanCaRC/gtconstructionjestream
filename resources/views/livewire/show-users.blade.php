@@ -87,13 +87,18 @@
                                                 <span class="badge badge-danger">Inactivo</span>
                                             @endif
                                         </td>
-                                        <td>Ventas</td>
                                         <td>
-                                            <button class="btn btn-info btn-custom" wire:click="viewUser({{ $user->id }})">
+                                            @foreach ($user->roles as $role)
+                                                {{ $role->name }}
+                                            @endforeach
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-info btn-custom"
+                                                wire:click="viewUser({{ $user->id }})">
                                                 <i class="fas fa-eye"></i>
                                             </button>
                                         </td>
-                                        
+
                                         <td>
                                             <button class="btn btn-primary btn-custom"
                                                 wire:click="edit({{ $user->id }})"><i
@@ -115,7 +120,8 @@
                                                         cancelButtonColor: '#3085d6',
                                                         confirmButtonText: 'Sí, eliminar',
                                                         cancelButtonText: 'Cancelar'
-                                                    }).then((result) => {ñ
+                                                    }).then((result) => {
+                                                        ñ
                                                         if (result.isConfirmed) {
                                                             @this.call('destroy', userId);
                                                             Swal.fire(
@@ -153,24 +159,21 @@
                 <label for="name">Imagen de usuario</label>
                 <div class="form-group">
                     <div class="mb-3 d-flex align-items-center">
-                        @if ($userEdit['image'] && $userEdit['image'] !== 'users/')
+                        @if ($image)
+                            <img src="{{ $image->temporaryUrl() }}" alt="Imagen"
+                                style="width: 50px; height: 50px; border-radius: 50%; margin-right: 15px;">
+                        @elseif ($userEdit['image'] && $userEdit['image'] !== 'users/')
                             <img src="{{ asset('storage/' . $userEdit['image']) }}" alt="Imagen"
                                 style="width: 50px; height: 50px; border-radius: 50%; margin-right: 15px;">
                         @else
                             <img src="{{ asset('storage/StockImages/stockUser.png') }}" alt="Imagen por Defecto"
                                 style="width: 50px; height: 50px; border-radius: 50%; margin-right: 15px;">
                         @endif
-                        <label class="btn btn-primary btn-file">
-                            Elegir archivo <input type="file" wire:model="userEdit.image" name="image">
+                        <label class="btn btn-primary">
+                            Elegir archivo <input type="file" wire:model="image" name="image"
+                                style="display: none;">
                         </label>
                     </div>
-
-                    @if ($userEdit['image'] && $userEdit['image'] instanceof \Livewire\TemporaryUploadedFile)
-                        <div class="mt-3">
-                            <img src="{{ $userEdit['image']->temporaryUrl() }}" alt="Nueva Imagen"
-                                style="width: 50px; height: 50px; border-radius: 50%;">
-                        </div>
-                    @endif
                 </div>
 
 
@@ -187,11 +190,12 @@
 
                     <div class="form-group col-md-4">
                         <label for="first_last_name">Primer Apellido</label>
-                        <input type="text" id="first_last_name" class="form-control @error('userEdit.first_last_name') is-invalid @enderror"
+                        <input type="text" id="first_last_name"
+                            class="form-control @error('userEdit.first_last_name') is-invalid @enderror"
                             wire:model.defer="userEdit.first_last_name">
                         @error('userEdit.first_last_name')
                             <span class="invalid-feedback">{{ 'Este campo es obligatorio' }}</span>
-                        @enderror 
+                        @enderror
                     </div>
                     <div class="form-group col-md-4">
                         <label for="second_last_name">Segundo Apellido</label>
@@ -201,10 +205,12 @@
                 </div>
                 <div class="form-group">
                     <label for="email">Correo Electrónico</label>
-                    <input type="email" id="email" class="form-control @error('userEdit.email') is-invalid @enderror" wire:model.defer="userEdit.email">
+                    <input type="email" id="email"
+                        class="form-control @error('userEdit.email') is-invalid @enderror"
+                        wire:model.defer="userEdit.email">
                     @error('userEdit.email')
-                            <span class="invalid-feedback">{{ $message }}</span>
-                        @enderror 
+                        <span class="invalid-feedback">{{ $message }}</span>
+                    @enderror
                 </div>
                 <div class="form-group">
                     <label for="number">Teléfono</label>
@@ -218,14 +224,16 @@
                             <option value="0">Inactivo</option>
                         </select>
                     </div>
-                    <div class="form-group col-md-6">
-                        <label for="department">Departamento</label>
-                        <select id="department" class="form-control">
-                            <option value="ventas">Ventas</option>
-                            <option value="compras">Compras</option>
-                            <option value="finanzas">Finanzas</option>
-                        </select>
-                    </div>
+
+
+                        <div class="form-group col-md-6">
+                            <label for="department">Departamento</label>
+                            <select id="department" class="form-control">
+                                <option value="ventas">Ventas</option>
+                                <option value="compras">Compras</option>
+                                <option value="finanzas">Finanzas</option>
+                            </select>
+                        </div>
                 </div>
 
             </form>
@@ -233,9 +241,26 @@
         <x-slot name='footer'>
             <button class="btn btn-secondary mr-2 disabled:opacity-50" wire:click="resetManual"
                 wire:loading.attr="disabled">Cancelar</button>
-            <button wire:click="update"class="btn btn-primary disabled:opacity-50"
-                wire:loading.attr="disabled">Actualizar</button>
+            <button class="btn btn-primary disabled:opacity-50" wire:loading.attr="disabled"
+                onclick="confirmUpdate()">Actualizar</button>
+
+
+            <script>
+                function confirmUpdate() {
+                    // Aquí puedes llamar a la función update de Livewire
+                    @this.call('update');
+
+                    // Mostrar la alerta después de la actualización
+                    Swal.fire({
+                        title: 'Usuario actualizado',
+                        text: 'El usuario ha sido actualizado exitosamente.',
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            </script>
+
         </x-slot>
     </x-dialog-modal>
-
+    
 </div>
