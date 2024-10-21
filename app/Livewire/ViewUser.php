@@ -5,14 +5,18 @@ namespace App\Livewire;
 use App\Models\User;
 use Livewire\Component;
 use Livewire\WithFileUploads;
+use Spatie\Permission\Models\Role;
 
 class ViewUser extends Component
 {
     use WithFileUploads;
+
     public $open = false;
     public $user;
     public $iduser;
     public $userEditId = '';
+    public $role; // Añadir esta línea
+    public $roles; // Añadir esta línea
     protected $listeners = ['userAddedEdit' => 'render'];
     public $sort = 'id';
     public $image;
@@ -30,26 +34,33 @@ class ViewUser extends Component
         'password' => '',
     ];
 
+    protected function rules()
+    {
+        return [
+            'userEdit.name' => 'required',
+            'userEdit.first_last_name' => 'required',
+            'userEdit.email' => 'required|email|unique:users,email,' . $this->userEditId,
+            'userEdit.status' => 'required',
+            'userEdit.password' => 'required',
+            'role' => 'required' // Añadir esta línea para la validación del rol
+        ];
+    }
+
     public function mount($iduser)
     {
         $this->user = User::findOrFail($iduser);
+        $this->roles = Role::where('id', '!=', 1)->get(); // Excluir rol de Administrador
     }
 
     public function render()
     {
-        return view('livewire.view-user', ['user' => $this->user]);
+        return view('livewire.view-user', ['user' => $this->user, 'roles' => $this->roles]);
     }
 
     public function update2()
     {
         // Validar los datos del formulario primero
-        $this->validate([
-            'userEdit.name' => 'required',
-            'userEdit.first_last_name' => 'required',
-            'userEdit.email' => 'required|email|unique:users,email,' . $this->userEditId,
-            'userEdit.status' => 'required',
-            'userEdit.password' => 'required'
-        ]);
+        $this->validate($this->rules());
 
         $user = User::find($this->userEditId);
         $image = null; // Mantener la imagen actual por defecto
@@ -77,9 +88,10 @@ class ViewUser extends Component
             'password' => $this->userEdit['password'],
         ]);
 
-        $this->reset('open', 'image');
-        $this->dispatch('userAddedEdit');
+        $user->syncRoles([$this->role]); // Asignar el rol al usuario
 
+        $this->reset('open', 'image', 'role');
+        $this->dispatch('userAddedEdit');
         return true; // Indicar que la actualización fue exitosa
     }
 
@@ -88,19 +100,15 @@ class ViewUser extends Component
         $user = User::find($iduser);
         $user->delete();
         $this->dispatch('userAddedEdit');
-
         // Redirigir a la ruta especificada
         return redirect()->route('admin.users');
     }
 
-
     public function edit($userId)
     {
         $this->open = true;
-
         $this->userEditId = $userId;
         $user = User::find($userId);
-
         $this->userEdit['id'] = $user->id;
         $this->userEdit['image'] = $user->image;
         $this->userEdit['name'] = $user->name;
@@ -110,7 +118,8 @@ class ViewUser extends Component
         $this->userEdit['number'] = $user->number;
         $this->userEdit['status'] = $user->status;
         $this->userEdit['password'] = $user->password;
-
         $this->imageRecuperada = $user->image;
+        $this->role = $user->roles->pluck('name')->first(); // Asignar el rol actual del usuario
     }
 }
+
