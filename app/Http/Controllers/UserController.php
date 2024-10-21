@@ -15,4 +15,8 @@ class UserController extends Controller
     {
         return view('admin.userView', ['iduser' => $iduser]);
     }
+    public function verRoles()
+    {
+        return view('admin.roles');
+    }
 }

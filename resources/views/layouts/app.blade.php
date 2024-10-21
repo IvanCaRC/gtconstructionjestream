@@ -98,7 +98,7 @@
 
             <!-- Nav Item - Icono de Roles -->
             <li class="nav-item @yield('activeRoles')">
-                <a class="nav-link" href="usuarios.html">
+                <a class="nav-link" href="{{ route('admin.roles') }}">
                     <i class="fas fa-fw fa-user-tag"></i>
                     <span>Roles</span>
                 </a>

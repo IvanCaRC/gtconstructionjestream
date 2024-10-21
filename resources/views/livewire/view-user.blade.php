@@ -21,7 +21,9 @@
                                 {{ $user->second_last_name }}</h1>
                             <a href="#" class="d-block mb-3" wire:click="edit({{ $user->id }})">Editar
                                 perfil</a>
-                            <h5 class="card-title mt-4">Rol: {{ $user->role ?? 'Por definir' }}</h5>
+                            <h5 class="card-title mt-4">Rol:  @foreach ($user->roles as $role)
+                                {{ $role->name }}
+                            @endforeach</h5>
                             <h5 class="card-title mt-3">Estado: {{ $user->status == 1 ? 'Activo' : 'Inactivo' }}</h5>
                             <h5 class="card-title mt-3">Correo: {{ $user->email ?? '' }}</h5>
                             <h5 class="card-title mt-3">Número Telefónico: {{ $user->number ?? '' }}</h5>
