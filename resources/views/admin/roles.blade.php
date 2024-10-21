@@ -3,5 +3,5 @@
 @section('title', 'Roles')
 @section('activeRoles', 'active')
 @section('contend')
-@livewire('show-users')
+@livewire('show-roles')
 @endsection
