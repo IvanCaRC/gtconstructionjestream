@@ -6,19 +6,21 @@ use Livewire\Component;
 use Livewire\WithFileUploads;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
 
 class ShowUsers extends Component
 {
     use WithFileUploads;
 
     public $searchTerm = '';
-
     public $sort = 'id';
     public $image;
     public $direction = 'desc';
     public $open = false;
     public $userEditId = '';
     public $imageRecuperada;
+    public $role; // Añadir esta línea
+    public $roles; // Añadir esta línea
     public $userEdit = [
         'id' => '',
         'image' => '',
@@ -34,11 +36,23 @@ class ShowUsers extends Component
     protected $rules = [
         'userEdit.name' => 'required',
         'userEdit.first_last_name' => 'required',
-        'userEdit.email' => 'required|email',
+        'userEdit.email' => 'required|email|unique:users,email',
         'userEdit.status' => 'required',
-        'userEdit.password' => 'required'
+        'userEdit.password' => 'required',
+        'role' => 'required'
     ];
 
+    protected function rules()
+    {
+        return [
+            'userEdit.name' => 'required',
+            'userEdit.first_last_name' => 'required',
+            'userEdit.email' => 'required|email|unique:users,email,' . $this->userEditId,
+            'userEdit.status' => 'required',
+            'userEdit.password' => 'required',
+            'role' => 'required'
+        ];
+    }
 
     public function viewUser($userId)
     {
@@ -49,6 +63,7 @@ class ShowUsers extends Component
 
     public function render()
     {
+        $this->roles = Role::where('id', '!=', 1)->get(); // Excluir rol de Administrador
         $users = User::where('name', 'LIKE', "%$this->searchTerm%")
             ->orWhere('first_last_name', 'LIKE', "%$this->searchTerm%")
             ->orWhere('second_last_name', 'LIKE', "%$this->searchTerm%")
@@ -59,22 +74,17 @@ class ShowUsers extends Component
             ->with('roles') // Cargar la relación con los roles
             ->get();
 
-        return view('livewire.show-users', compact('users'));
+        return view('livewire.show-users', [
+            'users' => $users,
+            'roles' => $this->roles
+        ]);
     }
-
-
     public function search() {}
 
     public function update()
     {
         // Validar los datos del formulario primero
-        $this->validate([
-            'userEdit.name' => 'required',
-            'userEdit.first_last_name' => 'required',
-            'userEdit.email' => 'required|email|unique:users,email,' . $this->userEditId,
-            'userEdit.status' => 'required',
-            'userEdit.password' => 'required'
-        ]);
+        $this->validate($this->rules());
 
         $user = User::find($this->userEditId);
         $image = null; // Mantener la imagen actual por defecto
@@ -102,18 +112,16 @@ class ShowUsers extends Component
             'password' => $this->userEdit['password'],
         ]);
 
-        $this->reset('open', 'image');
+        $user->syncRoles([$this->role]); // Asignar el rol al usuario
+
+        $this->reset('open', 'image', 'role');
         $this->dispatch('userAdded');
-
-        return true; // Indicar que la actualización fue exitosa
     }
-
-
 
 
     public function resetManual()
     {
-        $this->reset('open');
+        $this->reset('open', 'role');
         $this->resetValidation();
         $this->dispatch('userAdded');
     }
@@ -125,14 +133,11 @@ class ShowUsers extends Component
         $this->dispatch('userAdded');
     }
 
-
     public function edit($userId)
     {
         $this->open = true;
-
         $this->userEditId = $userId;
         $user = User::find($userId);
-
         $this->userEdit['id'] = $user->id;
         $this->userEdit['image'] = $user->image;
         $this->userEdit['name'] = $user->name;
@@ -142,18 +147,14 @@ class ShowUsers extends Component
         $this->userEdit['number'] = $user->number;
         $this->userEdit['status'] = $user->status;
         $this->userEdit['password'] = $user->password;
-
         $this->imageRecuperada = $user->image;
+        $this->role = $user->roles->pluck('name')->first(); // Asignar el rol actual del usuario
     }
 
     public function order($sort)
     {
         if ($this->sort == $sort) {
-            if ($this->direction == 'desc') {
-                $this->direction = 'asc';
-            } else {
-                $this->direction = 'desc';
-            }
+            $this->direction = $this->direction == 'desc' ? 'asc' : 'desc';
         } else {
             $this->sort = $sort;
             $this->direction = 'asc';

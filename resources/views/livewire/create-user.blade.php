@@ -84,7 +84,7 @@
                         </select>
                     </div>
                     <div class="form-group col-md-6">
-                        <label for="department">Departamento</label>
+                        <label for="departamento">Departamento</label>
                         <select id="role" class="form-control @error('role') required-field @enderror"
                             wire:model.defer="role">
                             <option value="" disabled selected>Asigne rol</option>

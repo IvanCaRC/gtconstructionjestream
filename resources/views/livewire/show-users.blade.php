@@ -121,7 +121,7 @@
                                                         confirmButtonText: 'Sí, eliminar',
                                                         cancelButtonText: 'Cancelar'
                                                     }).then((result) => {
-                                                        
+
                                                         if (result.isConfirmed) {
                                                             @this.call('destroy', userId);
                                                             Swal.fire(
@@ -224,16 +224,19 @@
                             <option value="0">Inactivo</option>
                         </select>
                     </div>
-
-
-                        <div class="form-group col-md-6">
-                            <label for="department">Departamento</label>
-                            <select id="department" class="form-control">
-                                <option value="ventas">Ventas</option>
-                                <option value="compras">Compras</option>
-                                <option value="finanzas">Finanzas</option>
-                            </select>
-                        </div>
+                    <div class="form-group col-md-6">
+                        <label for="departamento">Departamento</label>
+                        <select id="role" class="form-control @error('role') required-field @enderror"
+                            wire:model.defer="role">
+                            <option value="" disabled selected>Asigne rol</option>
+                            @foreach ($roles as $role)
+                                <option value="{{ $role->name }}">{{ $role->name }}</option>
+                            @endforeach
+                        </select>
+                        @error('role')
+                            <span class="invalid-feedback">{{ $message }}</span>
+                        @enderror
+                    </div>
                 </div>
 
             </form>
@@ -245,34 +248,34 @@
                 onclick="confirmUpdate()">Actualizar</button>
 
 
-                <script>
-                    function confirmUpdate() {
-                        // Llamar al método update de Livewire
-                        @this.call('update').then(response => {
-                            if (response) {
-                                // Mostrar la alerta después de la actualización si todo es correcto
-                                Swal.fire({
-                                    title: 'Usuario actualizado',
-                                    text: 'El usuario ha sido actualizado exitosamente.',
-                                    icon: 'success',
-                                    confirmButtonText: 'OK'
-                                });
-                            }
-                        }).catch(error => {
-                            // Manejar error si es necesario
+            <script>
+                function confirmUpdate() {
+                    // Llamar al método update de Livewire
+                    @this.call('update').then(response => {
+                        if (response) {
+                            // Mostrar la alerta después de la actualización si todo es correcto
                             Swal.fire({
-                                title: 'Error',
-                                text: 'Hubo un problema al actualizar el usuario.',
-                                icon: 'error',
+                                title: 'Usuario actualizado',
+                                text: 'El usuario ha sido actualizado exitosamente.',
+                                icon: 'success',
                                 confirmButtonText: 'OK'
                             });
+                        }
+                    }).catch(error => {
+                        // Manejar error si es necesario
+                        Swal.fire({
+                            title: 'Error',
+                            text: 'Hubo un problema al actualizar el usuario.',
+                            icon: 'error',
+                            confirmButtonText: 'OK'
                         });
-                    }
-                </script>
-                
-                
+                    });
+                }
+            </script>
+
+
 
         </x-slot>
     </x-dialog-modal>
-    
+
 </div>
