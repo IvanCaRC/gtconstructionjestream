@@ -34,31 +34,30 @@ class CreateUser extends Component
     }
 
     public function save()
-    {
-        $this->validate();
-
-        $image = null;
-        if ($this->image) {
-            $image = $this->image->store('users', 'public');
-        }
-
-        $user = User::create([
-            'image' => $image,
-            'name' => $this->name,
-            'first_last_name' => $this->first_last_name,
-            'second_last_name' => $this->second_last_name,
-            'email' => $this->email,
-            'number' => $this->number,
-            'status' => $this->status,
-            'password' => Hash::make($this->password),
-        ]);
-
-        $user->assignRole($this->role); // Asignar el rol al usuario
-
-        session()->flash('message', 'Usuario creado con éxito.');
-        $this->reset('open', 'name', 'first_last_name', 'second_last_name', 'email', 'number', 'status', 'password', 'image', 'role');
-        $this->dispatch('userAdded');
+{
+    $this->validate();
+    $image = null;
+    if ($this->image) {
+        $image = $this->image->store('users', 'public');
     }
+    $user = User::create([
+        'image' => $image,
+        'name' => $this->name,
+        'first_last_name' => $this->first_last_name,
+        'second_last_name' => $this->second_last_name,
+        'email' => $this->email,
+        'number' => $this->number,
+        'status' => $this->status,
+        'password' => Hash::make($this->password),
+    ]);
+    $user->assignRole($this->role); // Asignar el rol al usuario
+    session()->flash('message', 'Usuario creado con éxito.');
+    $this->reset('open', 'name', 'first_last_name', 'second_last_name', 'email', 'number', 'status', 'password', 'image', 'role');
+    $this->dispatch('userAdded');
+
+    return true; // Indicar que la creación fue exitosa
+}
+
 
     public function resetManual()
     {
