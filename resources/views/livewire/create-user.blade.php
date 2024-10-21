@@ -114,10 +114,35 @@
         <x-slot name='footer'>
             <button class="btn btn-secondary mr-2 disabled:opacity-50" wire:click="resetManual"
                 wire:loading.attr="disabled">Cancelar</button>
-            <button wire:click="save"class="btn btn-primary disabled:opacity-50"
-                wire:loading.attr="disabled">Guardar</button>
+                <button class="btn btn-primary disabled:opacity-50" onclick="confirmSave()" wire:loading.attr="disabled">Guardar</button>
+
         </x-slot>
     </x-dialog-modal>
+    <script>
+        function confirmSave() {
+            // Llamar al método save de Livewire
+            @this.call('save').then(response => {
+                if (response) {
+                    // Mostrar la alerta después de la creación si todo es correcto
+                    Swal.fire({
+                        title: 'Usuario creado',
+                        text: 'El usuario ha sido creado exitosamente.',
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            }).catch(error => {
+                // Manejar error si es necesario
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Hubo un problema al crear el usuario.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            });
+        }
+    </script>
+    
     <style>
         .img-redonda {
             border-radius: 50%;
