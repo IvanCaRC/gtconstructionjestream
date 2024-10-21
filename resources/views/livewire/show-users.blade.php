@@ -145,6 +145,12 @@
                         </div>
 
                     @endif
+                    @if ($users->hasPages())
+                        <div class="px-6 py-3">
+                            {{$users->links()}}
+                        </div>
+                        
+                    @endif                    
                 </div>
             </div>
         </div>

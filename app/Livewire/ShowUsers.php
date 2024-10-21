@@ -7,10 +7,12 @@ use Livewire\WithFileUploads;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
+use Livewire\WithPagination;
 
 class ShowUsers extends Component
 {
     use WithFileUploads;
+    use WithPagination;
 
     public $searchTerm = '';
     public $sort = 'id';
@@ -58,6 +60,9 @@ class ShowUsers extends Component
     {
         return redirect()->route('admin.usersView', ['iduser' => $userId]);
     }
+    public function updatingSearchTerm(){
+
+    }
 
     protected $listeners = ['userAdded' => 'render'];
 
@@ -72,14 +77,16 @@ class ShowUsers extends Component
             ->orWhere('number', 'LIKE', "%$this->searchTerm%")
             ->orderBy($this->sort, $this->direction)
             ->with('roles') // Cargar la relación con los roles
-            ->get();
+            ->paginate(10);
 
         return view('livewire.show-users', [
             'users' => $users,
             'roles' => $this->roles
         ]);
     }
-    public function search() {}
+    public function search() {
+        $this->resetPage();
+    }
 
     public function update()
     {
