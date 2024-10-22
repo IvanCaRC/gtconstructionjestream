@@ -54,6 +54,15 @@ class ShowRoles extends Component
         return true;
     }
 
+    public function getShortDescription($description)
+{
+    $maxLength = 100; // Ajusta el número de caracteres según tus necesidades
+    if (strlen($description) > $maxLength) {
+        return substr($description, 0, $maxLength) . '...';
+    }
+    return $description;
+}
+
     public function resetManual()
     {
         $this->reset('open', 'roleEdit');

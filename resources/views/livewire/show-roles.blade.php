@@ -14,6 +14,15 @@
         .is-invalid {
             border-color: #e3342f;
         }
+
+        .truncated-text {
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            /* Número de líneas que deseas mostrar */
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
     </style>
     <h1 class="pl-4">Roles del sistema</h1>
     <div class="container-fluid px-4 sm:px-6 lg:px-8 py-3"> <!-- Reduce el padding -->
@@ -35,7 +44,9 @@
                             @foreach ($roles as $role)
                                 <tr>
                                     <td class="align-middle">{{ $role->name }}</td>
-                                    <td class="align-middle d-none d-md-table-cell">{{ $role->description }}</td>
+                                    <td class="align-middle d-none d-md-table-cell">{{ $this->getShortDescription($role->description) }}</td>
+
+
 
                                     <td>
                                         <button class="btn btn-primary btn-sm"
