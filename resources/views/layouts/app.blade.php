@@ -69,13 +69,43 @@
             <!-- Divider -->
             <hr class="sidebar-divider my-0">
 
+            @can('admin.dashboardAdmin')
             <!-- Nav Item - Icono de Administracion -->
             <li class="nav-item @yield('activeAdministracion')">
                 <a class="nav-link" href="{{ route('admin.dashboardAdmin') }}">
                     <i class="fas fa-fw fa-tachometer-alt"></i>
                     <span>Administracion</span></a>
             </li>
+            @endcan
 
+            @can('ventas.dashboardVentas')
+            <!-- Nav Item - Icono de Administracion -->
+            <li class="nav-item @yield('activeAdministracion')">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Ventas</span></a>
+            </li>
+            @endcan
+
+            @can('compras.dashboardCompras')
+            <!-- Nav Item - Icono de Administracion -->
+            <li class="nav-item @yield('activeAdministracion')">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Compras</span></a>
+            </li>
+            @endcan
+
+            @can('finanzas.dashboardFinanzas')
+            <!-- Nav Item - Icono de Administracion -->
+            <li class="nav-item @yield('activeAdministracion')">
+                <a class="nav-link" href="#">
+                    <i class="fas fa-fw fa-tachometer-alt"></i>
+                    <span>Finanzas</span></a>
+            </li>
+            @endcan
+
+            @can('admin.dashboardAdmin')
             <!-- Nav Item - Icono de Usuarios -->
             <li class="nav-item @yield('activeUsuarios')">
                 <a class="nav-link" href="{{ route('admin.users') }}">
@@ -83,6 +113,7 @@
                     <span>Usuarios</span>
                 </a>
             </li>
+            @endcan
 
             <style>
                 .nav-link {
@@ -96,6 +127,7 @@
                 }
             </style>
 
+            @can('admin.dashboardAdmin')
             <!-- Nav Item - Icono de Roles -->
             <li class="nav-item @yield('activeRoles')">
                 <a class="nav-link" href="{{ route('admin.roles') }}">
@@ -103,7 +135,9 @@
                     <span>Roles</span>
                 </a>
             </li>
+            @endcan
 
+            @can('admin.dashboardAdmin')
             <!-- Nav Item - Pagina colapsada de departamentos-->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
@@ -126,6 +160,7 @@
                     </div>
                 </div>
             </li>
+            @endcan
 
             <!-- Divider -->
             <hr class="sidebar-divider d-none d-md-block">
