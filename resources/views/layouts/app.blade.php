@@ -70,49 +70,49 @@
             <hr class="sidebar-divider my-0">
 
             @can('admin.dashboardAdmin')
-            <!-- Nav Item - Icono de Administracion -->
-            <li class="nav-item @yield('activeAdministracion')">
-                <a class="nav-link" href="{{ route('admin.dashboardAdmin') }}">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Administracion</span></a>
-            </li>
+                <!-- Nav Item - Icono de Administracion -->
+                <li class="nav-item @yield('activeAdministracion')">
+                    <a class="nav-link" href="{{ route('admin.dashboardAdmin') }}">
+                        <i class="fas fa-fw fa-tachometer-alt"></i>
+                        <span>Administracion</span></a>
+                </li>
             @endcan
 
             @can('ventas.dashboardVentas')
-            <!-- Nav Item - Icono de Administracion -->
-            <li class="nav-item @yield('activeAdministracion')">
-                <a class="nav-link" href="#">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Ventas</span></a>
-            </li>
+                <!-- Nav Item - Icono de Administracion -->
+                <li class="nav-item @yield('activeAdministracion')">
+                    <a class="nav-link" href="#">
+                        <i class="fas fa-fw fa-tachometer-alt"></i>
+                        <span>Ventas</span></a>
+                </li>
             @endcan
 
             @can('compras.dashboardCompras')
-            <!-- Nav Item - Icono de Administracion -->
-            <li class="nav-item @yield('activeAdministracion')">
-                <a class="nav-link" href="#">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Compras</span></a>
-            </li>
+                <!-- Nav Item - Icono de Administracion -->
+                <li class="nav-item @yield('activeAdministracion')">
+                    <a class="nav-link" href="#">
+                        <i class="fas fa-fw fa-tachometer-alt"></i>
+                        <span>Compras</span></a>
+                </li>
             @endcan
 
             @can('finanzas.dashboardFinanzas')
-            <!-- Nav Item - Icono de Administracion -->
-            <li class="nav-item @yield('activeAdministracion')">
-                <a class="nav-link" href="#">
-                    <i class="fas fa-fw fa-tachometer-alt"></i>
-                    <span>Finanzas</span></a>
-            </li>
+                <!-- Nav Item - Icono de Administracion -->
+                <li class="nav-item @yield('activeAdministracion')">
+                    <a class="nav-link" href="#">
+                        <i class="fas fa-fw fa-tachometer-alt"></i>
+                        <span>Finanzas</span></a>
+                </li>
             @endcan
 
             @can('admin.dashboardAdmin')
-            <!-- Nav Item - Icono de Usuarios -->
-            <li class="nav-item @yield('activeUsuarios')">
-                <a class="nav-link" href="{{ route('admin.users') }}">
-                    <i class="fas fa-fw fa-users"></i>
-                    <span>Usuarios</span>
-                </a>
-            </li>
+                <!-- Nav Item - Icono de Usuarios -->
+                <li class="nav-item @yield('activeUsuarios')">
+                    <a class="nav-link" href="{{ route('admin.users') }}">
+                        <i class="fas fa-fw fa-users"></i>
+                        <span>Usuarios</span>
+                    </a>
+                </li>
             @endcan
 
             <style>
@@ -128,38 +128,100 @@
             </style>
 
             @can('admin.dashboardAdmin')
-            <!-- Nav Item - Icono de Roles -->
-            <li class="nav-item @yield('activeRoles')">
-                <a class="nav-link" href="{{ route('admin.roles') }}">
-                    <i class="fas fa-fw fa-user-tag"></i>
-                    <span>Roles</span>
-                </a>
-            </li>
+                <!-- Nav Item - Icono de Roles -->
+                <li class="nav-item @yield('activeRoles')">
+                    <a class="nav-link" href="{{ route('admin.roles') }}">
+                        <i class="fas fa-fw fa-user-tag"></i>
+                        <span>Roles</span>
+                    </a>
+                </li>
             @endcan
 
-            @can('admin.dashboardAdmin')
-            <!-- Nav Item - Pagina colapsada de departamentos-->
-            <li class="nav-item">
-                <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
-                    aria-expanded="true" aria-controls="collapsePages">
-                    <i class="fas fa-fw fa-building"></i>
-                    <span>Departamentos</span>
-                </a>
-                <div id="collapsePages" class="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
-                    <div class="bg-primary-dark text-white py-2 collapse-inner rounded">
-                        <a class="collapse-item @yield('activeAlogin') text-white" href="login.html"
-                            onmouseover="this.style.backgroundColor='#003366';"
-                            onmouseout="this.style.backgroundColor='';">Compras</a>
-                        <a class="collapse-item @yield('activeAregister') text-white" href="register.html"
-                            onmouseover="this.style.backgroundColor='#003366';"
-                            onmouseout="this.style.backgroundColor='';">Ventas</a>
-                        <a class="collapse-item @yield('activeAforgot') text-white" href="forgot-password.html"
-                            onmouseover="this.style.backgroundColor='#003366';"
-                            onmouseout="this.style.backgroundColor='';">Contabilidad</a>
-                        <div class="collapse-divider"></div>
+            @can('compras.collapsed')
+                <!-- Nav Item - Pagina colapsada de departamentos-->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCompras"
+                        aria-expanded="true" aria-controls="collapseCompras">
+                        <i class="fas fa-fw fa-building"></i>
+                        <span>Compras</span>
+                    </a>
+                    <div id="collapseCompras" class="collapse" aria-labelledby="headingPages"
+                        data-parent="#accordionSidebar">
+                        <div class="bg-primary-dark text-white py-2 collapse-inner rounded">
+                            <a class="collapse-item @yield('activeAlogin') text-white" href="#"
+                                onmouseover="this.style.backgroundColor='#003366';"
+                                onmouseout="this.style.backgroundColor='';">Categorias</a>
+                            <a class="collapse-item @yield('activeAregister') text-white" href="#"
+                                onmouseover="this.style.backgroundColor='#003366';"
+                                onmouseout="this.style.backgroundColor='';">Materiales</a>
+                            <a class="collapse-item @yield('activeAforgot') text-white" href="#"
+                                onmouseover="this.style.backgroundColor='#003366';"
+                                onmouseout="this.style.backgroundColor='';">Proveedores</a>
+                            <a class="collapse-item @yield('activeAforgot') text-white" href="#"
+                                onmouseover="this.style.backgroundColor='#003366';"
+                                onmouseout="this.style.backgroundColor='';">Cotizaciones</a>
+                            <a class="collapse-item @yield('activeAforgot') text-white" href="#"
+                                onmouseover="this.style.backgroundColor='#003366';"
+                                onmouseout="this.style.backgroundColor='';">Ordenes de Compra</a>
+                            <div class="collapse-divider"></div>
+                        </div>
                     </div>
-                </div>
-            </li>
+                </li>
+            @endcan
+
+            @can('ventas.collapsed')
+                <!-- Nav Item - Pagina colapsada de departamentos-->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseVentas"
+                        aria-expanded="true" aria-controls="collapseVentas">
+                        <i class="fas fa-fw fa-building"></i>
+                        <span>Ventas</span>
+                    </a>
+                    <div id="collapseVentas" class="collapse" aria-labelledby="headingPages"
+                        data-parent="#accordionSidebar">
+                        <div class="bg-primary-dark text-white py-2 collapse-inner rounded">
+                            <a class="collapse-item @yield('activeAlogin') text-white" href="#"
+                                onmouseover="this.style.backgroundColor='#003366';"
+                                onmouseout="this.style.backgroundColor='';">Gestion de proyectos</a>
+                            <a class="collapse-item @yield('activeAregister') text-white" href="#"
+                                onmouseover="this.style.backgroundColor='#003366';"
+                                onmouseout="this.style.backgroundColor='';">Recepcion de llamadas</a>
+                            <a class="collapse-item @yield('activeAforgot') text-white" href="#"
+                                onmouseover="this.style.backgroundColor='#003366';"
+                                onmouseout="this.style.backgroundColor='';">Fichas tecnicas</a>
+                            <a class="collapse-item @yield('activeAforgot') text-white" href="#"
+                                onmouseover="this.style.backgroundColor='#003366';"
+                                onmouseout="this.style.backgroundColor='';">Recepcion de Cotizaciones</a>
+                            <div class="collapse-divider"></div>
+                        </div>
+                    </div>
+                </li>
+            @endcan
+
+            @can('finanzas.collapsed')
+                <!-- Nav Item - Pagina colapsada de departamentos-->
+                <li class="nav-item">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFinanzas"
+                        aria-expanded="true" aria-controls="collapseFinanzas">
+                        <i class="fas fa-fw fa-building"></i>
+                        <span>Finanzas</span>
+                    </a>
+                    <div id="collapseFinanzas" class="collapse" aria-labelledby="headingPages"
+                        data-parent="#accordionSidebar">
+                        <div class="bg-primary-dark text-white py-2 collapse-inner rounded">
+                            <a class="collapse-item @yield('activeAlogin') text-white" href="#"
+                                onmouseover="this.style.backgroundColor='#003366';"
+                                onmouseout="this.style.backgroundColor='';">Control de Ingresos/Egresos</a>
+                            <a class="collapse-item @yield('activeAregister') text-white" href="#"
+                                onmouseover="this.style.backgroundColor='#003366';"
+                                onmouseout="this.style.backgroundColor='';">Seguimiento Mensual</a>
+                            <a class="collapse-item @yield('activeAforgot') text-white" href="#"
+                                onmouseover="this.style.backgroundColor='#003366';"
+                                onmouseout="this.style.backgroundColor='';">Reportes</a>
+                            <div class="collapse-divider"></div>
+                        </div>
+                    </div>
+                </li>
             @endcan
 
             <!-- Divider -->
