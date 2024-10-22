@@ -10,9 +10,10 @@
             display: block;
             color: #e3342f;
         }
+
         .is-invalid {
-    border-color: #e3342f;
-}
+            border-color: #e3342f;
+        }
     </style>
     <h1 class="pl-4">Roles del sistema</h1>
     <div class="container-fluid px-4 sm:px-6 lg:px-8 py-3"> <!-- Reduce el padding -->
@@ -38,7 +39,7 @@
 
                                     <td>
                                         <button class="btn btn-primary btn-sm"
-                                            wire:click="editRole({{ $role->id }})" >
+                                            wire:click="editRole({{ $role->id }})">
                                             <i class="fas fa-edit"></i>
                                         </button>
                                     </td>
@@ -53,7 +54,7 @@
     </div>
 
 
-    <x-dialog-modal wire:model="open" >
+    <x-dialog-modal wire:model="open">
         <x-slot name='title'>
             Editar Rol
         </x-slot>
@@ -66,19 +67,22 @@
                 </div>
                 <div class="form-group">
                     <label for="description">Descripción</label>
-                    <textarea id="description" class="form-control @error('roleEdit.description') is-invalid @enderror" rows="5" wire:model.defer="roleEdit.description"></textarea>
+                    <textarea id="description" class="form-control @error('roleEdit.description') is-invalid @enderror" rows="5"
+                        wire:model.defer="roleEdit.description"></textarea>
                     @error('roleEdit.description')
-                        <span class="invalid-feedback">{{ $message }}</span>
+                        <span class="invalid-feedback">El campo es obligatorio</span>
                     @enderror
+
                 </div>
             </form>
         </x-slot>
         <x-slot name='footer'>
-            <button class="btn btn-secondary mr-2" wire:click="$set('open', false)" wire:loading.attr="disabled">Cancelar</button>
+            <button class="btn btn-secondary mr-2" wire:click="resetManual"
+                wire:loading.attr="disabled">Cancelar</button>
             <button class="btn btn-primary" wire:loading.attr="disabled" onclick="confirmUpdate2()">Actualizar</button>
         </x-slot>
     </x-dialog-modal>
-    
+
     <script>
         function confirmUpdate2() {
             // Llamar al método update2 de Livewire
