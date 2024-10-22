@@ -87,7 +87,7 @@
                     // Mostrar la alerta después de la actualización si todo es correcto
                     Swal.fire({
                         title: 'Usuario actualizado',
-                        text: 'El usuario ha sido actualizado exitosamente.',
+                        text: 'El rol ha sido actualizado exitosamente.',
                         icon: 'success',
                         confirmButtonText: 'OK'
                     });
@@ -96,7 +96,7 @@
                 // Manejar error si es necesario
                 Swal.fire({
                     title: 'Error',
-                    text: 'Hubo un problema al actualizar el usuario.',
+                    text: 'Hubo un problema al actualizar el rol.',
                     icon: 'error',
                     confirmButtonText: 'OK'
                 });
