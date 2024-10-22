@@ -11,9 +11,10 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
 
     <!-- Scripts -->
-    @vite(['resources/css/app.css', 'resources/js/app.js'])
+
     <link href="{{ asset('vendor/fontawesome-free/css/all.min.css') }}" rel="stylesheet" type="text/css">
     <link
         href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
@@ -403,26 +404,30 @@
                         <!-- Nav Item - User Information -->
                         <li class="nav-item dropdown no-arrow">
                             @php
-$user = Auth::user();
-$imagePath = ($user->image && $user->image !== 'users/') ? asset('storage/' . $user->image) : asset('storage/StockImages/stockUser.png');
-@endphp
+                                $user = Auth::user();
+                                $imagePath =
+                                    $user->image && $user->image !== 'users/'
+                                        ? asset('storage/' . $user->image)
+                                        : asset('storage/StockImages/stockUser.png');
+                            @endphp
 
-<a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
-   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ $user->name }}</span>
-    <img class="img-profile rounded-circle" src="{{ $imagePath }}">
-</a>
+                            <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="mr-2 d-none d-lg-inline text-gray-600 small">{{ $user->name }}</span>
+                                <img class="img-profile rounded-circle" src="{{ $imagePath }}">
+                            </a>
 
 
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item" href="{{ route('admin.usersView', ['iduser' => Auth::user()->id]) }}">
+                                <a class="dropdown-item"
+                                    href="{{ route('admin.usersView', ['iduser' => Auth::user()->id]) }}">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Mi perfil
                                 </a>
-                                
-                               
+
+
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="#" data-toggle="modal"
                                     data-target="#logoutModal">
@@ -511,6 +516,7 @@ $imagePath = ($user->image && $user->image !== 'users/') ? asset('storage/' . $u
     <!-- Page level custom scripts -->
     <script src="{{ asset('js/demo/chart-area-demo.js') }}"></script>
     <script src="{{ asset('js/demo/chart-pie-demo.js') }}"></script>
+    <script src="{{ asset('js/app.js') }}"></script>
 
     @livewireScripts
 
