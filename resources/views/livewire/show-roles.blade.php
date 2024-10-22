@@ -86,7 +86,7 @@
                 if (response) {
                     // Mostrar la alerta después de la actualización si todo es correcto
                     Swal.fire({
-                        title: 'Usuario actualizado',
+                        title: 'Rol actualizado',
                         text: 'El rol ha sido actualizado exitosamente.',
                         icon: 'success',
                         confirmButtonText: 'OK'
