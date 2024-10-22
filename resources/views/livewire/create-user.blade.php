@@ -11,9 +11,7 @@
             <form>
                 <label for="name">Imagen de perfil</label>
                 <div class="form-group">
-
                     <div class="mb-3 d-flex align-items-center">
-
                         @if ($image)
                             <img src="{{ $image->temporaryUrl() }}" alt="Imagen"
                                 style="width: 50px; height: 50px; border-radius: 50%; margin-right: 10px;">
@@ -22,9 +20,15 @@
                                 style="width: 50px; height: 50px; border-radius: 50%; margin-right: 10px;">
                         @endif
                         <label class="btn btn-primary btn-file">
-                            Elegir archivo <input type="file" wire:model="image" name="image">
+                            Elegir archivo <input type="file" wire:model="image" name="image" accept="image/*">
                         </label>
                     </div>
+                    @error('image')
+                        <span class="invalid-feedback">{{ $message }}</span>
+                    @enderror
+                    @if (session('imageError'))
+                        <div class="alert alert-danger">{{ session('imageError') }}</div>
+                    @endif
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-4">
@@ -114,7 +118,8 @@
         <x-slot name='footer'>
             <button class="btn btn-secondary mr-2 disabled:opacity-50" wire:click="resetManual"
                 wire:loading.attr="disabled">Cancelar</button>
-                <button class="btn btn-primary disabled:opacity-50" onclick="confirmSave()" wire:loading.attr="disabled">Guardar</button>
+            <button class="btn btn-primary disabled:opacity-50" onclick="confirmSave()"
+                wire:loading.attr="disabled">Guardar</button>
 
         </x-slot>
     </x-dialog-modal>
@@ -142,7 +147,7 @@
             });
         }
     </script>
-    
+
     <style>
         .img-redonda {
             border-radius: 50%;

@@ -23,9 +23,10 @@ class CreateUser extends Component
         'first_last_name' => 'required',
         'email' => 'required|email|unique:users,email',
         'status' => 'required',
-        'password' => 'required'
+        'password' => 'required',
+        'image' => 'nullable|mimes:jpg,jpeg,png,gif,webp|max:1024' // Validar que sea una imagen de ciertos tipos y tamaño máximo de 1MB
     ];
-
+    
     public function render()
     {
         $this->role = '';
