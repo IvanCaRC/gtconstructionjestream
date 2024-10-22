@@ -1,4 +1,26 @@
 <div>
+    <style>
+.fixed-size-img-container {
+    width: 200px;
+    height: 200px;
+    flex-shrink: 0; /* No permite que el contenedor se reduzca */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.fixed-size-img {
+    width: 200px;
+    height: 200px;
+    object-fit: cover; /* Muestra la imagen completa sin recortes */
+    border-radius: 50%; /* Mantiene la imagen circular */
+}
+
+
+
+
+
+    </style>
     <div class="container my-5">
         <div class="row">
             <div class="col-md-8">
@@ -7,29 +29,36 @@
                         <h2>Perfil del Usuario</h2>
                     </div>
                     <div class="card-body d-flex">
-                        <div class="mr-3 text-center">
+                        <div class="mr-3 text-center fixed-size-img-container">
                             @if ($user->image && $user->image !== 'users/')
-                                <img src="{{ asset('storage/' . $user->image) }}" alt="Imagen del Usuario"
-                                    class="rounded-circle img-fluid" style="width: 200px; height: 200px;">
+                                <img src="{{ asset('storage/' . $user->image) }}" alt="Imagen del Usuario" class="fixed-size-img">
                             @else
-                                <img src="{{ asset('storage/StockImages/stockUser.png') }}" alt="Imagen del Usuario"
-                                    class="rounded-circle img-fluid" style="width: 200px; height: 200px;">
+                                <img src="{{ asset('storage/StockImages/stockUser.png') }}" alt="Imagen del Usuario" class="fixed-size-img">
                             @endif
                         </div>
                         <div class="pl-3">
-                            <h1 class="mt-2">{{ $user->name }} {{ $user->first_last_name }}
-                                {{ $user->second_last_name }}</h1>
-                            <a href="#" class="d-block mb-3" wire:click="edit({{ $user->id }})">Editar
-                                perfil</a>
-                            <h5 class="card-title mt-4">Rol: @foreach ($user->roles as $role)
+                            <h1 class="mt-2">{{ $user->name }} {{ $user->first_last_name }} {{ $user->second_last_name }}</h1>
+                            <a href="#" class="d-block mb-3" wire:click="edit({{ $user->id }})">Editar perfil</a>
+                            <h5 class="card-title mt-4 role-description">Rol: 
+                                @foreach ($user->roles as $role)
                                     {{ $role->name }}
                                 @endforeach
                             </h5>
                             <h5 class="card-title mt-3">Estado: {{ $user->status == 1 ? 'Activo' : 'Inactivo' }}</h5>
                             <h5 class="card-title mt-3">Correo: {{ $user->email ?? '' }}</h5>
                             <h5 class="card-title mt-3">Número Telefónico: {{ $user->number ?? '' }}</h5>
+                            <h5 class="card-title mt-4 role-description">Obligaciones: 
+                                @foreach ($user->roles as $role)
+                                    {{ $role->description }}
+                                @endforeach
+                            </h5>
                         </div>
                     </div>
+                    
+                    
+                    
+                    
+                    
                     @if (auth()->user()->id !== $user->id)
                         <div class="card-footer text-right">
                             <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -341,8 +370,6 @@
     </script>
 
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/js/all.min.js"></script>
+
+
 </div>

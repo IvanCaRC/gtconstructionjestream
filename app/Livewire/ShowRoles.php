@@ -9,7 +9,9 @@ class ShowRoles extends Component
 {
     public $open = false;
     public $roles; // Añadir esta línea
+    protected $listeners = ['roleUpdate' => 'render'];
     public $roleEdit = [
+        'id' => '',
         'name' => '',
         'description' => ''
     ];
@@ -21,6 +23,7 @@ class ShowRoles extends Component
 
     public function render()
     {
+        
         $this->roles = Role::all(); // Cargar todos los roles
         return view('livewire.show-roles', ['roles' => $this->roles]);
     }
@@ -28,22 +31,33 @@ class ShowRoles extends Component
     public function editRole($roleId)
     {
         $role = Role::findOrFail($roleId);
+        $this->roleEdit['id'] = $role->id;
         $this->roleEdit['name'] = $role->name;
         $this->roleEdit['description'] = $role->description;
         $this->open = true;
     }
 
+
+
+
     public function updateRole()
     {
         $this->validate();
-
-        $role = Role::where('name', $this->roleEdit['name'])->firstOrFail();
+        $role = Role::findOrFail($this->roleEdit['id']);
         $role->update([
             'description' => $this->roleEdit['description'],
         ]);
 
         $this->reset('open', 'roleEdit');
-        $this->dispatch('roleUpdated');
+        $this->resetValidation();
+        $this->dispatch('roleUpdate');
+        return true;
+    }
+
+    public function resetManual()
+    {
+        $this->reset('open', 'roleEdit');
+        $this->resetValidation();
+        $this->dispatch('roleUpdate');
     }
 }
-
