@@ -176,14 +176,14 @@
                             <img src="{{ asset('storage/StockImages/stockUser.png') }}" alt="Imagen por Defecto"
                                 style="width: 50px; height: 50px; border-radius: 50%; margin-right: 15px;">
                         @endif
-                        <label class="btn btn-primary">
-                            Elegir archivo <input type="file" wire:model="image" name="image"
-                                style="display: none;">
+                        <label class="btn btn-primary btn-file">
+                            Elegir archivo <input type="file" wire:model="image" name="image" accept="image/*">
                         </label>
                     </div>
+                    @error('image')
+                        <span class="invalid-feedback">{{ $message }}</span>
+                    @enderror
                 </div>
-
-
                 <div class="form-row">
                     <div class="form-group col-md-4">
                         <label for="name">Nombre</label>
