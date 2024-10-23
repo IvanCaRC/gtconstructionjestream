@@ -8,10 +8,24 @@
                 <div class="table-responsive">
                     <div class="d-flex justify-content-between mb-3">
                         <!-- Input de búsqueda -->
-                        <input type="text" class="form-control mr-2" id="searchInput" wire:model='searchTerm'
-                            wire:keydown='search' placeholder="Buscar usuario...">
+                        <input type="text" class="form-control mr-2" id="searchInput" wire:model='searchTerm' wire:keydown='search' placeholder="Buscar usuario...">
+                        
+                        <!-- Filtro de Estado -->
+                        <select class="form-control mr-2" wire:model="statusFiltroDeBusqueda">
+                            <option value="2">Todos los estados</option>
+                            <option value="1">Activo</option>
+                            <option value="0">Inactivo</option>
+                        </select>
+    
+                        <!-- Filtro de Roles -->
+                        <select class="form-control mr-2" wire:model="roleFiltroDeBusqueda">
+                            <option value="">Todos los roles</option>
+                            @foreach($roles as $role)
+                                <option value="{{ $role->name }}">{{ $role->name }}</option>
+                            @endforeach
+                        </select>
                     </div>
-
+                    
                     @if ($users->count() > 0)
                         <table class="table">
                             <thead>

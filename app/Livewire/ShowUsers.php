@@ -4,11 +4,13 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use Livewire\WithFileUploads;
-use App\Models\User;
-use Illuminate\Support\Facades\DB;
-use Spatie\Permission\Models\Role;
 use Livewire\WithPagination;
+use App\Models\User;
+use Spatie\Permission\Models\Role;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+
+
 
 class ShowUsers extends Component
 {
@@ -16,6 +18,8 @@ class ShowUsers extends Component
 
     public $currentUserId;
     public $searchTerm = '';
+    public $statusFiltroDeBusqueda;
+    public $roleFiltroDeBusqueda;
     public $sort = 'id';
     public $image;
     public $direction = 'desc';
@@ -36,9 +40,10 @@ class ShowUsers extends Component
         'password' => '',
     ];
 
-    public function viewUser($userId)
+    public function mount()
     {
-        return redirect()->route('admin.usersView', ['iduser' => $userId]);
+        $this->currentUserId = Auth::user()->id;
+        $this->roles = Role::where('id', '!=', 1)->get(); // Cargar todos los roles excepto Administrador
     }
 
     public function updatingSearchTerm()
@@ -46,27 +51,44 @@ class ShowUsers extends Component
         $this->resetPage();
     }
 
-    public function mount()
+    public function updated($propertyName)
     {
-        $this->currentUserId = Auth::user()->id;
+        if (in_array($propertyName, ['statusFiltroDeBusqueda', 'roleFiltroDeBusqueda'])) {
+            $this->resetPage();
+        }
     }
 
     protected $listeners = ['userAdded' => 'render'];
 
     public function render()
     {
-        $this->roles = Role::where('id', '!=', 1)->get();
+        $query = User::where('estadoEliminacion', false);
 
-        $users = User::where('estadoEliminacion', false)
-            ->where(function ($query) {
-                $query->where('name', 'LIKE', "%{$this->searchTerm}%")
+        // Búsqueda por término
+        if ($this->searchTerm) {
+            $query->where(function($q) {
+                $q->where('name', 'LIKE', "%{$this->searchTerm}%")
                     ->orWhere('first_last_name', 'LIKE', "%{$this->searchTerm}%")
                     ->orWhere('second_last_name', 'LIKE', "%{$this->searchTerm}%")
                     ->orWhere(DB::raw("CONCAT(name, ' ', first_last_name, ' ', second_last_name)"), 'LIKE', "%{$this->searchTerm}%")
                     ->orWhere('email', 'LIKE', "%{$this->searchTerm}%")
                     ->orWhere('number', 'LIKE', "%{$this->searchTerm}%");
-            })
-            ->orderBy($this->sort, $this->direction)
+            });
+        }
+
+        // Filtro de estado
+        if ($this->statusFiltroDeBusqueda !== 2) {
+            $query->where('status', $this->statusFiltroDeBusqueda);
+        }
+
+        // Filtro de roles
+        if ($this->roleFiltroDeBusqueda) {
+            $query->whereHas('roles', function($q) {
+                $q->where('name', $this->roleFiltroDeBusqueda);
+            });
+        }
+
+        $users = $query->orderBy($this->sort, $this->direction)
             ->with('roles')
             ->paginate(10);
 
@@ -76,7 +98,6 @@ class ShowUsers extends Component
         ]);
     }
 
-
     public function search()
     {
         $this->resetPage();
@@ -85,10 +106,8 @@ class ShowUsers extends Component
     public function update()
     {
         $this->validate(User::rules('userEdit.', $this->userEditId));
-
         $user = User::find($this->userEditId);
         $image = null;
-
         if ($this->image) {
             if ($this->image != $this->imageRecuperada) {
                 $image = $this->image->store('users', 'public');
@@ -98,7 +117,6 @@ class ShowUsers extends Component
         } else {
             $image = $this->imageRecuperada;
         }
-
         $user->update([
             'image' => $image,
             'name' => $this->userEdit['name'],
@@ -109,9 +127,7 @@ class ShowUsers extends Component
             'status' => $this->userEdit['status'],
             'password' => $this->userEdit['password'],
         ]);
-
         $user->syncRoles([$this->role]);
-
         $this->reset('open', 'image', 'role');
         $this->dispatch('userAdded');
         return true;
@@ -128,10 +144,8 @@ class ShowUsers extends Component
     {
         $user = User::findOrFail($userId);
         $user->update(['estadoEliminacion' => true]);
-    
-        $this->dispatch('userAdded'); // Si necesitas refrescar la lista de usuarios
+        $this->dispatch('userAdded');
     }
-    
 
     public function edit($userId)
     {

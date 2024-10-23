@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('number')->nullable();
             $table->boolean('status');
-            $table->boolean('estadoEliminacion');
+            $table->boolean('estadoEliminacion')->default(false);
             $table->string('password'); 
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
