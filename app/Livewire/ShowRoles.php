@@ -3,12 +3,12 @@
 namespace App\Livewire;
 
 use Livewire\Component;
-use Spatie\Permission\Models\Role;
+use App\Models\Role;
 
 class ShowRoles extends Component
 {
     public $open = false;
-    public $roles; // Añadir esta línea
+    public $roles;
     protected $listeners = ['roleUpdate' => 'render'];
     public $roleEdit = [
         'id' => '',
@@ -16,15 +16,9 @@ class ShowRoles extends Component
         'description' => ''
     ];
 
-    protected $rules = [
-        'roleEdit.name' => 'required',
-        'roleEdit.description' => 'required',
-    ];
-
     public function render()
     {
-        
-        $this->roles = Role::all(); // Cargar todos los roles
+        $this->roles = Role::all();
         return view('livewire.show-roles', ['roles' => $this->roles]);
     }
 
@@ -37,17 +31,13 @@ class ShowRoles extends Component
         $this->open = true;
     }
 
-
-
-
     public function updateRole()
     {
-        $this->validate();
+        $this->validate(Role::rules($this->roleEdit['id']));
         $role = Role::findOrFail($this->roleEdit['id']);
         $role->update([
             'description' => $this->roleEdit['description'],
         ]);
-
         $this->reset('open', 'roleEdit');
         $this->resetValidation();
         $this->dispatch('roleUpdate');
@@ -55,13 +45,13 @@ class ShowRoles extends Component
     }
 
     public function getShortDescription($description)
-{
-    $maxLength = 100; // Ajusta el número de caracteres según tus necesidades
-    if (strlen($description) > $maxLength) {
-        return substr($description, 0, $maxLength) . '...';
+    {
+        $maxLength = 100;
+        if (strlen($description) > $maxLength) {
+            return substr($description, 0, $maxLength) . '...';
+        }
+        return $description;
     }
-    return $description;
-}
 
     public function resetManual()
     {
@@ -70,3 +60,4 @@ class ShowRoles extends Component
         $this->dispatch('roleUpdate');
     }
 }
+
