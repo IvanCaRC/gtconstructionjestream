@@ -74,7 +74,7 @@
                 <li class="nav-item @yield('activeAdministracion')">
                     <a class="nav-link" href="{{ route('admin.dashboardAdmin') }}">
                         <i class="fas fa-fw fa-tachometer-alt"></i>
-                        <span>Administracion</span></a>
+                        <span>Dep. Administrativo</span></a>
                 </li>
             @endcan
 
@@ -83,7 +83,7 @@
                 <li class="nav-item @yield('activeAdministracion')">
                     <a class="nav-link" href="#">
                         <i class="fas fa-fw fa-tachometer-alt"></i>
-                        <span>Ventas</span></a>
+                        <span>Dep. Ventas</span></a>
                 </li>
             @endcan
 
@@ -92,7 +92,7 @@
                 <li class="nav-item @yield('activeAdministracion')">
                     <a class="nav-link" href="#">
                         <i class="fas fa-fw fa-tachometer-alt"></i>
-                        <span>Compras</span></a>
+                        <span>Dep. Compras</span></a>
                 </li>
             @endcan
 
@@ -101,7 +101,7 @@
                 <li class="nav-item @yield('activeAdministracion')">
                     <a class="nav-link" href="#">
                         <i class="fas fa-fw fa-tachometer-alt"></i>
-                        <span>Finanzas</span></a>
+                        <span>Dep. Finanzas</span></a>
                 </li>
             @endcan
 
