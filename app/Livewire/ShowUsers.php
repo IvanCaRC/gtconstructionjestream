@@ -56,12 +56,16 @@ class ShowUsers extends Component
     public function render()
     {
         $this->roles = Role::where('id', '!=', 1)->get();
-        $users = User::where('name', 'LIKE', "%$this->searchTerm%")
-            ->orWhere('first_last_name', 'LIKE', "%$this->searchTerm%")
-            ->orWhere('second_last_name', 'LIKE', "%$this->searchTerm%")
-            ->orWhere(DB::raw("CONCAT(name, ' ', first_last_name, ' ', second_last_name)"), 'LIKE', "%$this->searchTerm%")
-            ->orWhere('email', 'LIKE', "%$this->searchTerm%")
-            ->orWhere('number', 'LIKE', "%$this->searchTerm%")
+
+        $users = User::where('estadoEliminacion', false)
+            ->where(function ($query) {
+                $query->where('name', 'LIKE', "%{$this->searchTerm}%")
+                    ->orWhere('first_last_name', 'LIKE', "%{$this->searchTerm}%")
+                    ->orWhere('second_last_name', 'LIKE', "%{$this->searchTerm}%")
+                    ->orWhere(DB::raw("CONCAT(name, ' ', first_last_name, ' ', second_last_name)"), 'LIKE', "%{$this->searchTerm}%")
+                    ->orWhere('email', 'LIKE', "%{$this->searchTerm}%")
+                    ->orWhere('number', 'LIKE', "%{$this->searchTerm}%");
+            })
             ->orderBy($this->sort, $this->direction)
             ->with('roles')
             ->paginate(10);
@@ -71,6 +75,7 @@ class ShowUsers extends Component
             'roles' => $this->roles
         ]);
     }
+
 
     public function search()
     {
@@ -119,12 +124,14 @@ class ShowUsers extends Component
         $this->dispatch('userAdded');
     }
 
-    public function destroy($userId)
+    public function eliminar($userId)
     {
-        $user = User::find($userId);
-        $user->delete();
-        $this->dispatch('userAdded');
+        $user = User::findOrFail($userId);
+        $user->update(['estadoEliminacion' => true]);
+    
+        $this->dispatch('userAdded'); // Si necesitas refrescar la lista de usuarios
     }
+    
 
     public function edit($userId)
     {

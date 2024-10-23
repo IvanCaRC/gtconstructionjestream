@@ -124,7 +124,7 @@
                                                         }).then((result) => {
 
                                                             if (result.isConfirmed) {
-                                                                @this.call('destroy', userId);
+                                                                @this.call('eliminar', userId);
                                                                 Swal.fire(
                                                                     'Eliminado!',
                                                                     `${userName} ${userFirstLastName} ha sido eliminado.`,

@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
              'email' => 'administracion@gtcgroup.com.mx',
              'number' => '+52 12291750175',
              'status' => true,
+             'estadoEliminacion' => false,
              'password' => Hash::make('gtconstructions'),
          ])->assignRole('Administrador');
          

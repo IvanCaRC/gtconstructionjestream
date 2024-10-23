@@ -7,6 +7,8 @@ use Livewire\Component;
 use Livewire\WithFileUploads;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+
 class ViewUser extends Component
 {
     use WithFileUploads;
@@ -55,8 +57,14 @@ class ViewUser extends Component
 
     public function render()
     {
+        if ($this->user->estadoEliminacion) {
+            abort(404); // Lanza un error 404 si el usuario está eliminado
+        }
+
         return view('livewire.view-user', ['user' => $this->user, 'roles' => $this->roles]);
     }
+
+
 
     public function update2()
     {
@@ -123,4 +131,3 @@ class ViewUser extends Component
         $this->role = $user->roles->pluck('name')->first(); // Asignar el rol actual del usuario
     }
 }
-

@@ -21,16 +21,18 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
-            'image' => 'users/' . $this->faker->image('public/storage/users',640,480,null,false),
+            'image' => 'users/' . $this->faker->image('public/storage/users', 640, 480, null, false),
             'name' => $this->faker->firstName,
             'first_last_name' => $this->faker->lastName,
             'second_last_name' => $this->faker->lastName,
             'email' => $this->faker->unique()->safeEmail,
             'number' => $this->faker->phoneNumber,
             'status' => $this->faker->boolean,
-            'password' => Hash::make('password'), 
+            'estadoEliminacion'=> false, // Fijar a false
+            'password' => Hash::make('password'),
         ];
     }
+    
 
     /**
      * Indicate that the model's email address should be unverified.
