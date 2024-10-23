@@ -12,8 +12,8 @@ use Illuminate\Support\Facades\Auth;
 
 class ShowUsers extends Component
 {
-    use WithFileUploads;
-    use WithPagination;
+    use WithFileUploads, WithPagination;
+
     public $currentUserId;
     public $searchTerm = '';
     public $sort = 'id';
@@ -22,8 +22,8 @@ class ShowUsers extends Component
     public $open = false;
     public $userEditId = '';
     public $imageRecuperada;
-    public $role; // Añadir esta línea
-    public $roles; // Añadir esta línea
+    public $role;
+    public $roles;
     public $userEdit = [
         'id' => '',
         'image' => '',
@@ -36,45 +36,26 @@ class ShowUsers extends Component
         'password' => '',
     ];
 
-    protected $rules = [
-        'userEdit.name' => 'required',
-        'userEdit.first_last_name' => 'required',
-        'userEdit.email' => 'required|email|unique:users,email',
-        'userEdit.status' => 'required',
-        'userEdit.password' => 'required',
-        'role' => 'required'
-    ];
-
-    protected function rules()
-    {
-        return [
-            'userEdit.name' => 'required',
-            'userEdit.first_last_name' => 'required',
-            'userEdit.email' => 'required|email|unique:users,email,' . $this->userEditId,
-            'userEdit.status' => 'required',
-            'userEdit.password' => 'required',
-            'role' => 'required'
-        ];
-    }
-
     public function viewUser($userId)
     {
         return redirect()->route('admin.usersView', ['iduser' => $userId]);
     }
+
     public function updatingSearchTerm()
     {
-
         $this->resetPage();
     }
+
     public function mount()
     {
         $this->currentUserId = Auth::user()->id;
     }
+
     protected $listeners = ['userAdded' => 'render'];
 
     public function render()
     {
-        $this->roles = Role::where('id', '!=', 1)->get(); // Excluir rol de Administrador
+        $this->roles = Role::where('id', '!=', 1)->get();
         $users = User::where('name', 'LIKE', "%$this->searchTerm%")
             ->orWhere('first_last_name', 'LIKE', "%$this->searchTerm%")
             ->orWhere('second_last_name', 'LIKE', "%$this->searchTerm%")
@@ -82,7 +63,7 @@ class ShowUsers extends Component
             ->orWhere('email', 'LIKE', "%$this->searchTerm%")
             ->orWhere('number', 'LIKE', "%$this->searchTerm%")
             ->orderBy($this->sort, $this->direction)
-            ->with('roles') // Cargar la relación con los roles
+            ->with('roles')
             ->paginate(10);
 
         return view('livewire.show-users', [
@@ -90,6 +71,7 @@ class ShowUsers extends Component
             'roles' => $this->roles
         ]);
     }
+
     public function search()
     {
         $this->resetPage();
@@ -97,22 +79,19 @@ class ShowUsers extends Component
 
     public function update()
     {
-        // Validar los datos del formulario primero
-        $this->validate($this->rules());
+        $this->validate(User::rules('userEdit.', $this->userEditId));
 
         $user = User::find($this->userEditId);
-        $image = null; // Mantener la imagen actual por defecto
+        $image = null;
 
-        // Verificar si se subió una nueva imagen
         if ($this->image) {
-            // Verificar si la nueva imagen es diferente de la imagen recuperada
             if ($this->image != $this->imageRecuperada) {
                 $image = $this->image->store('users', 'public');
             } else {
-                $image = $this->imageRecuperada; // Mantener la imagen recuperada si es igual
+                $image = $this->imageRecuperada;
             }
         } else {
-            $image = $this->imageRecuperada; // Mantener la imagen recuperada si no hay nueva imagen
+            $image = $this->imageRecuperada;
         }
 
         $user->update([
@@ -126,13 +105,12 @@ class ShowUsers extends Component
             'password' => $this->userEdit['password'],
         ]);
 
-        $user->syncRoles([$this->role]); // Asignar el rol al usuario
+        $user->syncRoles([$this->role]);
 
         $this->reset('open', 'image', 'role');
         $this->dispatch('userAdded');
-        return true; // Indicar que la actualización fue exitosa
+        return true;
     }
-
 
     public function resetManual()
     {
@@ -163,7 +141,7 @@ class ShowUsers extends Component
         $this->userEdit['status'] = $user->status;
         $this->userEdit['password'] = $user->password;
         $this->imageRecuperada = $user->image;
-        $this->role = $user->roles->pluck('name')->first(); // Asignar el rol actual del usuario
+        $this->role = $user->roles->pluck('name')->first();
     }
 
     public function order($sort)
