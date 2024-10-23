@@ -77,16 +77,16 @@ class ShowUsers extends Component
         }
 
         // Filtro de estado
-        if ($this->statusFiltroDeBusqueda !== 2) {
-            $query->where('status', $this->statusFiltroDeBusqueda);
-        }
+        // if ($this->statusFiltroDeBusqueda !== 2) {
+        //     $query->where('status', $this->statusFiltroDeBusqueda);
+        // }
 
-        // Filtro de roles
-        if ($this->roleFiltroDeBusqueda) {
-            $query->whereHas('roles', function($q) {
-                $q->where('name', $this->roleFiltroDeBusqueda);
-            });
-        }
+        // // Filtro de roles
+        // if ($this->roleFiltroDeBusqueda) {
+        //     $query->whereHas('roles', function($q) {
+        //         $q->where('name', $this->roleFiltroDeBusqueda);
+        //     });
+        // }
 
         $users = $query->orderBy($this->sort, $this->direction)
             ->with('roles')
