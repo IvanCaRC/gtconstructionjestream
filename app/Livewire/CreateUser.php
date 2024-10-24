@@ -23,6 +23,13 @@ class CreateUser extends Component
         $this->roles = Role::where('id', '!=', 1)->get(); // Excluir rol de Administrador
         return view('livewire.create-user', ['roles' => $this->roles]);
     }
+    public function resetValidation2()
+    {
+        // Resetear solo la validación del campo 'role'
+        $this->resetErrorBag('role');
+    }
+    
+    
 
     public function save()
     {

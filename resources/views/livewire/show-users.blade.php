@@ -8,15 +8,15 @@
                 <div class="table-responsive">
                     <div class="d-flex justify-content-between mb-3">
                         <!-- Input de búsqueda -->
-                        <input type="text" class="form-control mr-2" id="searchInput" wire:model='searchTerm' placeholder="Buscar usuario...">
-                    
+                        <input type="text" class="form-control mr-2" id="searchInput" wire:model='searchTerm' wire:keydown='search' placeholder="Buscar usuario...">
+                        
                         <!-- Filtro de Estado -->
                         <select class="form-control mr-2" wire:model="statusFiltroDeBusqueda" wire:change="filter">
-                            <option value="">Todos los estados</option>
+                            <option value="2">Todos los estados</option>
                             <option value="1">Activo</option>
                             <option value="0">Inactivo</option>
                         </select>
-                    
+                        
                         <!-- Filtro de Roles -->
                         <select class="form-control mr-2" wire:model="roleFiltroDeBusqueda" wire:change="filter">
                             <option value="">Todos los roles</option>
@@ -25,8 +25,6 @@
                             @endforeach
                         </select>
                     </div>
-                    
-                    
                     @if ($users->count() > 0)
                         <table class="table">
                             <thead>
@@ -249,8 +247,7 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label for="departamento">Departamento</label>
-                            <select id="role" class="form-control @error('role') required-field @enderror"
-                                wire:model.defer="role">
+                            <select id="role" class="form-control @error('role') required-field @enderror" wire:model.defer="role" wire:change="resetValidation2">
                                 <option value="" disabled selected>Asigne rol</option>
                                 @foreach ($roles as $role)
                                     @if ($userEdit['id'] === $currentUserId)
@@ -260,6 +257,8 @@
                                     @endif
                                 @endforeach
                             </select>
+                            
+                            
                             @error('role')
                                 <span class="invalid-feedback">{{ $message }}</span>
                             @enderror

@@ -81,14 +81,14 @@ class ShowUsers extends Component
                 $q->where('name', 'LIKE', "%{$this->searchTerm}%")
                     ->orWhere('first_last_name', 'LIKE', "%{$this->searchTerm}%")
                     ->orWhere('second_last_name', 'LIKE', "%{$this->searchTerm}%")
-                    ->orWhere(DB::raw("CONCAT(name, ' ', first_last_name, ' ', second_last_name)"), 'LIKE', "%{$this->searchTerm}%")
+                    ->orWhere(DB::raw("CONCAT(first_last_name, ' ', second_last_name, ' ', name)"), 'LIKE', "%{$this->searchTerm}%")
                     ->orWhere('email', 'LIKE', "%{$this->searchTerm}%")
                     ->orWhere('number', 'LIKE', "%{$this->searchTerm}%");
             });
         }
 
         // Filtro de estado
-        if ($this->statusFiltroDeBusqueda !== "") {
+        if ($this->statusFiltroDeBusqueda !== "2" && $this->statusFiltroDeBusqueda !== null) {
             $query->where('status', $this->statusFiltroDeBusqueda);
         }
 
@@ -107,6 +107,7 @@ class ShowUsers extends Component
             'users' => $users,
             'roles' => $this->roles
         ]);
+        
     }
 
     public function search()
@@ -150,6 +151,9 @@ class ShowUsers extends Component
         $this->resetValidation();
         $this->dispatch('userAdded');
     }
+
+
+    
 
     public function eliminar($userId)
     {

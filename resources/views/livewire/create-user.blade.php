@@ -89,8 +89,7 @@
                     </div>
                     <div class="form-group col-md-6">
                         <label for="departamento">Departamento</label>
-                        <select id="role" class="form-control @error('role') required-field @enderror"
-                            wire:model.defer="role">
+                        <select id="role" class="form-control @error('role') required-field @enderror" wire:model.defer="role" >
                             <option value="" disabled selected>Asigne rol</option>
                             @foreach ($roles as $role)
                                 <option value="{{ $role->name }}">{{ $role->name }}</option>
@@ -100,6 +99,8 @@
                             <span class="error-message">{{ $message }}</span>
                         @enderror
                     </div>
+                    
+                    
                 </div>
                 <div class="form-group">
                     <label for="password">Contraseña</label>
