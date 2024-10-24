@@ -54,8 +54,19 @@ class ShowUsers extends Component
     public function updated($propertyName)
     {
         if (in_array($propertyName, ['statusFiltroDeBusqueda', 'roleFiltroDeBusqueda'])) {
-            $this->resetPage();
+            $this->filter();  // Llama al método de filtro para restablecer la página y aplicar los filtros
         }
+    }
+
+    public function filter()
+    {
+        $this->resetPage();  // Asegura que la paginación se restablezca
+    }
+
+
+    public function viewUser($userId)
+    {
+        return redirect()->route('admin.usersView', ['iduser' => $userId]);
     }
 
     protected $listeners = ['userAdded' => 'render'];
@@ -66,7 +77,7 @@ class ShowUsers extends Component
 
         // Búsqueda por término
         if ($this->searchTerm) {
-            $query->where(function($q) {
+            $query->where(function ($q) {
                 $q->where('name', 'LIKE', "%{$this->searchTerm}%")
                     ->orWhere('first_last_name', 'LIKE', "%{$this->searchTerm}%")
                     ->orWhere('second_last_name', 'LIKE', "%{$this->searchTerm}%")
@@ -77,16 +88,16 @@ class ShowUsers extends Component
         }
 
         // Filtro de estado
-        // if ($this->statusFiltroDeBusqueda !== 2) {
-        //     $query->where('status', $this->statusFiltroDeBusqueda);
-        // }
+        if ($this->statusFiltroDeBusqueda !== "") {
+            $query->where('status', $this->statusFiltroDeBusqueda);
+        }
 
         // // Filtro de roles
-        // if ($this->roleFiltroDeBusqueda) {
-        //     $query->whereHas('roles', function($q) {
-        //         $q->where('name', $this->roleFiltroDeBusqueda);
-        //     });
-        // }
+        if ($this->roleFiltroDeBusqueda) {
+            $query->whereHas('roles', function ($q) {
+                $q->where('name', $this->roleFiltroDeBusqueda);
+            });
+        }
 
         $users = $query->orderBy($this->sort, $this->direction)
             ->with('roles')

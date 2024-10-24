@@ -113,6 +113,15 @@ class ViewUser extends Component
         return redirect()->route('admin.users');
     }
 
+    public function eliminar($userId)
+    {
+        $user = User::findOrFail($userId);
+        
+        $user->update(['estadoEliminacion' => true]);
+        $this->dispatch('userAddedEdit');
+        return redirect()->route('admin.users');
+    }
+
     public function edit($userId)
     {
         $this->open = true;
