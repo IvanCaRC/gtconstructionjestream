@@ -17,7 +17,11 @@
                                     @if ($errors->any())
                                         <div class="alert alert-danger alert-dismissible fade show" role="alert">
                                             <ul>
+                                                @if ($errors->has('status_error'))
+                                                    <li>{{ $errors->first('status_error') }}</li>
+                                                @else
                                                     <li>{{ 'Verifica correo y/o contraseña'}}</li>
+                                                @endif
                                             </ul>
                                             <button type="button" class="btn-close" data-bs-dismiss="alert"
                                                 aria-label="Close"></button>
