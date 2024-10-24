@@ -19,10 +19,12 @@
                                             <ul>
                                                 @if ($errors->has('status_error'))
                                                     <li>{{ $errors->first('status_error') }}</li>
+                                                @elseif ($errors->has('estado_eliminado'))
+                                                    <li>{{ $errors->first('estado_eliminado') }}</li>
                                                 @else
-                                                    <li>{{ 'Verifica correo y/o contraseña'}}</li>
+                                                    <li>{{ 'Verifica correo y/o contraseña' }}</li>
                                                 @endif
-                                            </ul>
+                                            </ul>                                            
                                             <button type="button" class="btn-close" data-bs-dismiss="alert"
                                                 aria-label="Close"></button>
                                         </div>
