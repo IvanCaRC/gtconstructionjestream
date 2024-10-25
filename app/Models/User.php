@@ -44,25 +44,6 @@ class User extends Authenticatable
             'image' => 'nullable|mimes:jpg,jpeg,png,gif,webp|max:1024'
         ];
     }
-
-    public function getRoleView()
-    {
-        $this->role= '';
-        $this->role = $this->roles()->first()->name;
-
-        switch ($this->role) {
-            case 'Administrador':
-                return 'admin.dashboardAdmin';
-            case 'Ventas':
-                return 'ventas.dashboardVentas';
-            case 'Compras':
-                return 'compras.dashboardCompras';
-            case 'Finanzas':
-                return 'finanzas.dashboardFinanzas';
-            default:
-                return 'home';
-        }
-    }
 }
 
 
