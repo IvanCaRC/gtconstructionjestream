@@ -61,39 +61,16 @@
 
 
 
-                    @if (auth()->user()->id !== $user->id)
+
                         <div class="card-footer text-right">
                             <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-                            <a href="#" class="text-danger"
-                                onclick="confirmDeletion({{ $user->id }}, '{{ $user->name }}', '{{ $user->first_last_name }}')">Eliminar
-                                usuario</a>
-                            <script>
-                                function confirmDeletion(userId, userName, userFirstLastName) {
-                                    Swal.fire({
-                                        title: `¿Estás seguro de que deseas eliminar a ${userName} ${userFirstLastName}?`,
-                                        text: "¡No podrás revertir esto!",
-                                        icon: 'warning',
-                                        showCancelButton: true,
-                                        confirmButtonColor: '#d33',
-                                        cancelButtonColor: '#3085d6',
-                                        confirmButtonText: 'Sí, eliminar',
-                                        cancelButtonText: 'Cancelar'
-                                    }).then((result) => {
-                                        if (result.isConfirmed) {
-                                            @this.call('eliminar', userId);
-                                            Swal.fire(
-                                                'Eliminado!',
-                                                `${userName} ${userFirstLastName} ha sido eliminado.`,
-                                                'success'
-                                            );
-                                        }
-                                    });
-                                }
-                            </script>
+                            <a href="#" class="d-block mb-3" wire:click="$set('open2', true)">Cambiar contraseña</a>
+
+                            
 
                         </div>
-                    @endif
+
                 </div>
             </div>
 
@@ -238,6 +215,65 @@
     </script>
 
 
+<x-dialog-modal wire:model="open2">
+    <x-slot name='title'>
+        Cambiar Contraseña
+    </x-slot>
+    <x-slot name='content'>
+        <form>
+            <div class="form-group">
+                <label for="current_password">Contraseña Actual</label>
+                <input type="password" id="current_password" class="form-control" wire:model.defer="current_password">
+                @error('current_password')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+            </div>
+            <div class="form-group">
+                <label for="new_password">Nueva Contraseña</label>
+                <input type="password" id="new_password" class="form-control" wire:model.defer="new_password">
+                @error('new_password')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+            </div>
+            <div class="form-group">
+                <label for="confirm_password">Confirmar Nueva Contraseña</label>
+                <input type="password" id="confirm_password" class="form-control" wire:model.defer="confirm_password">
+                @error('confirm_password')
+                    <span class="invalid-feedback">{{ $message }}</span>
+                @enderror
+            </div>
+        </form>
+    </x-slot>
+    <x-slot name='footer'>
+        <button class="btn btn-secondary mr-2 disabled:opacity-50" wire:click="$set('open2',false)" wire:loading.attr="disabled">Cancelar</button>
+        <button class="btn btn-primary disabled:opacity-50" wire:loading.attr="disabled" onclick="updatePassword()">Aceptar</button>
+    </x-slot>
+</x-dialog-modal>
+
+<script>
+    function updatePassword() {
+        // Llamar al método update2 de Livewire
+        @this.call('updatePassword').then(response => {
+            if (response) {
+                // Mostrar la alerta después de la actualización si todo es correcto
+                Swal.fire({
+                    title: 'Usuario actualizado',
+                    text: 'El usuario ha sido actualizado exitosamente.',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                });
+            }
+        }).catch(error => {
+            // Manejar error si es necesario
+            Swal.fire({
+                title: 'Error',
+                text: 'Hubo un problema al actualizar el usuario.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        });
+    }
+</script>
 
 
 </div>

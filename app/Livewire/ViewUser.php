@@ -14,6 +14,7 @@ class ViewUser extends Component
     use WithFileUploads;
     public $currentUserId;
     public $open = false;
+    public $open2 = false;
     public $user;
     public $iduser;
     public $userEditId = '';
