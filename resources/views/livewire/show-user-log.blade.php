@@ -24,7 +24,7 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">
-                        <h2>Perfil del Usuario</h2>
+                        <h2>Perfil del Usussssario</h2>
                     </div>
                     <div class="card-body d-flex">
                         <div class="mr-3 text-center fixed-size-img-container">
@@ -56,27 +56,15 @@
                             </h5>
                         </div>
                     </div>
-
-
-
-
-
-
-                        <div class="card-footer text-right">
-                            <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
-                            <a href="#" class="d-block mb-3" wire:click="$set('open2', true)">Cambiar contraseña</a>
-
-                            
-
-                        </div>
-
+                    <div class="card-footer text-right">
+                        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+                        <a href="#" class="d-block mb-3"
+                        wire:click="$set('open2', true)">Cambiar
+                            contraseña</a>
+                    </div>
                 </div>
             </div>
-
-           
         </div>
-
     </div>
 
 
@@ -144,49 +132,13 @@
                     <label for="number">Teléfono</label>
                     <input type="text" id="number" class="form-control" wire:model.defer="userEdit.number">
                 </div>
-                @if ($userEdit['id'] != $currentUserId)
-                    <div class="form-row">
-                        <div class="form-group col-md-6">
-                            <label for="status">Estado</label>
-                            <select id="status" class="form-control" wire:model.defer="userEdit.status">
-                                <option value="1">Activo</option>
-                                <option value="0">Inactivo</option>
-                            </select>
-                        </div>
-                        <div class="form-group col-md-6">
-                            <label for="departamento">Departamento</label>
-                            <select id="role" class="form-control @error('role') required-field @enderror"
-                                wire:model.defer="role">
-                                <option value="" disabled selected>Asigne rol</option>
-                                @foreach ($roles as $role)
-                                    @if ($userEdit['id'] === $currentUserId)
-                                        <option value="Admin">Administrador</option>
-                                    @else
-                                        <option value="{{ $role->name }}">{{ $role->name }}</option>
-                                    @endif
-                                @endforeach
-                            </select>
-                            @error('role')
-                                <span class="invalid-feedback">{{ $message }}</span>
-                            @enderror
-                        </div>
-                    </div>
-                @endif
-
             </form>
         </x-slot>
         <x-slot name='footer'>
             <button class="btn btn-secondary mr-2 disabled:opacity-50" wire:click="$set('open',false)"
                 wire:loading.attr="disabled">Cancelar</button>
-
-
             <button class="btn btn-primary disabled:opacity-50" wire:loading.attr="disabled"
                 onclick="confirmUpdate2()">Actualizar</button>
-
-
-
-
-
         </x-slot>
     </x-dialog-modal>
     <script>
@@ -213,67 +165,67 @@
             });
         }
     </script>
+    <x-dialog-modal wire:model="open2">
+        <x-slot name='title'>
+            Cambiar Contraseña
+        </x-slot>
+        <x-slot name='content'>
+            <form>
+                <div class="form-group">
+                    <label for="current_password">Contraseña Actual</label>
+                    <input type="password" id="current_password" class="form-control"
+                        wire:model.defer="current_password">
+                    @error('current_password')
+                        <span class="invalid-feedback">{{ $message }}</span>
+                    @enderror
+                </div>
+                <div class="form-group">
+                    <label for="new_password">Nueva Contraseña</label>
+                    <input type="password" id="new_password" class="form-control" wire:model.defer="new_password">
+                    @error('new_password')
+                        <span class="invalid-feedback">{{ $message }}</span>
+                    @enderror
+                </div>
+                <div class="form-group">
+                    <label for="confirm_password">Confirmar Nueva Contraseña</label>
+                    <input type="password" id="confirm_password" class="form-control"
+                        wire:model.defer="confirm_password">
+                    @error('confirm_password')
+                        <span class="invalid-feedback">{{ $message }}</span>
+                    @enderror
+                </div>
+            </form>
+        </x-slot>
+        <x-slot name='footer'>
+            <button class="btn btn-secondary mr-2 disabled:opacity-50" wire:click="$set('open2',false)"
+                wire:loading.attr="disabled">Cancelar</button>
+            <button class="btn btn-primary disabled:opacity-50" wire:loading.attr="disabled"
+                onclick="updatePassword()">Aceptar</button>
+        </x-slot>
+    </x-dialog-modal>
 
-
-<x-dialog-modal wire:model="open2">
-    <x-slot name='title'>
-        Cambiar Contraseña
-    </x-slot>
-    <x-slot name='content'>
-        <form>
-            <div class="form-group">
-                <label for="current_password">Contraseña Actual</label>
-                <input type="password" id="current_password" class="form-control" wire:model.defer="current_password">
-                @error('current_password')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror
-            </div>
-            <div class="form-group">
-                <label for="new_password">Nueva Contraseña</label>
-                <input type="password" id="new_password" class="form-control" wire:model.defer="new_password">
-                @error('new_password')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror
-            </div>
-            <div class="form-group">
-                <label for="confirm_password">Confirmar Nueva Contraseña</label>
-                <input type="password" id="confirm_password" class="form-control" wire:model.defer="confirm_password">
-                @error('confirm_password')
-                    <span class="invalid-feedback">{{ $message }}</span>
-                @enderror
-            </div>
-        </form>
-    </x-slot>
-    <x-slot name='footer'>
-        <button class="btn btn-secondary mr-2 disabled:opacity-50" wire:click="$set('open2',false)" wire:loading.attr="disabled">Cancelar</button>
-        <button class="btn btn-primary disabled:opacity-50" wire:loading.attr="disabled" onclick="updatePassword()">Aceptar</button>
-    </x-slot>
-</x-dialog-modal>
-
-<script>
-    function updatePassword() {
-        // Llamar al método update2 de Livewire
-        @this.call('updatePassword').then(response => {
-            if (response) {
-                // Mostrar la alerta después de la actualización si todo es correcto
+    <script>
+        function updatePassword() {
+            // Llamar al método u    pdate2 de Livewire
+            @this.call('updatePassword').then(response => {
+                if (response) {
+                    // Mostrar la alerta después de la actualización si todo es correcto
+                    Swal.fire({
+                        title: 'Contraseña actualizada',
+                        text: 'La contraseña a sido actualisada correctamente',
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    });
+                }
+            }).catch(error => {
+                // Manejar error si es necesario
                 Swal.fire({
-                    title: 'Usuario actualizado',
-                    text: 'El usuario ha sido actualizado exitosamente.',
-                    icon: 'success',
+                    title: 'Error',
+                    text: 'Hubo un problema al actualizar la contraseña.',
+                    icon: 'error',
                     confirmButtonText: 'OK'
                 });
-            }
-        }).catch(error => {
-            // Manejar error si es necesario
-            Swal.fire({
-                title: 'Error',
-                text: 'Hubo un problema al actualizar el usuario.',
-                icon: 'error',
-                confirmButtonText: 'OK'
             });
-        });
-    }
-</script>
-
-
+        }
+    </script>
 </div>

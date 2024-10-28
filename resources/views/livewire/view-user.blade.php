@@ -24,7 +24,7 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">
-                        <h2>Perfil del Usuario</h2>
+                        <h2>Perfil del Usussssario</h2>
                     </div>
                     <div class="card-body d-flex">
                         <div class="mr-3 text-center fixed-size-img-container">
@@ -301,6 +301,7 @@
                     <label for="number">Teléfono</label>
                     <input type="text" id="number" class="form-control" wire:model.defer="userEdit.number">
                 </div>
+
                 @if ($userEdit['id'] != $currentUserId)
                     <div class="form-row">
                         <div class="form-group col-md-6">
@@ -310,25 +311,45 @@
                                 <option value="0">Inactivo</option>
                             </select>
                         </div>
+                        <style>
+                            .form-check-input {
+                                border-radius: 50%;
+                                /* Hace el borde circular */
+                                outline: none;
+                                /* Elimina el contorno de enfoque */
+                            }
+
+                            .form-check-input:checked {
+                                border-color: transparent;
+                                /* Elimina el contorno al seleccionar */
+                                box-shadow: none;
+                                /* Evita que se ilumine */
+                            }
+
+                            .form-check-input:focus {
+                                box-shadow: none;
+                                /* Evita que se ilumine al enfocarse */
+                            }
+                        </style>
+
                         <div class="form-group col-md-6">
-                            <label for="departamento">Departamento</label>
-                            <select id="role" class="form-control @error('role') required-field @enderror"
-                                wire:model.defer="role">
-                                <option value="" disabled selected>Asigne rol</option>
-                                @foreach ($roles as $role)
-                                    @if ($userEdit['id'] === $currentUserId)
-                                        <option value="Admin">Administrador</option>
-                                    @else
-                                        <option value="{{ $role->name }}">{{ $role->name }}</option>
-                                    @endif
-                                @endforeach
-                            </select>
-                            @error('role')
-                                <span class="invalid-feedback">{{ $message }}</span>
+                            <label for="departamento">Departamentos</label>
+                            @foreach ($roles as $role)
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="role{{ $role->id }}"
+                                        wire:model.defer="selectedRoles" value="{{ $role->name }}">
+                                    <label class="form-check-label"
+                                        for="role{{ $role->id }}">{{ $role->name }}</label>
+                                </div>
+                            @endforeach
+                            @error('selectedRoles')
+                                <span class="error-message">{{ $message }}</span>
                             @enderror
                         </div>
+
                     </div>
                 @endif
+                
 
             </form>
         </x-slot>

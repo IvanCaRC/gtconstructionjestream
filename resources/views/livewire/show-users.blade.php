@@ -8,19 +8,20 @@
                 <div class="table-responsive">
                     <div class="d-flex justify-content-between mb-3">
                         <!-- Input de búsqueda -->
-                        <input type="text" class="form-control mr-2" id="searchInput" wire:model='searchTerm' wire:keydown='search' placeholder="Buscar usuario...">
-                        
+                        <input type="text" class="form-control mr-2" id="searchInput" wire:model='searchTerm'
+                            wire:keydown='search' placeholder="Buscar usuario...">
+
                         <!-- Filtro de Estado -->
                         <select class="form-control mr-2" wire:model="statusFiltroDeBusqueda" wire:change="filter">
                             <option value="2">Todos los estados</option>
                             <option value="1">Activo</option>
                             <option value="0">Inactivo</option>
                         </select>
-                        
+
                         <!-- Filtro de Roles -->
                         <select class="form-control mr-2" wire:model="roleFiltroDeBusqueda" wire:change="filter">
                             <option value="">Todos los roles</option>
-                            @foreach($roles as $role)
+                            @foreach ($roles as $role)
                                 <option value="{{ $role->name }}">{{ $role->name }}</option>
                             @endforeach
                         </select>
@@ -118,7 +119,7 @@
                                                     wire:click="edit({{ $user->id }})"><i
                                                         class="fas fa-edit"></i></button>
                                             </td>
-                                        
+
                                             <td><button class="btn btn-danger btn-custom"
                                                     onclick="confirmDeletion({{ $user->id }}, '{{ $user->name }}', '{{ $user->first_last_name }}')">
                                                     <i class="fas fa-trash-alt"></i>
@@ -198,13 +199,14 @@
                         <span class="invalid-feedback">{{ $message }}</span>
                     @enderror
                 </div>
-                
+
                 <div class="form-row">
                     <div class="form-group col-md-12">
-                        <h3>{{ $userEdit['name'] }} {{ $userEdit['first_last_name'] }} {{ $userEdit['second_last_name'] }}</h3>
+                        <h3>{{ $userEdit['name'] }} {{ $userEdit['first_last_name'] }}
+                            {{ $userEdit['second_last_name'] }}</h3>
                     </div>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="email">Correo Electrónico</label>
                     <input type="email" id="email"
@@ -228,31 +230,40 @@
                             </select>
                         </div>
                         <style>
-    .form-check-input {
-        border-radius: 50%; /* Hace el borde circular */
-        outline: none; /* Elimina el contorno de enfoque */
-    }
-    .form-check-input:checked {
-        border-color: transparent; /* Elimina el contorno al seleccionar */
-        box-shadow: none; /* Evita que se ilumine */
-    }
-    .form-check-input:focus {
-        box-shadow: none; /* Evita que se ilumine al enfocarse */
-    }
-</style>
+                            .form-check-input {
+                                border-radius: 50%;
+                                /* Hace el borde circular */
+                                outline: none;
+                                /* Elimina el contorno de enfoque */
+                            }
 
-<div class="form-group col-md-6">
-    <label for="departamento">Departamentos</label>
-    @foreach ($roles as $role)
-        <div class="form-check">
-            <input class="form-check-input" type="checkbox" id="role{{ $role->id }}" wire:model.defer="selectedRoles" value="{{ $role->name }}">
-            <label class="form-check-label" for="role{{ $role->id }}">{{ $role->name }}</label>
-        </div>
-    @endforeach
-    @error('selectedRoles')
-        <span class="error-message">{{ $message }}</span>
-    @enderror
-</div>
+                            .form-check-input:checked {
+                                border-color: transparent;
+                                /* Elimina el contorno al seleccionar */
+                                box-shadow: none;
+                                /* Evita que se ilumine */
+                            }
+
+                            .form-check-input:focus {
+                                box-shadow: none;
+                                /* Evita que se ilumine al enfocarse */
+                            }
+                        </style>
+
+                        <div class="form-group col-md-6">
+                            <label for="departamento">Departamentos</label>
+                            @foreach ($roles as $role)
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="role{{ $role->id }}"
+                                        wire:model.defer="selectedRoles" value="{{ $role->name }}">
+                                    <label class="form-check-label"
+                                        for="role{{ $role->id }}">{{ $role->name }}</label>
+                                </div>
+                            @endforeach
+                            @error('selectedRoles')
+                                <span class="error-message">{{ $message }}</span>
+                            @enderror
+                        </div>
 
                     </div>
                 @endif

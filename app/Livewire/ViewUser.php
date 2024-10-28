@@ -25,6 +25,7 @@ class ViewUser extends Component
     public $image;
     public $direction = 'desc';
     public $imageRecuperada;
+    public $selectedRoles = [];
     public $userEdit = [
         'id' => '',
         'image' => '',
@@ -70,7 +71,7 @@ class ViewUser extends Component
     public function update2()
     {
         // Validar los datos del formulario primero
-        $this->validate($this->rules());
+        $this->validate(User::rules('userEdit.', $this->userEditId));
 
         $user = User::find($this->userEditId);
         $image = null; // Mantener la imagen actual por defecto
@@ -98,9 +99,9 @@ class ViewUser extends Component
             'password' => $this->userEdit['password'],
         ]);
 
-        $user->syncRoles([$this->role]); // Asignar el rol al usuario
+        $user->syncRoles($this->selectedRoles);
 
-        $this->reset('open', 'image', 'role');
+        $this->reset('open', 'image', 'selectedRoles');
         $this->dispatch('userAddedEdit');
         return true; // Indicar que la actualización fue exitosa
     }
@@ -138,6 +139,6 @@ class ViewUser extends Component
         $this->userEdit['status'] = $user->status;
         $this->userEdit['password'] = $user->password;
         $this->imageRecuperada = $user->image;
-        $this->role = $user->roles->pluck('name')->first(); // Asignar el rol actual del usuario
+        $this->selectedRoles = $user->roles->pluck('name')->toArray();
     }
 }
