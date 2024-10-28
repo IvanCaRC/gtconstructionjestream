@@ -173,8 +173,7 @@
             <form>
                 <div class="form-group">
                     <label for="current_password">Contraseña Actual</label>
-                    <input type="password" id="current_password" class="form-control"
-                        wire:model.defer="current_password">
+                    <input type="password" id="current_password" class="form-control" wire:model.defer="current_password">
                     @error('current_password')
                         <span class="invalid-feedback">{{ $message }}</span>
                     @enderror
@@ -188,12 +187,17 @@
                 </div>
                 <div class="form-group">
                     <label for="confirm_password">Confirmar Nueva Contraseña</label>
-                    <input type="password" id="confirm_password" class="form-control"
-                        wire:model.defer="confirm_password">
+                    <input type="password" id="confirm_password" class="form-control" wire:model.defer="confirm_password">
                     @error('confirm_password')
                         <span class="invalid-feedback">{{ $message }}</span>
                     @enderror
                 </div>
+                @if (session()->has('error'))
+                    <div class="alert alert-danger">{{ session('error') }}</div>
+                @endif
+                @if (session()->has('message'))
+                    <div class="alert alert-success">{{ session('message') }}</div>
+                @endif
             </form>
         </x-slot>
         <x-slot name='footer'>
