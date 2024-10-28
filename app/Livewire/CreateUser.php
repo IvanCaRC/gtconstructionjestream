@@ -14,22 +14,19 @@ class CreateUser extends Component
 
     public $open = false;
     public $name, $first_last_name, $second_last_name, $email, $number, $status = true, $password, $image;
-    public $role;
+    public $selectedRoles = [];
     public $roles;
 
     public function render()
     {
-        $this->role = '';
         $this->roles = Role::where('id', '!=', 1)->get(); // Excluir rol de Administrador
         return view('livewire.create-user', ['roles' => $this->roles]);
     }
+
     public function resetValidation2()
     {
-        // Resetear solo la validación del campo 'role'
-        $this->resetErrorBag('role');
+        $this->resetErrorBag('selectedRoles');
     }
-    
-    
 
     public function save()
     {
@@ -51,10 +48,14 @@ class CreateUser extends Component
             'password' => Hash::make($this->password),
         ]);
 
-        $user->assignRole($this->role);
+        // Asignar múltiples roles seleccionados
+        foreach ($this->selectedRoles as $role) {
+            $user->assignRole($role);
+        }
 
         session()->flash('message', 'Usuario creado con éxito.');
-        $this->reset('open', 'name', 'first_last_name', 'second_last_name', 'email', 'number', 'status', 'password', 'image', 'role');
+
+        $this->reset('open', 'name', 'first_last_name', 'second_last_name', 'email', 'number', 'status', 'password', 'image', 'selectedRoles');
         $this->dispatch('userAdded');
 
         return true;
@@ -62,7 +63,7 @@ class CreateUser extends Component
 
     public function resetManual()
     {
-        $this->reset('open', 'name', 'first_last_name', 'second_last_name', 'email', 'number', 'status', 'password', 'image', 'role');
+        $this->reset('open', 'name', 'first_last_name', 'second_last_name', 'email', 'number', 'status', 'password', 'image', 'selectedRoles');
         $this->resetValidation();
         $this->dispatch('userAdded');
     }

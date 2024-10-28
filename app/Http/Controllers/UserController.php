@@ -19,4 +19,9 @@ class UserController extends Controller
     {
         return view('admin.roles');
     }
+
+    public function verPerfil()
+    {
+        return view('profile.profileView');
+    }
 }

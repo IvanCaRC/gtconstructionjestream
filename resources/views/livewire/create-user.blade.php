@@ -87,20 +87,26 @@
                             <option value="0">Inactivo</option>
                         </select>
                     </div>
+                    
+                    
                     <div class="form-group col-md-6">
-                        <label for="departamento">Departamento</label>
-                        <select id="role" class="form-control @error('role') required-field @enderror" wire:model.defer="role" >
-                            <option value="" disabled selected>Asigne rol</option>
-                            @foreach ($roles as $role)
-                                <option value="{{ $role->name }}">{{ $role->name }}</option>
-                            @endforeach
-                        </select>
-                        @error('role')
+                        <label for="departamento">Departamentos</label>
+                        @foreach ($roles as $role)
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="role{{ $role->id }}" wire:model.defer="selectedRoles" value="{{ $role->name }}">
+                                <label class="form-check-label" for="role{{ $role->id }}">{{ $role->name }}</label>
+                            </div>
+                        @endforeach
+                        @error('selectedRoles')
                             <span class="error-message">{{ $message }}</span>
                         @enderror
                     </div>
                     
                     
+                    
+
+
+
                 </div>
                 <div class="form-group">
                     <label for="password">Contraseña</label>
@@ -186,7 +192,17 @@
         .required-field {
             border-color: red;
         }
+        .form-check-input {
+            border-radius: 50%; /* Hace el borde circular */
+            outline: none; /* Elimina el contorno de enfoque */
+        }
+        .form-check-input:checked {
+            border-color: transparent; /* Elimina el contorno al seleccionar */
+            box-shadow: none; /* Evita que se ilumine */
+        }
+        .form-check-input:focus {
+            box-shadow: none; /* Evita que se ilumine al enfocarse */
+        }
     </style>
-
 
 </div>

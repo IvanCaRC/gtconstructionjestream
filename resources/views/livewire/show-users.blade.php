@@ -105,19 +105,20 @@
                                                 {{ $role->name }}
                                             @endforeach
                                         </td>
-                                        <td>
-                                            <button class="btn btn-info btn-custom"
-                                                wire:click="viewUser({{ $user->id }})">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                        </td>
-
-                                        <td>
-                                            <button class="btn btn-primary btn-custom"
-                                                wire:click="edit({{ $user->id }})"><i
-                                                    class="fas fa-edit"></i></button>
-                                        </td>
                                         @if (auth()->user()->id !== $user->id)
+                                            <td>
+                                                <button class="btn btn-info btn-custom"
+                                                    wire:click="viewUser({{ $user->id }})">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                            </td>
+
+                                            <td>
+                                                <button class="btn btn-primary btn-custom"
+                                                    wire:click="edit({{ $user->id }})"><i
+                                                        class="fas fa-edit"></i></button>
+                                            </td>
+                                        
                                             <td><button class="btn btn-danger btn-custom"
                                                     onclick="confirmDeletion({{ $user->id }}, '{{ $user->name }}', '{{ $user->first_last_name }}')">
                                                     <i class="fas fa-trash-alt"></i>
@@ -197,32 +198,13 @@
                         <span class="invalid-feedback">{{ $message }}</span>
                     @enderror
                 </div>
+                
                 <div class="form-row">
-                    <div class="form-group col-md-4">
-                        <label for="name">Nombre</label>
-                        <input type="text" id="name"
-                            class="form-control @error('userEdit.name') is-invalid @enderror"
-                            wire:model.defer="userEdit.name">
-                        @error('userEdit.name')
-                            <span class="invalid-feedback">{{ 'Este campo es obligatorio' }}</span>
-                        @enderror
-                    </div>
-
-                    <div class="form-group col-md-4">
-                        <label for="first_last_name">Primer Apellido</label>
-                        <input type="text" id="first_last_name"
-                            class="form-control @error('userEdit.first_last_name') is-invalid @enderror"
-                            wire:model.defer="userEdit.first_last_name">
-                        @error('userEdit.first_last_name')
-                            <span class="invalid-feedback">{{ 'Este campo es obligatorio' }}</span>
-                        @enderror
-                    </div>
-                    <div class="form-group col-md-4">
-                        <label for="second_last_name">Segundo Apellido</label>
-                        <input type="text" id="second_last_name" class="form-control"
-                            wire:model.defer="userEdit.second_last_name">
+                    <div class="form-group col-md-12">
+                        <h3>{{ $userEdit['name'] }} {{ $userEdit['first_last_name'] }} {{ $userEdit['second_last_name'] }}</h3>
                     </div>
                 </div>
+                
                 <div class="form-group">
                     <label for="email">Correo Electrónico</label>
                     <input type="email" id="email"
@@ -245,24 +227,33 @@
                                 <option value="0">Inactivo</option>
                             </select>
                         </div>
-                        <div class="form-group col-md-6">
-                            <label for="departamento">Departamento</label>
-                            <select id="role" class="form-control @error('role') required-field @enderror" wire:model.defer="role" wire:change="resetValidation2">
-                                <option value="" disabled selected>Asigne rol</option>
-                                @foreach ($roles as $role)
-                                    @if ($userEdit['id'] === $currentUserId)
-                                        <option value="Admin">Administrador</option>
-                                    @else
-                                        <option value="{{ $role->name }}">{{ $role->name }}</option>
-                                    @endif
-                                @endforeach
-                            </select>
-                            
-                            
-                            @error('role')
-                                <span class="invalid-feedback">{{ $message }}</span>
-                            @enderror
-                        </div>
+                        <style>
+    .form-check-input {
+        border-radius: 50%; /* Hace el borde circular */
+        outline: none; /* Elimina el contorno de enfoque */
+    }
+    .form-check-input:checked {
+        border-color: transparent; /* Elimina el contorno al seleccionar */
+        box-shadow: none; /* Evita que se ilumine */
+    }
+    .form-check-input:focus {
+        box-shadow: none; /* Evita que se ilumine al enfocarse */
+    }
+</style>
+
+<div class="form-group col-md-6">
+    <label for="departamento">Departamentos</label>
+    @foreach ($roles as $role)
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="role{{ $role->id }}" wire:model.defer="selectedRoles" value="{{ $role->name }}">
+            <label class="form-check-label" for="role{{ $role->id }}">{{ $role->name }}</label>
+        </div>
+    @endforeach
+    @error('selectedRoles')
+        <span class="error-message">{{ $message }}</span>
+    @enderror
+</div>
+
                     </div>
                 @endif
             </form>

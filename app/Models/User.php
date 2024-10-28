@@ -40,7 +40,7 @@ class User extends Authenticatable
             $prefix . 'email' => 'required|email|unique:users,email,' . $id,
             $prefix . 'status' => 'required',
             $prefix . 'password' => 'required',
-            'role' => 'required',
+            'selectedRoles' => 'required',
             'image' => 'nullable|mimes:jpg,jpeg,png,gif,webp|max:1024'
         ];
     }
