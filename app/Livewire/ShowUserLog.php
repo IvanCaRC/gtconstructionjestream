@@ -61,6 +61,13 @@ class ShowUserLog extends Component
         ];
     }
 
+    public function resetManual()
+    {
+        $this->reset('open2', 'current_password', 'new_password', 'confirm_password');
+        $this->resetValidation();
+        $this->dispatch('userAddedEdit');
+    }
+
 
     public function updatePassword()
     {
