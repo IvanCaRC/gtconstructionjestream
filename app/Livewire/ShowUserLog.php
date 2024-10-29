@@ -20,8 +20,8 @@ class ShowUserLog extends Component
     public $user;
     public $iduser;
     public $userEditId = '';
-    public $role; // Añadir esta línea
-    public $roles; // Añadir esta línea
+    public $role;
+    public $roles;
     protected $listeners = ['userAddedEdit' => 'render'];
     public $sort = 'id';
     public $image;
@@ -69,46 +69,55 @@ class ShowUserLog extends Component
     }
 
     protected function messages2()
-{
-    return [
-        'current_password.required' => 'Por favor, ingresa tu contraseña actual.',
-        'current_password.min' => 'La contraseña actual debe tener al menos 8 caracteres.',
-        'new_password.required' => 'Por favor, ingresa la nueva contraseña.',
-        'new_password.min' => 'La nueva contraseña debe tener al menos 8 caracteres.',
-        'new_password.different' => 'La nueva contraseña debe ser diferente de la actual.',
-        'confirm_password.required' => 'Por favor, confirma la nueva contraseña.',
-        'confirm_password.same' => 'Las contraseñas no coinciden.',
-    ];
-}
+    {
+        return [
+            'current_password.required' => 'Por favor, ingresa tu contraseña actual.',
+            'current_password.min' => 'La contraseña actual debe tener al menos 8 caracteres.',
+            'new_password.required' => 'Por favor, ingresa la nueva contraseña.',
+            'new_password.min' => 'La nueva contraseña debe tener al menos 8 caracteres.',
+            'new_password.different' => 'La nueva contraseña debe ser diferente de la actual.',
+            'confirm_password.required' => 'Por favor, confirma la nueva contraseña.',
+            'confirm_password.same' => 'Las contraseñas no coinciden.',
+        ];
+    }
 
     public function updatePassword()
     {
-        $this->validate($this->rules2(), $this->messages2());
 
         $user = User::find($this->currentUserId);
-    
         if (!$user) {
             session()->flash('error', 'Usuario no encontrado.');
             return;
         }
-    
+
         if (!Hash::check($this->current_password, $user->password)) {
             session()->flash('error', 'La contraseña actual no es correcta.');
             return;
         }
-    
+
         if ($this->new_password !== $this->confirm_password) {
             session()->flash('error', 'Las contraseñas no coinciden.');
             return;
         }
-    
+
+        if (empty($this->new_password) || empty($this->confirm_password)) {
+            session()->flash('error', 'La nueva contraseña no puede estar vacía.');
+            return;
+        }
+
+        if (strlen($this->new_password) < 8) {
+            session()->flash('error', 'La nueva contraseña debe tener al menos 8 caracteres.');
+            return;
+        }
+
         $user->update([
             'password' => Hash::make($this->new_password),
         ]);
-    
+
         session()->flash('message', 'Contraseña actualizada correctamente.');
         $this->reset('open2', 'current_password', 'new_password', 'confirm_password');
         $this->dispatch('userAddedEdit');
+
         return true;
     }
 

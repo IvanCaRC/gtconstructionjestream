@@ -19,12 +19,13 @@
             /* Mantiene la imagen circular */
         }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <div class="container my-5">
         <div class="row">
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">
-                        <h2>Perfil del Usussssario</h2>
+                        <h2>Perfil del Usuario</h2>
                     </div>
                     <div class="card-body d-flex">
                         <div class="mr-3 text-center fixed-size-img-container">
@@ -58,8 +59,7 @@
                     </div>
                     <div class="card-footer text-right">
                         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-                        <a href="#" class="d-block mb-3"
-                        wire:click="$set('open2', true)">Cambiar
+                        <a href="#" class="d-block mb-3" wire:click="$set('open2', true)">Cambiar
                             contraseña</a>
                     </div>
                 </div>
@@ -171,65 +171,91 @@
         </x-slot>
         <x-slot name='content'>
             <form>
-                <div class="form-group">
-                    <label for="current_password">Contraseña Actual</label>
-                    <input type="password" id="current_password" class="form-control" wire:model.defer="current_password">
-                    @error('current_password')
-                        <span class="invalid-feedback">{{ $message }}</span>
-                    @enderror
-                </div>
-                <div class="form-group">
-                    <label for="new_password">Nueva Contraseña</label>
-                    <input type="password" id="new_password" class="form-control" wire:model.defer="new_password">
-                    @error('new_password')
-                        <span class="invalid-feedback">{{ $message }}</span>
-                    @enderror
-                </div>
-                <div class="form-group">
-                    <label for="confirm_password">Confirmar Nueva Contraseña</label>
-                    <input type="password" id="confirm_password" class="form-control" wire:model.defer="confirm_password">
-                    @error('confirm_password')
-                        <span class="invalid-feedback">{{ $message }}</span>
-                    @enderror
-                </div>
                 @if (session()->has('error'))
                     <div class="alert alert-danger">{{ session('error') }}</div>
                 @endif
                 @if (session()->has('message'))
                     <div class="alert alert-success">{{ session('message') }}</div>
                 @endif
+                <div class="form-group">
+                    <label for="current_password">Contraseña Actual</label>
+                    <div class="input-group">
+                        <input type="password" id="current_password" class="form-control"
+                            wire:model.defer="current_password">
+                        <div class="input-group-append">
+                            <span class="input-group-text"
+                                onmousedown="showPassword('current_password', 'togglePasswordIconCurrent')"
+                                onmouseup="hidePassword('current_password', 'togglePasswordIconCurrent')"
+                                onmouseleave="hidePassword('current_password', 'togglePasswordIconCurrent')">
+                                <i class="fas fa-eye" id="togglePasswordIconCurrent"></i>
+                            </span>
+                        </div>
+                    </div>
+                    @error('current_password')
+                        <span class="invalid-feedback">{{ $message }}</span>
+                    @enderror
+                </div>
+                <div class="form-group">
+                    <label for="new_password">Nueva Contraseña</label>
+                    <div class="input-group">
+                        <input type="password" id="new_password" class="form-control"
+                            wire:model.defer="new_password">
+                        <div class="input-group-append">
+                            <span class="input-group-text"
+                                onmousedown="showPassword('new_password', 'togglePasswordIconNew')"
+                                onmouseup="hidePassword('new_password', 'togglePasswordIconNew')"
+                                onmouseleave="hidePassword('new_password', 'togglePasswordIconNew')">
+                                <i class="fas fa-eye" id="togglePasswordIconNew"></i>
+                            </span>
+                        </div>
+                    </div>
+                    @error('new_password')
+                        <span class="invalid-feedback">{{ $message }}</span>
+                    @enderror
+                </div>
+                <div class="form-group">
+                    <label for="confirm_password">Confirmar Nueva Contraseña</label>
+                    <div class="input-group">
+                        <input type="password" id="confirm_password" class="form-control"
+                            wire:model.defer="confirm_password">
+                        <div class="input-group-append">
+                            <span class="input-group-text"
+                                onmousedown="showPassword('confirm_password', 'togglePasswordIconConfirm')"
+                                onmouseup="hidePassword('confirm_password', 'togglePasswordIconConfirm')"
+                                onmouseleave="hidePassword('confirm_password', 'togglePasswordIconConfirm')">
+                                <i class="fas fa-eye" id="togglePasswordIconConfirm"></i>
+                            </span>
+                        </div>
+                    </div>
+                    @error('confirm_password')
+                        <span class="invalid-feedback">{{ $message }}</span>
+                    @enderror
+                </div>
             </form>
         </x-slot>
         <x-slot name='footer'>
             <button class="btn btn-secondary mr-2 disabled:opacity-50" wire:click="resetManual"
                 wire:loading.attr="disabled">Cancelar</button>
             <button class="btn btn-primary disabled:opacity-50" wire:loading.attr="disabled"
-                onclick="updatePassword()">Aceptar</button>
+                wire:click="updatePassword">Aceptar</button>
         </x-slot>
     </x-dialog-modal>
 
     <script>
-        function updatePassword() {
-            // Llamar al método u    pdate2 de Livewire
-            @this.call('updatePassword').then(response => {
-                if (response) {
-                    // Mostrar la alerta después de la actualización si todo es correcto
-                    Swal.fire({
-                        title: 'Contraseña actualizada',
-                        text: 'La contraseña a sido actualisada correctamente',
-                        icon: 'success',
-                        confirmButtonText: 'OK'
-                    });
-                }
-            }).catch(error => {
-                // Manejar error si es necesario
-                Swal.fire({
-                    title: 'Error',
-                    text: 'Hubo un problema al actualizar la contraseña.',
-                    icon: 'error',
-                    confirmButtonText: 'OK'
-                });
-            });
+        function showPassword(inputId, iconId) {
+            var passwordInput = document.getElementById(inputId);
+            var passwordIcon = document.getElementById(iconId);
+            passwordInput.type = 'text';
+            passwordIcon.classList.remove('fa-eye');
+            passwordIcon.classList.add('fa-eye-slash');
+        }
+
+        function hidePassword(inputId, iconId) {
+            var passwordInput = document.getElementById(inputId);
+            var passwordIcon = document.getElementById(iconId);
+            passwordInput.type = 'password';
+            passwordIcon.classList.remove('fa-eye-slash');
+            passwordIcon.classList.add('fa-eye');
         }
     </script>
 </div>
