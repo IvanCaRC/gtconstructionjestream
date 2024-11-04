@@ -13,6 +13,29 @@ class PasswordResetTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_reset_password_link_cannot_be_requested_for_nonexistent_email(): void
+    {
+        if (! Features::enabled(Features::resetPasswords())) {
+            $this->markTestSkipped('Password updates are not enabled.');
+        }
+
+        Notification::fake();
+
+        // Email que no existe en la base de datos
+        $nonExistentEmail = 'nonexistent@example.com';
+
+        $response = $this->post('/forgot-password', [
+            'email' => $nonExistentEmail,
+        ]);
+
+        // Verificar que no se haya enviado ninguna notificación
+        Notification::assertNothingSent();
+
+        // Verificar que la respuesta contiene un mensaje de error
+        $response->assertSessionHasErrors(['email']);
+    }
+
+
     public function test_reset_password_link_screen_can_be_rendered(): void
     {
         if (! Features::enabled(Features::resetPasswords())) {
@@ -56,7 +79,7 @@ class PasswordResetTest extends TestCase
         ]);
 
         Notification::assertSentTo($user, ResetPassword::class, function (object $notification) {
-            $response = $this->get('/reset-password/'.$notification->token);
+            $response = $this->get('/reset-password/' . $notification->token);
 
             $response->assertStatus(200);
 
