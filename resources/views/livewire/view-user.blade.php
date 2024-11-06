@@ -263,31 +263,12 @@
                     </div>
                 </div>
                 <div class="form-row">
-                    <div class="form-group col-md-4">
-                        <label for="name">Nombre</label>
-                        <input type="text" id="name"
-                            class="form-control @error('userEdit.name') is-invalid @enderror"
-                            wire:model.defer="userEdit.name">
-                        @error('userEdit.name')
-                            <span class="invalid-feedback">{{ 'Este campo es obligatorio' }}</span>
-                        @enderror
-                    </div>
-
-                    <div class="form-group col-md-4">
-                        <label for="first_last_name">Primer Apellido</label>
-                        <input type="text" id="first_last_name"
-                            class="form-control @error('userEdit.first_last_name') is-invalid @enderror"
-                            wire:model.defer="userEdit.first_last_name">
-                        @error('userEdit.first_last_name')
-                            <span class="invalid-feedback">{{ 'Este campo es obligatorio' }}</span>
-                        @enderror
-                    </div>
-                    <div class="form-group col-md-4">
-                        <label for="second_last_name">Segundo Apellido</label>
-                        <input type="text" id="second_last_name" class="form-control"
-                            wire:model.defer="userEdit.second_last_name">
+                    <div class="form-group col-md-12">
+                        <h3>{{ $userEdit['name'] }} {{ $userEdit['first_last_name'] }}
+                            {{ $userEdit['second_last_name'] }}</h3>
                     </div>
                 </div>
+
                 <div class="form-group">
                     <label for="email">Correo Electrónico</label>
                     <input type="email" id="email"
