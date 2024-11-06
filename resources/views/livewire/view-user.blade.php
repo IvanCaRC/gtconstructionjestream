@@ -24,7 +24,7 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">
-                        <h2>Perfil del Usussssario</h2>
+                        <h2>Perfil del Usuario</h2>
                     </div>
                     <div class="card-body d-flex">
                         <div class="mr-3 text-center fixed-size-img-container">
