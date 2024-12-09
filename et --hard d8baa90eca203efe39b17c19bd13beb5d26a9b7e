@@ -1,0 +1,571 @@
+[33mcommit 7ae19858b64bea9efd98805797161a56ac251a75[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/sincronisacion[m[33m, [m[1;31morigin/main[m[33m, [m[1;32msincronisacion[m[33m)[m
+Merge: d8baa90 99bd625
+Author: DanielCG196 <danielcg76570@gmail.com>
+Date:   Tue Nov 5 23:57:57 2024 -0600
+
+    Merge branch 'sincronisacion' of https://github.com/IvanCaRC/gtconstructionjestream into sincronisacion
+
+[33mcommit d8baa90eca203efe39b17c19bd13beb5d26a9b7e[m
+Author: DanielCG196 <danielcg76570@gmail.com>
+Date:   Tue Nov 5 23:57:41 2024 -0600
+
+    Cambio en texto
+
+[33mcommit 99bd625f5434edde869e7e7024bcc43d07233e11[m
+Author: Ivan Axel <cupido.iacp@gmail.com>
+Date:   Tue Nov 5 21:43:34 2024 -0600
+
+    correcion de edicion de vista especifica
+
+[33mcommit 233a88102171291acc833e43202fba29e9435757[m
+Author: Ivan Axel <cupido.iacp@gmail.com>
+Date:   Mon Nov 4 01:15:12 2024 -0600
+
+    Pruebas v1
+
+[33mcommit 719338b86accf547fe9ebd7569bb7c5479c5b1c1[m
+Author: DanielCG196 <danielcg76570@gmail.com>
+Date:   Tue Oct 29 01:27:32 2024 -0600
+
+    Update password actualizado
+
+[33mcommit ae926fa8025101894f2b8d7a9391ec5be5c368b0[m
+Author: Ivan Axel <cupido.iacp@gmail.com>
+Date:   Mon Oct 28 03:19:18 2024 -0600
+
+    Cambio de contraseña falta validacion
+
+[33mcommit 9a099d9242716095c2dae2b26a1c061e2ce363a2[m
+Author: Ivan Axel <cupido.iacp@gmail.com>
+Date:   Mon Oct 28 02:55:40 2024 -0600
+
+    Actualisacion de roles y edicion de usuario y perfil v2
+
+[33mcommit 6eb4aa0cf4b66c45eba8e4561695171bcd8e1d54[m[33m ([m[1;32mtemp-rama[m[33m)[m
+Author: Ivan Axel <cupido.iacp@gmail.com>
+Date:   Mon Oct 28 02:43:00 2024 -0600
+
+    Actualisacion de roles y edicion de usuario y perfil v1
+
+[33mcommit 799a1012551c9579eb261252747e3d23b7259ea8[m
+Author: Ivan Axel <cupido.iacp@gmail.com>
+Date:   Sun Oct 27 23:16:07 2024 -0600
+
+    Actualisar contraseña para cada usuario
+
+[33mcommit 2ca5ca4b850a2ee652acde6d0e8dbe4962f703c6[m
+Author: Ivan Axel <cupido.iacp@gmail.com>
+Date:   Sun Oct 27 18:59:10 2024 -0600
+
+    Actualisacion de multiples roles
+
+[33mcommit 3ae088a3474a1228fa51b51d7eae0449411d7b5e[m
+Author: DanielCG196 <danielcg76570@gmail.com>
+Date:   Thu Oct 24 21:34:39 2024 -0600
+
+    Arreglado getRoleView
+
+[33mcommit a6b27b923dafccc10ad4b64b366429ec6b2dc384[m
+Author: DanielCG196 <danielcg76570@gmail.com>
+Date:   Thu Oct 24 20:15:36 2024 -0600
+
+    Login de roles mal
+
+[33mcommit 666f29fe2a787a1bd13e855ab1cf017cb38b78b1[m
+Author: DanielCG196 <danielcg76570@gmail.com>
+Date:   Thu Oct 24 02:07:55 2024 -0600
+
+    Validacion de eliminacion logica
+
+[33mcommit 1846de6351315a3bf1ec3a2465deb4c3886067eb[m
+Author: Ivan Axel <cupido.iacp@gmail.com>
+Date:   Thu Oct 24 01:40:38 2024 -0600
+
+    filtros de busqueda usuarios
+
+[33mcommit 1e5d6e125a14eb1cd177993be681ba88c3d67d58[m
+Author: DanielCG196 <danielcg76570@gmail.com>
+Date:   Thu Oct 24 01:38:16 2024 -0600
+
+    Validacion de usuarios inactivos
+
+[33mcommit 9d1e2ed5a5be9e275f1651499c51c9e92cfa1537[m
+Author: Ivan Axel <cupido.iacp@gmail.com>
+Date:   Thu Oct 24 00:18:14 2024 -0600
+
+    Correccion de metodos perdidos
+
+[33mcommit 92abd8f3653a60e389a941bd84d201d4b1c6250b[m
+Author: Ivan Axel <cupido.iacp@gmail.com>
+Date:   Wed Oct 23 02:12:16 2024 -0600
+
+    Correccion de mbusqueda temporal
+
+[33mcommit a8840d47e3b1d201b0eae7168848f68a9be70314[m
+Author: Ivan Axel <cupido.iacp@gmail.com>
+Date:   Wed Oct 23 02:08:45 2024 -0600
+
+    Correccion de migracion
+
+[33mcommit 9a6a527636b8ee4d74df25ffbe2aa50bae0a9d2b[m
+Author: Ivan Axel <cupido.iacp@gmail.com>
+Date:   Wed Oct 23 01:39:09 2024 -0600
+
+    Correccion de eliminacion de usuario
+
+[33mcommit c8bf22e478e4e5b2a9c11c533279b9d247ddf7ca[m
+Author: DanielCG196 <danielcg76570@gmail.com>
+Date:   Wed Oct 23 01:14:17 2024 -0600
+
+    Reglas en el modelo de Usuarios
+
+[33mcommit 81bce406338c3e36fa87bc8608abd815487a208d[m
+Author: DanielCG196 <danielcg76570@gmail.com>
+Date:   Wed Oct 23 00:55:19 2024 -0600
+
+    Reglas en el modelo de roles
+
+[33mcommit 0b4677f0dbe3dcaeeb60f9f29032fe99d78c52ce[m
+Author: DanielCG196 <danielcg76570@gmail.com>
+Date:   Tue Oct 22 19:13:14 2024 -0600
+
+    Cambio Anita
+
+[33mcommit b504785b64b599b5881fe1eb3faaed41e4186126[m
+Author: DanielCG196 <danielcg76570@gmail.com>
+Date:   Tue Oct 22 01:32:03 2024 -0600
+
+    Imagen de update arreglada
+
+[33mcommit f096e491928ac4a44f20e60f9a706f8133f58ccb[m
+Author: DanielCG196 <danielcg76570@gmail.com>
+Date:   Tue Oct 22 01:29:55 2024 -0600
+
+    Imagen de create arreglada
+
+[33mcommit 7cff96c21e260b65451d683d7e289935d01a8460[m
+Author: Ivan Axel <cupido.iacp@gmail.com>
+Date:   Tue Oct 22 00:41:06 2024 -0600
+
+    Correcion de talvez
+
+[33mcommit edd04c42cba20e44ff8cf5d54ef07d51423be3fd[m
+Author: Ivan Axel <cupido.iacp@gmail.com>
+Date:   Tue Oct 22 00:39:59 2024 -0600
+
+    Correcion de talvez
+
+[33mcommit 549eb15feafd22089e4d0a90ef7e65780fd49208[m
+Author: Ivan Axel <cupido.iacp@gmail.com>
+Date:   Tue Oct 22 00:33:52 2024 -0600
+
+    Cambio de vista de roles
+
+[33mcommit 5f6a81566f2de9698f4a66a52695604513cf97c9[m
+Author: Ivan Axel <cupido.iacp@gmail.com>
+Date:   Tue Oct 22 00:29:54 2024 -0600
+
+    Cambio de mensaje
+
+[33mcommit 94f6689314e33083447038c736208554cb066070[m
+Author: DanielCG196 <danielcg76570@gmail.com>
+Date:   Tue Oct 22 00:24:05 2024 -0600
+
+    Descripcion de roles
+
+[33mcommit e96461d1c5ff7bc08228619aa9901fee566abb4a[m
+Author: Ivan Axel <cupido.iacp@gmail.com>
+Date:   Mon Oct 21 23:32:47 2024 -0600
+
+    Cambio de mensaje de confirmacion de actualisacion de rol
+
+[33mcommit c66b9b468a92835eb8afb2af3008aa664d5546d5[m
+Author: Ivan Axel <cupido.iacp@gmail.com>
+Date:   Mon Oct 21 23:31:15 2024 -0600
+
+    Cambio de mensaje de confirmacion de actualisacion de rol
+
+[33mcommit 0cae287f164e3303aad6c8de6f37de84d4ef9d26[m
+Author: Ivan Axel <cupido.iacp@gmail.com>
+Date:   Mon Oct 21 23:23:17 2024 -0600
+
+    funcionalidad de roles y correcion de errores de cita ede usuario especifico
+
+[33mcommit a93960bf966cdc64be7ef5ff9d6ac53de1fb6954[m
+Author: DanielCG196 <danielcg76570@gmail.com>
+Date:   Mon Oct 21 20:02:57 2024 -0600
+
+    Colapsadas de cada departamento
+
+[33mcommit 1afe3b025574989a06dd2811b0e134bc1243b21c[m
+Author: DanielCG196 <danielcg76570@gmail.com>
+Date:   Mon Oct 21 18:49:00 2024 -0600
+
+    Botones segun el rol
+
+[33mcommit f78b05041ecf3b25c018428a31b67a32a3f1bb89[m
+Author: DanielCG196 <danielcg76570@gmail.com>
+Date:   Mon Oct 21 15:53:11 2024 -0600
+
+    Roles en la tabla
+
+[33mcommit 257a17ea999b9367295b8f611e84b862322b842d[m
+Author: Ivan Axel <cupido.iacp@gmail.com>
+Date:   Mon Oct 21 02:35:36 2024 -0600
+
+    agragr modal de decicion
+
+[33mcommit 0a12a03e2b4ea39b631eef483ed5d462f2264780[m
+Author: Ivan Axel <cupido.iacp@gmail.com>
+Date:   Mon Oct 21 01:17:49 2024 -0600
+
+    vistas de roles del sistema
+
+[33mcommit a25ff4ffab54217c90c785456f458278702e2d45[m
+Author: Ivan Axel <cupido.iacp@gmail.com>
+Date:   Mon Oct 21 00:59:47 2024 -0600
+
+    coreccion de modal de edicion para usuario en secion
+
+[33mcommit 96f32e7e859314a88cafb0d200a87f66c40136d8[m
+Author: DanielCG196 <danielcg76570@gmail.com>
+Date:   Mon Oct 21 00:52:03 2024 -0600
+
+    Descripcion de roles
+
+[33mcommit 1a1811113c2d4729074406356a4943edd3052517[m
+Author: Ivan Axel <cupido.iacp@gmail.com>
+Date:   Mon Oct 21 00:06:23 2024 -0600
+
+    paginacion usuarios
+
+[33mcommit ec050bd9218444e1bfeb8ce019f5467235d58367[m
+Author: DanielCG196 <danielcg76570@gmail.com>
+Date:   Mon Oct 21 00:06:08 2024 -0600
+
+    Update vista usuario
+
+[33mcommit 0636e0b97086a5ad88d4d716c30b321b3c152af3[m
+Author: Ivan Axel <cupido.iacp@gmail.com>
+Date:   Sun Oct 20 23:49:58 2024 -0600
+
+    actualizacion de vista de perfil de usuario para ver departamento
+
+[33mcommit 1f83972a0c7ab764d0cdd856a8a87a23b45f7a3d[m
+Author: DanielCG196 <danielcg76570@gmail.com>
+Date:   Sun Oct 20 23:39:40 2024 -0600
+
+    Return devuelto
+
+[33mcommit b0f435726f46e03ad8585568d4f006a6b1c842e0[m
+Merge: b7e3887 7b19260
+Author: DanielCG196 <danielcg76570@gmail.com>
+Date:   Sun Oct 20 23:31:35 2024 -0600
+
+    Merge branch 'sincronisacion' of https://github.com/IvanCaRC/gtconstructionjestream into sincronisacion
+
+[33mcommit b7e3887ae8652b0a56dd30311343abc7a0fc61b6[m
+Author: DanielCG196 <danielcg76570@gmail.com>
+Date:   Sun Oct 20 23:30:13 2024 -0600
+
+    Update Role
+
+[33mcommit 7b19260617aa5fc1f0cdcaae75bba55a9db66ac4[m
+Author: Ivan Axel <cupido.iacp@gmail.com>
+Date:   Sun Oct 20 22:30:27 2024 -0600
+
+    asignar alerta de creacion de usuario
+
+[33mcommit 64cb0210bd15af2c9aaec704b52c391e57bea1b2[m
+Author: Ivan Axel <cupido.iacp@gmail.com>
+Date:   Sun Oct 20 22:25:42 2024 -0600
+
+    arreglar alerta de update
+
+[33mcommit 6f1a8866fcebe13ec81120744d235b49bca07b66[m
+Author: Ivan Axel <cupido.iacp@gmail.com>
+Date:   Sun Oct 20 22:14:09 2024 -0600
+
+    la Ñ del dany
+
+[33mcommit bd40f8b896dfaa7636b9d1087b4060ac5ff67822[m
+Author: Ivan Axel <cupido.iacp@gmail.com>
+Date:   Sun Oct 20 19:29:31 2024 -0600
+
+    Paignas view respaldo de cambio de pag
+
+[33mcommit 7ea2ae782f3ee7f8afbbf90894b55f511e51cb04[m
+Author: DanielCG196 <danielcg76570@gmail.com>
+Date:   Sun Oct 20 01:36:15 2024 -0600
+
+    Asignacion de roles
+
+[33mcommit d16c923486fb0b411a10a25ef17a9563c7aa7455[m
+Author: DanielCG196 <danielcg76570@gmail.com>
+Date:   Sat Oct 19 23:57:40 2024 -0600
+
+    Cambio x
+
+[33mcommit 9c49dd791d456e7122812ecfc1c1768bb1497e87[m
+Merge: a6afcb9 f2ff105
+Author: Ivan Axel <cupido.iacp@gmail.com>
+Date:   Fri Oct 18 18:49:30 2024 -0600
+
+    Resuelto conflicto de merge
+
+[33mcommit a6afcb98daeaec4e263c486707b7fc7297b8974a[m
+Author: Ivan Axel <cupido.iacp@gmail.com>
+Date:   Fri Oct 18 18:47:39 2024 -0600
+
+    Edicion de usuarios
+
+[33mcommit f2ff10599920471368e3995628d979176f8b4d50[m
+Author: DanielCG196 <danielcg76570@gmail.com>
+Date:   Fri Oct 18 18:11:03 2024 -0600
+
+    Roles creados
+
+[33mcommit f6229e304bc60040ff6f70fbbdc2b49ea80aa071[m
+Author: DanielCG196 <danielcg76570@gmail.com>
+Date:   Fri Oct 18 17:21:12 2024 -0600
+
+    Antes de roles 2.0
+
+[33mcommit 414ed2757c20a43f5f762ea6f0619f639094fed7[m
+Author: DanielCG196 <danielcg76570@gmail.com>
+Date:   Fri Oct 18 15:38:04 2024 -0600
+
+    Antes de roles
+
+[33mcommit 2eed9e2d18a1b2223cd9bf1d63664035aba3c044[m
+Author: Ivan Axel <cupido.iacp@gmail.com>
+Date:   Fri Oct 18 14:19:02 2024 -0600
+
+    Resolviendo validaciones despues de precionar cancelr edit2
+
+[33mcommit 5bfef12804a45634ef5fb0d4ae8dc6d696814092[m
+Author: Ivan Axel <cupido.iacp@gmail.com>
+Date:   Fri Oct 18 14:16:52 2024 -0600
+
+    Resolviendo validaciones despues de precionar cancelr edit
+
+[33mcommit 08a1d093832a3a50e9fdb105722080cf9936ebdd[m
+Author: Ivan Axel <cupido.iacp@gmail.com>
+Date:   Fri Oct 18 14:15:26 2024 -0600
+
+    Resolviendo detalles de edit
+
+[33mcommit c7f5bf8e139ab451bc872678d242661bf565fd6a[m
+Author: Ivan Axel <cupido.iacp@gmail.com>
+Date:   Fri Oct 18 14:10:35 2024 -0600
+
+    Resolviendo detalles de reset de valiudaciones boton cancelar creacion de usuarios
+
+[33mcommit 7bd3814132f67c60b0bd2294fef406357a8a01ac[m
+Author: Ivan Axel <cupido.iacp@gmail.com>
+Date:   Fri Oct 18 14:03:31 2024 -0600
+
+    Resolviendo detalles de modal de cracion y barra de busqueda
+
+[33mcommit 29e166b7b86ed20876227c786a2908d72afe9f6f[m
+Merge: f93ad1a e1973bf
+Author: DanielCG196 <danielcg76570@gmail.com>
+Date:   Fri Oct 18 13:53:42 2024 -0600
+
+    Merge branch 'sincronisacion' of https://github.com/IvanCaRC/gtconstructionjestream into sincronisacion
+
+[33mcommit f93ad1a250ca86d85ef1695e56f0d9e8fe5975b7[m
+Author: DanielCG196 <danielcg76570@gmail.com>
+Date:   Fri Oct 18 13:53:20 2024 -0600
+
+    detallito
+
+[33mcommit e1973bfa5fc281315dd984542bac46ae08323025[m
+Merge: df05110 14f5646
+Author: Ivan Axel <cupido.iacp@gmail.com>
+Date:   Fri Oct 18 13:50:59 2024 -0600
+
+    Merge branch 'sincronisacion' of https://github.com/IvanCaRC/gtconstructionjestream into sincronisacion
+
+[33mcommit df051106756557190efd38fc3a417073fca40d5b[m
+Author: Ivan Axel <cupido.iacp@gmail.com>
+Date:   Fri Oct 18 13:46:56 2024 -0600
+
+    creacion de vista usuario
+
+[33mcommit 14f56465daef8f7bfb218c48bc300930f7ca6c7a[m
+Author: DanielCG196 <danielcg76570@gmail.com>
+Date:   Fri Oct 18 13:38:08 2024 -0600
+
+    Validar update y delete
+
+[33mcommit 230742570a729f86cd16d10e01a7f4e319c3a4a7[m
+Merge: 3427baa 214ec95
+Author: Ivan Axel <cupido.iacp@gmail.com>
+Date:   Fri Oct 18 02:25:49 2024 -0600
+
+    boton de eliminar
+
+[33mcommit 214ec9599d8152c8d7328b0a75430542a8e42e9f[m
+Author: DanielCG196 <danielcg76570@gmail.com>
+Date:   Fri Oct 18 02:24:30 2024 -0600
+
+    Previous
+
+[33mcommit 3427baaf5a9951a6642f258f5c911d1caf6ca5e0[m
+Author: Ivan Axel <cupido.iacp@gmail.com>
+Date:   Fri Oct 18 02:24:19 2024 -0600
+
+    boton de eliminar
+
+[33mcommit d04bf497a6745411e3fc8c28e517581f5ce5452c[m
+Author: DanielCG196 <danielcg76570@gmail.com>
+Date:   Fri Oct 18 02:14:58 2024 -0600
+
+    Validacion crear Usuario
+
+[33mcommit a65d189253b4d33d765c05b8a1de2b7eb884d722[m
+Merge: e35043e 8f83248
+Author: DanielCG196 <danielcg76570@gmail.com>
+Date:   Fri Oct 18 02:10:56 2024 -0600
+
+    Merge branch 'sincronisacion' of https://github.com/IvanCaRC/gtconstructionjestream into sincronisacion
+
+[33mcommit e35043e41aa93144e6fe37b6c3cbc0fcbb16509f[m
+Author: DanielCG196 <danielcg76570@gmail.com>
+Date:   Fri Oct 18 02:07:09 2024 -0600
+
+    Validacion crear Usuario
+
+[33mcommit 8f83248629ffb167c76fb904fe0c93489ad7c154[m
+Author: Ivan Axel <cupido.iacp@gmail.com>
+Date:   Fri Oct 18 02:05:58 2024 -0600
+
+    formulario edicion
+
+[33mcommit 0ed4bcc10c0a7bcbc78ea20bc1f93702c4d28878[m
+Author: Ivan Axel <cupido.iacp@gmail.com>
+Date:   Thu Oct 17 19:31:58 2024 -0600
+
+    hash contrase;a
+
+[33mcommit 6b25ba899b57b83ae3c200ff5288cf702e03eeb1[m
+Author: Ivan Axel <cupido.iacp@gmail.com>
+Date:   Thu Oct 17 18:52:59 2024 -0600
+
+    storage carptet
+
+[33mcommit adf65a86ef59e14ebe93f5510329324181e8cc21[m
+Author: Ivan Axel <cupido.iacp@gmail.com>
+Date:   Thu Oct 17 18:51:24 2024 -0600
+
+    storage carptet
+
+[33mcommit 4ae711a7cee7fc63440529dfeefff4a97ef6a3a2[m
+Author: Ivan Axel <cupido.iacp@gmail.com>
+Date:   Thu Oct 17 18:17:04 2024 -0600
+
+    formulario para validar segurisimo
+
+[33mcommit af918d309208edaf5bcf1d0d13b4a9746d4cbb1c[m
+Author: Ivan Axel <cupido.iacp@gmail.com>
+Date:   Thu Oct 17 17:47:25 2024 -0600
+
+    formulario para validar
+
+[33mcommit ed0e6350ec24dca5926ce9f86e5fe567bc7bfafb[m
+Author: Ivan Axel <cupido.iacp@gmail.com>
+Date:   Thu Oct 17 01:00:24 2024 -0600
+
+    comoponnente
+
+[33mcommit d433778772aa65c56803d290ce5fa16c8539425b[m
+Author: Ivan Axel <cupido.iacp@gmail.com>
+Date:   Thu Oct 17 00:56:53 2024 -0600
+
+    Tablas de usuario y empesare filtros
+
+[33mcommit 353493ace5e5f01cc6745d8673e15e60f0ec2255[m
+Merge: c72ecd6 1b52675
+Author: DanielCG196 <danielcg76570@gmail.com>
+Date:   Wed Oct 16 23:57:32 2024 -0600
+
+    Merge branch 'sincronisacion' of https://github.com/IvanCaRC/gtconstructionjestream into sincronisacion
+
+[33mcommit c72ecd6498976efaa8b8563815a646831c453867[m
+Author: DanielCG196 <danielcg76570@gmail.com>
+Date:   Wed Oct 16 23:56:27 2024 -0600
+
+    Correo actualizado
+
+[33mcommit 1b5267513cd5e959463cf3923ecea79d56f7b1e5[m
+Author: Ivan Axel <cupido.iacp@gmail.com>
+Date:   Wed Oct 16 22:11:50 2024 -0600
+
+    Relatiamente Funcional
+
+[33mcommit e48d089fb3bd16a4058ab15a761cf5722e2f37cb[m
+Author: DanielCG196 <danielcg76570@gmail.com>
+Date:   Wed Oct 16 17:08:22 2024 -0600
+
+    Axel ayudame!!!!
+
+[33mcommit 6756270a68f7c18422792fe607f9bbe634f8dc97[m
+Author: DanielCG196 <danielcg76570@gmail.com>
+Date:   Wed Oct 16 15:27:38 2024 -0600
+
+    Restauracion de Contraseña validada
+
+[33mcommit bfcd48524bec4fe0b1fc0c1ae84c40f27e55599b[m
+Author: DanielCG196 <danielcg76570@gmail.com>
+Date:   Wed Oct 16 15:15:29 2024 -0600
+
+    Validacion Login completa
+
+[33mcommit 6c0b602f0f5a69786be292b43394ab7c418b364d[m
+Author: DanielCG196 <danielcg76570@gmail.com>
+Date:   Wed Oct 16 14:45:45 2024 -0600
+
+    Modo FullRush
+
+[33mcommit b64ac52586bfc2d15d4dc18becf366799f189705[m
+Author: DanielCG196 <danielcg76570@gmail.com>
+Date:   Tue Oct 15 21:20:11 2024 -0600
+
+    Pruebas Login
+
+[33mcommit 98738445b5f81a58929e3d3e369ba83075f730e7[m
+Author: Ivan Axel <cupido.iacp@gmail.com>
+Date:   Tue Oct 15 03:14:35 2024 -0600
+
+    platilla principal
+
+[33mcommit 5cbec1f8a2d3d8c81bc6f751d4512bbc4531d4b6[m
+Author: Ivan Axel <cupido.iacp@gmail.com>
+Date:   Tue Oct 15 02:48:58 2024 -0600
+
+    resetPasword
+
+[33mcommit cafffe18407e95d8434451e6dc40f389b8bff2ee[m
+Author: Ivan Axel <cupido.iacp@gmail.com>
+Date:   Tue Oct 15 02:30:15 2024 -0600
+
+    login and forgetPasword
+
+[33mcommit da399cc490358393d57c6f9f3c6ed138ca82ff24[m
+Author: Ivan Axel <cupido.iacp@gmail.com>
+Date:   Mon Oct 14 22:55:37 2024 -0600
+
+    first commit
+
+[33mcommit 13cfaabd7c54e0c85fc9f3b7fb7822ca2315dc8a[m
+Author: Ivan Axel <cupido.iacp@gmail.com>
+Date:   Mon Oct 14 22:44:33 2024 -0600
+
+    Install Jetstream
+
+[33mcommit 049e7b9a2ddb16375d77390b8c21ebbe1884dd55[m
+Author: Ivan Axel <cupido.iacp@gmail.com>
+Date:   Mon Oct 14 22:43:33 2024 -0600
+
+    Set up a fresh Laravel app
