@@ -39,3 +39,4 @@ Route::get('admin/userView/{iduser}', [UserController::class, 'verUsuario'])
 Route::get('admin/roles', [UserController::class, 'verRoles'])->middleware('auth', 'nocache')->name('admin.roles');
 
 Route::get('profile/profileView', [UserController::class, 'verPerfil'])->middleware('auth', 'nocache')->name('profile.profileView');
+

@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
@@ -20,7 +22,8 @@ class DatabaseSeeder extends Seeder
          \App\Models\User::factory(10)->create();
 
         $this->call(RoleSeeder::class);
-
+        $this->call(familiaSeeder::class);
+        
          \App\Models\User::factory()->create([
              'name' => 'Marisela',
              'first_last_name' => 'Gonzalez',
@@ -31,6 +34,7 @@ class DatabaseSeeder extends Seeder
              'estadoEliminacion' => false,
              'password' => Hash::make('gtconstructions'),
          ])->assignRole('Administrador');
+         
          
     }
 }

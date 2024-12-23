@@ -20,6 +20,7 @@ class CreateItemEspecificoProveedorTable extends Migration
             $table->integer('tiempo_max_entrega');
             $table->integer('tiempo_min_entrega');
             $table->decimal('precio_compra', 10, 2);
+            $table->boolean('estado')->default(true);
             $table->timestamps();
 
             // Definir claves foráneas

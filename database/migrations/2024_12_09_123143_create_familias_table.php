@@ -12,6 +12,7 @@ class CreateFamiliasTable extends Migration
             $table->unsignedBigInteger('id_familia')->nullable(); // Llave foránea para subfamilias
             $table->string('nombre');
             $table->text('descripcion')->nullable();
+            $table->boolean('estado')->default(false);
             $table->timestamps();
 
             // Definir la llave foránea
