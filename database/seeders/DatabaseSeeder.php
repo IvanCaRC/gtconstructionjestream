@@ -24,6 +24,9 @@ class DatabaseSeeder extends Seeder
         $this->call(RoleSeeder::class);
         $this->call(familiaSeeder::class);
         $this->call(ProveedoresSeeder::class);
+        $this->call(TelefonosSeeder::class);
+        $this->call(DireccionesSeeder::class);
+        $this->call(ClientesSeeder::class);
         
          \App\Models\User::factory()->create([
              'name' => 'Marisela',

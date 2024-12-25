@@ -14,15 +14,16 @@ class ProveedoresSeeder extends Seeder
      */
     public function run()
     {
-        Proveedor::create([
-            'nombre' => 'Construrama',
-            'descripcion' => 'Empresa constructora de Materiales en general',
-            'correo' => 'Construrama123@gmail.com',
-            'rfc' => '345678909876',
-            'archivo_facturacion_pdf' => null,
-            'datos_bancarios_pdf' => null,
-            'estado' => true,
-        ]);
+        $proveedor = new Proveedor();
+        $proveedor->nombre = "Construrama 2";
+        $proveedor->descripcion = "Empresa constructora de Materiales en general";
+        $proveedor->correo = "Construrama123@gmail.com";
+        $proveedor->rfc = "345678909876";
+        $proveedor->archivo_facturacion_pdf = null;
+        $proveedor->datos_bancarios_pdf = null;
+        $proveedor->estado = true;
+
+        $proveedor->save();
     }
 }
 
