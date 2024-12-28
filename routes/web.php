@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\adminController;
+use App\Http\Controllers\FamiliaController;
 use App\Http\Controllers\UserController;
 
 /*
@@ -40,3 +41,7 @@ Route::get('admin/roles', [UserController::class, 'verRoles'])->middleware('auth
 
 Route::get('profile/profileView', [UserController::class, 'verPerfil'])->middleware('auth', 'nocache')->name('profile.profileView');
 
+Route::get('compras/familias/viewFamilias', [FamiliaController::class, 'index'])->middleware('auth', 'nocache')->name('compras.familias.viewFamilias');
+
+
+//Route::get('/categorias/crear', CreateCategoria::class)->name('categorias.crear');

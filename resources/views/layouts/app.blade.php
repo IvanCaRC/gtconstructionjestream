@@ -24,6 +24,8 @@
     <!-- Custom styles for this template-->
     <link href="{{ asset('css/sb-admin-2.min.css') }}" rel="stylesheet">
 
+    
+    
     @livewireStyles
     <style>
         .img-redonda {
@@ -33,22 +35,7 @@
             object-fit: cover;
         }
 
-        .table th,
-        .table td {
-            border-top: 1px solid #dee2e6;
-            border-left: none;
-            border-right: none;
-        }
-
-        .btn-custom {
-            font-size: 1rem;
-            padding: 0.45rem .75rem;
-        }
-
-        .table-responsive .btn {
-            margin-left: -10%;
-            /* Ajusta el margen para acercar los botones entre sí */
-        }
+       
     </style>
 
 </head>
@@ -145,10 +132,10 @@
                         <i class="fas fa-fw fa-building"></i>
                         <span>Compras</span>
                     </a>
-                    <div id="collapseCompras" class="collapse" aria-labelledby="headingPages"
+                    <div id="collapseCompras" class="collapse @yield('activeCollapseCompras')" aria-labelledby="headingPages"
                         data-parent="#accordionSidebar">
                         <div class="bg-primary-dark text-white py-2 collapse-inner rounded">
-                            <a class="collapse-item @yield('activeAlogin') text-white" href="#"
+                            <a class="collapse-item @yield('activeCategorias') text-white" href="{{ route('compras.familias.viewFamilias') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
                                 onmouseout="this.style.backgroundColor='';">Categorias</a>
                             <a class="collapse-item @yield('activeAregister') text-white" href="#"
