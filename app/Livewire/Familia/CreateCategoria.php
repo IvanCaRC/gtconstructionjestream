@@ -10,15 +10,37 @@ class CreateCategoria extends Component
     public $descripcion;
     public $estado = false;
     public $selectedFamilia = null;
+    public $selectedSubfamilias = []; // Arreglo para almacenar las subfamilias seleccionadas
+    public $familias = [];
+    public $subfamilias = [];
 
-    protected $listeners = ['subcategoriaSelected' => 'handleSubcategoriaSelected'];
-
-    public function handleSubcategoriaSelected($subcategoriaId)
+    public function mount()
     {
-        $this->selectedFamilia = $subcategoriaId;
+        $this->familias = Familia::whereNull('id_familia')->get();
+        $this->subfamilias = collect([]);
+    }
+
+    public function loadSubfamilias($familiaId, $nivel)
+    {
+        if ($familiaId) {
+            $this->subfamilias[$nivel] = Familia::where('id_familia', $familiaId)->get();
+        } else {
+            $this->subfamilias[$nivel] = collect([]);
+        }
+    }
+
+    public function updateSubfamilias($value, $key)
+    {
+        $nivel = intval($key) + 1;
+        $this->loadSubfamilias($value, $nivel);
     }
 
     public function save()
+    {
+        $this->updateSubfamilias($this->selectedFamilia, 0);
+    }
+
+    public function save2()
     {
         $this->validate([
             'nombre' => 'required|string|max:255',
@@ -26,11 +48,14 @@ class CreateCategoria extends Component
             'estado' => 'boolean',
         ]);
 
+        // Obtener el id de la última subfamilia seleccionada o de la familia principal
+        $ultimaSubfamiliaSeleccionada = end($this->selectedSubfamilias) ?: $this->selectedFamilia;
+
         Familia::create([
             'nombre' => $this->nombre,
             'descripcion' => $this->descripcion,
             'estado' => $this->estado,
-            'id_familia' => $this->selectedFamilia,
+            'id_familia' => $ultimaSubfamiliaSeleccionada ?: null, // Usar null si no hay familia seleccionada
         ]);
 
         session()->flash('message', 'Familia registrada exitosamente.');
@@ -38,6 +63,10 @@ class CreateCategoria extends Component
 
     public function render()
     {
-        return view('livewire.familia.create-categoria');
+        return view('livewire.familia.create-categoria', [
+            'familias' => $this->familias,
+            'subfamilias' => $this->subfamilias,
+            'selectedSubfamilias' => $this->selectedSubfamilias,
+        ]);
     }
 }

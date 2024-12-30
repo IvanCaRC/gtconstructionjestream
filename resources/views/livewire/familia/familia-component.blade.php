@@ -5,7 +5,7 @@
             <div class="card-body">
                 <div class="text-left mb-3">
                     <button class="btn btn-custom" onclick="window.location.href='{{ route('compras.familias.createFamilias') }}'"
-                            style="background-color: #4c72de; color: white;">Agregar categoría</button>
+                            style="background-color: #4c72de; color: white;">Agregar familia</button>
                 </div>
                 
                 <div class="table-responsive">

@@ -1,4 +1,5 @@
 <div class="container-fluid px-4 sm:px-6 lg:px-8 py-1">
+    <h1 class="pl-4">Crear Familia</h1>
     <div class="card">
         <div class="card-body">
             <div>
@@ -8,7 +9,7 @@
                     </div>
                 @endif
 
-                <form wire:submit.prevent="save">
+                <form>
                     <div class="form-group">
                         <label for="nombre">Nombre</label>
                         <input type="text" wire:model="nombre" class="form-control" id="nombre"
@@ -26,9 +27,31 @@
                         <input type="checkbox" wire:model="estado" id="estado">
                     </div>
 
-                    <livewire:familia.categoria-select />
+                    <div class="form-group">
+                        <label for="familia">Familia</label>
+                        <select wire:model="selectedFamilia" class="form-control" wire:click="save">
+                            <option value="">Seleccione una familia</option>
+                            @foreach($familias as $familia)
+                                <option value="{{ $familia->id }}">{{ $familia->nombre }}</option>
+                            @endforeach
+                        </select>
+                    </div>
 
-                    <button type="submit" class="btn btn-primary">Registrar</button>
+                    @foreach ($subfamilias as $nivel => $subfamiliasNivel)
+                        @if ($subfamiliasNivel->isNotEmpty())
+                            <div class="form-group">
+                                <label for="subfamilia-nivel-{{ $nivel }}">Subfamilia (Nivel {{ $nivel }})</label>
+                                <select wire:model="selectedSubfamilias.{{ $nivel }}" class="form-control" wire:click="updateSubfamilias($event.target.value, {{ $nivel }})">
+                                    <option value="">Seleccione una subfamilia</option>
+                                    @foreach ($subfamiliasNivel as $subfamilia)
+                                        <option value="{{ $subfamilia->id }}">{{ $subfamilia->nombre }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        @endif
+                    @endforeach
+
+                    <button type="submit" class="btn btn-primary" wire:click="save2">Registrar</button>
                 </form>
             </div>
         </div>
