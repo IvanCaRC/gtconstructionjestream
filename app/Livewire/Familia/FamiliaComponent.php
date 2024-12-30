@@ -19,22 +19,12 @@ class FamiliaComponent extends Component
 
     public function render()
     {
-        $query = Familia::whereNull('id_familia'); // Solo categorías principales
+        $query = Familia::whereNull('id_familia');
 
         if ($this->searchTerm) {
-            // Buscamos en todas las categorías y subcategorías
             $query = Familia::query();
             $query->where(function ($q) {
-                $q->where('nombre', 'LIKE', "%{$this->searchTerm}%")
-                    ->orWhere('descripcion', 'LIKE', "%{$this->searchTerm}%")
-                    ->orWhereHas('subfamilias', function ($subQuery) {
-                        $subQuery->where('nombre', 'LIKE', "%{$this->searchTerm}%")
-                                 ->orWhere('descripcion', 'LIKE', "%{$this->searchTerm}%")
-                                 ->orWhereHas('subfamilias', function ($subSubQuery) {
-                                     $subSubQuery->where('nombre', 'LIKE', "%{$this->searchTerm}%")
-                                                 ->orWhere('descripcion', 'LIKE', "%{$this->searchTerm}%");
-                                 });
-                    });
+                $q->where('nombre', 'LIKE', "%{$this->searchTerm}%");
             });
         }
 
@@ -50,5 +40,3 @@ class FamiliaComponent extends Component
         // Lógica para editar una categoría
     }
 }
-
-

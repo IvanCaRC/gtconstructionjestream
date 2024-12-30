@@ -4,14 +4,15 @@
         <div class="card">
             <div class="card-body">
                 <div class="text-left mb-3">
-                    <button class="btn btn-custom" wire:click="$set('open', true)"
-                        style="background-color: #4c72de; color: white;">Agregar categoría</button>
+                    <button class="btn btn-custom" onclick="window.location.href='{{ route('compras.familias.createFamilias') }}'"
+                            style="background-color: #4c72de; color: white;">Agregar categoría</button>
                 </div>
+                
                 <div class="table-responsive">
                     <div class="d-flex justify-content-between mb-3">
                         <!-- Input de búsqueda -->
                         <input type="text" class="form-control mr-2" id="searchInput" wire:model='searchTerm' wire:keydown='search'
-                         placeholder="Buscar familia...">
+                            placeholder="Buscar familia...">
                     </div>
                 </div>
                 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -43,22 +44,16 @@
                 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
                 <script>
                     function toggleVisibility(id) {
-                        $('#' + id).animate({
+                        let subcategoria = $('#' + id);
+                        subcategoria.animate({
                             height: 'toggle'
                         }, 500);
 
-                        var icon = $('#toggleButton' + id + ' i');
+                        let icon = subcategoria.prev().find('.toggle-icon');
                         if (icon.hasClass('fa-chevron-down')) {
                             icon.removeClass('fa-chevron-down').addClass('fa-chevron-up');
                         } else {
                             icon.removeClass('fa-chevron-up').addClass('fa-chevron-down');
-                        }
-
-                        var folderIcon = $('#folderIcon' + id + ' i');
-                        if (folderIcon.hasClass('fa-folder')) {
-                            folderIcon.removeClass('fa-folder').addClass('fa-folder-open');
-                        } else {
-                            folderIcon.removeClass('fa-folder-open').addClass('fa-folder');
                         }
                     }
                 </script>

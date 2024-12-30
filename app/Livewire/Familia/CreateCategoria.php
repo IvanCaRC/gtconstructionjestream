@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Livewire\Familia;
 
 use Livewire\Component;
@@ -10,29 +9,31 @@ class CreateCategoria extends Component
     public $nombre;
     public $descripcion;
     public $estado = false;
-    public $id_familia;
+    public $selectedFamilia = null;
 
-    protected $rules = [
-        'nombre' => 'required|string|max:255',
-        'descripcion' => 'nullable|string|max:65535',
-        'estado' => 'boolean',
-        'id_familia' => 'nullable|exists:familias,id'
-    ];
+    protected $listeners = ['subcategoriaSelected' => 'handleSubcategoriaSelected'];
 
-    public function submit()
+    public function handleSubcategoriaSelected($subcategoriaId)
     {
-        $this->validate();
+        $this->selectedFamilia = $subcategoriaId;
+    }
+
+    public function save()
+    {
+        $this->validate([
+            'nombre' => 'required|string|max:255',
+            'descripcion' => 'nullable|string',
+            'estado' => 'boolean',
+        ]);
 
         Familia::create([
             'nombre' => $this->nombre,
             'descripcion' => $this->descripcion,
             'estado' => $this->estado,
-            'id_familia' => $this->id_familia
+            'id_familia' => $this->selectedFamilia,
         ]);
 
-        session()->flash('message', 'Categoría creada exitosamente.');
-
-        return redirect()->to('/categorias');
+        session()->flash('message', 'Familia registrada exitosamente.');
     }
 
     public function render()

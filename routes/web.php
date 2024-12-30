@@ -5,6 +5,7 @@ use App\Http\Controllers\adminController;
 use App\Http\Controllers\FamiliaController;
 use App\Http\Controllers\UserController;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -43,5 +44,4 @@ Route::get('profile/profileView', [UserController::class, 'verPerfil'])->middlew
 
 Route::get('compras/familias/viewFamilias', [FamiliaController::class, 'index'])->middleware('auth', 'nocache')->name('compras.familias.viewFamilias');
 
-
-//Route::get('/categorias/crear', CreateCategoria::class)->name('categorias.crear');
+Route::get('compras/familias/createFamilias', [FamiliaController::class, 'crearUsuario'])->middleware('auth', 'nocache')->name('compras.familias.createFamilias');
