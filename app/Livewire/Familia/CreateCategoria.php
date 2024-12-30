@@ -17,7 +17,7 @@ class CreateCategoria extends Component
     public function mount()
     {
         $this->familias = Familia::whereNull('id_familia')->get();
-        $this->subfamilias = collect([]);
+        $this->subfamilias = [];
     }
 
     public function loadSubfamilias($familiaId, $nivel)
@@ -37,7 +37,7 @@ class CreateCategoria extends Component
 
     public function save()
     {
-        $this->updateSubfamilias($this->selectedFamilia, 0);
+        $this->loadSubfamilias($this->selectedFamilia, 0);
     }
 
     public function save2()

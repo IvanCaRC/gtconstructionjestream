@@ -1,5 +1,4 @@
 <div class="container-fluid px-4 sm:px-6 lg:px-8 py-1">
-    <h1 class="pl-4">Crear Familia</h1>
     <div class="card">
         <div class="card-body">
             <div>
@@ -10,6 +9,9 @@
                 @endif
 
                 <form>
+                    <div class="container-fluid px-0 sm:px-1 lg:px-1 py-3">
+                    <button type="submit" class="btn btn-primary" wire:click="save2">Registrar</button>
+                </div>
                     <div class="form-group">
                         <label for="nombre">Nombre</label>
                         <input type="text" wire:model="nombre" class="form-control" id="nombre"
@@ -39,7 +41,7 @@
 
                     @foreach ($subfamilias as $nivel => $subfamiliasNivel)
                         @if ($subfamiliasNivel->isNotEmpty())
-                            <div class="form-group">
+                            <div class="form-group slide-in" x-data="{ show: false }" x-init="$nextTick(() => { show = true })" :class="{ 'show': show }">
                                 <label for="subfamilia-nivel-{{ $nivel }}">Subfamilia (Nivel {{ $nivel }})</label>
                                 <select wire:model="selectedSubfamilias.{{ $nivel }}" class="form-control" wire:click="updateSubfamilias($event.target.value, {{ $nivel }})">
                                     <option value="">Seleccione una subfamilia</option>
@@ -51,7 +53,7 @@
                         @endif
                     @endforeach
 
-                    <button type="submit" class="btn btn-primary" wire:click="save2">Registrar</button>
+                    
                 </form>
             </div>
         </div>
