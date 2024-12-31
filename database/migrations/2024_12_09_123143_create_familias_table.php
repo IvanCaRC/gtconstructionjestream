@@ -9,14 +9,14 @@ class CreateFamiliasTable extends Migration
     {
         Schema::create('familias', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('id_familia')->nullable(); // Llave foránea para subfamilias
+            $table->unsignedBigInteger('id_familia_padre')->nullable(); // Llave foránea para subfamilias
             $table->string('nombre');
             $table->text('descripcion')->nullable();
-            $table->boolean('estado')->default(false);
+            $table->integer('nivel')->default(1); // Nivel de anidación
             $table->timestamps();
 
             // Definir la llave foránea
-            $table->foreign('id_familia')->references('id')->on('familias')->onDelete('cascade');
+            $table->foreign('id_familia_padre')->references('id')->on('familias')->onDelete('cascade');
         });
     }
 
@@ -25,4 +25,4 @@ class CreateFamiliasTable extends Migration
         Schema::dropIfExists('familias');
     }
 }
-;
+

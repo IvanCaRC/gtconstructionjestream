@@ -19,7 +19,7 @@ class FamiliaComponent extends Component
 
     public function render()
     {
-        $query = Familia::whereNull('id_familia');
+        $query = Familia::whereNull('id_familia_padre');
 
         if ($this->searchTerm) {
             $query = Familia::query();

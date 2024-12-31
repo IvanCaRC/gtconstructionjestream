@@ -10,7 +10,7 @@ class CreateCategoria extends Component
     public $descripcion;
     public $estado = false;
     public $selectedFamilia = null;
-    public $selectedSubfamilias = []; // Arreglo para almacenar las subfamilias seleccionadas
+    public $selectedSubfamilias = [];
     public $familias = [];
     public $subfamilias = [];
 
@@ -18,6 +18,20 @@ class CreateCategoria extends Component
     {
         $this->familias = Familia::whereNull('id_familia')->get();
         $this->subfamilias = [];
+    }
+
+    public function updateSelectedFamilia($value)
+    {
+        $this->selectedFamilia = $value;
+        $this->selectedSubfamilias = [];
+        $this->subfamilias = [];
+
+        if ($this->selectedFamilia) {
+            $familia = Familia::find($this->selectedFamilia);
+            if ($familia && $familia->estado) {
+                $this->loadSubfamilias($this->selectedFamilia, 1);
+            }
+        }
     }
 
     public function loadSubfamilias($familiaId, $nivel)
@@ -29,15 +43,26 @@ class CreateCategoria extends Component
         }
     }
 
-    public function updateSubfamilias($value, $key)
+    public function updateSelectedSubfamilia($value, $key)
     {
+        
         $nivel = intval($key) + 1;
-        $this->loadSubfamilias($value, $nivel);
+        $this->selectedSubfamilias[$key] = $value;
+        // Reiniciar niveles posteriores
+        $this->selectedSubfamilias = array_slice($this->selectedSubfamilias, 0, $key + 1);
+        $this->subfamilias = array_slice($this->subfamilias, 0, $nivel);
+
+        if ($value) {
+            $subfamilia = Familia::find($value);
+            if ($subfamilia && $subfamilia->estado) {
+                $this->loadSubfamilias($value, $nivel);
+            }
+        }
     }
 
     public function save()
     {
-        $this->loadSubfamilias($this->selectedFamilia, 0);
+        // Lógica de guardado puede ir aquí si es necesario.
     }
 
     public function save2()
@@ -48,14 +73,13 @@ class CreateCategoria extends Component
             'estado' => 'boolean',
         ]);
 
-        // Obtener el id de la última subfamilia seleccionada o de la familia principal
         $ultimaSubfamiliaSeleccionada = end($this->selectedSubfamilias) ?: $this->selectedFamilia;
 
         Familia::create([
             'nombre' => $this->nombre,
             'descripcion' => $this->descripcion,
             'estado' => $this->estado,
-            'id_familia' => $ultimaSubfamiliaSeleccionada ?: null, // Usar null si no hay familia seleccionada
+            'id_familia' => $ultimaSubfamiliaSeleccionada ?: null,
         ]);
 
         session()->flash('message', 'Familia registrada exitosamente.');

@@ -10,7 +10,7 @@
                 <span><i class="fas fa-file"></i></span>
             @endif
             <label class="font-weight-bold">{{ $familia->nombre }}</label>
-            <span>{{ $familia->descripcion }}</span>
+            
         </div>
         <div class="categoria-buttons">
             <button class="btn btn-primary btn-sm" wire:click="editCategory('{{ $familia->id }}')"><i
