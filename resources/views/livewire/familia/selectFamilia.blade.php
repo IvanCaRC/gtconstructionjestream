@@ -1,16 +1,24 @@
-@php
-    $contador = 0;
-@endphp
-<select class="form-control" name="familia_nivel_1">
-    <option value="">Seleccione una familia</option>
-    @foreach ($familias as $familia)
-        @if ($familia->nivel == 1)
+<div>
+    @php
+        $primerNivel = null;
+    @endphp
+    <h3>Contenido de Familias Filtradas:</h3>
+    @foreach ($familiasFiltradas as $nivel => $familias)
+        @if ($primerNivel === null)
             @php
-                $contador++;
+                $primerNivel = $nivel;
             @endphp
-            <option value="{{ $familia->id }}">{{ $familia->nombre }}</option>
+        @endif
+        @if ($nivel == $primerNivel)
+            <select id="{{ $nivel }}" class="form-control" name="familia_nivel_1"
+                wire:change="calcularSubfamilias($event.target.value)">
+                <option value="0">Seleccione una familia</option>
+                @foreach ($familias as $familia)
+                    <option value="{{ $familia->id }}">{{ $familia->nombre }}</option>
+                @endforeach
+            </select>
         @endif
     @endforeach
-</select>
+    <p>El primer nivel encontrado es: {{ $primerNivel }}</p>
 
-<label for="">Total de familias de nivel 1: {{ $contador }}</label>
+</div>

@@ -38,7 +38,7 @@ class CreateCategoria extends Component
             return;
         }
 
-        $familiaSeleccionada = Familia::with('subfamiliasRecursivas')->find(10);
+        $familiaSeleccionada = Familia::with('subfamiliasRecursivas')->find($variableBuscada);
 
         if ($familiaSeleccionada) {
             $this->familiasFiltradas = $this->agruparSubfamiliasPorNivel($familiaSeleccionada);

@@ -26,54 +26,47 @@
                         @enderror
                     </div>
 
-                    @php
-                        $contador = 0;
-                    @endphp
+                    @if (!empty($familias))
+                        <div class="form-group">
+                            <select id="1" class="form-control" name="familia_nivel_1"
+                                wire:change="calcularSubfamilias($event.target.value)">
+                                <option value="0">Seleccione una familia</option>
+                                @foreach ($familias as $familia)
+                                    @if ($familia->nivel == 1)
+                                        <option value="{{ $familia->id }}">{{ $familia->nombre }}</option>
+                                    @endif
+                                @endforeach
+                            </select>
+                        </div>
 
-                    <select class="form-control" name="familia_nivel_1"
-                        wire:change="calcularSubfamilias($event.target.value)">
-                        <option value="0">Seleccione una familia</option>
-                        @foreach ($familias as $familia)
-                            @if ($familia->nivel == 1)
-                                @php
-                                    $contador++;
-                                @endphp
-                                <option value="{{ $familia->id }}">{{ $familia->nombre }}</option>
-                            @endif
-                        @endforeach
-                    </select>
-
-                    <label for="">Total de familias de nivel 1: {{ $contador }}</label>
-
-                    @if (!empty($familiasFiltradas))
-
-                        <h3>Contenido de Familias Filtradas:</h3>
-                        @php
-                            $contenidoFiltrado = '';
-                            foreach ($familiasFiltradas as $nivel => $familias) {
-                                
-                                    $contenidoFiltrado .= "Nivel {$nivel}:\n";
-                                    foreach ($familias as $familia) {
-                                        $contenidoFiltrado .= "ID: {$familia['id']}, Nombre: {$familia['nombre']}\n";
-                                    }
-                                
-                            }
-                        @endphp
-                        <label for="">{{ nl2br(e($contenidoFiltrado)) }}</label>
-
-
-                        <h3>Familias Filtradas:</h3>
-                        @foreach ($familiasFiltradas as $nivel => $familias)
-                            <h4>Nivel {{ $nivel }}</h4>
-                            @foreach ($familias as $familia)
-                                <label for="">{{ $familia['nombre'] }}</label>
-                                @include('livewire.familia.categoria', [
-                                    'familia' => $familia,
-                                    'nivel' => $nivel,
-                                ])
+                        @if (!empty($familiasFiltradas))
+                            @php
+                                $primerNivel = null;
+                            @endphp
+                            <h3>Contenido de Familias Filtradas:</h3>
+                            @foreach ($familiasFiltradas as $nivel => $familias)
+                                @if ($primerNivel === null)
+                                    @php
+                                        $primerNivel = $nivel;
+                                    @endphp
+                                @endif
+                                @if ($nivel == $primerNivel)
+                                    <select id="{{ $nivel }}" class="form-control" name="familia_nivel_1"
+                                        wire:change="calcularSubfamilias($event.target.value)">
+                                        <option value="0">Seleccione una familia</option>
+                                        @foreach ($familias as $familia)
+                                            <option value="{{ $familia->id }}">{{ $familia->nombre }}</option>
+                                        @endforeach
+                                    </select>
+                                @endif
                             @endforeach
-                        @endforeach
+                            <p>El primer nivel encontrado es: {{ $primerNivel }}</p>
+
+                                    
+                        @endif
                     @endif
+
+
 
                     <button type="submit" wire:click="submit" class="btn btn-primary mt-3">Crear Familia</button>
                 </form>
