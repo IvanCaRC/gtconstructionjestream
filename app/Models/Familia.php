@@ -9,10 +9,15 @@ class Familia extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['id_familia_padre', 'nombre', 'descripcion', 'estado'];
+    protected $fillable = ['id_familia_padre', 'nombre', 'descripcion'];
 
     public function subfamilias()
     {
         return $this->hasMany(Familia::class, 'id_familia_padre');
+    }
+
+    public function subfamiliasRecursivas()
+    {
+        return $this->subfamilias()->with('subfamiliasRecursivas');
     }
 }

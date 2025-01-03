@@ -28,7 +28,7 @@ class FamiliaComponent extends Component
             });
         }
 
-        $familias = $query->with('subfamilias.subfamilias')->paginate(10);
+        $familias = $query->with('subfamiliasRecursivas')->paginate(10);
 
         return view('livewire.familia.familia-component', [
             'familias' => $familias

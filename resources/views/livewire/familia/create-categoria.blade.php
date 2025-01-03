@@ -1,8 +1,8 @@
 <div class="container-fluid px-4 sm:px-6 lg:px-8 py-1">
-    <h1 class="pl-1">Registrar Familias</h1>
-    <div class="card">
-        <div class="card-body">
-            <div>
+    <h1 class="pl-4">Crear Nueva Familia</h1>
+    <div class="container-fluid px-4 sm:px-6 lg:px-8 py-1">
+        <div class="card">
+            <div class="card-body">
                 @if (session()->has('message'))
                     <div class="alert alert-success">
                         {{ session('message') }}
@@ -10,49 +10,72 @@
                 @endif
 
                 <form>
-                    <div class="container-fluid px-0 sm:px-1 lg:px-1 py-3">
-                        <button type="submit" class="btn btn-primary" wire:click="save2">Registrar</button>
-                    </div>
                     <div class="form-group">
                         <label for="nombre">Nombre</label>
-                        <input type="text" wire:model="nombre" class="form-control" id="nombre"
-                            placeholder="Ingrese el nombre de la familia">
+                        <input type="text" id="nombre" class="form-control" wire:model="nombre">
+                        @error('nombre')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
                     </div>
 
                     <div class="form-group">
                         <label for="descripcion">Descripción</label>
-                        <textarea wire:model="descripcion" class="form-control" id="descripcion"
-                            placeholder="Ingrese la descripción de la familia"></textarea>
+                        <textarea id="descripcion" class="form-control" wire:model="descripcion"></textarea>
+                        @error('descripcion')
+                            <span class="text-danger">{{ $message }}</span>
+                        @enderror
                     </div>
 
-                    <div class="form-group">
-                        <label for="estado">Estado</label>
-                        <input type="checkbox" wire:model="estado" id="estado">
-                    </div>
+                    @php
+                        $contador = 0;
+                    @endphp
 
-                    <div class="form-group">
-                        <label for="familia">Familia</label>
-                        <select wire:model="selectedFamilia" class="form-control" wire:change="updateSelectedFamilia($event.target.value)">
-                            <option value="">Seleccione una familia</option>
-                            @foreach($familias as $familia)
+                    <select class="form-control" name="familia_nivel_1"
+                        wire:change="calcularSubfamilias($event.target.value)">
+                        <option value="0">Seleccione una familia</option>
+                        @foreach ($familias as $familia)
+                            @if ($familia->nivel == 1)
+                                @php
+                                    $contador++;
+                                @endphp
                                 <option value="{{ $familia->id }}">{{ $familia->nombre }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+                            @endif
+                        @endforeach
+                    </select>
 
-                    @foreach ($subfamilias as $nivel => $subfamiliasNivel)
-                        @if ($subfamiliasNivel->isNotEmpty())
-                            <div class="form-group slide-in" x-data="{ show: false }" x-init="$nextTick(() => { show = true })" :class="{ 'show': show }">
-                                <label for="subfamilia-nivel-{{ $nivel }}">Subfamilia (Nivel {{ $nivel }})</label>
-                                <select wire:model="selectedSubfamilias.{{ $nivel }}" class="form-control" wire:change="updateSelectedSubfamilia($event.target.value, {{ $nivel }})">
-                                    <option value="">Seleccione una subfamilia</option>
-                                    @foreach ($subfamiliasNivel as $subfamilia)
-                                        <option value="{{ $subfamilia->id }}">{{ $subfamilia->nombre }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        @endif
-                    @endforeach
+                    <label for="">Total de familias de nivel 1: {{ $contador }}</label>
+
+                    @if (!empty($familiasFiltradas))
+
+                        <h3>Contenido de Familias Filtradas:</h3>
+                        @php
+                            $contenidoFiltrado = '';
+                            foreach ($familiasFiltradas as $nivel => $familias) {
+                                
+                                    $contenidoFiltrado .= "Nivel {$nivel}:\n";
+                                    foreach ($familias as $familia) {
+                                        $contenidoFiltrado .= "ID: {$familia['id']}, Nombre: {$familia['nombre']}\n";
+                                    }
+                                
+                            }
+                        @endphp
+                        <label for="">{{ nl2br(e($contenidoFiltrado)) }}</label>
+
+
+                        <h3>Familias Filtradas:</h3>
+                        @foreach ($familiasFiltradas as $nivel => $familias)
+                            <h4>Nivel {{ $nivel }}</h4>
+                            @foreach ($familias as $familia)
+                                <label for="">{{ $familia['nombre'] }}</label>
+                                @include('livewire.familia.categoria', [
+                                    'familia' => $familia,
+                                    'nivel' => $nivel,
+                                ])
+                            @endforeach
+                        @endforeach
+                    @endif
+
+                    <button type="submit" wire:click="submit" class="btn btn-primary mt-3">Crear Familia</button>
                 </form>
             </div>
         </div>

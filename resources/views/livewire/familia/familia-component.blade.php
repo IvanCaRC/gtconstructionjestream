@@ -27,13 +27,8 @@
                             </div>
                         </li>
 
-                        @php $contador = 1; @endphp
+                        
                         @foreach ($familias as $familia)
-                            @php
-                                echo "Iteración: $contador\n";
-                                echo 'Familia: ' . print_r($familia->toArray(), true) . "\n";
-                                $contador++;
-                            @endphp
                             @include('livewire.familia.categoria', ['familia' => $familia, 'nivel' => 1])
                         @endforeach
 

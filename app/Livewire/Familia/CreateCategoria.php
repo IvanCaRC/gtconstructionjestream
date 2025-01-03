@@ -8,89 +8,76 @@ class CreateCategoria extends Component
 {
     public $nombre;
     public $descripcion;
-    public $estado = false;
-    public $selectedFamilia = null;
-    public $selectedSubfamilias = [];
-    public $familias = [];
-    public $subfamilias = [];
+    public $familiasFiltradas = []; // Propiedad para almacenar las familias filtradas
 
-    public function mount()
+    protected $rules = [
+        'nombre' => 'required|string|max:255',
+        'descripcion' => 'nullable|string',
+    ];
+
+    public function submit()
     {
-        $this->familias = Familia::whereNull('id_familia')->get();
-        $this->subfamilias = [];
+        $this->validate();
+
+        $familia = new Familia();
+        $familia->nombre = $this->nombre;
+        $familia->descripcion = $this->descripcion;
+        $familia->nivel = 1; // Nivel inicial ya que no hay familia padre
+
+        $familia->save();
+
+        session()->flash('message', 'Familia creada exitosamente!');
+
+        $this->reset(['nombre', 'descripcion']);
     }
 
-    public function updateSelectedFamilia($value)
+    public function calcularSubfamilias($variableBuscada)
     {
-        $this->selectedFamilia = $value;
-        $this->selectedSubfamilias = [];
-        $this->subfamilias = [];
-
-        if ($this->selectedFamilia) {
-            $familia = Familia::find($this->selectedFamilia);
-            if ($familia && $familia->estado) {
-                $this->loadSubfamilias($this->selectedFamilia, 1);
-            }
+        if ($variableBuscada == 0) {
+            $this->familiasFiltradas = [];
+            return;
         }
-    }
 
-    public function loadSubfamilias($familiaId, $nivel)
-    {
-        if ($familiaId) {
-            $this->subfamilias[$nivel] = Familia::where('id_familia', $familiaId)->get();
+        $familiaSeleccionada = Familia::with('subfamiliasRecursivas')->find(10);
+
+        if ($familiaSeleccionada) {
+            $this->familiasFiltradas = $this->agruparSubfamiliasPorNivel($familiaSeleccionada);
         } else {
-            $this->subfamilias[$nivel] = collect([]);
+            $this->familiasFiltradas = [];
         }
     }
 
-    public function updateSelectedSubfamilia($value, $key)
+    private function agruparSubfamiliasPorNivel($familia)
     {
-        
-        $nivel = intval($key) + 1;
-        $this->selectedSubfamilias[$key] = $value;
-        // Reiniciar niveles posteriores
-        $this->selectedSubfamilias = array_slice($this->selectedSubfamilias, 0, $key + 1);
-        $this->subfamilias = array_slice($this->subfamilias, 0, $nivel);
+        $agrupadas = [];
+        $nivelInicial = $familia->nivel;
 
-        if ($value) {
-            $subfamilia = Familia::find($value);
-            if ($subfamilia && $subfamilia->estado) {
-                $this->loadSubfamilias($value, $nivel);
+        $this->agregarSubfamilias($familia, $nivelInicial, $agrupadas);
+
+        return $agrupadas;
+    }
+
+    private function agregarSubfamilias($familia, $nivelInicial, &$agrupadas)
+    {
+        foreach ($familia->subfamiliasRecursivas as $subfamilia) {
+            $nivel = $nivelInicial + 1;
+            if ($subfamilia->nivel == $nivel) {
+                if (!isset($agrupadas[$nivel])) {
+                    $agrupadas[$nivel] = [];
+                }
+                $agrupadas[$nivel][] = $subfamilia;
+                $this->agregarSubfamilias($subfamilia, $nivel, $agrupadas);
             }
         }
-    }
-
-    public function save()
-    {
-        // Lógica de guardado puede ir aquí si es necesario.
-    }
-
-    public function save2()
-    {
-        $this->validate([
-            'nombre' => 'required|string|max:255',
-            'descripcion' => 'nullable|string',
-            'estado' => 'boolean',
-        ]);
-
-        $ultimaSubfamiliaSeleccionada = end($this->selectedSubfamilias) ?: $this->selectedFamilia;
-
-        Familia::create([
-            'nombre' => $this->nombre,
-            'descripcion' => $this->descripcion,
-            'estado' => $this->estado,
-            'id_familia' => $ultimaSubfamiliaSeleccionada ?: null,
-        ]);
-
-        session()->flash('message', 'Familia registrada exitosamente.');
     }
 
     public function render()
     {
+        $familias = Familia::whereNull('id_familia_padre')->with('subfamiliasRecursivas')->get();
+
         return view('livewire.familia.create-categoria', [
-            'familias' => $this->familias,
-            'subfamilias' => $this->subfamilias,
-            'selectedSubfamilias' => $this->selectedSubfamilias,
+            'familias' => $familias,
+            'familiasFiltradas' => $this->familiasFiltradas
         ]);
     }
 }
