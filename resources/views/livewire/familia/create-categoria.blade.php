@@ -28,6 +28,8 @@
 
                     @if (!empty($familias))
                         <div class="form-group">
+                            <!-- Primer select para el nivel 1 -->
+                            <label for="familia_nivel_1">Nivel 1:</label>
                             <select id="1" class="form-control" name="familia_nivel_1"
                                 wire:change="calcularSubfamilias($event.target.value)">
                                 <option value="0">Seleccione una familia</option>
@@ -38,32 +40,46 @@
                                 @endforeach
                             </select>
                         </div>
+                    @endif
 
-                        @if (!empty($familiasFiltradas))
-                            @php
-                                $primerNivel = null;
-                            @endphp
-                            <h3>Contenido de Familias Filtradas:</h3>
+                    @if (!empty($familiasFiltradas))
+                        <!-- Depuración con JSON -->
+                        <h3>Depuración de Familias Filtradas:</h3>
+                        <label>
+                            @json($familiasFiltradas)
+                        </label>
+
+
+                        <!-- Alternativa: Mostrar los niveles y nombres en lista -->
+                        <ul>
                             @foreach ($familiasFiltradas as $nivel => $familias)
-                                @if ($primerNivel === null)
-                                    @php
-                                        $primerNivel = $nivel;
-                                    @endphp
-                                @endif
-                                @if ($nivel == $primerNivel)
-                                    <select id="{{ $nivel }}" class="form-control" name="familia_nivel_1"
-                                        wire:change="calcularSubfamilias($event.target.value)">
-                                        <option value="0">Seleccione una familia</option>
+                                <li>
+                                    <strong>Nivel {{ $nivel }}:</strong>
+                                    <ul>
                                         @foreach ($familias as $familia)
-                                            <option value="{{ $familia->id }}">{{ $familia->nombre }}</option>
+                                            <li>{{ $familia->id }}: {{ $familia->nombre }}</li>
                                         @endforeach
-                                    </select>
-                                @endif
+                                    </ul>
+                                </li>
                             @endforeach
-                            <p>El primer nivel encontrado es: {{ $primerNivel }}</p>
+                        </ul>
 
-                                    
-                        @endif
+                        @php
+                            $primerNivel = null;
+                        @endphp
+                        <h3>Contenido de Familias Filtradas:</h3>
+                        @foreach ($familiasFiltradas as $nivel => $familias)
+                            <select id="nivel-{{ $nivel }}" class="form-control"
+                                name="familia_nivel_{{ $nivel }}"
+                                wire:change="calcularSubfamilias($event.target.value, {{ $nivel }})">
+                                <option value="0">Seleccione una familia</option>
+                                @foreach ($familias as $familia)
+                                    <option value="{{ $familia->id }}">{{ $familia->nombre }}</option>
+                                @endforeach
+                            </select>
+                        @endforeach
+
+                        <p>El primer nivel encontrado es: {{ $primerNivel }}</p>
                     @endif
 
 
