@@ -24,20 +24,20 @@
 
                     <!-- Niveles dinámicos -->
                     @foreach ($niveles as $nivel => $familias)
-                        <div class="form-group">
-                            <label for="familia_nivel_{{ $nivel }}">Nivel {{ $nivel }}</label>
-                            <select id="familia_nivel_{{ $nivel }}" class="form-control"
-                                wire:change="calcularSubfamilias($event.target.value, {{ $nivel }})">
-                                <option value="0">Seleccione una familia</option>
-                                @foreach ($familias as $familia)
-                                    <option value="{{ $familia->id }}"
-                                        {{ isset($seleccionadas[$nivel]) && $seleccionadas[$nivel] == $familia->id ? 'selected' : '' }}>
-                                        {{ $familia->nombre }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-                    @endforeach
+    <div class="form-group">
+        <label for="familia_nivel_{{ $nivel }}">Nivel {{ $nivel }}</label>
+        <select id="familia_nivel_{{ $nivel }}" class="form-control" wire:change="calcularSubfamilias($event.target.value, {{ $nivel }})">
+            <option value="0" {{ !isset($seleccionadas[$nivel]) || $seleccionadas[$nivel] == 0 ? 'selected' : '' }}>Seleccione una familia</option>
+            @foreach ($familias as $familia)
+                <option value="{{ $familia->id }}" {{ isset($seleccionadas[$nivel]) && $seleccionadas[$nivel] == $familia->id ? 'selected' : '' }}>
+                    {{ $familia->nombre }}
+                </option>
+            @endforeach
+        </select>
+    </div>
+@endforeach
+
+
 
                     <!-- Botón de envío -->
                     <button type="submit" class="btn btn-primary mt-3">Crear Familia</button>
