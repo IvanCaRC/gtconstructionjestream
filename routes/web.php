@@ -45,3 +45,5 @@ Route::get('profile/profileView', [UserController::class, 'verPerfil'])->middlew
 Route::get('compras/familias/viewFamilias', [FamiliaController::class, 'index'])->middleware('auth', 'nocache')->name('compras.familias.viewFamilias');
 
 Route::get('compras/familias/createFamilias', [FamiliaController::class, 'crearUsuario'])->middleware('auth', 'nocache')->name('compras.familias.createFamilias');
+
+Route::get('/ruta/subfamilias/{id}', [FamiliaController::class, 'obtenerSubfamilias']);
