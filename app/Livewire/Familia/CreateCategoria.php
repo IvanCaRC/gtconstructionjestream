@@ -25,33 +25,33 @@ class CreateCategoria extends Component
     }
 
     public function calcularSubfamilias($idFamiliaSeleccionada, $nivel)
-{
-    // Guardar la selección actual en el nivel correspondiente
-    $this->seleccionadas[$nivel] = $idFamiliaSeleccionada;
+    {
+        // Guardar la selección actual en el nivel correspondiente
+        $this->seleccionadas[$nivel] = $idFamiliaSeleccionada;
 
-    // Limpiar los niveles más profundos que este
-    foreach ($this->niveles as $key => $value) {
-        if ($key > $nivel) {
-            unset($this->niveles[$key]);
-            unset($this->seleccionadas[$key]);
+        // Limpiar los niveles más profundos que este
+        foreach ($this->niveles as $key => $value) {
+            if ($key > $nivel) {
+                unset($this->niveles[$key]);
+                unset($this->seleccionadas[$key]);
+            }
+        }
+
+        // Cargar subfamilias solo si hay una selección válida
+        if ($idFamiliaSeleccionada != 0) {
+            $familia = Familia::find($idFamiliaSeleccionada);
+            if ($familia) {
+                $this->niveles[$nivel + 1] = $familia->subfamilias()->get();
+                // Restablecer el valor del siguiente select a "Seleccione una familia"
+                $this->seleccionadas[$nivel + 1] = 0;
+            }
+        } else {
+            // Si la selección no es válida, también restablece el valor a "Seleccione una familia"
+            if (isset($this->niveles[$nivel + 1])) {
+                unset($this->niveles[$nivel + 1]);
+            }
         }
     }
-
-    // Cargar subfamilias solo si hay una selección válida
-    if ($idFamiliaSeleccionada != 0) {
-        $familia = Familia::find($idFamiliaSeleccionada);
-        if ($familia) {
-            $this->niveles[$nivel + 1] = $familia->subfamilias()->get();
-            // Restablecer el valor del siguiente select a "Seleccione una familia"
-            $this->seleccionadas[$nivel + 1] = 0;
-        }
-    } else {
-        // Si la selección no es válida, también restablece el valor a "Seleccione una familia"
-        if (isset($this->niveles[$nivel + 1])) {
-            unset($this->niveles[$nivel + 1]);
-        }
-    }
-}
 
 
     public function submit()
