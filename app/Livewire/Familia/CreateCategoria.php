@@ -64,14 +64,14 @@ class CreateCategoria extends Component
         $familia->save();
 
         // Resetear los campos
-        $this->reset(['nombre', 'descripcion', 'niveles', 'seleccionadas']);
-        $this->mount(); // Recargar las familias iniciales
+        
+        
         $this->dispatch('FamiliaCreate');
 
         // Mensaje de éxito (puede ser capturado en el frontend)
         session()->flash('message', 'La familia ha sido creada exitosamente.');
+        return view('livewire.familia.familia-component');
 
-        return true;
     }
 
 

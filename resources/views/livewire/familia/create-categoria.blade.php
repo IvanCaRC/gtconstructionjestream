@@ -68,11 +68,20 @@
                 // Mostrar la alerta después de la actualización si todo es correcto
                 Swal.fire({
                     title: 'Familia Creada',
-                    text: 'La familia a sido creada exitosamente.',
+                    text: 'La familia ha sido creada exitosamente.',
                     icon: 'success',
-                    confirmButtonText: 'OK'
+                    confirmButtonText: 'OK',
+                    allowOutsideClick: false // Deshabilitar el clic fuera para cerrar
+                }).then((result) => {
+                    // Redirigir al hacer clic en el botón "OK"
+                    if (result.isConfirmed) {
+                        window.location.href = "{{ route('compras.familias.viewFamilias') }}";
+                    }
                 });
             }
+
+
+
         }).catch(error => {
             // Manejar error si es necesario
             Swal.fire({
