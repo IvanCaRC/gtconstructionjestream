@@ -20,8 +20,10 @@ class CreateCategoria extends Component
 
     public function mount()
     {
-        // Cargar las familias del nivel raíz (nivel 1)
-        $this->niveles[1] = Familia::whereNull('id_familia_padre')->get();
+        // Cargar las familias del nivel raíz (nivel 1) con estado_eliminacion = 0
+        $this->niveles[1] = Familia::whereNull('id_familia_padre')
+            ->where('estado_eliminacion', 0)
+            ->get();
     }
 
     public function calcularSubfamilias($idFamiliaSeleccionada, $nivel)
@@ -34,43 +36,43 @@ class CreateCategoria extends Component
     }
 
     public function save()
-{
-    // Validar los datos del formulario
-    $this->validate();
+    {
+        // Validar los datos del formulario
+        $this->validate();
 
-    // Determinar el ID de la familia padre
-    // Encontrar el último valor seleccionado que no sea 0
-    $idFamiliaPadre = null;
-    foreach (array_reverse($this->seleccionadas) as $seleccionada) {
-        if ($seleccionada != 0) {
-            $idFamiliaPadre = $seleccionada;
-            break;
+        // Determinar el ID de la familia padre
+        // Encontrar el último valor seleccionado que no sea 0
+        $idFamiliaPadre = null;
+        foreach (array_reverse($this->seleccionadas) as $seleccionada) {
+            if ($seleccionada != 0) {
+                $idFamiliaPadre = $seleccionada;
+                break;
+            }
         }
+
+        // Calcular el nivel
+        // Si hay una familia padre, el nivel será el de la familia padre + 1; de lo contrario, será 1
+        $nivel = $idFamiliaPadre ? Familia::find($idFamiliaPadre)->nivel + 1 : 1;
+
+        // Crear una nueva familia
+        $familia = new Familia();
+        $familia->nombre = $this->nombre;
+        $familia->descripcion = $this->descripcion;
+        $familia->estado_eliminacion = false; // Siempre guardar como "false"
+        $familia->id_familia_padre = $idFamiliaPadre; // Asignar familia padre o `null`
+        $familia->nivel = $nivel; // Asignar nivel
+        $familia->save();
+
+        // Resetear los campos
+        $this->reset(['nombre', 'descripcion', 'niveles', 'seleccionadas']);
+        $this->mount(); // Recargar las familias iniciales
+        $this->dispatch('FamiliaCreate');
+
+        // Mensaje de éxito (puede ser capturado en el frontend)
+        session()->flash('message', 'La familia ha sido creada exitosamente.');
+
+        return true;
     }
-
-    // Calcular el nivel
-    // Si hay una familia padre, el nivel será el de la familia padre + 1; de lo contrario, será 1
-    $nivel = $idFamiliaPadre ? Familia::find($idFamiliaPadre)->nivel + 1 : 1;
-
-    // Crear una nueva familia
-    $familia = new Familia();
-    $familia->nombre = $this->nombre;
-    $familia->descripcion = $this->descripcion;
-    $familia->estado_eliminacion = false; // Siempre guardar como "false"
-    $familia->id_familia_padre = $idFamiliaPadre; // Asignar familia padre o `null`
-    $familia->nivel = $nivel; // Asignar nivel
-    $familia->save();
-
-    // Resetear los campos
-    $this->reset(['nombre', 'descripcion', 'niveles', 'seleccionadas']);
-    $this->mount(); // Recargar las familias iniciales
-    $this->dispatch('FamiliaCreate');
-
-    // Mensaje de éxito (puede ser capturado en el frontend)
-    session()->flash('message', 'La familia ha sido creada exitosamente.');
-
-    return true;
-}
 
 
 

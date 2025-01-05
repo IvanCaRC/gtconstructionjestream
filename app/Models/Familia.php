@@ -13,13 +13,16 @@ class Familia extends Model
 
     public function subfamilias()
     {
-        return $this->hasMany(Familia::class, 'id_familia_padre');
+        // Filtrar las subfamilias por estado_eliminacion = 0
+        return $this->hasMany(Familia::class, 'id_familia_padre')->where('estado_eliminacion', 0);
     }
 
     public function subfamiliasRecursivas()
     {
+        // Aplicar el filtro también en la relación recursiva
         return $this->subfamilias()->with('subfamiliasRecursivas');
     }
+
 
     /**
      * Obtiene las subfamilias de un nivel dado y limpia los niveles profundos si es necesario.

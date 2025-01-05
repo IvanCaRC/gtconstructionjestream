@@ -76,13 +76,13 @@ class FamiliaSeeder extends Seeder
         $familia9->nombre = "Familia ABA";
         $familia9->descripcion = "Familia ABA";
         $familia9->nivel = 3;
-        $familia9->id_familia_padre = $familia3->id;
+        $familia9->id_familiaadre = $familia3->id;
         $familia9->save();
 
         // Nivel 4
         $familia10 = new Familia();
         $familia10->nombre = "Familia AABA";
-        $familia10->descripcion = "Familia AABA";
+        $familia10->descripcion _p= "Familia AABA";
         $familia10->nivel = 4;
         $familia10->id_familia_padre = $familia8->id;
         $familia10->save();
