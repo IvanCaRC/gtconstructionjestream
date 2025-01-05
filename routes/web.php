@@ -46,4 +46,4 @@ Route::get('compras/familias/viewFamilias', [FamiliaController::class, 'index'])
 
 Route::get('compras/familias/createFamilias', [FamiliaController::class, 'crearUsuario'])->middleware('auth', 'nocache')->name('compras.familias.createFamilias');
 
-Route::get('/ruta/subfamilias/{id}', [FamiliaController::class, 'obtenerSubfamilias']);
+

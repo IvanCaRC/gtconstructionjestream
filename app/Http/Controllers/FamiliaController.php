@@ -19,12 +19,5 @@ class FamiliaController extends Controller
         return view('compras.familias.createFamilias');
     }
 
-    public function obtenerSubfamilias($id)
-    {
-        Log::info("Obteniendo subfamilias para familia ID: $id");
-        $subfamilias = Familia::where('parent_id', $id)->get();
-        return response()->json([
-            'subfamilias' => $subfamilias
-        ]);
-    }
+    
 }
