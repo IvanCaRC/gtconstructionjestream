@@ -3,7 +3,7 @@
     <div class="container-fluid px-4 sm:px-6 lg:px-8 py-1">
         <div class="card">
             <div class="card-body">
-                <form wire:submit.prevent="submit">
+                <form>
                     <!-- Nombre -->
                     <div class="form-group">
                         <label for="nombre">Nombre</label>
@@ -42,11 +42,11 @@
                             </div>
                         @endif
                     @endforeach
-                    
+
 
 
                     <!-- Botón de envío -->
-                    <button type="submit" class="btn btn-primary mt-3">Crear Familia</button>
+                    <button wire::click="submit" class="btn btn-primary mt-3">Crear Familia</button>
                 </form>
 
                 <!-- Mensaje de éxito -->
