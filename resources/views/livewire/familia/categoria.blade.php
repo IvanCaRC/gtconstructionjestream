@@ -16,6 +16,9 @@
             <button class="btn btn-primary btn-sm" wire:click="editCategory('{{ $familia->id }}')"><i
                     class="fas fa-pencil-alt"></i></button>
             <button class="btn btn-secondary btn-sm"><i class="fas fa-eye"></i></button>
+            <button class="btn btn-danger btn-sm" wire:click="deleteCategory('{{ $familia->id }}')">
+                <i class="fas fa-trash-alt"></i>
+            </button>            
             @if ($familia->subfamilias->count() > 0)
                 <button class="btn btn-secondary btn-sm"
                     onclick="toggleVisibility('cat{{ $familia->id }}{{ $nivel }}')"><i

@@ -22,10 +22,7 @@ class FamiliaComponent extends Component
         $query = Familia::whereNull('id_familia_padre');
 
         if ($this->searchTerm) {
-            $query = Familia::query();
-            $query->where(function ($q) {
-                $q->where('nombre', 'LIKE', "%{$this->searchTerm}%");
-            });
+            $query->where('nombre', 'LIKE', "%{$this->searchTerm}%");
         }
 
         $familias = $query->with('subfamiliasRecursivas')->paginate(10);
@@ -38,5 +35,17 @@ class FamiliaComponent extends Component
     public function editCategory($id)
     {
         // Lógica para editar una categoría
+    }
+
+    public function deleteCategory($id)
+    {
+        $familia = Familia::find($id);
+
+        if ($familia) {
+            $familia->delete();
+            session()->flash('message', 'Familia eliminada correctamente.');
+        } else {
+            session()->flash('error', 'Familia no encontrada.');
+        }
     }
 }

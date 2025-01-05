@@ -24,6 +24,7 @@ class CreateItemEspecificoTable extends Migration
             $table->text('especificaciones')->nullable();
             $table->string('ficha_tecnica_pdf')->nullable();
             $table->boolean('estado')->default(true);
+            $table->boolean('estado_eliminacion')->default(true);
             $table->timestamps();
 
             // Definir clave foránea

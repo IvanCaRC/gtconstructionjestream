@@ -13,6 +13,7 @@ class CreateFamiliasTable extends Migration
             $table->string('nombre');
             $table->text('descripcion')->nullable();
             $table->integer('nivel')->default(1); // Nivel de anidación
+            $table->boolean('estado_eliminacion')->default(true);
             $table->timestamps();
 
             // Definir la llave foránea

@@ -22,6 +22,7 @@ class CreateProveedoresTable extends Migration
             $table->string('archivo_facturacion_pdf')->nullable();
             $table->string('datos_bancarios_pdf')->nullable();
             $table->boolean('estado')->default(true); // Estado como booleano
+            $table->boolean('estado_eliminacion')->default(true);
             $table->timestamps();
         });
     }
