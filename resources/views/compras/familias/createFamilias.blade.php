@@ -1,5 +1,5 @@
 @extends('layouts.app')
-<script src="//unpkg.com/alpinejs" defer></script>
+
 
 <style>
 .slide-in {
@@ -13,6 +13,8 @@
     transform: translateY(0);
 }
 </style>
+
+
 @section('title', 'Crear Categorias')
 @section('activeCollapseCompras', 'show')
 @section('activeCategorias', 'active')

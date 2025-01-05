@@ -9,7 +9,7 @@ class CreateCategoria extends Component
 {
     public $nombre;
     public $descripcion;
-
+    protected $listeners = ['FamiliaCreate' => 'render'];
     public $niveles = []; // Array para almacenar las familias de cada nivel
     public $seleccionadas = []; // Array para almacenar las opciones seleccionadas
 
@@ -33,22 +33,47 @@ class CreateCategoria extends Component
         $this->seleccionadas = $resultado['seleccionadas'];
     }
 
-    public function submit()
-    {
-        $this->validate();
+    public function save()
+{
+    // Validar los datos del formulario
+    $this->validate();
 
-        $familia = new Familia();
-        $familia->nombre = $this->nombre;
-        $familia->descripcion = $this->descripcion;
-        $familia->nivel = 1; // Nivel inicial ya que no hay familia padre
-
-        $familia->save();
-
-        session()->flash('message', 'Familia creada exitosamente!');
-
-        $this->reset(['nombre', 'descripcion', 'niveles', 'seleccionadas']);
-        $this->mount(); // Recargar niveles iniciales
+    // Determinar el ID de la familia padre
+    // Encontrar el último valor seleccionado que no sea 0
+    $idFamiliaPadre = null;
+    foreach (array_reverse($this->seleccionadas) as $seleccionada) {
+        if ($seleccionada != 0) {
+            $idFamiliaPadre = $seleccionada;
+            break;
+        }
     }
+
+    // Calcular el nivel
+    // Si hay una familia padre, el nivel será el de la familia padre + 1; de lo contrario, será 1
+    $nivel = $idFamiliaPadre ? Familia::find($idFamiliaPadre)->nivel + 1 : 1;
+
+    // Crear una nueva familia
+    $familia = new Familia();
+    $familia->nombre = $this->nombre;
+    $familia->descripcion = $this->descripcion;
+    $familia->estado_eliminacion = false; // Siempre guardar como "false"
+    $familia->id_familia_padre = $idFamiliaPadre; // Asignar familia padre o `null`
+    $familia->nivel = $nivel; // Asignar nivel
+    $familia->save();
+
+    // Resetear los campos
+    $this->reset(['nombre', 'descripcion', 'niveles', 'seleccionadas']);
+    $this->mount(); // Recargar las familias iniciales
+    $this->dispatch('FamiliaCreate');
+
+    // Mensaje de éxito (puede ser capturado en el frontend)
+    session()->flash('message', 'La familia ha sido creada exitosamente.');
+
+    return true;
+}
+
+
+
 
     public function render()
     {

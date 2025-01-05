@@ -1,6 +1,8 @@
 <div class="container-fluid px-4 sm:px-6 lg:px-8 py-1">
+    <script src="//unpkg.com/alpinejs" defer></script>
     <h1>Crear Nueva Familia</h1>
     <div class="container-fluid px-4 sm:px-6 lg:px-8 py-1">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <div class="card">
             <div class="card-body">
                 <form>
@@ -43,10 +45,8 @@
                         @endif
                     @endforeach
 
-
-
                     <!-- Botón de envío -->
-                    <button wire::click="submit" class="btn btn-primary mt-3">Crear Familia</button>
+                    <button type="button" onclick="confirmSave()" class="btn btn-primary mt-3">Crear Familia</button>
                 </form>
 
                 <!-- Mensaje de éxito -->
@@ -59,3 +59,28 @@
         </div>
     </div>
 </div>
+
+<script>
+    function confirmSave() {
+        // Llamar al método update2 de Livewire
+        @this.call('save').then(response => {
+            if (response) {
+                // Mostrar la alerta después de la actualización si todo es correcto
+                Swal.fire({
+                    title: 'Familia Creada',
+                    text: 'La familia a sido creada exitosamente.',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                });
+            }
+        }).catch(error => {
+            // Manejar error si es necesario
+            Swal.fire({
+                title: 'Error',
+                text: 'Hubo un problema al Crear la familia.',
+                icon: 'error',
+                confirmButtonText: 'OK'
+            });
+        });
+    }
+</script>
