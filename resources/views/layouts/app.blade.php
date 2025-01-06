@@ -137,7 +137,7 @@
                         <div class="bg-primary-dark text-white py-2 collapse-inner rounded">
                             <a class="collapse-item @yield('activeCategorias') text-white" href="{{ route('compras.familias.viewFamilias') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
-                                onmouseout="this.style.backgroundColor='';">Categorias</a>
+                                onmouseout="this.style.backgroundColor='';">Familias</a>
                             <a class="collapse-item @yield('activeAregister') text-white" href="#"
                                 onmouseover="this.style.backgroundColor='#003366';"
                                 onmouseout="this.style.backgroundColor='';">Materiales</a>

@@ -9,12 +9,12 @@ class Familia extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['id_familia_padre', 'nombre', 'descripcion'];
+    protected $fillable = ['id_familia_padre', 'nombre', 'descripcion', 'estadoEliminacion'];
 
     public function subfamilias()
     {
         // Filtrar las subfamilias por estado_eliminacion = 0
-        return $this->hasMany(Familia::class, 'id_familia_padre')->where('estado_eliminacion', 0);
+        return $this->hasMany(Familia::class, 'id_familia_padre')->where('estadoEliminacion', 0);
     }
 
     public function subfamiliasRecursivas()

@@ -27,7 +27,7 @@
                             </div>
                         </li>
 
-                        
+
                         @foreach ($familias as $familia)
                             @include('livewire.familia.categoria', ['familia' => $familia, 'nivel' => 1])
                         @endforeach
@@ -44,22 +44,11 @@
                     {{ $familias->links() }}
                 </div>
 
-                <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-                <script>
-                    function toggleVisibility(id) {
-                        let subcategoria = $('#' + id);
-                        subcategoria.animate({
-                            height: 'toggle'
-                        }, 500);
+               
+                
 
-                        let icon = subcategoria.prev().find('.toggle-icon');
-                        if (icon.hasClass('fa-chevron-down')) {
-                            icon.removeClass('fa-chevron-down').addClass('fa-chevron-up');
-                        } else {
-                            icon.removeClass('fa-chevron-up').addClass('fa-chevron-down');
-                        }
-                    }
-                </script>
+                
+
             </div>
         </div>
     </div>

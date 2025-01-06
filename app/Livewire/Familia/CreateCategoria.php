@@ -22,7 +22,7 @@ class CreateCategoria extends Component
     {
         // Cargar las familias del nivel raíz (nivel 1) con estado_eliminacion = 0
         $this->niveles[1] = Familia::whereNull('id_familia_padre')
-            ->where('estado_eliminacion', 0)
+            ->where('estadoEliminacion', 0)
             ->get();
     }
 
@@ -58,7 +58,7 @@ class CreateCategoria extends Component
         $familia = new Familia();
         $familia->nombre = $this->nombre;
         $familia->descripcion = $this->descripcion;
-        $familia->estado_eliminacion = false; // Siempre guardar como "false"
+        $familia->estadoEliminacion = false; // Siempre guardar como "false"
         $familia->id_familia_padre = $idFamiliaPadre; // Asignar familia padre o `null`
         $familia->nivel = $nivel; // Asignar nivel
         $familia->save();
