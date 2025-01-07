@@ -27,8 +27,13 @@ class FamiliaComponent extends Component
             ->where('estadoEliminacion', 0); // Filtrar por estado_eliminacion igual a 0
 
         if ($this->searchTerm) {
-            $query->where('nombre', 'LIKE', "%{$this->searchTerm}%");
+            $query = Familia::query();
+            $query->where(function ($q) {
+                $q->where('nombre', 'LIKE', "%{$this->searchTerm}%");
+                $q->where('estadoEliminacion', 0);
+            });
         }
+
 
         $familias = $query->with(['subfamiliasRecursivas' => function ($q) {
             $q->where('estadoEliminacion', 0); // Filtrar subfamilias por estado_eliminacion igual a 0
