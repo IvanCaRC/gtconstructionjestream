@@ -24,8 +24,8 @@
     <!-- Custom styles for this template-->
     <link href="{{ asset('css/sb-admin-2.min.css') }}" rel="stylesheet">
 
-    
-    
+
+
     @livewireStyles
     <style>
         .img-redonda {
@@ -34,8 +34,22 @@
             height: 50px;
             object-fit: cover;
         }
+    </style>
+    <style>
+        .background-permanent {
+            background-color: #003366 !important;
+        }
 
-       
+        .background-default {
+            background-color: initial !important;
+        }
+
+        .container-flex2 {
+            display: flex;
+            flex-direction: column;
+            gap: 100mm;
+            /* Espacio de 1 milímetro entre los elementos */
+        }
     </style>
 
 </head>
@@ -127,17 +141,21 @@
             @can('compras.collapsed')
                 <!-- Nav Item - Pagina colapsada de departamentos-->
                 <li class="nav-item">
-                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCompras"
+                    <a class="nav-link collapsed " href="#" data-toggle="collapse" data-target="#collapseCompras"
                         aria-expanded="true" aria-controls="collapseCompras">
                         <i class="fas fa-fw fa-building"></i>
                         <span>Compras</span>
                     </a>
-                    <div id="collapseCompras" class="collapse @yield('activeCollapseCompras')" aria-labelledby="headingPages"
-                        data-parent="#accordionSidebar">
+                    <div id="collapseCompras" class="collapse @yield('activeCollapseCompras') container-flex2"
+                        aria-labelledby="headingPages" data-parent="#accordionSidebar">
                         <div class="bg-primary-dark text-white py-2 collapse-inner rounded">
-                            <a class="collapse-item @yield('activeCategorias') text-white" href="{{ route('compras.familias.viewFamilias') }}"
+                            <a class="collapse-item @yield('activeCategorias') text-white @yield('activeFondoPermanente')"
+                                href="{{ route('compras.familias.viewFamilias') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
-                                onmouseout="this.style.backgroundColor='';">Familias</a>
+                                onmouseout="this.style.backgroundColor='@yield('activeAforgot')';">
+                                Familias
+                            </a>
+
                             <a class="collapse-item @yield('activeAregister') text-white" href="#"
                                 onmouseover="this.style.backgroundColor='#003366';"
                                 onmouseout="this.style.backgroundColor='';">Materiales</a>
@@ -407,8 +425,7 @@
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item"
-                                    href="{{ route('profile.profileView') }}">
+                                <a class="dropdown-item" href="{{ route('profile.profileView') }}">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Mi perfil
                                 </a>
@@ -451,7 +468,7 @@
     </div>
     <!-- End of Page Wrapper -->
 
-    
+
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>

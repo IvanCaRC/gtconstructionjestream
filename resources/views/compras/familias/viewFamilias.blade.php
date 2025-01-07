@@ -69,6 +69,7 @@
 @section('title', 'Categorias')
 @section('activeCollapseCompras', 'show')
 @section('activeCategorias', 'active')
+@section('activeFondoPermanente', 'background-permanent')
 @section('contend')
     @livewire('familia.familia-component')
     <script>
