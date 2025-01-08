@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\adminController;
 use App\Http\Controllers\FamiliaController;
+use App\Http\Controllers\ProveedorController;
 use App\Http\Controllers\UserController;
 
 
@@ -45,5 +46,7 @@ Route::get('profile/profileView', [UserController::class, 'verPerfil'])->middlew
 Route::get('compras/familias/viewFamilias', [FamiliaController::class, 'index'])->middleware('auth', 'nocache')->name('compras.familias.viewFamilias');
 
 Route::get('compras/familias/createFamilias', [FamiliaController::class, 'crearUsuario'])->middleware('auth', 'nocache')->name('compras.familias.createFamilias');
+
+Route::get('compras/proveedores/viewProveedores', [ProveedorController::class, 'index'])->middleware('auth', 'nocache')->name('compras.proveedores.viewProveedores');
 
 

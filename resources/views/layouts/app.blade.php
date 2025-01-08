@@ -141,7 +141,7 @@
                             <a class="collapse-item @yield('activeAregister') text-white" href="#"
                                 onmouseover="this.style.backgroundColor='#003366';"
                                 onmouseout="this.style.backgroundColor='';">Materiales</a>
-                            <a class="collapse-item @yield('activeAforgot') text-white" href="#"
+                            <a class="collapse-item @yield('activeProveedores') text-white" href="{{ route('compras.proveedores.viewProveedores') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
                                 onmouseout="this.style.backgroundColor='';">Proveedores</a>
                             <a class="collapse-item @yield('activeAforgot') text-white" href="#"
