@@ -36,9 +36,16 @@
                     <div class="card-header">
                         <h2>Jerarquia de subfamilias</h2>
                     </div>
-                    <div class="card-body d-flex">
+                    <div class="card-body">
                         @if ($subfamilias->count() > 0)
-                            <ul class="list-group">
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <div class="categoria-header">
+                                    <div><strong>Nombre</strong></div>
+                                    <div><strong>Descripción</strong></div>
+                                    <div><strong>Acciones</strong></div>
+                                </div>
+                            </li>
                                 @foreach ($subfamilias as $subfamilia)
                                     <li class="list-group-item nivel-{{ $nivel }}">
                                         <div class="categoria-content">
@@ -108,7 +115,7 @@
             confirmButtonColor: '#d33',
             cancelButtonColor: '#3085d6',
             confirmButtonText: 'Sí, eliminar',
-            cancelButtonText: 'Cancelar'
+            cancelButtonText: 'Cancelar'x
         }).then((result) => {
             if (result.isConfirmed) {
                 // Si tiene subfamilias 
