@@ -49,4 +49,10 @@ Route::get('compras/familias/createFamilias', [FamiliaController::class, 'crearU
 
 Route::get('compras/proveedores/viewProveedores', [ProveedorController::class, 'index'])->middleware('auth', 'nocache')->name('compras.proveedores.viewProveedores');
 
+Route::get('compras/proveedores/viewProveedores', [ProveedorController::class, 'index'])->middleware('auth', 'nocache')->name('compras.proveedores.viewProveedores');
+
+Route::get('compras/familias/viewFamiliaEspecifica/{idfamilia}', [FamiliaController::class, 'verFamilia'])
+    ->middleware('auth', 'nocache')
+    ->name('compras.familias.viewFamiliaEspecifica');
+
 

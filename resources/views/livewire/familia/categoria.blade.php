@@ -11,39 +11,13 @@
                 <span><i class="fas fa-file"></i></span>
             @endif
             <label class="font-weight-bold">{{ $familia->nombre }}</label>
-
         </div>
         <div class="categoria-buttons">
-            <button class="btn btn-primary btn-sm" wire:click="confirmDeletion('{{ $familia->id }}')"><i
-                    class="fas fa-pencil-alt"></i></button>
-            <button class="btn btn-secondary btn-sm"><i class="fas fa-eye"></i></button>
-            <button class="btn btn-danger btn-sm" onclick="confirmDeletion({{ $familia->id }},'{{ $familia->nombre }}' )">
-                <i class="fas fa-trash-alt"></i>
-            </button>
-            <script>
-                function confirmDeletion(idFamilia, familiasName) {
-                    Swal.fire({
-                        title: `¿Estás seguro de que deseas eliminar a ${familiasName}?`,
-                        text: "¡No podrás revertir esto!",
-                        icon: 'warning',
-                        showCancelButton: true,
-                        confirmButtonColor: '#d33',
-                        cancelButtonColor: '#3085d6',
-                        confirmButtonText: 'Sí, eliminar',
-                        cancelButtonText: 'Cancelar'
-                    }).then((result) => {
-
-                        if (result.isConfirmed) {
-                            @this.call('eliminar', idFamilia);
-                            Swal.fire(
-                                'Eliminado!',
-                                `${familiasName}  ha sido eliminado.`,
-                                'success'
-                            )
-                        }
-                    })
-                }
-            </script>
+            <button class="btn btn-primary btn-sm"><i class="fas fa-pencil-alt"></i></button>
+            <button class="btn btn-secondary btn-sm"><i class="fas fa-eye" wire:click="viewFamilia({{ $familia->id }})"></i></button>
+            <button class="btn btn-danger btn-sm"
+                onclick="confirmDeletion({{ $familia->id }},'{{ $familia->nombre }}' )"><i
+                    class="fas fa-trash-alt"></i></button>
             @if ($familia->subfamilias->count() > 0)
                 <button class="btn btn-secondary btn-sm"
                     onclick="toggleVisibility('cat{{ $familia->id }}{{ $nivel }}')"><i
@@ -64,3 +38,74 @@
         </div>
     @endif
 </li>
+
+<script>
+    function confirmDeletion(idFamilia, familiasName) {
+        @this.call('obtenerSubfamiliasActivas', idFamilia);
+        Swal.fire({
+            title: `¿Estás seguro de que deseas eliminar a ${familiasName}?`,
+            text: "¡No podrás revertir esto!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Si tiene subfamilias 
+                if (@this.subfamilias.length > 0) {
+                    Swal.fire({
+                        title: 'Advertencia!',
+                        text: 'Esta familia tiene subfamilias. Estas también serán eliminadas.',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'Sí, eliminar',
+                        cancelButtonText: 'Cancelar'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Llamar al método de verificación para ver si la familia o subfamilias están asignadas
+                            @this.call('verificarAsignacion', idFamilia).then((asignada) => {
+                                if (asignada) {
+                                    // Si está asignada, mostrar mensaje de error
+                                    Swal.fire(
+                                        'No se puede eliminar',
+                                        'Esta familia o alguna de sus subfamilias está asignada a proveedores o productos, no se puede eliminar.',
+                                        'error'
+                                    );
+                                } else {
+                                    // Si no está asignada, proceder con la eliminación
+                                    @this.call('eliminarFamiliaConSubfamilias', idFamilia);
+                                    Swal.fire(
+                                        'Eliminado!',
+                                        `${familiasName} y sus subfamilias han sido eliminadas.`,
+                                        'success'
+                                    );
+                                }
+                            });
+                        } else {
+                            // Si el usuario cancela, mostrar mensaje de cancelación
+                            Swal.fire(
+                                'Cancelado',
+                                'La eliminación ha sido cancelada.',
+                                'info'
+                            );
+                        }
+                    });
+                } else {
+                    // Si no tiene subfamilias, eliminar la familia directamente
+                    @this.call('eliminar', idFamilia);
+                    Swal.fire(
+                        'Eliminado!',
+                        `${familiasName} ha sido eliminado.`,
+                        'success'
+                    );
+                }
+
+
+            }
+        })
+    }
+</script>

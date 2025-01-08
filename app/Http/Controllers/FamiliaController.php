@@ -19,5 +19,10 @@ class FamiliaController extends Controller
         return view('compras.familias.createFamilias');
     }
 
+    public function verFamilia($idfamilia)
+    {
+        return view('compras.familias.viewFamiliaEspecifica', ['idfamilia' => $idfamilia]);
+    }
+
     
 }

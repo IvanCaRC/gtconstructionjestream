@@ -1,7 +1,4 @@
 @extends('layouts.app')
-
-
-
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -55,42 +52,27 @@
         cursor: pointer;
     }
 </style>
-
-
-
-
-
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet"> @livewireStyles
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-@section('title', 'Categorias')
-@section('activeCollapseCompras', 'show')
-@section('activeCategorias', 'active')
-@section('activeFondoPermanente', 'background-permanent')
+@section('title', 'Vista de familia')
 @section('contend')
-    @livewire('familia.familia-component')
-    <script>
-        function toggleVisibility(id) {
-            $('#' + id).animate({
-                height: 'toggle'
-            }, 500);
+@livewire('familia.familia-vista-especifica', ['idfamilia' => $idfamilia])
+<script>
+    function toggleVisibility(id) {
+        $('#' + id).animate({
+            height: 'toggle'
+        }, 500);
+    }
+
+    function editCategory(id) {
+        alert('Editar categoría: ' + id);
+    }
+
+    // Mostrar el botón de despliegue solo si hay subcategorías
+    $(document).ready(function() {
+        if ($('#cat1 .list-group-item').length > 0) {
+            $('#toggleButtonCat1').html(
+                '<button class="btn btn-secondary btn-sm" onclick="toggleVisibility(\'cat1\')"><i class="fas fa-chevron-down"></i></button>'
+                );
         }
-
-        function editCategory(id) {
-            alert('Editar categoría: ' + id);
-        }
-
-        // Mostrar el botón de despliegue solo si hay subcategorías
-        $(document).ready(function() {
-            if ($('#cat1 .list-group-item').length > 0) {
-                $('#toggleButtonCat1').html(
-                    '<button class="btn btn-secondary btn-sm" onclick="toggleVisibility(\'cat1\')"><i class="fas fa-chevron-down"></i></button>'
-                    );
-            }
-        });
-    </script>
-
+    });
+</script>
 @endsection

@@ -2,50 +2,65 @@
 
 namespace App\Livewire\Familia;
 
-use Livewire\Component;
-use Livewire\WithPagination;
 use App\Models\Familia;
+use Livewire\Component;
 use Illuminate\Support\Facades\DB;
 
-class FamiliaComponent extends Component
+class FamiliaVistaEspecifica extends Component
 {
-    use WithPagination;
-
-    public $searchTerm;
+    public $familia;
+    public $nivel;
+    public $familiaPadre = null;
+    public $subfamilias2 = [];
     public $familiaId;
-    protected $listeners = ['FamiliaEll' => 'render'];
-    public $subfamilias = [];
+    protected $listeners = ['FamEspe' => 'render'];
 
-    public function search()
+    public function render()
     {
-        $this->resetPage();
+        if ($this->familia->estadoEliminacion) {
+            abort(404); // Lanza un error 404 si la familia está eliminada
+        }
+
+        $query = Familia::where('id_familia_padre', $this->familia->id) ->where('estadoEliminacion', 0);
+
+        $subfamilias = $query->paginate(10);
+
+        return view('livewire.familia.familia-vista-especifica', [
+            'familia' => $this->familia,
+            'familiaPadre' => $this->familiaPadre,
+            'subfamilias' => $subfamilias,
+            'nivel' => $this->nivel
+        ]);
     }
 
     
 
-    public function render()
+
+    public function mount($idfamilia)
     {
-        $query = Familia::whereNull('id_familia_padre')
-            ->where('estadoEliminacion', 0); // Filtrar por estado_eliminacion igual a 0
-
-        if ($this->searchTerm) {
-            $query = Familia::query();
-            $query->where(function ($q) {
-                $q->where('nombre', 'LIKE', "%{$this->searchTerm}%");
-                $q->where('estadoEliminacion', 0);
-            });
-        }
-
-
-        $familias = $query->with(['subfamiliasRecursivas' => function ($q) {
-            $q->where('estadoEliminacion', 0); // Filtrar subfamilias por estado_eliminacion igual a 0
-        }])->paginate(10);
-
-        return view('livewire.familia.familia-component', [
-            'familias' => $familias
-        ]);
+        $this->familia = Familia::findOrFail($idfamilia);
+        $this->buscarFamiliaPadreDirecta($idfamilia);
+        $this->nivel = $this->familia->nivel;
     }
 
+    public function buscarFamiliaPadreDirecta($idfamilia)
+    {
+        // Buscar la familia con el ID especificado
+        $familia = Familia::find($idfamilia);
+
+        // Verificar si la familia existe
+        if ($familia) {
+            // Buscar la familia padre directa utilizando el campo 'id_familia_padre'
+            $familiaPadre = Familia::find($familia->id_familia_padre);
+
+            // Retornar la familia padre directa si existe
+            if ($familiaPadre) {
+                $this->familiaPadre = $familiaPadre;
+            } else {
+                $this->familiaPadre = null;
+            }
+        }
+    }
 
     public function editCategory($id)
     {
@@ -56,7 +71,7 @@ class FamiliaComponent extends Component
     {
         $fammmm = Familia::findOrFail($familiaId);
         $fammmm->update(['estadoEliminacion' => 1]);
-        $this->dispatch('FamiliaEll');
+        $this->dispatch('FamEspe');
     }
 
     public function viewFamilia($idfamilia)
@@ -67,7 +82,7 @@ class FamiliaComponent extends Component
     public function obtenerSubfamiliasActivas($familiaId)
     {
         $this->familiaId = $familiaId; // Guardamos el id de la familia seleccionada
-        $this->subfamilias = []; // Limpiar el arreglo de subfamilias antes de agregar nuevas
+        $this->subfamilias2 = []; // Limpiar el arreglo de subfamilias antes de agregar nuevas
 
         // Llamada recursiva para obtener las subfamilias activas
         $this->recuperarSubfamiliasRecursivas($familiaId);
@@ -81,14 +96,14 @@ class FamiliaComponent extends Component
     private function recuperarSubfamiliasRecursivas($familiaId)
     {
         // Obtener las subfamilias activas (estadoEliminacion = 0) de una familia
-        $subfamilias = Familia::where('id_familia_padre', $familiaId)
+        $subfamilias2 = Familia::where('id_familia_padre', $familiaId)
             ->where('estadoEliminacion', 0)
             ->get();
 
         // Si hay subfamilias, las agregamos al arreglo
-        foreach ($subfamilias as $subfamilia) {
+        foreach ($subfamilias2 as $subfamilia) {
             // Almacenar la subfamilia en el arreglo
-            $this->subfamilias[] = $subfamilia;
+            $this->subfamilias2[] = $subfamilia;
 
             // Llamada recursiva para obtener las subfamilias de la subfamilia actual
             $this->recuperarSubfamiliasRecursivas($subfamilia->id);
@@ -105,7 +120,7 @@ class FamiliaComponent extends Component
         $familia->save();
 
         // Si tiene subfamilias, también cambiar su estado
-        foreach ($this->subfamilias as $subfamilia) {
+        foreach ($this->subfamilias2 as $subfamilia) {
             $subfamilia->update(['estadoEliminacion' => 1]);
         }
 
@@ -128,7 +143,7 @@ class FamiliaComponent extends Component
             ->exists();
 
         // Verificar si alguna de las subfamilias está asignada
-        $subfamiliasAsignadas = $familia->subfamilias->contains(function ($subfamilia) {
+        $subfamiliasAsignadas = $familia->subfamilias2->contains(function ($subfamilia) {
             return DB::table('proveedor_has_familia')->where('familia_id', $subfamilia->id)->exists() ||
                 DB::table('item_especifico_has_familia')->where('familia_id', $subfamilia->id)->exists();
         });
@@ -137,3 +152,5 @@ class FamiliaComponent extends Component
         return $proveedorAsignado || $itemAsignado || $subfamiliasAsignadas;
     }
 }
+
+
