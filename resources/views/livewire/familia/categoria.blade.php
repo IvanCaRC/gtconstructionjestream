@@ -14,7 +14,7 @@
         </div>
         <div class="categoria-buttons">
             <button class="btn btn-primary btn-sm"><i class="fas fa-pencil-alt"></i></button>
-            <button class="btn btn-secondary btn-sm"><i class="fas fa-eye" wire:click="viewFamilia({{ $familia->id }})"></i></button>
+            <button class="btn btn-secondary btn-sm" wire:click="viewFamilia({{ $familia->id }})"><i class="fas fa-eye" ></i></button>
             <button class="btn btn-danger btn-sm"
                 onclick="confirmDeletion({{ $familia->id }},'{{ $familia->nombre }}' )"><i
                     class="fas fa-trash-alt"></i></button>
