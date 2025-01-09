@@ -13,7 +13,7 @@
             <label class="font-weight-bold">{{ $familia->nombre }}</label>
         </div>
         <div class="categoria-buttons">
-            <button class="btn btn-primary btn-sm"><i class="fas fa-pencil-alt"></i></button>
+            <button class="btn btn-primary btn-sm" wire:click="editCategory({{ $familia->id }})"><i class="fas fa-pencil-alt"></i></button>
             <button class="btn btn-secondary btn-sm" wire:click="viewFamilia({{ $familia->id }})"><i
                     class="fas fa-eye"></i></button>
             <button type="button" class="btn btn-danger btn-sm"

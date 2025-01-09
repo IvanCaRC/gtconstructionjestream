@@ -33,9 +33,6 @@ class FamiliaVistaEspecifica extends Component
         ]);
     }
 
-    
-
-
     public function mount($idfamilia)
     {
         $this->familia = Familia::findOrFail($idfamilia);
@@ -62,9 +59,9 @@ class FamiliaVistaEspecifica extends Component
         }
     }
 
-    public function editCategory($id)
+    public function editCategory($idfamilia)
     {
-        // Lógica para editar una categoría
+        return redirect()->route('compras.familias.edicionFamilia', ['idfamilia' => $idfamilia]);
     }
 
     public function eliminar($familiaId)

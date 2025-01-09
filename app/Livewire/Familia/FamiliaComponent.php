@@ -45,9 +45,9 @@ class FamiliaComponent extends Component
     }
 
 
-    public function editCategory($id)
+    public function editCategory($idfamilia)
     {
-        // Lógica para editar una categoría
+        return redirect()->route('compras.familias.edicionFamilia', ['idfamilia' => $idfamilia]);
     }
 
     public function eliminar($familiaId)

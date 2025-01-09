@@ -60,7 +60,7 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 @section('title', 'Vista de familia')
 @section('contend')
-Hola
+@livewire('familia.familia-edicion', ['idfamilia' => $idfamilia])
 <script>
     function toggleVisibility(id) {
         $('#' + id).animate({

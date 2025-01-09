@@ -10,13 +10,14 @@
                         </div>
                         <div class="card-body d-flex">
                             <div class="pl-3">
-                                <a href="#" class="d-block mb-3" wire:click="">Editar Familia</a>
+                                <a href="#" wire:click="editCategory({{ $familia->id }})" class="d-block mb-3" wire:click="">Editar Familia</a>
                                 <h5 class="card-title mt-4 role-description">Familia Padre Directa:
                                     {{ $familiaPadre->nombre ?? 'Esta familia no tiene familia padre directa por lo que es una familia primaria' }}
                                 </h5>
                                 <h5 class="card-title mt-3">Nombre: {{ $familia->nombre ?? '' }}</h5>
                                 <h5 class="card-title mt-3">Descripcion: {{ $familia->descripcion ?? '' }}</h5>
-                                <h5 class="card-title mt-3">Nivel de jerarquia al que pertenece: {{ $familia->nivel ?? '' }}</h5>
+                                <h5 class="card-title mt-3">Nivel de jerarquia al que pertenece:
+                                    {{ $familia->nivel ?? '' }}</h5>
                             </div>
                         </div>
                         <div class="card-footer text-right">
@@ -52,13 +53,15 @@
                                                         <span class="icon"
                                                             id="folderIconcat{{ $subfamilia->id }}{{ $nivel }}"
                                                             onclick="toggleVisibility('cat{{ $subfamilia->id }}{{ $nivel }}')"
-                                                            style="cursor: pointer;"> <i class="fas fa-folder"></i> </span>
+                                                            style="cursor: pointer;"> <i class="fas fa-folder"></i>
+                                                        </span>
                                                     @else
                                                         <span><i class="fas fa-file"></i></span>
                                                     @endif <label
                                                         class="font-weight-bold">{{ $subfamilia->nombre }}</label>
                                                 </div>
-                                                <div class="categoria-buttons"> <button class="btn btn-primary btn-sm"><i
+                                                <div class="categoria-buttons"> <button
+                                                        class="btn btn-primary btn-sm"><i
                                                             class="fas fa-pencil-alt"></i></button> <button
                                                         class="btn btn-secondary btn-sm"
                                                         wire:click="viewFamilia({{ $subfamilia->id }})"><i
@@ -103,7 +106,7 @@
         function confirmDeletion2(idFamilia, familiasName) {
             // Obtener las subfamilias activas primero
             @this.call('obtenerSubfamiliasActivas', idFamilia);
-    
+
             Swal.fire({
                 title: `¿Estás seguro de que deseas eliminar a ${familiasName}?`,
                 text: "¡No podrás revertir esto!",
