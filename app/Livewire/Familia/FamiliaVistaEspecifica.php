@@ -11,7 +11,7 @@ class FamiliaVistaEspecifica extends Component
     public $familia;
     public $nivel;
     public $familiaPadre = null;
-    public $subfamilias2 = [];
+    public $subfamilias = [];
     public $familiaId;
     protected $listeners = ['FamEspe' => 'render'];
 
@@ -23,12 +23,12 @@ class FamiliaVistaEspecifica extends Component
 
         $query = Familia::where('id_familia_padre', $this->familia->id) ->where('estadoEliminacion', 0);
 
-        $subfamilias = $query->paginate(10);
+        $subfamilias2 = $query->paginate(10);
 
         return view('livewire.familia.familia-vista-especifica', [
             'familia' => $this->familia,
             'familiaPadre' => $this->familiaPadre,
-            'subfamilias' => $subfamilias,
+            'subfamilias2' => $subfamilias2,
             'nivel' => $this->nivel
         ]);
     }
@@ -71,18 +71,18 @@ class FamiliaVistaEspecifica extends Component
     {
         $fammmm = Familia::findOrFail($familiaId);
         $fammmm->update(['estadoEliminacion' => 1]);
-        $this->dispatch('FamEspe');
+        return redirect()->route('compras.familias.viewFamilias');
     }
 
     public function viewFamilia($idfamilia)
     {
         return redirect()->route('compras.familias.viewFamiliaEspecifica', ['idfamilia' => $idfamilia]);
     }
-    
+
     public function obtenerSubfamiliasActivas($familiaId)
     {
         $this->familiaId = $familiaId; // Guardamos el id de la familia seleccionada
-        $this->subfamilias2 = []; // Limpiar el arreglo de subfamilias antes de agregar nuevas
+        $this->subfamilias = []; // Limpiar el arreglo de subfamilias antes de agregar nuevas
 
         // Llamada recursiva para obtener las subfamilias activas
         $this->recuperarSubfamiliasRecursivas($familiaId);
@@ -96,14 +96,14 @@ class FamiliaVistaEspecifica extends Component
     private function recuperarSubfamiliasRecursivas($familiaId)
     {
         // Obtener las subfamilias activas (estadoEliminacion = 0) de una familia
-        $subfamilias2 = Familia::where('id_familia_padre', $familiaId)
+        $subfamilias = Familia::where('id_familia_padre', $familiaId)
             ->where('estadoEliminacion', 0)
             ->get();
 
         // Si hay subfamilias, las agregamos al arreglo
-        foreach ($subfamilias2 as $subfamilia) {
+        foreach ($subfamilias as $subfamilia) {
             // Almacenar la subfamilia en el arreglo
-            $this->subfamilias2[] = $subfamilia;
+            $this->subfamilias[] = $subfamilia;
 
             // Llamada recursiva para obtener las subfamilias de la subfamilia actual
             $this->recuperarSubfamiliasRecursivas($subfamilia->id);
@@ -120,11 +120,12 @@ class FamiliaVistaEspecifica extends Component
         $familia->save();
 
         // Si tiene subfamilias, también cambiar su estado
-        foreach ($this->subfamilias2 as $subfamilia) {
+        foreach ($this->subfamilias as $subfamilia) {
             $subfamilia->update(['estadoEliminacion' => 1]);
         }
 
         session()->flash('message', 'Familia y sus subfamilias eliminadas correctamente.');
+        return redirect()->route('compras.familias.viewFamilias');
     }
 
     public function verificarAsignacion($familiaId)
@@ -143,7 +144,7 @@ class FamiliaVistaEspecifica extends Component
             ->exists();
 
         // Verificar si alguna de las subfamilias está asignada
-        $subfamiliasAsignadas = $familia->subfamilias2->contains(function ($subfamilia) {
+        $subfamiliasAsignadas = $familia->subfamilias->contains(function ($subfamilia) {
             return DB::table('proveedor_has_familia')->where('familia_id', $subfamilia->id)->exists() ||
                 DB::table('item_especifico_has_familia')->where('familia_id', $subfamilia->id)->exists();
         });
@@ -152,5 +153,3 @@ class FamiliaVistaEspecifica extends Component
         return $proveedorAsignado || $itemAsignado || $subfamiliasAsignadas;
     }
 }
-
-

@@ -8,7 +8,6 @@
                         onclick="window.location.href='{{ route('compras.familias.createFamilias') }}'"
                         style="background-color: #4c72de; color: white;">Agregar familia</button>
                 </div>
-
                 <div class="table-responsive">
                     <div class="d-flex justify-content-between mb-3">
                         <!-- Input de búsqueda -->
@@ -26,26 +25,20 @@
                                 <div><strong>Acciones</strong></div>
                             </div>
                         </li>
-
-
                         @foreach ($familias as $familia)
                             @include('livewire.familia.categoria', ['familia' => $familia, 'nivel' => 1])
                         @endforeach
-
                     </ul>
                 @else
                     <div class='px-6 py-2'>
                         <p>No hay resultados</p>
                     </div>
                 @endif
-
                 <!-- Enlaces de paginación -->
                 <div class="px-6 py-3">
                     {{ $familias->links() }}
                 </div>
-
             </div>
         </div>
     </div>
-
 </div>

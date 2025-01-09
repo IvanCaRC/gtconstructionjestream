@@ -21,8 +21,6 @@ class FamiliaComponent extends Component
         $this->resetPage();
     }
 
-    
-
     public function render()
     {
         $query = Familia::whereNull('id_familia_padre')
@@ -63,7 +61,7 @@ class FamiliaComponent extends Component
     {
         return redirect()->route('compras.familias.viewFamiliaEspecifica', ['idfamilia' => $idfamilia]);
     }
-    
+
     public function obtenerSubfamiliasActivas($familiaId)
     {
         $this->familiaId = $familiaId; // Guardamos el id de la familia seleccionada
@@ -110,6 +108,7 @@ class FamiliaComponent extends Component
         }
 
         session()->flash('message', 'Familia y sus subfamilias eliminadas correctamente.');
+        $this->dispatch('FamiliaEll');
     }
 
     public function verificarAsignacion($familiaId)
