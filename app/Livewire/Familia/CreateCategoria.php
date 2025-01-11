@@ -74,9 +74,6 @@ class CreateCategoria extends Component
 
     }
 
-
-
-
     public function render()
     {
         return view('livewire.familia.create-categoria');

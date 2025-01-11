@@ -23,6 +23,10 @@ class Familia extends Model
         return $this->subfamilias()->with('subfamiliasRecursivas');
     }
 
+    public function padre()
+    {
+        return $this->belongsTo(Familia::class, 'id_familia_padre');
+    }
 
     /**
      * Obtiene las subfamilias de un nivel dado y limpia los niveles profundos si es necesario.
