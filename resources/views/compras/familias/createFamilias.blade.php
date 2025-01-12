@@ -16,6 +16,7 @@
 
 
 @section('title', 'Crear Categorias')
+@section('activedesplegablefamilias', 'active')
 @section('activeCollapseCompras', 'show')
 @section('activeCategorias', 'active')
 @section('activeFondoPermanente', 'background-permanent')

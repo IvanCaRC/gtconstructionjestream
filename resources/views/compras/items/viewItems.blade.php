@@ -68,8 +68,9 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 
 @section('title', 'Items')
+@section('activedesplegablefamilias', 'active')
 @section('activeCollapseCompras', 'show')
-@section('activeItems', 'active')
+@section('activeMateriales', 'active')
 @section('activeFondoPermanenteMateriales', 'background-permanent')
 @section('contend')
     @livewire('item.item-component')

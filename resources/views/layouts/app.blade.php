@@ -140,8 +140,8 @@
 
             @can('compras.collapsed')
                 <!-- Nav Item - Pagina colapsada de departamentos-->
-                <li class="nav-item">
-                    <a class="nav-link collapsed " href="#" data-toggle="collapse" data-target="#collapseCompras"
+                <li class="nav-item @yield('activedesplegablefamilias')">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCompras"
                         aria-expanded="true" aria-controls="collapseCompras">
                         <i class="fas fa-fw fa-building"></i>
                         <span>Compras</span>
@@ -150,30 +150,30 @@
                         aria-labelledby="headingPages" data-parent="#accordionSidebar">
                         <div class="bg-primary-dark text-white py-2 collapse-inner rounded">
 
-                            <a class="collapse-item @yield('activeCategorias') text-white @yield('activeFondoPermanente')"
+                            <a class="collapse-item @yield('activeCategorias') text-white @yield('activeFondoPermanente') mb-2"
                                 href="{{ route('compras.familias.viewFamilias') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
                                 onmouseout="this.style.backgroundColor='@yield('activeAforgot')';">
                                 Familias
                             </a>
-                            <a class="collapse-item @yield('activeMateriales') text-white @yield('activeFondoPermanenteMateriales')"
+                            <a class="collapse-item @yield('activeMateriales') text-white @yield('activeFondoPermanenteMateriales') mb-2"
                                 href="{{ route('compras.items.viewItems') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
                                 onmouseout="this.style.backgroundColor='@yield('activeBackgroundMateriales')';">
                                 Materiales
                             </a>
-                            <a class="collapse-item @yield('activeProveedores') text-white @yield('activeFondoPermanenteProveedores')"
+                            <a class="collapse-item @yield('activeProveedores') text-white @yield('activeFondoPermanenteProveedores') mb-2"
                                 href="{{ route('compras.proveedores.viewProveedores') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
                                 onmouseout="this.style.backgroundColor='@yield('activeBackgroundProveedores')';">
                                 Proveedores
                             </a>
-                            <a class="collapse-item @yield('activeAforgot') text-white" href="#"
+                            <a class="collapse-item @yield('activeAforgot') text-white mb-2" href="#"
                                 onmouseover="this.style.backgroundColor='#003366';"
                                 onmouseout="this.style.backgroundColor='';">
                                 Cotizaciones
                             </a>
-                            <a class="collapse-item @yield('activeAforgot') text-white" href="#"
+                            <a class="collapse-item @yield('activeAforgot') text-white mb-2" href="#"
                                 onmouseover="this.style.backgroundColor='#003366';"
                                 onmouseout="this.style.backgroundColor='';">
                                 Ordenes de Compra
