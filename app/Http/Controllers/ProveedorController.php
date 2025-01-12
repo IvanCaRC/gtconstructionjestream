@@ -8,7 +8,11 @@ class ProveedorController extends Controller
 {
     public function index()
     {
-        // Retornar la vista de la lista de proveedores
         return view('compras.proveedores.viewProveedores');
+    }
+
+    public function crearProveedor()
+    {
+        return view('compras.proveedores.createProveedores');
     }
 }

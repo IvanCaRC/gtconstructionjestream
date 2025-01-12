@@ -4,8 +4,8 @@
         <div class="card">
             <div class="card-body">
                 <div class="text-left mb-3">
-                    <button class="btn btn-custom" {{-- Cambiar cuando tenga el createProveedores --}}
-                        onclick="window.location.href='{{ route('compras.familias.createFamilias') }}'"
+                    <button class="btn btn-custom"
+                        onclick="window.location.href='{{ route('compras.proveedores.createProveedores') }}'"
                         style="background-color: #4c72de; color: white;">Registrar nuevo Proveedor</button>
                 </div>
 
