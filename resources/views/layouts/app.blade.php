@@ -149,26 +149,35 @@
                     <div id="collapseCompras" class="collapse @yield('activeCollapseCompras') container-flex2"
                         aria-labelledby="headingPages" data-parent="#accordionSidebar">
                         <div class="bg-primary-dark text-white py-2 collapse-inner rounded">
+
                             <a class="collapse-item @yield('activeCategorias') text-white @yield('activeFondoPermanente')"
                                 href="{{ route('compras.familias.viewFamilias') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
                                 onmouseout="this.style.backgroundColor='@yield('activeAforgot')';">
                                 Familias
                             </a>
-                            <a class="collapse-item @yield('activeAregister') text-white"
+                            <a class="collapse-item @yield('activeMateriales') text-white @yield('activeFondoPermanenteMateriales')"
                                 href="{{ route('compras.items.viewItems') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
-                                onmouseout="this.style.backgroundColor='';">Materiales</a>
-                            <a class="collapse-item @yield('activeProveedores') text-white"
+                                onmouseout="this.style.backgroundColor='@yield('activeBackgroundMateriales')';">
+                                Materiales
+                            </a>
+                            <a class="collapse-item @yield('activeProveedores') text-white @yield('activeFondoPermanenteProveedores')"
                                 href="{{ route('compras.proveedores.viewProveedores') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
-                                onmouseout="this.style.backgroundColor='';">Proveedores</a>
+                                onmouseout="this.style.backgroundColor='@yield('activeBackgroundProveedores')';">
+                                Proveedores
+                            </a>
                             <a class="collapse-item @yield('activeAforgot') text-white" href="#"
                                 onmouseover="this.style.backgroundColor='#003366';"
-                                onmouseout="this.style.backgroundColor='';">Cotizaciones</a>
+                                onmouseout="this.style.backgroundColor='';">
+                                Cotizaciones
+                            </a>
                             <a class="collapse-item @yield('activeAforgot') text-white" href="#"
                                 onmouseover="this.style.backgroundColor='#003366';"
-                                onmouseout="this.style.backgroundColor='';">Ordenes de Compra</a>
+                                onmouseout="this.style.backgroundColor='';">
+                                Ordenes de Compra
+                            </a>
                             <div class="collapse-divider"></div>
                         </div>
                     </div>
