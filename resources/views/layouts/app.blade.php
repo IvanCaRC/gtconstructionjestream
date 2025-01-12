@@ -155,11 +155,12 @@
                                 onmouseout="this.style.backgroundColor='@yield('activeAforgot')';">
                                 Familias
                             </a>
-
-                            <a class="collapse-item @yield('activeAregister') text-white" href="#"
+                            <a class="collapse-item @yield('activeAregister') text-white"
+                                href="{{ route('compras.items.viewItems') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
                                 onmouseout="this.style.backgroundColor='';">Materiales</a>
-                            <a class="collapse-item @yield('activeProveedores') text-white" href="{{ route('compras.proveedores.viewProveedores') }}"
+                            <a class="collapse-item @yield('activeProveedores') text-white"
+                                href="{{ route('compras.proveedores.viewProveedores') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
                                 onmouseout="this.style.backgroundColor='';">Proveedores</a>
                             <a class="collapse-item @yield('activeAforgot') text-white" href="#"

@@ -13,7 +13,7 @@
                     <div class="d-flex justify-content-between mb-3">
                         <!-- Input de búsqueda -->
                         <input type="text" class="form-control mr-2" id="searchInput" wire:model='searchTerm'
-                            placeholder="Buscar proveedor...">
+                        wire:keydown='search' placeholder="Buscar proveedor...">
                     </div>
                 </div>
                 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
