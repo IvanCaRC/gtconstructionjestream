@@ -9,7 +9,7 @@ class Familia extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['id_familia_padre', 'nombre', 'descripcion', 'estadoEliminacion'];
+    protected $fillable = ['id_familia_padre', 'nombre', 'descripcion', 'estadoEliminacion','nivel'];
 
     public function subfamilias()
     {

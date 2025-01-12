@@ -19,13 +19,14 @@ class FamiliaEdicion extends Component
     public $seleccionadas = [];
     public $familiasPadre = [];
     public $familiaActual;
+    public $familiaEditId = '';
+    protected $listeners = ['editFamilia' => 'render'];
 
     public function render()
     {
         return view('livewire.familia.familia-edicion', [
             'familiasPadre' => $this->familiasPadre,
             'familiaActual' => $this->familiaActual
-
         ]);
     }
 
@@ -34,7 +35,7 @@ class FamiliaEdicion extends Component
     {
         $this->familia = Familia::findOrFail($idfamilia);
         $this->familiaActual = Familia::findOrFail($idfamilia);
-
+        $this->familiaEditId = $idfamilia;
         $this->familiaEdit['id'] = $this->familia->id;
         $this->familiaEdit['id_familia_padre'] = $this->familia->id_familia_padre;
         $this->familiaEdit['nombre'] = $this->familia->nombre;
@@ -64,9 +65,38 @@ class FamiliaEdicion extends Component
                 $nivel++;
             }
         }
-        
+
         // Cargar el nivel inicial si no hay padres
+
+    }
+
+    public function update()
+    {
+        $familia = Familia::find($this->familiaEditId);
+
+        $idFamiliaPadre = null;
+        foreach (array_reverse($this->seleccionadas) as $seleccionada) {
+            if ($seleccionada != 0) {
+                if ($seleccionada != $familia->id) { // Compara con el ID, no con el objeto completo
+                    $idFamiliaPadre = $seleccionada;
+                    break;
+                }
+            }
+        }
         
+
+        // Calcular el nivel
+        // Si hay una familia padre, el nivel será el de la familia padre + 1; de lo contrario, será 1
+        $nivel = $idFamiliaPadre ? Familia::find($idFamiliaPadre)->nivel + 1 : 1;
+
+        $familia->update([
+            'nombre' => $this->familiaEdit['nombre'],
+            'descripcion' => $this->familiaEdit['descripcion'],
+            'nivel' => $nivel,
+            'id_familia_padre' => $idFamiliaPadre,
+        ]);
+        $this->dispatch('editFamilia');
+        return redirect()->route('compras.familias.edicionFamilia', ['idfamilia' => $this->familiaEditId]);
     }
 
     private function crearArregloDeFamiliasPadre($familiaActual)
@@ -81,8 +111,6 @@ class FamiliaEdicion extends Component
             $contador++;
             $familiaActual = $familiaActual->padre; // Asegúrate de tener la relación padre definida en el modelo
         }
-        
-
         $this->familiasPadre = array_reverse($this->familiasPadre, true);
     }
 
@@ -91,7 +119,6 @@ class FamiliaEdicion extends Component
     public function calcularSubfamilias($idFamiliaSeleccionada, $nivel)
     {
         $resultado = Familia::calcularSubfamilias($idFamiliaSeleccionada, $nivel, $this->niveles, $this->seleccionadas);
-
         $this->niveles = $resultado['niveles'];
         $this->seleccionadas = $resultado['seleccionadas'];
     }

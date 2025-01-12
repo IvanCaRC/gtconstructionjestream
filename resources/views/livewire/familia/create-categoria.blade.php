@@ -80,9 +80,6 @@
                     }
                 });
             }
-
-
-
         }).catch(error => {
             // Manejar error si es necesario
             Swal.fire({
