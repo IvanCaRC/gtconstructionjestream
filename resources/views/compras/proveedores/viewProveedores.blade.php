@@ -16,9 +16,17 @@
     .categoria-header,
     .categoria-content {
         display: flex;
-        align-items: center;
         justify-content: space-between;
-        padding: 10px 0;
+        /* Espacia las columnas equitativamente */
+        width: 100%;
+    }
+
+    .categoria-header div {
+        flex: 1;
+        /* Cada columna toma espacio igual */
+        text-align: center;
+        /* Centra el texto en su columna */
+        padding: 5px;
     }
 
     .categoria-content>div {
@@ -49,6 +57,12 @@
         border: none;
         margin-bottom: 5px;
         padding-left: 0;
+        font-size: 12px;
+        /* Disminuye el tamaño del texto */
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        /* Centra las columnas */
     }
 
     .nivel-1 {
@@ -85,7 +99,7 @@
 @section('activeProveedores', 'active')
 @section('activeFondoPermanenteProveedores', 'background-permanent')
 @section('contend')
-@livewire('proveedor.proveedor-component')
+    @livewire('proveedor.proveedor-component')
     <script>
         function toggleVisibility(id) {
             $('#' + id).animate({

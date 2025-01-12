@@ -21,22 +21,25 @@
                     <ul class="list-group">
                         <li class="list-group-item">
                             <div class="categoria-header">
+                                <div><strong>Actualización</strong></div>
                                 <div><strong>Nombre</strong></div>
                                 <div><strong>RFC</strong></div>
-                                <div><strong>Direccion</strong></div>
+                                <div><strong>Direccion(es)</strong></div>
                                 <div><strong>Familia de materiales</strong></div>
                                 <div><strong>Correo</strong></div>
-                                <div><strong>Telefono</strong></div>
+                                <div><strong>Telefono(s)</strong></div>
                                 <div><strong>Datos bancarios</strong></div>
                                 <div><strong>Total de compra</strong></div>
                                 <div><strong>Credito de compra</strong></div>
+                                <div><strong>Acciones</strong></div>
                             </div>
 
                             {{-- Agregar atributos para listar en la vista de proveedores --}}
                             @foreach ($proveedores as $proveedor)
                                 <tr>
+                                    <td class="align-middle d-none d-md-table-cell">{{ $proveedor->estado }}</td>
                                     <td class="align-middle d-none d-md-table-cell">{{ $proveedor->nombre }}</td>
-                                    <td class="align-middle d-none d-md-table-cell">{{ $proveedor->rfc }}</td>
+                                    <td class="align-middle d-none d-mxd-table-cell">{{ $proveedor->rfc }}</td>
                             @endforeach
                         </li>
                     </ul>
