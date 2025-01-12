@@ -59,6 +59,9 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 @section('title', 'Vista de familia')
+@section('activeCollapseCompras', 'show')
+@section('activeCategorias', 'active')
+@section('activeFondoPermanente', 'background-permanent')
 @section('contend')
 @livewire('familia.familia-vista-especifica', ['idfamilia' => $idfamilia])
 <script>
