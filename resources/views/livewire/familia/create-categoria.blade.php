@@ -1,7 +1,8 @@
 <div class="container-fluid px-4 sm:px-6 lg:px-8 py-1">
     <script src="//unpkg.com/alpinejs" defer></script>
-    <h1>Crear Nueva Familia</h1>
+
     <div class="container-fluid px-4 sm:px-6 lg:px-8 py-1">
+        <h1>Crear Nueva Familia</h1>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <div class="card">
             <div class="card-body">
@@ -28,7 +29,7 @@
                     @foreach ($niveles as $nivel => $familias)
                         @if (count($familias) > 0)
                             <div class="form-group">
-                                <label for="familia_nivel_{{ $nivel }}">Nivel {{ $nivel }}</label>
+                                <label for="label_familia_nivel_{{ $nivel }}">Nivel {{ $nivel }}</label>
                                 <select id="familia_nivel_{{ $nivel }}" class="form-control"
                                     wire:change="calcularSubfamilias($event.target.value, {{ $nivel }})">
                                     <option value="0"
@@ -79,9 +80,6 @@
                     }
                 });
             }
-
-
-
         }).catch(error => {
             // Manejar error si es necesario
             Swal.fire({

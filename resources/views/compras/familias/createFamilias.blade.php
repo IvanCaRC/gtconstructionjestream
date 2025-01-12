@@ -18,7 +18,7 @@
 @section('title', 'Crear Categorias')
 @section('activeCollapseCompras', 'show')
 @section('activeCategorias', 'active')
-@section('activeFondoPermanente','style="background-color: #003366;"')
+@section('activeFondoPermanente', 'background-permanent')
 @section('contend')
 @livewire('familia.create-categoria')
 <script>

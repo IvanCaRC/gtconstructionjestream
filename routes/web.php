@@ -56,4 +56,6 @@ Route::get('compras/familias/viewFamiliaEspecifica/{idfamilia}', [FamiliaControl
     ->middleware('auth', 'nocache')
     ->name('compras.familias.viewFamiliaEspecifica');
 
-
+Route::get('compras/familias/edicionFamilia/{idfamilia}', [FamiliaController::class, 'editarFamilia'])
+    ->middleware('auth', 'nocache')
+    ->name('compras.familias.edicionFamilia');

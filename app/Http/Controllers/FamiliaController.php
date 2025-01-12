@@ -24,5 +24,8 @@ class FamiliaController extends Controller
         return view('compras.familias.viewFamiliaEspecifica', ['idfamilia' => $idfamilia]);
     }
 
-    
+    public function editarFamilia($idfamilia)
+    {
+        return view('compras.familias.edicionFamilia', ['idfamilia' => $idfamilia]);
+    }
 }
