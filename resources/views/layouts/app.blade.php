@@ -156,17 +156,17 @@
                                 onmouseout="this.style.backgroundColor='@yield('activeAforgot')';">
                                 Familias
                             </a>
-                            <a class="collapse-item @yield('activeMateriales') text-white @yield('activeFondoPermanenteMateriales') mb-2"
-                                href="{{ route('compras.items.viewItems') }}"
-                                onmouseover="this.style.backgroundColor='#003366';"
-                                onmouseout="this.style.backgroundColor='@yield('activeBackgroundMateriales')';">
-                                Materiales
-                            </a>
                             <a class="collapse-item @yield('activeProveedores') text-white @yield('activeFondoPermanenteProveedores') mb-2"
                                 href="{{ route('compras.proveedores.viewProveedores') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
                                 onmouseout="this.style.backgroundColor='@yield('activeBackgroundProveedores')';">
                                 Proveedores
+                            </a>
+                            <a class="collapse-item @yield('activeMateriales') text-white @yield('activeFondoPermanenteMateriales') mb-2"
+                                href="{{ route('compras.items.viewItems') }}"
+                                onmouseover="this.style.backgroundColor='#003366';"
+                                onmouseout="this.style.backgroundColor='@yield('activeBackgroundMateriales')';">
+                                Materiales
                             </a>
                             <a class="collapse-item @yield('activeAforgot') text-white mb-2" href="#"
                                 onmouseover="this.style.backgroundColor='#003366';"
