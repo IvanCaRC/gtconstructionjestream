@@ -56,15 +56,9 @@
                             </h5>
                         </div>
                     </div>
-
-
-
-
-
                     @if (auth()->user()->id !== $user->id)
                         <div class="card-footer text-right">
                             <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
                             <a href="#" class="text-danger"
                                 onclick="confirmDeletion({{ $user->id }}, '{{ $user->name }}', '{{ $user->first_last_name }}')">Eliminar
                                 usuario</a>

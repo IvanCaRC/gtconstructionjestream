@@ -12,4 +12,9 @@ class CreateProveedor extends Component
     {
         return view('livewire.proveedor.create-proveedor');
     }
+
+    public function editRole($id)
+    {
+        $this->open = true;
+    }
 }

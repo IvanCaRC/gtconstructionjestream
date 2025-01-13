@@ -27,7 +27,7 @@
 
                     <!-- Niveles dinámicos -->
                     @foreach ($niveles as $nivel => $familias)
-                        @if (count($familias) > 0)
+                        @if (count($familias) > 0)  
                             <div class="form-group">
                                 <label for="label_familia_nivel_{{ $nivel }}">Nivel {{ $nivel }}</label>
                                 <select id="familia_nivel_{{ $nivel }}" class="form-control"

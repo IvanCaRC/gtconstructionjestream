@@ -89,8 +89,9 @@
                     </div>
 
                     <div class="form-group">
-                        <button type="button" wire:click="$set('open', true)" class="btn btn-primary mt-3">Añadir
-                            direccion</button>
+                        <button class="btn btn-primary btn-sm" wire:click="$set('open',false)">
+                            ya estoy arto
+                            </button>
                     </div>
 
                     <div class="row align-items-end">
