@@ -5,5 +5,5 @@
 @section('activeProveedores', 'active')
 @section('activeFondoPermanenteitem', 'background-permanent')
 @section('contend')
-@livewire('proveedor.create-proveedor')
+@livewire('item.create-item')
 @endsection
