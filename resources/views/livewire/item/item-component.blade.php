@@ -5,7 +5,7 @@
             <div class="card-body">
                 <div class="text-left mb-3">
                     <button class="btn btn-custom" {{-- Cambiar cuando tenga el createItems --}}
-                        onclick="window.location.href='{{ route('compras.familias.createFamilias') }}'"
+                        onclick="window.location.href='{{ route('compras.items.createItems') }}'"
                         style="background-color: #4c72de; color: white;">Registrar nuevo Material</button>
                 </div>
 

@@ -11,4 +11,10 @@ class ItemController extends Controller
         // Retornar la vista de la lista de proveedores
         return view('compras.items.viewItems');
     }
+
+    public function crearItem()
+    {
+        // Retornar la vista de la lista de proveedores
+        return view('compras.items.createItems');
+    }
 }

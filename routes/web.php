@@ -50,6 +50,8 @@ Route::get('compras/familias/createFamilias', [FamiliaController::class, 'crearU
 
 Route::get('compras/items/viewItems', [ItemController::class, 'index'])->middleware('auth', 'nocache')->name('compras.items.viewItems');
 
+Route::get('compras/items/createItems', [ItemController::class, 'crearItem'])->middleware('auth', 'nocache')->name('compras.items.createItems');
+
 Route::get('compras/familias/viewFamiliaEspecifica/{idfamilia}', [FamiliaController::class, 'verFamilia'])
     ->middleware('auth', 'nocache')
     ->name('compras.familias.viewFamiliaEspecifica');
