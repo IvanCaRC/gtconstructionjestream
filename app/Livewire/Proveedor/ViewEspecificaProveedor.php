@@ -25,4 +25,11 @@ class ViewEspecificaProveedor extends Component
     {
         $this->proveedor = Proveedor::findOrFail($idproveedor);
     }
+
+    public function eliminar($proveedroId)
+    {
+        $Proveedor = Proveedor::findOrFail($proveedroId);
+        $Proveedor->update(['estado_eliminacion' => false]);
+        return redirect()->route('compras.proveedores.viewProveedores');
+    }
 }
