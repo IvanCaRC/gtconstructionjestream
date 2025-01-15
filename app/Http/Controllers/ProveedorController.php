@@ -15,4 +15,9 @@ class ProveedorController extends Controller
     {
         return view('compras.proveedores.createProveedores');
     }
+
+    public function verProveedor($idproveedor)
+    {
+        return view('compras.proveedores.viewProveedorEspecifico', ['idproveedor' => $idproveedor]);
+    }
 }

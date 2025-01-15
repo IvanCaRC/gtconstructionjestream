@@ -13,6 +13,7 @@ class ProveedorComponent extends Component
     public $searchTerm = '';
     public $sort = 'id';
     public $direction = 'desc';
+    protected $listeners = ['renderVistaProv' => 'render'];
 
     public function search()
     {
@@ -39,5 +40,17 @@ class ProveedorComponent extends Component
             'proveedores' => $proveedor
         ]);
         
+    }
+
+    public function eliminar($proveedroId)
+    {
+        $Proveedor = Proveedor::findOrFail($proveedroId);
+        $Proveedor->update(['estado_eliminacion' => false]);
+        $this->dispatch('renderVistaProv');
+    }
+
+    public function viewProveedor($idproveedor)
+    {
+        return redirect()->route('compras.proveedores.viewProveedorEspecifico', ['idproveedor' => $idproveedor]);
     }
 }
