@@ -22,19 +22,17 @@
                         <thead>
                             <tr>
                                 <th>Nombre</th>
-                                <th class="d-none d-md-table-cell" wire:click="order('first_last_name')"
-                                    style="cursor: pointer;">
-                                    Nombre
+                                <th class="d-none d-md-table-cell" wire:click="" style="cursor: pointer;">
+                                    Descripcion
                                 </th>
-                                <th class="d-none d-md-table-cell" wire:click="order('email')" style="cursor: pointer;">
+                                <th class="d-none d-md-table-cell" wire:click="" style="cursor: pointer;">
                                     Correo
                                 </th>
-                                <th class="d-none d-md-table-cell" wire:click="order('number')"
-                                    style="cursor: pointer;">
-                                    Teléfono
+                                <th class="d-none d-md-table-cell" wire:click="" style="cursor: pointer;">
+                                    RFC
                                 </th>
                                 <th>Estado</th>
-                                <th>Departamento</th>
+                                <th>Familias</th>
                                 <th></th>
                                 <th></th>
                                 <th></th>
@@ -43,99 +41,65 @@
                         <tbody>
                             @foreach ($proveedores as $proveedor)
                                 <tr>
-                                    <td class="align-middle">
-                                       
-                                    </td>
-                                    <td class="align-middle"></td>
-                                    <td class="align-middle d-none d-md-table-cell"></td>
-                                    <td class="align-middle d-none d-md-table-cell"></td>
+                                    <td class="align-middle">{{ $proveedor->nombre }}</td>
+                                    <td class="align-middle">{{ $proveedor->descripcion }}</td>
+                                    <td class="align-middle d-none d-md-table-cell">{{ $proveedor->correo }}</td>
+                                    <td class="align-middle d-none d-md-table-cell">{{ $proveedor->rfc }}</td>
                                     <td class="align-middle d-none d-md-table-cell">
-                                       
+                                        @if ($proveedor->estado)
+                                            <span class="badge badge-success">Actualizado</span>
+                                        @else
+                                            <span class="badge badge-danger">Desactualizado</span>
+                                        @endif
+                                    </td>
+                                    <td>----</td>
+                                    <td>
+                                        <button class="btn btn-info btn-custom" wire:click="viewProveedor({{ $proveedor->id }})">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
                                     </td>
                                     <td>
-                                       
+                                        <button class="btn btn-primary btn-custom" wire:click=""><i
+                                                class="fas fa-edit"></i></button>
                                     </td>
-                                   
-                                        <td>
-                                            <button class="btn btn-info btn-custom"
-                                                wire:click="">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                        </td>
+                                    <td><button class="btn btn-danger btn-custom" onclick="confirmDeletion({{ $proveedor->id }}, '{{ $proveedor->nombre }}')">
+                                            <i class="fas fa-trash-alt"></i>
+                                        </button>
+                                        <script>
+                                            function confirmDeletion(proveedorId, proveedorNombre) {
+                                                Swal.fire({
+                                                    title: `¿Estás seguro de que deseas eliminar a ${proveedorNombre}?`,
+                                                    text: "¡No podrás revertir esto!",
+                                                    icon: 'warning',
+                                                    showCancelButton: true,
+                                                    confirmButtonColor: '#d33',
+                                                    cancelButtonColor: '#3085d6',
+                                                    confirmButtonText: 'Sí, eliminar',
+                                                    cancelButtonText: 'Cancelar'
+                                                }).then((result) => {
+                                                    if (result.isConfirmed) {
+                                                        @this.call('eliminar', proveedorId);
+                                                        Swal.fire(
+                                                            'Eliminado!',
+                                                            `${proveedorNombre} ha sido eliminado.`,
+                                                            'success'
+                                                        )
+                                                    }
+                                                })
+                                            }
+                                        </script>
 
-                                        <td>
-                                            <button class="btn btn-primary btn-custom"
-                                                wire:click=""><i
-                                                    class="fas fa-edit"></i></button>
-                                        </td>
+                                    </td>
 
-                                        <td><button class="btn btn-danger btn-custom"
-                                                onclick="">
-                                                <i class="fas fa-trash-alt"></i>
-                                            </button>
-
-                                            {{-- <script>
-                                                function confirmDeletion(userId, userName, userFirstLastName) {
-                                                    Swal.fire({
-                                                        title: `¿Estás seguro de que deseas eliminar a ${userName} ${userFirstLastName}?`,
-                                                        text: "¡No podrás revertir esto!",
-                                                        icon: 'warning',
-                                                        showCancelButton: true,
-                                                        confirmButtonColor: '#d33',
-                                                        cancelButtonColor: '#3085d6',
-                                                        confirmButtonText: 'Sí, eliminar',
-                                                        cancelButtonText: 'Cancelar'
-                                                    }).then((result) => {
-
-                                                        if (result.isConfirmed) {
-                                                            @this.call('eliminar', userId);
-                                                            Swal.fire(
-                                                                'Eliminado!',
-                                                                `${userName} ${userFirstLastName} ha sido eliminado.`,
-                                                                'success'
-                                                            )
-                                                        }
-                                                    })
-                                                }
-                                            </script> --}}
-
-                                        </td>
-                                    
                                 </tr>
                             @endforeach
                         </tbody>
                     </table>
-                    <ul class="list-group">
-                        <li class="list-group-item">
-                            <div class="categoria-header">
-                                <div><strong>Actualización</strong></div>
-                                <div><strong>Nombre</strong></div>
-                                <div><strong>RFC</strong></div>
-                                {{-- <div><strong>Familia de materiales</strong></div> --}}
-                                <div><strong>Correo</strong></div>
-                                {{-- <div><strong>Telefono(s)</strong></div> --}}
-                                {{-- <div><strong>Total de compra</strong></div>
-                                <div><strong>Credito de compra</strong></div> --}}
-                                <div><strong></strong></div>
-                                <div><strong></strong></div>
-                                <div><strong></strong></div>
-                            </div>
-
-                            {{-- Agregar atributos para listar en la vista de proveedores --}}
-                            @foreach ($proveedores as $proveedor)
-                                <tr>
-                                    <td class="align-middle d-none d-md-table-cell">{{ $proveedor->estado }}</td>
-                                    <td class="align-middle d-none d-md-table-cell">{{ $proveedor->nombre }}</td>
-                                    <td class="align-middle d-none d-mxd-table-cell">{{ $proveedor->rfc }}</td>
-                            @endforeach
-                        </li>
-                    </ul>
                 @else
                     <div class='px-6 py-2'>
                         <p>No hay resultados</p>
                     </div>
                 @endif
-
                 <!-- Enlaces de paginación -->
                 <div class="px-6 py-3">
                     {{ $proveedores->links() }}

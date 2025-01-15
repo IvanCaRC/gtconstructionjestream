@@ -61,3 +61,7 @@ Route::get('compras/familias/edicionFamilia/{idfamilia}', [FamiliaController::cl
 Route::get('compras/proveedores/viewProveedores', [ProveedorController::class, 'index'])->middleware('auth', 'nocache')->name('compras.proveedores.viewProveedores');
 
 Route::get('compras/proveedores/createProveedores', [ProveedorController::class, 'crearProveedor'])->middleware('auth', 'nocache')->name('compras.proveedores.createProveedores');
+
+Route::get('compras/proveedores/viewProveedorEspecifico/{idproveedor}', [ProveedorController::class, 'verProveedor'])
+    ->middleware('auth', 'nocache')
+    ->name('compras.proveedores.viewProveedorEspecifico');

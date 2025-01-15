@@ -19,6 +19,7 @@ class Proveedor extends Model
         'archivo_facturacion_pdf',
         'datos_bancarios_pdf',
         'estado',
+        'estado_eliminacion',
     ];
 }
 
