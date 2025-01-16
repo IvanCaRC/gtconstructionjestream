@@ -1,41 +1,4 @@
 <div class="container-fluid px-4 sm:px-6 lg:px-8 py-1">
-    <style>
-        .file-upload {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px dashed #007bff;
-            border-radius: 5px;
-            background-color: #f9f9f9;
-            padding: 20px;
-            cursor: pointer;
-        }
-
-        .file-upload .file-upload-icon {
-            font-size: 48px;
-            color: #007bff;
-        }
-
-        .file-upload .file-upload-text {
-            margin-left: 15px;
-            font-size: 16px;
-            color: #007bff;
-        }
-
-        .file-upload input[type="file"] {
-            display: none;
-        }
-
-        .btn-round {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            padding: 0;
-            font-size: 24px;
-            text-align: center;
-            line-height: 36px;
-        }
-    </style>
     <div class="container-fluid px-4 sm:px-6 lg:px-8 py-1">
         <h1>Crear Nuevo Proveedor</h1>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -61,7 +24,40 @@
                         <label for="descripcion">RFC</label>
                         <input id="descripcion" class="form-control" wire:model="rfc"></input>
                     </div>
-
+                    <div class="form-group">
+                        <label>Teléfonos</label>
+                        @foreach ($telefonos as $index => $telefono)
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control"
+                                    wire:model.defer="telefonos.{{ $index }}" placeholder="Teléfono">
+                                @if ($index > 0)
+                                    <div class="input-group-append">
+                                        <button type="button" class="btn btn-danger ml-2"
+                                            wire:click="removeTelefono({{ $index }})">Eliminar</button>
+                                    </div>
+                                @endif
+                            </div>
+                        @endforeach
+                        <button type="button" class="btn btn-primary mt-2" wire:click="addTelefono">Agregar otro
+                            teléfono</button>
+                    </div>
+                    <div class="form-group"> <label>Familias</label>
+                        @foreach ($familiasSeleccionadas as $index => $familiaSeleccionada)
+                            <div class="input-group mb-2"> <select class="form-control"
+                                    wire:model.defer="familiasSeleccionadas.{{ $index }}">
+                                    <option value="">Seleccione una familia</option>
+                                    @foreach ($familias as $familia)
+                                        <option value="{{ $familia->id }}">{{ $familia->nombre }}</option>
+                                        @endforeach
+                                </select>
+                                @if ($index > 0)
+                                    <div class="input-group-append"> <button type="button" class="btn btn-danger ml-2"
+                                            wire:click="removeFamilia({{ $index }})">Eliminar</button> </div>
+                                @endif
+                            </div>
+                        @endforeach <button type="button" class="btn btn-primary mt-2"
+                            wire:click="addFamilia">Agregar otra familia</button>
+                    </div>
                     <div class="form-group"> <label for="archivosFacturacion">Archivos de facturación</label>
                         @if (!$facturacion)
                             <div class="file-upload" onclick="document.getElementById('archivosFacturacion').click();">
@@ -110,27 +106,6 @@
                         @endif
                     </div>
 
-                    {{-- <div class="form-group">
-                        <label for="descripcion">Direccion</label>
-                    </div>
-
-                    <div class="form-group">
-                        <a class="btn btn-primary mt-3" wire:click="$set('open',true)" href="#">
-                            Agregar direcion
-                        </a>
-                    </div>
-
-                    <div class="row align-items-end">
-                        <div class="col-md-6">
-                            <div class="form-group"> <label for="telefono">Teléfono</label> <input type="text"
-                                    id="telefono" class="form-control" wire:model="telefono"> </div>
-                        </div>
-                        <div class="col-md-1">
-                            <div class="form-group">
-                                <a class="btn btn-primary btn-round">+</a>
-                            </div>
-                        </div>
-                    </div> --}}
                 </form>
                 <button type="button" onclick="confirmSave()" class="btn btn-primary mt-3">Crear proveedor</button>
             </div>
