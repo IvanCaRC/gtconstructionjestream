@@ -5,6 +5,7 @@ namespace App\Livewire\Proveedor;
 use App\Models\Proveedor;
 use App\Models\Telefono;  // Importar el modelo de Telefonos
 use App\Models\Familia;   // Importar el modelo de Familia
+use App\Models\ProveedorHasFamilia;
 use Livewire\Features\SupportFileUploads\WithFileUploads;
 use Livewire\Component;
 
@@ -126,7 +127,18 @@ class CreateProveedor extends Component
             ]);
         }
 
-        $this->reset('openModalFamilias', 'nombre', 'descripcion', 'correo', 'rfc', 'facturacion', 'bancarios', 'telefonos', 'familiasSeleccionadas');
+        foreach ($this->familiasSeleccionadas as $familia) {
+            if (is_object($familia) && get_class($familia) === Familia::class) {
+                ProveedorHasFamilia::create([
+                    'proveedor_id' => $proveedor->id,
+                    'familia_id' => $familia->id, // Acceder al ID de la familia
+                ]);
+            }
+        }
+        
+        
+
+        $this->reset('openModalFamilias', 'nombre', 'descripcion', 'correo', 'rfc', 'facturacion', 'bancarios', 'telefonos');
 
         return true;
     }
