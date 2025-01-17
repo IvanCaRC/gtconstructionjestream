@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Livewire\Proveedor;
 
 use App\Models\Proveedor;
@@ -10,14 +11,20 @@ use Livewire\Component;
 class CreateProveedor extends Component
 {
     use WithFileUploads;
-    public $open = false;
+    public $openModalFamilias = false;
     public $nombre, $descripcion, $correo, $rfc, $facturacion, $bancarios, $telefonos = [''];  // Inicializar con un campo de teléfono
     public $familias, $familiasSeleccionadas = [''];  // Inicializar con un campo de familia
     public $fileNameFacturacion, $fileNameBancarios;
 
+    public $niveles = []; // Array para almacenar las familias de cada nivel
+    public $seleccionadas = []; // Array para almacenar las opciones seleccionadas
+
     public function mount()
     {
-        $this->familias = Familia::where('estadoEliminacion', 0)->get();
+        $this->niveles[1] = Familia::whereNull('id_familia_padre')
+            ->where('estadoEliminacion', 0)
+            ->get();
+        $this->familiasSeleccionadas = []; // Inicializar como arreglo vacío
     }
 
     public function addTelefono()
@@ -33,13 +40,42 @@ class CreateProveedor extends Component
 
     public function addFamilia()
     {
-        $this->familiasSeleccionadas[] = '';
+        $idFamiliaPadre = null;
+        foreach (array_reverse($this->seleccionadas) as $seleccionada) {
+            if ($seleccionada != 0) {
+                $idFamiliaPadre = $seleccionada;
+                break;
+            }
+        }
+
+        if ($idFamiliaPadre) {
+            $familia = Familia::find($idFamiliaPadre);
+            // Verificar si la familia ya está en el arreglo
+            $exists = collect($this->familiasSeleccionadas)->contains(function ($value) use ($familia) {
+                return $value->id === $familia->id;
+            });
+
+            if (!$exists) {
+                $this->familiasSeleccionadas[] = $familia;
+            }
+        }
+    }
+
+
+    public function confirmFamilia()
+    {
+        $this->addFamilia();
+        $this->openModalFamilias = false;
+        $this->reset('seleccionadas', 'niveles');
+        $this->niveles[1] = Familia::whereNull('id_familia_padre')
+            ->where('estadoEliminacion', 0)
+            ->get();
     }
 
     public function removeFamilia($index)
     {
         unset($this->familiasSeleccionadas[$index]);
-        $this->familiasSeleccionadas = array_values($this->familiasSeleccionadas); // Reindexar el array
+        $this->familiasSeleccionadas = array_values($this->familiasSeleccionadas); // Reindexar el arreglo
     }
 
     public function updatedFacturacion()
@@ -90,15 +126,17 @@ class CreateProveedor extends Component
             ]);
         }
 
-        // Guardar las familias en la tabla proveedor_has_familia
-        foreach ($this->familiasSeleccionadas as $familiaId) {
-            if ($familiaId) {
-                $proveedor->familias()->attach($familiaId);
-            }
-        }
+        $this->reset('openModalFamilias', 'nombre', 'descripcion', 'correo', 'rfc', 'facturacion', 'bancarios', 'telefonos', 'familiasSeleccionadas');
 
-        $this->reset('open', 'nombre', 'descripcion', 'correo', 'rfc', 'facturacion', 'bancarios', 'telefonos', 'familiasSeleccionadas');
-        
         return true;
+    }
+
+    public function calcularSubfamilias($idFamiliaSeleccionada, $nivel)
+    {
+        // Llama al método del modelo y actualiza las propiedades locales
+        $resultado = Familia::calcularSubfamilias($idFamiliaSeleccionada, $nivel, $this->niveles, $this->seleccionadas);
+
+        $this->niveles = $resultado['niveles'];
+        $this->seleccionadas = $resultado['seleccionadas'];
     }
 }

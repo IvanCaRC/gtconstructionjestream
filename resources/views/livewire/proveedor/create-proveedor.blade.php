@@ -41,22 +41,25 @@
                         <button type="button" class="btn btn-primary mt-2" wire:click="addTelefono">Agregar otro
                             teléfono</button>
                     </div>
-                    <div class="form-group"> <label>Familias</label>
-                        @foreach ($familiasSeleccionadas as $index => $familiaSeleccionada)
-                            <div class="input-group mb-2"> <select class="form-control"
-                                    wire:model.defer="familiasSeleccionadas.{{ $index }}">
-                                    <option value="">Seleccione una familia</option>
-                                    @foreach ($familias as $familia)
-                                        <option value="{{ $familia->id }}">{{ $familia->nombre }}</option>
-                                        @endforeach
-                                </select>
-                                @if ($index > 0)
-                                    <div class="input-group-append"> <button type="button" class="btn btn-danger ml-2"
-                                            wire:click="removeFamilia({{ $index }})">Eliminar</button> </div>
-                                @endif
-                            </div>
-                        @endforeach <button type="button" class="btn btn-primary mt-2"
-                            wire:click="addFamilia">Agregar otra familia</button>
+                    <div class="form-group">
+                        <label>Familias</label>
+                        <div class="input-group mb-2">
+                            @if (count($familiasSeleccionadas) > 0)
+                                @foreach ($familiasSeleccionadas as $index => $familia)
+                                    <div class="w-100 d-flex align-items-center mb-2">
+                                        <div class="flex-grow-1">
+                                            {{ $familia->nombre }}
+                                        </div>
+                                        <button type="button" wire:click="removeFamilia({{ $index }})" class="btn btn-danger btn-sm ml-2">Eliminar</button>
+                                    </div>
+                                @endforeach
+                            @else
+                                <div class="no-familias-seleccionadas w-100">
+                                    No hay familias seleccionadas
+                                </div>
+                            @endif
+                        </div>
+                        <a href="#" wire:click="$set('openModalFamilias', true)" class="btn btn-primary mt-3">Agregar Familia</a>
                     </div>
                     <div class="form-group"> <label for="archivosFacturacion">Archivos de facturación</label>
                         @if (!$facturacion)
@@ -111,29 +114,39 @@
             </div>
         </div>
     </div>
-    <x-dialog-modal wire:model="open">
+    <x-dialog-modal wire:model="openModalFamilias">
         <x-slot name='title'>
-            Añadir Direccion
+            Añadir Familia
         </x-slot>
         <x-slot name='content'>
             <form>
-                <div class="form-group">
-                    <label for="email">Estado</label>
-                    <input type="email" id="email"
-                        class="form-control @error('userEdit.email') is-invalid @enderror"
-                        wire:model.defer="userEdit.email">
-                </div>
-                <div class="form-group">
-                    <label for="number">Ciudad</label>
-                    <input type="text" id="number" class="form-control" wire:model.defer="userEdit.number">
-                </div>
+                @foreach ($niveles as $nivel => $familias)
+                    @if (count($familias) > 0)
+                        <div class="form-group">
+                            <label for="label_familia_nivel_{{ $nivel }}">Nivel {{ $nivel }}</label>
+                            <select id="familia_nivel_{{ $nivel }}" class="form-control"
+                                wire:change="calcularSubfamilias($event.target.value, {{ $nivel }})">
+                                <option value="0"
+                                    {{ !isset($seleccionadas[$nivel]) || $seleccionadas[$nivel] == 0 ? 'selected' : '' }}>
+                                    Seleccione una familia</option>
+                                @foreach ($familias as $familia)
+                                    <option value="{{ $familia->id }}"
+                                        {{ isset($seleccionadas[$nivel]) && $seleccionadas[$nivel] == $familia->id ? 'selected' : '' }}>
+                                        {{ $familia->nombre }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                    @endif
+                @endforeach
             </form>
         </x-slot>
         <x-slot name='footer'>
-            <button class="btn btn-secondary mr-2 disabled:opacity-50" wire:click="$set('open',false)"
+            <button class="btn btn-secondary mr-2 disabled:opacity-50" wire:click="$set('openModalFamilias',false)"
                 wire:loading.attr="disabled">Cancelar</button>
             <button class="btn btn-primary disabled:opacity-50" wire:loading.attr="disabled"
-                onclick="confirmUpdate2()">Actualizar</button>
+                wire:click="confirmFamilia">Actualizar</button>
+
         </x-slot>
     </x-dialog-modal>
 
