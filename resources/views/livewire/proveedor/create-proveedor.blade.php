@@ -161,6 +161,11 @@
                         text: 'El proveedor ha sido creado exitosamente.',
                         icon: 'success',
                         confirmButtonText: 'OK'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Redirigir a la ruta deseada
+                            window.location.href = "{{ route('compras.proveedores.viewProveedores') }}";
+                        }
                     });
                 }
             }).catch(error => {
@@ -174,4 +179,5 @@
             });
         }
     </script>
+    
 </div>
