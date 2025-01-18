@@ -11,8 +11,10 @@ use Livewire\Component;
 
 class CreateProveedor extends Component
 {
+
     use WithFileUploads;
     public $openModalFamilias = false;
+    public $openModalDireccion = false;
     public $nombre, $descripcion, $correo, $rfc, $facturacion, $bancarios, $telefonos = [''];  // Inicializar con un campo de teléfono
     public $familias, $familiasSeleccionadas = [''];  // Inicializar con un campo de familia
     public $fileNameFacturacion, $fileNameBancarios;
@@ -28,6 +30,12 @@ class CreateProveedor extends Component
         $this->familiasSeleccionadas = []; // Inicializar como arreglo vacío
     }
 
+    public function updatedOpenModalDireccion($value)
+    {
+        if ($value) {
+            $this->dispatch('openModalDireccion');
+        }
+    }
     public function addTelefono()
     {
         $this->telefonos[] = '';
@@ -135,8 +143,8 @@ class CreateProveedor extends Component
                 ]);
             }
         }
-        
-        
+
+
 
         $this->reset('openModalFamilias', 'nombre', 'descripcion', 'correo', 'rfc', 'facturacion', 'bancarios', 'telefonos');
 

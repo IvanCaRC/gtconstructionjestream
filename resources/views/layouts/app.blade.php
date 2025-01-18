@@ -8,6 +8,11 @@
 
     <title>@yield('title')</title>
 
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.3/dist/leaflet.css"
+        integrity="sha256-sA+9cug2B+vRLzX1Q1yUbs1XjbwNqu1p5DKTn2Pdijk=" crossorigin="" />
+    <script src="https://unpkg.com/leaflet@1.9.3/dist/leaflet.js"
+        integrity="sha256-o9N1jPq+0WQnSn+JzE+T+zSTp/aap4a4+nFqNN6JPCc=" crossorigin=""></script>
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />

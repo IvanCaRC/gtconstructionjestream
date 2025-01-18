@@ -50,7 +50,8 @@
                                         <div class="flex-grow-1">
                                             {{ $familia->nombre }}
                                         </div>
-                                        <button type="button" wire:click="removeFamilia({{ $index }})" class="btn btn-danger btn-sm ml-2">Eliminar</button>
+                                        <button type="button" wire:click="removeFamilia({{ $index }})"
+                                            class="btn btn-danger btn-sm ml-2">Eliminar</button>
                                     </div>
                                 @endforeach
                             @else
@@ -59,7 +60,16 @@
                                 </div>
                             @endif
                         </div>
-                        <a href="#" wire:click="$set('openModalFamilias', true)" class="btn btn-primary mt-3">Agregar Familia</a>
+                        <a href="#" wire:click="$set('openModalFamilias', true)"
+                            class="btn btn-primary mt-3">Agregar Familia</a>
+                    </div>
+                    <div class="form-group">
+                        <label>Direcciones</label>
+                        <div class="input-group mb-2">
+                            No hay direcciones asignadas
+                        </div>
+                        <a href="#" wire:click="$set('openModalDireccion', true)"
+                            class="btn btn-primary mt-3">Agregar Direccion</a>
                     </div>
                     <div class="form-group"> <label for="archivosFacturacion">Archivos de facturación</label>
                         @if (!$facturacion)
@@ -145,12 +155,53 @@
             <button class="btn btn-secondary mr-2 disabled:opacity-50" wire:click="$set('openModalFamilias',false)"
                 wire:loading.attr="disabled">Cancelar</button>
             <button class="btn btn-primary disabled:opacity-50" wire:loading.attr="disabled"
-                wire:click="confirmFamilia">Actualizar</button>
+                wire:click="confirmFamilia">Agregar familia</button>
 
         </x-slot>
     </x-dialog-modal>
 
+    <x-dialog-modal wire:model="openModalDireccion">
+        <x-slot name='title'>
+            Añadir Dirección
+        </x-slot>
+        <x-slot name='content'>
+            <form>
+                <div id="map" style="height: 300px; width: 100%;"></div>
+            </form>
+        </x-slot>
+        <x-slot name='footer'>
+            <button class="btn btn-secondary mr-2 disabled:opacity-50" wire:click="$set('openModalDireccion',false)"
+                wire:loading.attr="disabled">Cancelar</button>
+            <button class="btn btn-primary disabled:opacity-50" wire:loading.attr="disabled"
+                wire:click="confirmDireccion">Agregar Dirección</button>
+        </x-slot>
+    </x-dialog-modal>
+
+
     <script>
+        document.addEventListener('livewire:load', () => {
+            let map;
+
+            Livewire.on('openModalDireccion', () => {
+                if (!map) {
+                    map = L.map('map').setView([51.505, -0.09], 13); // Coordenadas iniciales
+
+                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        maxZoom: 19,
+                        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    }).addTo(map);
+
+                    L.marker([51.505, -0.09]).addTo(map);
+                }
+
+                // Ajustar tamaño del mapa al contenedor
+                setTimeout(() => {
+                    map.invalidateSize();
+                }, 300);
+            });
+        });
+
+
         function confirmSave() {
             // Llamar al método save de Livewire
             @this.call('save').then(response => {
@@ -179,5 +230,5 @@
             });
         }
     </script>
-    
+
 </div>
