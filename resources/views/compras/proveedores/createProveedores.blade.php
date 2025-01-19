@@ -1,10 +1,13 @@
 @extends('layouts.app')
 <!-- Incluir Leaflet CSS -->
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" integrity="sha384-hs2+e1ecAhXZrp0TBECMsTh0FeP0K2j3/Zni+1iZQODhFboc2vm4IpYgrbs4zXrC" crossorigin=""/>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+    integrity="sha384-hs2+e1ecAhXZrp0TBECMsTh0FeP0K2j3/Zni+1iZQODhFboc2vm4IpYgrbs4zXrC" crossorigin="" />
 
 <!-- Incluir Leaflet JS -->
-<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js" integrity="sha384-M0jX1lz+V5Ftchz4HJaP3vTTv1od8Hcewgsq/oa9OYypsA8SjlAZ5d+8xvQZZlAA" crossorigin=""></script>
-
+<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+    integrity="sha384-M0jX1lz+V5Ftchz4HJaP3vTTv1od8Hcewgsq/oa9OYypsA8SjlAZ5d+8xvQZZlAA" crossorigin=""></script>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 <style>
     .file-upload {
         display: flex;
@@ -41,12 +44,10 @@
         text-align: center;
         line-height: 36px;
     }
-    #map{
-        margin: 0 auto;
-        width: 20%;
-        min-height: 250px;
-        max-height: 250px;
-        height: 100%;
+
+    #map {
+
+        height: 180px;
     }
 </style>
 @section('title', 'Crear proveedor')
@@ -55,5 +56,5 @@
 @section('activeProveedores', 'active')
 @section('activeFondoPermanenteProveedores', 'background-permanent')
 @section('contend')
-@livewire('proveedor.create-proveedor')
+    @livewire('proveedor.create-proveedor')
 @endsection
