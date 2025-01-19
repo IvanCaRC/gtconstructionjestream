@@ -8,7 +8,7 @@
 
     <title>@yield('title')</title>
 
-Este es el punto
+
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
