@@ -41,6 +41,13 @@
         text-align: center;
         line-height: 36px;
     }
+    #map{
+        margin: 0 auto;
+        width: 20%;
+        min-height: 250px;
+        max-height: 250px;
+        height: 100%;
+    }
 </style>
 @section('title', 'Crear proveedor')
 @section('activedesplegablefamilias', 'active')

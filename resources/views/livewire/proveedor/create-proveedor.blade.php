@@ -4,6 +4,16 @@
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <div class="card">
             <div class="card-body">
+                <div id="map"></div>
+                <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+                    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+                <script>
+                    var map = L.map('map').setView([51.505, -0.09], 13);
+                    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        maxZoom: 19,
+                        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    }).addTo(map);
+                </script>
                 <form>
                     <div class="form-group">
                         <label for="nombre">Nombre</label>
@@ -166,7 +176,16 @@
         </x-slot>
         <x-slot name='content'>
             <form>
-                <div id="map" style="height: 300px; width: 100%;"></div>
+                <div id="map"></div>
+                <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+                    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+                <script>
+                    var map = L.map('map').setView([51.505, -0.09], 13);
+                    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        maxZoom: 19,
+                        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    }).addTo(map);
+                </script>
             </form>
         </x-slot>
         <x-slot name='footer'>
@@ -177,31 +196,7 @@
         </x-slot>
     </x-dialog-modal>
 
-
     <script>
-        document.addEventListener('livewire:load', () => {
-            let map;
-
-            Livewire.on('openModalDireccion', () => {
-                if (!map) {
-                    map = L.map('map').setView([51.505, -0.09], 13); // Coordenadas iniciales
-
-                    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                        maxZoom: 19,
-                        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                    }).addTo(map);
-
-                    L.marker([51.505, -0.09]).addTo(map);
-                }
-
-                // Ajustar tamaño del mapa al contenedor
-                setTimeout(() => {
-                    map.invalidateSize();
-                }, 300);
-            });
-        });
-
-
         function confirmSave() {
             // Llamar al método save de Livewire
             @this.call('save').then(response => {

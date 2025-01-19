@@ -59,7 +59,7 @@
                                         </button>
                                     </td>
                                     <td>
-                                        <button class="btn btn-primary btn-custom"  onclick="window.location.href='{{ route('compras.proveedores.createProveedores') }}'"><i
+                                        <button class="btn btn-primary btn-custom"  onclick="window.location.href='{{ route('compras.proveedores.editProveedores') }}'"><i
                                                 class="fas fa-edit"></i></button>
                                     </td>
                                     <td><button class="btn btn-danger btn-custom" onclick="confirmDeletion({{ $proveedor->id }}, '{{ $proveedor->nombre }}')">

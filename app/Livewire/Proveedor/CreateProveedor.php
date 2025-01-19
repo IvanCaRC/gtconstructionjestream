@@ -30,12 +30,14 @@ class CreateProveedor extends Component
         $this->familiasSeleccionadas = []; // Inicializar como arreglo vacío
     }
 
+
     public function updatedOpenModalDireccion($value)
     {
         if ($value) {
-            $this->dispatch('openModalDireccion');
+            $this->dispatch('openModalDireccion'); // O $this->emit('openModalDireccion');
         }
     }
+    
     public function addTelefono()
     {
         $this->telefonos[] = '';
