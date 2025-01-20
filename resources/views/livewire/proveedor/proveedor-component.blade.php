@@ -21,18 +21,19 @@
                     <table class="table">
                         <thead>
                             <tr>
+                                <th>Estado</th>
                                 <th>Nombre</th>
-                                <th class="d-none d-md-table-cell" wire:click="" style="cursor: pointer;">
+                                {{-- <th class="d-none d-md-table-cell" wire:click="" style="cursor: pointer;">
                                     Descripcion
-                                </th>
+                                </th> --}}
                                 <th class="d-none d-md-table-cell" wire:click="" style="cursor: pointer;">
                                     Correo
                                 </th>
                                 <th class="d-none d-md-table-cell" wire:click="" style="cursor: pointer;">
                                     RFC
                                 </th>
-                                <th>Estado</th>
                                 <th>Familias</th>
+                                <th>Telefonos</th>
                                 <th></th>
                                 <th></th>
                                 <th></th>
@@ -41,10 +42,6 @@
                         <tbody>
                             @foreach ($proveedores as $proveedor)
                                 <tr>
-                                    <td class="align-middle">{{ $proveedor->nombre }}</td>
-                                    <td class="align-middle">{{ $proveedor->descripcion }}</td>
-                                    <td class="align-middle d-none d-md-table-cell">{{ $proveedor->correo }}</td>
-                                    <td class="align-middle d-none d-md-table-cell">{{ $proveedor->rfc }}</td>
                                     <td class="align-middle d-none d-md-table-cell">
                                         @if ($proveedor->estado)
                                             <span class="badge badge-success">Actualizado</span>
@@ -52,6 +49,11 @@
                                             <span class="badge badge-danger">Desactualizado</span>
                                         @endif
                                     </td>
+                                    <td class="align-middle">{{ $proveedor->nombre }}</td>
+                                    {{-- <td class="align-middle">{{ $proveedor->descripcion }}</td> --}}
+                                    <td class="align-middle d-none d-md-table-cell">{{ $proveedor->correo }}</td>
+                                    <td class="align-middle d-none d-md-table-cell">{{ $proveedor->rfc }}</td>
+                                    <td>----</td>
                                     <td>----</td>
                                     <td>
                                         <button class="btn btn-info btn-custom" wire:click="viewProveedor({{ $proveedor->id }})">

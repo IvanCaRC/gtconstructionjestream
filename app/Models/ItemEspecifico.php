@@ -9,7 +9,7 @@ class ItemEspecifico extends Model
 {
     use HasFactory;
 
-    protected $table = 'item_especifico'; 
+    protected $table = 'item_especifico';
 
     protected $fillable = [
         'item_id',
@@ -24,10 +24,18 @@ class ItemEspecifico extends Model
         'estado',
     ];
 
-    
     public function item()
     {
-        return $this->belongsTo(Item::class);//Relacion con la entidad item
+        return $this->belongsTo(Item::class); // Relación con la entidad item
     }
-}
 
+    public function familias()
+    {
+        return $this->belongsToMany(Familia::class, 'item_especifico_has_familia', 'item_especifico_id', 'familia_id');
+    }
+
+    public function proveedores()
+     { 
+        return $this->belongsToMany(Proveedor::class, 'item_especifico_proveedor', 'item_especifico_id', 'proveedor_id') ->withPivot('precio_compra'); // Incluir el campo precio_compra en la tabla intermedia 
+     }
+}

@@ -9,7 +9,13 @@ class Familia extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['id_familia_padre', 'nombre', 'descripcion', 'estadoEliminacion','nivel'];
+    protected $fillable = [
+        'id_familia_padre', 
+        'nombre', 
+        'descripcion', 
+        'estadoEliminacion',
+        'nivel'
+    ];
 
     public function subfamilias()
     {
@@ -26,6 +32,11 @@ class Familia extends Model
     public function padre()
     {
         return $this->belongsTo(Familia::class, 'id_familia_padre');
+    }
+
+    public function itemEspecificos()
+    {
+        return $this->belongsToMany(ItemEspecifico::class, 'item_especifico_has_familia', 'familia_id', 'item_especifico_id');
     }
 
     /**
@@ -65,3 +76,4 @@ class Familia extends Model
         return compact('niveles', 'seleccionadas');
     }
 }
+

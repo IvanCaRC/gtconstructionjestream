@@ -18,8 +18,10 @@ class CreateItemEspecificoTable extends Migration
             $table->string('marca');
             $table->integer('cantidad_piezas_mayoreo');
             $table->integer('cantidad_piezas_minorista');
-            $table->decimal('porcentaje_venta', 5, 2);
-            $table->decimal('precio_venta', 10, 2);
+            $table->decimal('porcentaje_venta_minorista', 5, 2);
+            $table->decimal('porcentaje_venta_mayorista', 5, 2);
+            $table->decimal('precio_venta_minorista', 10, 2);
+            $table->decimal('precio_venta_mayorista', 10, 2);
             $table->string('unidad');
             $table->text('especificaciones')->nullable();
             $table->string('ficha_tecnica_pdf')->nullable();

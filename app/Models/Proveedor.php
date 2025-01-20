@@ -21,5 +21,11 @@ class Proveedor extends Model
         'estado',
         'estado_eliminacion',
     ];
+
+    public function itemEspecificos()
+    {
+        return $this->belongsToMany(ItemEspecifico::class, 'item_especifico_proveedor', 'proveedor_id', 'item_especifico_id')
+        ->withPivot('precio_compra'); // Incluir el campo precio_compra en la tabla intermedia 
+    }
 }
 
