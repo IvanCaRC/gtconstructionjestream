@@ -101,12 +101,6 @@
                             <span class="error-message">{{ $message }}</span>
                         @enderror
                     </div>
-                    
-                    
-                    
-
-
-
                 </div>
                 <div class="form-group">
                     <label for="password">Contraseña</label>

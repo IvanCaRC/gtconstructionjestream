@@ -67,3 +67,7 @@ Route::get('compras/proveedores/createProveedores', [ProveedorController::class,
 Route::get('compras/proveedores/viewProveedorEspecifico/{idproveedor}', [ProveedorController::class, 'verProveedor'])
     ->middleware('auth', 'nocache')
     ->name('compras.proveedores.viewProveedorEspecifico');
+
+Route::get('compras/proveedores/editProveedores', [ProveedorController::class, 'editProveedor'])
+    ->middleware('auth', 'nocache')
+    ->name('compras.proveedores.editProveedores');
