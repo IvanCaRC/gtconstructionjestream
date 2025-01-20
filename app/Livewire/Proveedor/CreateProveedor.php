@@ -14,7 +14,7 @@ class CreateProveedor extends Component
 
     use WithFileUploads;
     public $openModalFamilias = false;
-    public $openModalDireccion = false;
+    public $openModalDireccion = true;
     public $nombre, $descripcion, $correo, $rfc, $facturacion, $bancarios, $telefonos = [''];  // Inicializar con un campo de teléfono
     public $familias, $familiasSeleccionadas = [''];  // Inicializar con un campo de familia
     public $fileNameFacturacion, $fileNameBancarios;
@@ -89,13 +89,6 @@ class CreateProveedor extends Component
         }
     }
 
-    public function updatedOpenModalDireccion($value)
-    {
-        if ($value) {
-            logger('Evento renderMap emitido');
-            $this->dispatch('renderMap'); // Emitir evento
-        }
-    }
 
 
     public function render()
