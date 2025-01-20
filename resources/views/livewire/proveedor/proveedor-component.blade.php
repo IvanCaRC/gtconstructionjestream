@@ -32,6 +32,7 @@
                                 <th class="d-none d-md-table-cell" wire:click="" style="cursor: pointer;">
                                     RFC
                                 </th>
+                                <th>Direccion(es)</th>
                                 <th>Familias</th>
                                 <th>Telefonos</th>
                                 <th></th>
@@ -53,18 +54,34 @@
                                     {{-- <td class="align-middle">{{ $proveedor->descripcion }}</td> --}}
                                     <td class="align-middle d-none d-md-table-cell">{{ $proveedor->correo }}</td>
                                     <td class="align-middle d-none d-md-table-cell">{{ $proveedor->rfc }}</td>
-                                    <td>----</td>
+                                    <td class="align-middle">
+                                        @if ($proveedor->direcciones)
+                                            @foreach ($proveedor->direcciones as $direccion)
+                                                {{ $direccion->ciudad }}
+                                            @endforeach
+                                        @else
+                                            N/A
+                                        @endif
+                                    </td>
+                                    <td class="align-middle">
+                                        @foreach ($proveedor->familias as $familia)
+                                            {{ $familia->nombre }}
+                                        @endforeach
+                                    </td>
                                     <td>----</td>
                                     <td>
-                                        <button class="btn btn-info btn-custom" wire:click="viewProveedor({{ $proveedor->id }})">
+                                        <button class="btn btn-info btn-custom"
+                                            wire:click="viewProveedor({{ $proveedor->id }})">
                                             <i class="fas fa-eye"></i>
                                         </button>
                                     </td>
                                     <td>
-                                        <button class="btn btn-primary btn-custom"  onclick="window.location.href='{{ route('compras.proveedores.editProveedores') }}'"><i
+                                        <button class="btn btn-primary btn-custom"
+                                            onclick="window.location.href='{{ route('compras.proveedores.editProveedores') }}'"><i
                                                 class="fas fa-edit"></i></button>
                                     </td>
-                                    <td><button class="btn btn-danger btn-custom" onclick="confirmDeletion({{ $proveedor->id }}, '{{ $proveedor->nombre }}')">
+                                    <td><button class="btn btn-danger btn-custom"
+                                            onclick="confirmDeletion({{ $proveedor->id }}, '{{ $proveedor->nombre }}')">
                                             <i class="fas fa-trash-alt"></i>
                                         </button>
                                         <script>

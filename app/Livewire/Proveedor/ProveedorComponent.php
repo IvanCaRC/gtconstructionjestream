@@ -22,8 +22,9 @@ class ProveedorComponent extends Component
 
     public function render()
     {
-
-        $query = Proveedor::where('estado_eliminacion', 1);
+        // Consulta para el modelo Proveedor
+        $query = Proveedor::where('estado_eliminacion', 1)
+            ->with('familias'); // Incluir la relación familias
 
         if ($this->searchTerm) {
             $query->where(function ($q) {
@@ -33,18 +34,17 @@ class ProveedorComponent extends Component
             });
         }
 
-        $proveedor = $query->orderBy($this->sort, $this->direction)
+        $proveedores = $query->orderBy($this->sort, $this->direction)
             ->paginate(10);
 
         return view('livewire.proveedor.proveedor-component', [
-            'proveedores' => $proveedor
+            'proveedores' => $proveedores
         ]);
-        
     }
 
-    public function eliminar($proveedroId)
+    public function eliminar($proveedorId)
     {
-        $Proveedor = Proveedor::findOrFail($proveedroId);
+        $Proveedor = Proveedor::findOrFail($proveedorId);
         $Proveedor->update(['estado_eliminacion' => false]);
         $this->dispatch('renderVistaProv');
     }
@@ -54,3 +54,4 @@ class ProveedorComponent extends Component
         return redirect()->route('compras.proveedores.viewProveedorEspecifico', ['idproveedor' => $idproveedor]);
     }
 }
+

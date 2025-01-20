@@ -36,6 +36,7 @@ class ItemEspecifico extends Model
 
     public function proveedores()
      { 
-        return $this->belongsToMany(Proveedor::class, 'item_especifico_proveedor', 'item_especifico_id', 'proveedor_id') ->withPivot('precio_compra'); // Incluir el campo precio_compra en la tabla intermedia 
+        return $this->belongsToMany(Proveedor::class, 'item_especifico_proveedor', 'item_especifico_id', 'proveedor_id') 
+        ->withPivot('precio_compra'); // Incluir el campo precio_compra en la tabla intermedia 
      }
 }

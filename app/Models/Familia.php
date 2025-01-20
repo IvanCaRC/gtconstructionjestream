@@ -10,9 +10,9 @@ class Familia extends Model
     use HasFactory;
 
     protected $fillable = [
-        'id_familia_padre', 
-        'nombre', 
-        'descripcion', 
+        'id_familia_padre',
+        'nombre',
+        'descripcion',
         'estadoEliminacion',
         'nivel'
     ];
@@ -37,6 +37,11 @@ class Familia extends Model
     public function itemEspecificos()
     {
         return $this->belongsToMany(ItemEspecifico::class, 'item_especifico_has_familia', 'familia_id', 'item_especifico_id');
+    }
+
+    public function proveedores()
+    {
+        return $this->belongsToMany(Proveedor::class, 'proveedor_has_familia', 'familia_id', 'proveedor_id');
     }
 
     /**
@@ -76,4 +81,3 @@ class Familia extends Model
         return compact('niveles', 'seleccionadas');
     }
 }
-

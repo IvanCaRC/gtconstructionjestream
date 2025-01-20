@@ -10,7 +10,7 @@ class Direccion extends Model
 {
     use HasFactory, SoftDeletes;
 
-    protected $table = 'direcciones'; 
+    protected $table = 'direcciones';
 
     protected $fillable = [
         'cp',
@@ -25,15 +25,13 @@ class Direccion extends Model
         'cliente_id',
     ];
 
-    // Definir relaciones con los modelos Proveedor y Cliente
-    public function proveedor()
-    {
-        return $this->belongsTo(Proveedor::class);
-    }
-
     public function cliente()
     {
         return $this->belongsTo(Cliente::class);
     }
-}
 
+    public function proveedor()
+    {
+        return $this->belongsTo(Proveedor::class, 'proveedor_id');
+    }
+}
