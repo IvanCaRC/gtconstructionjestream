@@ -1,4 +1,12 @@
 <div class="container-fluid px-4 sm:px-6 lg:px-8 py-1">
+    <!-- Bootstrap -->
+
+
+
+    <!-- Leaflet -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
     <div class="container-fluid px-4 sm:px-6 lg:px-8 py-1">
         <h1>Crear Nuevo Proveedor</h1>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -86,7 +94,6 @@
                         </div>
                     @endif
                 </div>
-
                 <div class="form-group">
                     <label>Familias</label>
                     <div class="input-group mb-2">
@@ -114,23 +121,78 @@
                     <div class="input-group mb-2">
                         No hay direcciones asignadas
                     </div>
-                    <button wire:click="$set('openModalDireccion', false)" class="btn btn-primary mt-3">Cerrar
-                        Direccion</a>
-                        {{-- El boton cambia el estado de openModalDirecion --}}
-                        <button wire:click="$set('openModalDireccion', true)" class="btn btn-primary mt-3">Abrir
-                            Direccion</a>
-                            {{-- El boton cambia el estado de openModalDirecion --}}
+                    <button class="btn btn-primary mt-3" wire:click="$set('openModalDireccion', false)">Cerrar
+                        Dirección</button>
+                    <button class="btn btn-primary mt-3" wire:click="$set('openModalDireccion', true)">Abrir
+                        Dirección</button>
                 </div>
 
                 @if ($openModalDireccion)
-                    {{-- Aqui se agrga el mapa se openModalDirecion es TRUE --}}
-                    <div id="map"></div>
+                    <div id="map" style="height: 500px; width: 100%;"></div>
                 @endif
 
                 <button type="button" onclick="confirmSave()" class="btn btn-primary mt-3">Crear proveedor</button>
+
+
+
             </div>
         </div>
     </div>
+    <script>
+        console.log('Script cargado'); // Confirmar que el script se carga
+
+        document.addEventListener('livewire:load', () => {
+            console.log('Livewire cargado correctamente'); // Confirmar que Livewire se cargó
+
+            Livewire.on('renderMap', () => {
+                console.log('Evento renderMap recibido'); // Confirmar que el evento se recibe
+
+                const mapElement = document.getElementById('map');
+                if (mapElement) {
+                    console.log('Contenedor del mapa encontrado'); // Confirmar que el contenedor existe
+                }
+            });
+        });
+    </script>
+    <script>
+        document.addEventListener('livewire:load', () => {
+            console.log('Livewire cargado correctamente');
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('Script cargado al DOM'); // Verificar carga básica
+
+            Livewire.on('renderMap', () => {
+                console.log('Evento renderMap recibido'); // Confirmar que el evento se recibió
+                var map = L.map('map').setView([51.505, -0.09], 13);
+                
+                L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    maxZoom: 19,
+                    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                }).addTo(map);
+
+                console.log('Evento renderMap terminado'); // Confirmar que el evento se recibió
+
+            });
+        });
+    </script>
+    <script>
+
+
+
+
+
+
+    </script>
+
+
+
+
+
+
+
+
     <x-dialog-modal wire:model="openModalFamilias">
         <x-slot name='title'>
             Añadir Familia
@@ -165,15 +227,9 @@
                 wire:click="confirmFamilia">Agregar familia</button>
         </x-slot>
     </x-dialog-modal>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-    <script>
-        var map = L.map('map').setView([51.505, -0.09], 13);
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        }).addTo(map);
-    </script>
+
+
+
 
     <script>
         function confirmSave() {

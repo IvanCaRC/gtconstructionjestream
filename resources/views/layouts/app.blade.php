@@ -8,8 +8,14 @@
 
     <title>@yield('title')</title>
 
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
     
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
@@ -57,7 +63,7 @@
 </head>
 
 <body class="font-sans antialiased">
-    
+
     <!-- Page Wrapper -->
     <div id="wrapper">
 
@@ -535,7 +541,35 @@
 
     @livewireScripts
 
-
+    <script>
+        document.addEventListener('livewire:load', () => {
+            console.log('Livewire cargado correctamente'); // Confirmar que Livewire se cargó
+            let map; 
+            let mapInitialized = false; 
+    
+            Livewire.on('renderMap', () => {
+                console.log('Evento renderMap recibido'); // Confirmar que el evento se recibió
+    
+                const mapElement = document.getElementById('map');
+                if (mapElement && !mapInitialized) {
+                    map = L.map('map').setView([51.505, -0.09], 13);
+                    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                        maxZoom: 19,
+                        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    }).addTo(map);
+    
+                    mapInitialized = true; 
+                }
+    
+                if (map) {
+                    setTimeout(() => {
+                        map.invalidateSize();
+                    }, 300);
+                }
+            });
+        });
+    </script>
+    
 
 
 </body>

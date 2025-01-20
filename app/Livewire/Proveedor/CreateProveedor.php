@@ -14,11 +14,11 @@ class CreateProveedor extends Component
 
     use WithFileUploads;
     public $openModalFamilias = false;
-    public $openModalDireccion = true;
+    public $openModalDireccion = false;
     public $nombre, $descripcion, $correo, $rfc, $facturacion, $bancarios, $telefonos = [''];  // Inicializar con un campo de teléfono
     public $familias, $familiasSeleccionadas = [''];  // Inicializar con un campo de familia
     public $fileNameFacturacion, $fileNameBancarios;
-    protected $listeners = ['renderCompleto' => 'render'];
+
     public $niveles = []; // Array para almacenar las familias de cada nivel
     public $seleccionadas = []; // Array para almacenar las opciones seleccionadas
 
@@ -28,17 +28,9 @@ class CreateProveedor extends Component
             ->where('estadoEliminacion', 0)
             ->get();
         $this->familiasSeleccionadas = []; // Inicializar como arreglo vacío
-        
+
     }
 
-
-    public function updatedOpenModalDireccion($value)
-    {
-        if ($value) {
-            $this->dispatch('openModalDireccion'); // O $this->emit('openModalDireccion');
-        }
-    }
-    
     public function addTelefono()
     {
         $this->telefonos[] = '';
@@ -64,7 +56,6 @@ class CreateProveedor extends Component
             $familia = Familia::find($idFamiliaPadre);
             $this->familiasSeleccionadas[] = $familia;
         }
-        
     }
 
 
@@ -98,10 +89,22 @@ class CreateProveedor extends Component
         }
     }
 
+    public function updatedOpenModalDireccion($value)
+    {
+        if ($value) {
+            logger('Evento renderMap emitido');
+            $this->dispatch('renderMap'); // Emitir evento
+        }
+    }
+
+
     public function render()
     {
         return view('livewire.proveedor.create-proveedor');
     }
+
+
+
 
     public function save()
     {
