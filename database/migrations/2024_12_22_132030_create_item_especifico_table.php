@@ -15,6 +15,7 @@ class CreateItemEspecificoTable extends Migration
         Schema::create('item_especifico', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('item_id');
+            $table->string('image')->nullable();
             $table->string('marca');
             $table->integer('cantidad_piezas_mayoreo');
             $table->integer('cantidad_piezas_minorista');

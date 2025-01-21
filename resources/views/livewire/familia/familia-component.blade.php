@@ -21,7 +21,7 @@
                         <li class="list-group-item">
                             <div class="categoria-header">
                                 <div><strong>Nombre</strong></div>
-                                <div><strong>Descripción</strong></div>
+                                <div><strong></strong></div>
                                 <div><strong>Acciones</strong></div>
                             </div>
                         </li>
