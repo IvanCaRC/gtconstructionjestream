@@ -2,12 +2,169 @@
 
 namespace App\Livewire\Item;
 
+use App\Models\Familia;
+use App\Models\Item;
+use App\Models\ItemEspecifico;
+use App\Models\ItemEspecificoHasFamilia;
+use App\Models\Proveedor;
 use Livewire\Component;
+use Livewire\Features\SupportFileUploads\WithFileUploads;
 
 class CreateItem extends Component
 {
-    public function render()
+    use WithFileUploads;
+    public $openModalProveedores = false;
+    public $openModalFamilias = false;
+    public $nombre, $descripcion, $marca, $pz_Mayoreo, $pz_Minorista, $porcentaje_venta_minorista, $porcentaje_venta_mayorista, $precio_venta_minorista, $precio_venta_mayorista, $unidad, $ficha_Tecnica_pdf;
+    public $proveedores = [''];
+    public $especificaciones = [['enunciado' => '', 'concepto' => '']];
+    public $familias, $familiasSeleccionadas = [''];
+    public $niveles = []; // Array para almacenar las familias de cada nivel
+    public $seleccionadas = []; // Array para almacenar las opciones seleccionadas
+    public $image;
+    public $fileNamePdf;
+
+
+
+    public function mount()
     {
-        return view('livewire.item.create-item');
+        $this->niveles[1] = Familia::whereNull('id_familia_padre')
+            ->where('estadoEliminacion', 0)
+            ->get();
+        $this->familiasSeleccionadas = []; // Inicializar como arreglo vacío
+    }
+
+    public function calcularSubfamilias($idFamiliaSeleccionada, $nivel)
+    {
+        // Llama al método del modelo y actualiza las propiedades locales
+        $resultado = Familia::calcularSubfamilias($idFamiliaSeleccionada, $nivel, $this->niveles, $this->seleccionadas);
+
+        $this->niveles = $resultado['niveles'];
+        $this->seleccionadas = $resultado['seleccionadas'];
+    }
+
+    public function addFamilia()
+    {
+        $idFamiliaPadre = null;
+        foreach (array_reverse($this->seleccionadas) as $seleccionada) {
+            if ($seleccionada != 0) {
+                $idFamiliaPadre = $seleccionada;
+                break;
+            }
+        }
+        if ($idFamiliaPadre) {
+            $familia = Familia::find($idFamiliaPadre);
+            $this->familiasSeleccionadas[] = $familia;
+        }
+    }
+
+    public function updatedficha_Tecnica_pdf()
+    {
+        if ($this->ficha_Tecnica_pdf) {
+            $this->fileNamePdf = $this->ficha_Tecnica_pdf->getClientOriginalName();
+        }
+    }
+
+    public function confirmFamilia()
+    {
+        $this->addFamilia();
+        $this->openModalFamilias = false;
+        $this->reset('seleccionadas', 'niveles');
+        $this->niveles[1] = Familia::whereNull('id_familia_padre')
+            ->where('estadoEliminacion', 0)
+            ->get();
+    }
+
+    public function removeFamilia($index)
+    {
+        unset($this->familiasSeleccionadas[$index]);
+        $this->familiasSeleccionadas = array_values($this->familiasSeleccionadas); // Reindexar el arreglo
+    }
+
+    
+    public $seleccionProvedorModal;
+    public $searchTerm = '';
+    public $provedorresListados;
+    public $sort = 'id';
+    public $direction = 'desc';
+
+    public function render()
+{
+    $query = Proveedor::where('estado_eliminacion', 1)
+        ->with('familias'); // Incluir la relación familias
+
+    if ($this->searchTerm) {
+        $query->where(function ($q) {
+            $q->where('nombre', 'LIKE', "%{$this->searchTerm}%")
+                ->orWhere('correo', 'LIKE', "%{$this->searchTerm}%")
+                ->orWhere('rfc', 'LIKE', "%{$this->searchTerm}%");
+        });
+    }
+
+    $proveedores = $query->orderBy($this->sort, $this->direction)
+        ->paginate(10);
+
+    return view('livewire.item.create-item', ['proveedores' => $proveedores]);
+}
+
+
+    public function save()
+    {
+        $ficha_Tecnica_pdf = null;
+        if ($this->ficha_Tecnica_pdf) {
+            $ficha_Tecnica_pdf = $this->ficha_Tecnica_pdf->store('archivosFacturacionProveedores', 'public');
+        }
+        // Crear el nuevo Item
+        $item = Item::create([
+            'nombre' => $this->nombre,
+            'descripcion' => $this->descripcion,
+        ]);
+
+        // Crear el registro en ItemEspecifico
+        $itemEspe = ItemEspecifico::create([
+            'item_id' => $item->id,
+            'marca' => $this->marca,
+            'cantidad_piezas_mayoreo' => $this->pz_Mayoreo,
+            'cantidad_piezas_minorista' => $this->pz_Minorista,
+            'porcentaje_venta_minorista' => $this->porcentaje_venta_minorista,
+            'porcentaje_venta_mayorista' => $this->porcentaje_venta_mayorista,
+            'precio_venta_minorista' => $this->precio_venta_minorista,
+            'precio_venta_mayorista' => $this->precio_venta_mayorista,
+            'unidad' => $this->unidad,
+            'especificaciones' => json_encode($this->especificaciones), // Guardar como JSON
+            'ficha_tecnica_pdf' => $ficha_Tecnica_pdf,
+            'estado' => true,
+            'estado_eliminacion' => true,
+        ]);
+
+        foreach ($this->familiasSeleccionadas as $familia) {
+            if (is_object($familia) && get_class($familia) === Familia::class) {
+                ItemEspecificoHasFamilia::create([
+                    'item_especifico_id' => $itemEspe->id,
+                    'familia_id' => $familia->id, // Acceder al ID de la familia
+                ]);
+            }
+        }
+
+        return true;
+    }
+
+    public function addLineaTecnica()
+    {
+        $this->especificaciones[] = ['enunciado' => '', 'concepto' => ''];
+    }
+
+    public function removeLineaTecnica($index)
+    {
+        unset($this->especificaciones[$index]);
+        $this->especificaciones = array_values($this->especificaciones); // Reindexar el array
+    }
+
+
+
+    public function montarModalProveedores()
+    {
+        $this->openModalProveedores = true;
+        
     }
 }
