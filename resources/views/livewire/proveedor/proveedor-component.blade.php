@@ -24,8 +24,8 @@
                                 <th>Estado</th>
                                 <th>Nombre</th>
                                 {{-- <th class="d-none d-md-table-cell" wire:click="" style="cursor: pointer;">
-                                    Descripcion
-                                </th> --}}
+                    Descripcion
+                </th> --}}
                                 <th class="d-none d-md-table-cell" wire:click="" style="cursor: pointer;">
                                     Correo
                                 </th>
@@ -55,9 +55,10 @@
                                     <td class="align-middle d-none d-md-table-cell">{{ $proveedor->correo }}</td>
                                     <td class="align-middle d-none d-md-table-cell">{{ $proveedor->rfc }}</td>
                                     <td class="align-middle">
-                                        @if ($proveedor->direcciones)
+                                        @if ($proveedor->direcciones && $proveedor->direcciones->count() > 0)
                                             @foreach ($proveedor->direcciones as $direccion)
-                                                {{ $direccion->ciudad }}
+                                                {{ $direccion->estado }}, {{ $direccion->ciudad }},
+                                                {{ $direccion->calle }}, {{ $direccion->numero }}<br>
                                             @endforeach
                                         @else
                                             N/A
@@ -68,7 +69,15 @@
                                             {{ $familia->nombre }}
                                         @endforeach
                                     </td>
-                                    <td>----</td>
+                                    <td class="align-middle">
+                                        @if ($proveedor->telefonos && $proveedor->telefonos->count() > 0)
+                                            @foreach ($proveedor->telefonos as $telefono)
+                                                {{ $telefono->numero }}<br>
+                                            @endforeach
+                                        @else
+                                            N/A
+                                        @endif
+                                    </td>
                                     <td>
                                         <button class="btn btn-info btn-custom"
                                             wire:click="viewProveedor({{ $proveedor->id }})">
@@ -77,7 +86,7 @@
                                     </td>
                                     <td>
                                         <button class="btn btn-primary btn-custom"
-                                        wire:click="editProveedor({{ $proveedor->id }})"><i
+                                            wire:click="editProveedor({{ $proveedor->id }})"><i
                                                 class="fas fa-edit"></i></button>
                                     </td>
                                     <td><button class="btn btn-danger btn-custom"

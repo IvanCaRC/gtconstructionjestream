@@ -9,15 +9,16 @@ class Telefono extends Model
 {
     use HasFactory;
 
-    protected $table = "telefonos";
+    protected $table = 'telefonos';
 
     protected $fillable = [
-        'numero',
         'proveedor_id',
-    ]; 
+        'numero'
+    ];
 
     public function proveedor()
     {
-        return $this->belongsTo(Proveedor::class);//Relacion con proveedor
+        return $this->belongsTo(Proveedor::class, 'proveedor_id');
     }
 }
+
