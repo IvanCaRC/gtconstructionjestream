@@ -90,26 +90,20 @@ class CreateItem extends Component
 
     public function render()
 {
-    $query = Proveedor::where('estado_eliminacion', 1)
-        ->with('familias'); // Incluir la relación familias
+    
 
-    if ($this->searchTerm) {
-        $query->where(function ($q) {
-            $q->where('nombre', 'LIKE', "%{$this->searchTerm}%")
-                ->orWhere('correo', 'LIKE', "%{$this->searchTerm}%")
-                ->orWhere('rfc', 'LIKE', "%{$this->searchTerm}%");
-        });
-    }
-
-    $proveedores = $query->orderBy($this->sort, $this->direction)
-        ->paginate(10);
-
-    return view('livewire.item.create-item', ['proveedores' => $proveedores]);
+    return view('livewire.item.create-item');
 }
 
 
     public function save()
     {
+
+        $image = null;
+        if ($this->image) {
+            $image = $this->image->store('users', 'public');
+        }
+        
         $ficha_Tecnica_pdf = null;
         if ($this->ficha_Tecnica_pdf) {
             $ficha_Tecnica_pdf = $this->ficha_Tecnica_pdf->store('archivosFacturacionProveedores', 'public');

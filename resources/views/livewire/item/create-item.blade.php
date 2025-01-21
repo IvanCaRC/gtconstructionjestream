@@ -18,7 +18,7 @@
                                     <div class="form-group">
                                         <div class="form-group text-center">
                                             @if ($image)
-                                                <img src="{{ $imagen->temporaryUrl() }}" alt="Imagen"
+                                                <img src="{{ $image->temporaryUrl() }}" alt="Imagen"
                                                     class="imagen-cuadrada">
                                             @else
                                                 <div class="imagen-predeterminada">
@@ -35,7 +35,7 @@
                                         <div class="text-center">
                                             <label class="btn btn-secondary btn-file">
                                                 Elegir archivo
-                                                <input type="file" wire:model="imagen" name="imagen"
+                                                <input type="file" wire:model="image" name="imagen"
                                                     accept="image/*" style="display: none;">
                                             </label>
                                             @error('image')
