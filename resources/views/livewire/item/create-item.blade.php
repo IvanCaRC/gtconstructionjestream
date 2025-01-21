@@ -262,40 +262,49 @@
         </x-slot>
         <x-slot name='content'>
             @if (!$seleccionProvedorModal)
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Correo</th>
-                        <th>RFC</th>
-                        <th class="align-middle d-none d-md-table-cell">Estado</th>
-                        <!-- Otras columnas -->
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($proveedores as $proveedor)
+                {{-- <table class="table">
+                    <thead>
                         <tr>
-                            <td>{{ $proveedor->nombre }}</td>
-                            <td>{{ $proveedor->correo }}</td>
-                            <td>{{ $proveedor->rfc }}</td>
-                            <td class="align-middle d-none d-md-table-cell">
-                                @if ($proveedor->estado)
-                                    <span class="badge badge-success">Actualizado</span>
-                                @else
-                                    <span class="badge badge-danger">Desactualizado</span>
-                                @endif
-                            </td>
-                            <!-- Otras celdas -->
+                            <th>Estado</th>
+                            <th>Nombre</th>
+                            <th class="d-none d-md-table-cell" wire:click="" style="cursor: pointer;">
+                                RFC
+                            </th>
+                            <th>Direccion(es)</th>
+                            <th></th>
                         </tr>
-                    @endforeach
-                </tbody>
-            </table>
-            
-            <!-- Paginación -->
-            {{ $proveedores->links() }}
-            
-            
+                    </thead>
+                    <tbody>
+                        @foreach ($proveedores as $proveedor)
+                            <tr>
+                                <td class="align-middle d-none d-md-table-cell">
+                                    @if ($proveedor->estado)
+                                        <span class="badge badge-success">Actualizado</span>
+                                    @else
+                                        <span class="badge badge-danger">Desactualizado</span>
+                                    @endif
+                                </td>
+                                <td class="align-middle">{{ $proveedor->nombre }}</td>
+                                <td class="align-middle d-none d-md-table-cell">{{ $proveedor->rfc }}</td>
+                                <td class="align-middle">
+                                    @if ($proveedor->direcciones)
+                                        @foreach ($proveedor->direcciones as $direccion)
+                                            {{ $direccion->ciudad }}
+                                        @endforeach
+                                    @else
+                                        N/A
+                                    @endif
+                                </td>
+                                <td><button class="btn btn-danger btn-custom"
+                                       >
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
 
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table> --}}
             @else
             @endif
         </x-slot>
