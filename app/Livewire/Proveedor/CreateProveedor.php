@@ -28,7 +28,6 @@ class CreateProveedor extends Component
             ->where('estadoEliminacion', 0)
             ->get();
         $this->familiasSeleccionadas = []; // Inicializar como arreglo vacío
-
     }
 
     public function addTelefono()
@@ -36,6 +35,7 @@ class CreateProveedor extends Component
         $this->telefonos[] = '';
     }
 
+    
     public function removeTelefono($index)
     {
         unset($this->telefonos[$index]);
@@ -51,7 +51,6 @@ class CreateProveedor extends Component
                 break;
             }
         }
-
         if ($idFamiliaPadre) {
             $familia = Familia::find($idFamiliaPadre);
             $this->familiasSeleccionadas[] = $familia;
@@ -88,8 +87,6 @@ class CreateProveedor extends Component
             $this->fileNameBancarios = $this->bancarios->getClientOriginalName();
         }
     }
-
-
 
     public function render()
     {
