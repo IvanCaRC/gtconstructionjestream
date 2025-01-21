@@ -14,7 +14,7 @@ class CreateProveedor extends Component
 
     use WithFileUploads;
     public $openModalFamilias = false;
-    public $openModalDireccion = true;
+    public $openModalDireccion = false;
     public $nombre, $descripcion, $correo, $rfc, $facturacion, $bancarios, $telefonos = [''];  // Inicializar con un campo de teléfono
     public $familias, $familiasSeleccionadas = [''];  // Inicializar con un campo de familia
     public $fileNameFacturacion, $fileNameBancarios;
@@ -95,9 +95,6 @@ class CreateProveedor extends Component
     {
         return view('livewire.proveedor.create-proveedor');
     }
-
-
-
 
     public function save()
     {

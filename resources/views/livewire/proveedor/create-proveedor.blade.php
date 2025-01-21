@@ -3,7 +3,7 @@
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
     <div class="container-fluid px-4 sm:px-6 lg:px-8 py-1">
         <h1>Crear Nuevo Proveedor</h1>
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+        
         <div class="card">
             <div class="card-body">
 
@@ -110,7 +110,7 @@
                     <button href="#" wire:click="$set('openModalFamilias', true)"
                         class="btn btn-primary mt-3">Agregar Familia</button>
                 </div>
-                <div class="form-group">
+                {{-- <div class="form-group">
                     <label>Direcciones</label>
                     <div class="input-group mb-2">
                         No hay direcciones asignadas
@@ -123,7 +123,7 @@
 
                 @if ($openModalDireccion)
                     <div id="map" style="height: 500px; width: 100%;"></div>
-                @endif
+                @endif --}}
 
 
 
@@ -131,7 +131,7 @@
             </div>
         </div>
     </div>
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    {{-- <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
         integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
     <script>
         var map = L.map('map').setView([51.505, -0.09], 14);
@@ -139,7 +139,7 @@
             maxZoom: 19,
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(map);
-    </script>
+    </script> --}}
     <x-dialog-modal wire:model="openModalFamilias">
         <x-slot name='title'>
             Añadir Familia

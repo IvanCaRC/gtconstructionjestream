@@ -21,8 +21,8 @@ class ProveedorController extends Controller
         return view('compras.proveedores.viewProveedorEspecifico', ['idproveedor' => $idproveedor]);
     }
 
-    public function editProveedor()
+    public function editProveedor($idproveedor)
     {
-        return view('compras.proveedores.editProveedores');
+        return view('compras.proveedores.editProveedores', ['idproveedor' => $idproveedor]);
     }
 }

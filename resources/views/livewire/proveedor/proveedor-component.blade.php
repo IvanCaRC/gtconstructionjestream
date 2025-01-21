@@ -77,7 +77,7 @@
                                     </td>
                                     <td>
                                         <button class="btn btn-primary btn-custom"
-                                            onclick="window.location.href='{{ route('compras.proveedores.editProveedores') }}'"><i
+                                        wire:click="editProveedor({{ $proveedor->id }})"><i
                                                 class="fas fa-edit"></i></button>
                                     </td>
                                     <td><button class="btn btn-danger btn-custom"
@@ -97,14 +97,31 @@
                                                     cancelButtonText: 'Cancelar'
                                                 }).then((result) => {
                                                     if (result.isConfirmed) {
-                                                        @this.call('eliminar', proveedorId);
-                                                        Swal.fire(
-                                                            'Eliminado!',
-                                                            `${proveedorNombre} ha sido eliminado.`,
-                                                            'success'
-                                                        )
+                                                        ejecutarEliminacionProveedor(proveedorId, proveedorNombre);
+                                                    } else {
+                                                        Swal.fire('Cancelado', 'La eliminación ha sido cancelada.', 'info');
                                                     }
-                                                })
+                                                });
+                                            }
+
+                                            function ejecutarEliminacionProveedor(proveedorId, proveedorNombre) {
+                                                @this.call('verificarAsignacionProvedor', proveedorId).then((asignada) => {
+                                                    if (asignada) {
+                                                        Swal.fire(
+                                                            'No se puede eliminar',
+                                                            'Este proveedor está asignada a un item, no se puede eliminar.',
+                                                            'error'
+                                                        );
+                                                    } else {
+                                                        @this.call('eliminar', proveedorId).then(() => {
+                                                            Swal.fire(
+                                                                'Eliminado!',
+                                                                `${proveedorNombre} ha sido eliminado.`,
+                                                                'success'
+                                                            );
+                                                        });
+                                                    }
+                                                });
                                             }
                                         </script>
 
