@@ -32,4 +32,14 @@ class Proveedor extends Model
     {
         return $this->belongsToMany(Familia::class, 'proveedor_has_familia', 'proveedor_id', 'familia_id');
     }
+
+    public function direcciones()
+    {
+        return $this->hasMany(Direccion::class, 'proveedor_id');
+    }
+
+    public function telefonos()
+    {
+        return $this->hasMany(Telefono::class, 'proveedor_id');
+    }
 }

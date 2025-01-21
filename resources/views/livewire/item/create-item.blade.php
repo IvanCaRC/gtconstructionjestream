@@ -294,6 +294,8 @@
             <!-- Paginación -->
             {{ $proveedores->links() }}
             
+            
+
             @else
             @endif
         </x-slot>
