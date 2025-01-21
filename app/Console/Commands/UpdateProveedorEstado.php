@@ -4,6 +4,8 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Models\Proveedor;
+use App\Models\User; // Importar el modelo User
+use App\Notifications\ProveedorEstadoCambiado; // Importar la notificación
 
 class UpdateProveedorEstado extends Command
 {
@@ -26,6 +28,11 @@ class UpdateProveedorEstado extends Command
     public function handle()
     {
         Proveedor::where('estado', true)->update(['estado' => false]);
+
+        // Enviar notificación
+        $user = User::first(); // O cualquier usuario al que quieras notificar
+        $user->notify(new ProveedorEstadoCambiado());
+
         $this->info('Estado de proveedor desactualizado');
     }
 }

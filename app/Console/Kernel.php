@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         \App\Console\Commands\UpdateProveedorEstado::class,
+        \App\Console\Commands\UpdateItemEspecificoEstado::class,
         // Otros comandos si los tienes
     ];
 
@@ -27,9 +28,11 @@ class Kernel extends ConsoleKernel
     {
         // Programar el comando para que se ejecute cada 5 minutos para pruebas
         $schedule->command('proveedor:update-estado')->everyFiveMinutes();
+        $schedule->command('itemespecifico:update-estado')->everyFiveMinutes();
 
         // Para ejecutar semanalmente en producción, podrías cambiar a:
         // $schedule->command('proveedor:update-estado')->weekly();
+        // $schedule->command('itemespecifico:update-estado')->weekly();
     }
 
     /**
