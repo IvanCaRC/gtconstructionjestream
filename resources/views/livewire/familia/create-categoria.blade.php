@@ -2,7 +2,7 @@
     <script src="//unpkg.com/alpinejs" defer></script>
 
     <div class="container-fluid px-4 sm:px-6 lg:px-8 py-1">
-        <h1>Crear Nueva Familia prueba de cambio</h1>
+        <h1>Crear Nueva Familia </h1>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <div class="card">
             <div class="card-body">
