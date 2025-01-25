@@ -21,7 +21,7 @@ class CreateItem extends Component
     public $familias, $familiasSeleccionadas = [''];
     public $niveles = []; // Array para almacenar las familias de cada nivel
     public $seleccionadas = []; // Array para almacenar las opciones seleccionadas
-    public $image;
+    public $image = [];
     public $fileNamePdf;
 
 
@@ -81,7 +81,7 @@ class CreateItem extends Component
         $this->familiasSeleccionadas = array_values($this->familiasSeleccionadas); // Reindexar el arreglo
     }
 
-    
+
     public $seleccionProvedorModal;
     public $searchTerm = '';
     public $provedorresListados;
@@ -89,21 +89,15 @@ class CreateItem extends Component
     public $direction = 'desc';
 
     public function render()
-{
-    
-
-    return view('livewire.item.create-item');
-}
+    {
+        return view('livewire.item.create-item');
+    }
 
 
     public function save()
     {
 
-        $image = null;
-        if ($this->image) {
-            $image = $this->image->store('users', 'public');
-        }
-        
+
         $ficha_Tecnica_pdf = null;
         if ($this->ficha_Tecnica_pdf) {
             $ficha_Tecnica_pdf = $this->ficha_Tecnica_pdf->store('archivosFacturacionProveedores', 'public');
@@ -114,9 +108,21 @@ class CreateItem extends Component
             'descripcion' => $this->descripcion,
         ]);
 
-        // Crear el registro en ItemEspecifico
+        $imagenes = [];
+
+        if ($this->image) {
+            foreach ($this->image as $key => $imageI) {
+                $imagenes[] = $imageI->store('imagenesItems', 'public');
+            }
+        }
+
+        // Convertir el array de imágenes a una cadena delimitada por comas o null si está vacío
+        $imagenesString = !empty($imagenes) ? implode(',', $imagenes) : null;
+
+
         $itemEspe = ItemEspecifico::create([
             'item_id' => $item->id,
+            'image' => $imagenesString,
             'marca' => $this->marca,
             'cantidad_piezas_mayoreo' => $this->pz_Mayoreo,
             'cantidad_piezas_minorista' => $this->pz_Minorista,
@@ -154,11 +160,13 @@ class CreateItem extends Component
         $this->especificaciones = array_values($this->especificaciones); // Reindexar el array
     }
 
-
+    public function eliminarImagenes()
+    {
+        $this->image = null;
+    }
 
     public function montarModalProveedores()
     {
         $this->openModalProveedores = true;
-        
     }
 }

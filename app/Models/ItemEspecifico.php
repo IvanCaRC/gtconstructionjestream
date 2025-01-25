@@ -13,6 +13,7 @@ class ItemEspecifico extends Model
 
     protected $fillable = [
         'item_id',
+        'image',
         'marca',
         'cantidad_piezas_mayoreo',
         'cantidad_piezas_minorista',

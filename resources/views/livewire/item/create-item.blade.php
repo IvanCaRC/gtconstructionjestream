@@ -13,13 +13,33 @@
                             <div class="row">
                                 <!-- Área de carga de la imagen -->
                                 <div class="col-md-4" class="form-group text-center">
-
                                     <label for="name">Imagen de item</label>
                                     <div class="form-group">
+                                        <div class="text-center">
+                                            <label class="btn btn-secondary btn-file">
+                                                Elegir archivo
+                                                <input type="file" wire:model="image" name="imagen" accept="image/*"
+                                                    style="display: none;" multiple>
+                                            </label>
+                                            @error('image')
+                                                <span class="invalid-feedback">{{ $message }}</span>
+                                            @enderror
+                                        </div>
+                                        <div class="text-center">
+                                            @if ($image)
+                                                <button href="#" wire:click="eliminarImagenes()"
+                                                    class="btn btn-danger mt-3">Eliminar Imagenes</button>
+                                            @endif
+                                        </div>
                                         <div class="form-group text-center">
                                             @if ($image)
-                                                <img src="{{ $image->temporaryUrl() }}" alt="Imagen"
-                                                    class="imagen-cuadrada">
+
+                                                @foreach ($image as $ima)
+                                                    <div class="mi-div" style="padding: 20px;">
+                                                        <img src="{{ $ima->temporaryUrl() }}" alt="Imagen"
+                                                            class="imagen-cuadrada">
+                                                    </div>
+                                                @endforeach
                                             @else
                                                 <div class="imagen-predeterminada">
                                                     <span class="file-upload-icon">&#128247;</span>
@@ -31,18 +51,6 @@
                                                 <span class="invalid-feedback">{{ $message }}</span>
                                             @enderror
                                         </div>
-
-                                        <div class="text-center">
-                                            <label class="btn btn-secondary btn-file">
-                                                Elegir archivo
-                                                <input type="file" wire:model="image" name="imagen"
-                                                    accept="image/*" style="display: none;">
-                                            </label>
-                                            @error('image')
-                                                <span class="invalid-feedback">{{ $message }}</span>
-                                            @enderror
-                                        </div>
-
                                     </div>
                                 </div>
 
