@@ -13,17 +13,20 @@ use Livewire\Features\SupportFileUploads\WithFileUploads;
 class CreateItem extends Component
 {
     use WithFileUploads;
-    public $openModalProveedores = false;
+    public $openModalProveedores = true;
     public $openModalFamilias = false;
     public $nombre, $descripcion, $marca, $pz_Mayoreo, $pz_Minorista, $porcentaje_venta_minorista, $porcentaje_venta_mayorista, $precio_venta_minorista, $precio_venta_mayorista, $unidad, $ficha_Tecnica_pdf;
-    public $proveedores = [''];
+    public $proveedores = [];
     public $especificaciones = [['enunciado' => '', 'concepto' => '']];
     public $familias, $familiasSeleccionadas = [''];
     public $niveles = []; // Array para almacenar las familias de cada nivel
-    public $seleccionadas = []; // Array para almacenar las opciones seleccionadas
+    public $seleccionadas = []; // Array para almacenar las opciones seleccionadas de familia
     public $image = [];
     public $fileNamePdf;
-
+    public $unidadSeleccionada;
+    public $seleccionProvedorModal;
+    public $searchTerm = '';
+    public $ProvedoresAsignados = [];
 
 
     public function mount()
@@ -32,6 +35,7 @@ class CreateItem extends Component
             ->where('estadoEliminacion', 0)
             ->get();
         $this->familiasSeleccionadas = []; // Inicializar como arreglo vacío
+        $this->actualizarProveedores();
     }
 
     public function calcularSubfamilias($idFamiliaSeleccionada, $nivel)
@@ -82,12 +86,7 @@ class CreateItem extends Component
     }
 
 
-    public $seleccionProvedorModal;
-    public $searchTerm = '';
-    public $provedorresListados;
-    public $sort = 'id';
-    public $direction = 'desc';
-
+    
     public function render()
     {
         return view('livewire.item.create-item');
@@ -125,7 +124,7 @@ class CreateItem extends Component
             'image' => $imagenesString,
             'marca' => $this->marca,
             'cantidad_piezas_mayoreo' => $this->pz_Mayoreo,
-            'cantidad_piezas_minorista' => $this->pz_Minorista,
+            'cantidad_piezas_minorista' => $this->pz_Mayoreo - 1,
             'porcentaje_venta_minorista' => $this->porcentaje_venta_minorista,
             'porcentaje_venta_mayorista' => $this->porcentaje_venta_mayorista,
             'precio_venta_minorista' => $this->precio_venta_minorista,
@@ -167,6 +166,33 @@ class CreateItem extends Component
 
     public function montarModalProveedores()
     {
+
         $this->openModalProveedores = true;
     }
+
+    public function actualizarProveedores()
+    {
+        if ($this->searchTerm) {
+            $this->proveedores = Proveedor::where('estado', 1)
+                ->where('nombre', 'LIKE', "%{$this->searchTerm}%")
+                ->get();
+        } else {
+            $this->proveedores = [];
+        }
+    }
+        
+    public function asignarVlaor($id)
+    {
+        $this->seleccionProvedorModal = $id;
+    }
+
+    public function asignarUnidad($unidad)
+    {
+        $this->unidadSeleccionada = $unidad;
+    }
+
+    public function asignarProvedorArregloProvedor(){
+        
+    }
+
 }

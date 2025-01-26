@@ -118,12 +118,6 @@
                                                     wire:model="pz_Mayoreo" required>
                                             </div>
                                             <div class="col-md-2 mb-3">
-                                                <label for="cantidad_piezas_minorista" class="mr-2">Cant. Piezas
-                                                    Minorista</label>
-                                                <input type="number" id="cantidad_piezas_minorista"
-                                                    class="form-control" wire:model="pz_Minorista" required>
-                                            </div>
-                                            <div class="col-md-2 mb-3">
                                                 <label for="porcentaje_venta_mayorista" class="mr-2">% Venta
                                                     Mayorista</label>
                                                 <input type="number" step="0.01" id="porcentaje_venta_mayorista"
@@ -270,57 +264,96 @@
         </x-slot>
         <x-slot name='content'>
             @if (!$seleccionProvedorModal)
-                {{-- <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Estado</th>
-                            <th>Nombre</th>
-                            <th class="d-none d-md-table-cell" wire:click="" style="cursor: pointer;">
-                                RFC
-                            </th>
-                            <th>Direccion(es)</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($proveedores as $proveedor)
-                            <tr>
-                                <td class="align-middle d-none d-md-table-cell">
-                                    @if ($proveedor->estado)
-                                        <span class="badge badge-success">Actualizado</span>
-                                    @else
-                                        <span class="badge badge-danger">Desactualizado</span>
-                                    @endif
-                                </td>
-                                <td class="align-middle">{{ $proveedor->nombre }}</td>
-                                <td class="align-middle d-none d-md-table-cell">{{ $proveedor->rfc }}</td>
-                                <td class="align-middle">
-                                    @if ($proveedor->direcciones)
-                                        @foreach ($proveedor->direcciones as $direccion)
-                                            {{ $direccion->ciudad }}
-                                        @endforeach
-                                    @else
-                                        N/A
-                                    @endif
-                                </td>
-                                <td><button class="btn btn-danger btn-custom"
-                                       >
-                                        <i class="fas fa-trash-alt"></i>
-                                    </button>
-                                </td>
+                <input type="text" wire:model="searchTerm" class="form-control"
+                    placeholder="Ingresa el nombre o RFC del provedor" wire:keydown='actualizarProveedores' />
+                @if ($searchTerm)
+                    @if ($proveedores->count() > 0)
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Estado</th>
+                                    <th>Nombre</th>
+                                    <th class="d-none d-md-table-cell" wire:click="" style="cursor: pointer;">
+                                        RFC
+                                    </th>
+                                    <th>Direccion(es)</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($proveedores as $proveedor)
+                                    <tr>
+                                        <td>
+                                            @if ($proveedor->estado)
+                                                <span class="badge badge-success">Actualizado</span>
+                                            @else
+                                                <span class="badge badge-danger">Desactualizado</span>
+                                            @endif
+                                        </td>
+                                        <td>{{ $proveedor->nombre }}</td>
+                                        <td class="d-none d-md-table-cell">{{ $proveedor->rfc }}</td>
+                                        <td>{{ $proveedor->direccion }}</td>
+                                        <td>
+                                            <button class="btn btn-secondary btn-custom"
+                                                wire:click="asignarVlaor({{ $proveedor->id }})">Selecionar</button>
+                                        </td>
+                                    </tr>
+                                @endforeach
 
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table> --}}
+                            </tbody>
+                        </table>
+                    @else
+                        <div class='px-6 py-2'>
+                            <p>No hay resultados</p>
+                        </div>
+                    @endif
+                @endif
             @else
+                <div class="form-group">
+                    <label for="tiempoMinEntrega">Tiempo mínimo de entrega (días)</label>
+                    <input type="number" id="tiempoMinEntrega" wire:model="tiempoMinEntrega" class="form-control"
+                        min="0" placeholder="Ingrese los días mínimos" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="tiempoMaxEntrega">Tiempo máximo de entrega (días)</label>
+                    <input type="number" id="tiempoMaxEntrega" wire:model="tiempoMaxEntrega" class="form-control"
+                        min="0" placeholder="Ingrese los días máximos" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="precioCompra">Precio de compra</label>
+                    <input type="number" id="precioCompra" wire:model="precioCompra" class="form-control"
+                        min="0" step="0.01" placeholder="Ingrese el precio de compra" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="unidad">Unidad</label>
+                    <select id="unidad" wire:model="unidadSeleccionada " class="form-control" required wire:change="asignarUnidad($event.target.value)">
+                        <option value="">Seleccione una unidad</option>
+                        <option value="pieza">Pieza</option>
+                        <option value="kilo">Kilo</option>
+                        <option value="rollo">Rollo</option>
+                        <option value="metro">Metro</option>
+                        <option value="litro">Litro</option>
+                        <option value="otro">Otro</option>
+                    </select>
+                </div>
+
+                @if ($unidadSeleccionada === 'otro')
+                    <div class="form-group">
+                        <label for="unidadPersonalizada">Especifique la unidad</label>
+                        <input type="text" id="unidadPersonalizada" wire:model="unidadPersonalizada"
+                            class="form-control" placeholder="Ingrese el tipo de unidad">
+                    </div>
+                @endif
             @endif
         </x-slot>
         <x-slot name='footer'>
             <button class="btn btn-secondary mr-2 disabled:opacity-50" wire:click="$set('openModalProveedores',false)"
                 wire:loading.attr="disabled">Cancelar</button>
             <button class="btn btn-primary disabled:opacity-50" wire:loading.attr="disabled"
-                wire:click="confirmFamilia">Agregar familia</button>
+                wire:click="confirmFamilia">Agregar Proveedor</button>
         </x-slot>
     </x-dialog-modal>
 

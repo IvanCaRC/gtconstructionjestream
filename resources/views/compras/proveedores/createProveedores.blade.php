@@ -5,7 +5,7 @@
 @section('activeProveedores', 'active')
 @section('activeFondoPermanenteProveedores', 'background-permanent')
 @section('contend')
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+{{-- <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
         integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
         <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet" />
         <style>
@@ -397,6 +397,6 @@
                     alert('Por favor, llena todos los campos.');
                 }
             }
-        </script>
-    {{-- @livewire('proveedor.create-proveedor') --}}
+        </script> --}}
+    @livewire('proveedor.create-proveedor')
 @endsection
