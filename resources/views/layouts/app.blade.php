@@ -306,7 +306,8 @@
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-bell fa-fw"></i>
                                 <!-- Counter - Alerts -->
-                                <span class="badge badge-danger badge-counter">3+</span>
+                                <span
+                                    class="badge badge-danger badge-counter">{{ Auth::user()->notifications->count() }}</span>
                             </a>
                             <!-- Dropdown - Alerts -->
                             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -314,41 +315,28 @@
                                 <h6 class="dropdown-header">
                                     Notificaciones
                                 </h6>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-primary">
-                                            <i class="fas fa-file-alt text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500">Diciembre 9, 2024</div>
-                                        <span class="font-weight-bold">¡Tu nuevo informe mensual esta listo!</span>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-success">
-                                            <i class="fas fa-donate text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500">Diciembre 3, 2024</div>
-                                        Se ha cerrado un proyecto por $200,000!!!
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-warning">
-                                            <i class="fas fa-exclamation-triangle text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500">Diciembre 3, 2024</div>
-                                        Se a genera un nuevo gasto.
-                                    </div>
-                                </a>
-                                <a class="dropdown-item text-center small text-gray-500" href="#">Ver todas las
-                                    notificaciones</a>
+                                @if (Auth::check())
+                                    @forelse (Auth::user()->notifications as $notification)
+                                        <a class="dropdown-item d-flex align-items-center"
+                                            href="{{ route('compras.proveedores.viewProveedores') }}">
+                                            <div class="mr-3">
+                                                <div class="icon-circle bg-primary">
+                                                    <i class="fas fa-file-alt text-white"></i>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="small text-gray-500">
+                                                    {{ $notification->created_at->diffForHumans() }}</div>
+                                                <span
+                                                    class="font-weight-bold">{{ $notification->data['message'] }}</span>
+                                            </div>
+                                        </a>
+                                    @empty
+                                        <p class="dropdown-item">No hay notificaciones.</p>
+                                    @endforelse
+                                @else
+                                    <p class="dropdown-item">No hay un usuario autenticado.</p>
+                                @endif
                             </div>
                         </li>
 
@@ -538,7 +526,7 @@
 
     @livewireScripts
 
-    
+
 
 
 </body>
