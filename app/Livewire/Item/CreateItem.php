@@ -220,33 +220,33 @@ class CreateItem extends Component
         // Limpiar los campos del formulario
         $this->reset(['seleccionProvedorModalNombre', 'seleccionProvedorModal', 'tiempoMinEntrega', 'tiempoMaxEntrega', 'precioCompra', 'unidadSeleccionada', 'openModalProveedores']);
     }
-    
-    
+
+
     public $unidadSeleccionadaEnTabla;
     public $precioSeleccionadoEnTabla;
     public $provedorSeleccionadoDeLaTabla;
 
-    
 
-
-    public function seleccionarProveedor($index)
+    public function seleccionarProveedor($index,$nombre)
     {
-        if ($this->provedorSeleccionadoDeLaTabla === $index) {
-            // Si el mismo proveedor ya está seleccionado, deseleccionarlo
-            $this->ProvedoresAsignados[$index]['estado'] = 0;
-            $this->provedorSeleccionadoDeLaTabla = null;
-            $this->unidadSeleccionadaEnTabla = null;
-            $this->precioSeleccionadoEnTabla = null;
-        } else {
-            // Deseleccionar cualquier otro proveedor
-            if ($this->provedorSeleccionadoDeLaTabla !== null) {
-                $this->ProvedoresAsignados[$this->provedorSeleccionadoDeLaTabla]['estado'] = 0;
+        foreach ($this->ProvedoresAsignados as $key => $proveedor) {
+            if ($key === $index) {
+                // Alternar el estado del proveedor seleccionado
+                if ($this->ProvedoresAsignados[$key]['estado'] == 1) {
+                    $this->ProvedoresAsignados[$key]['estado'] = 0;
+                    $this->provedorSeleccionadoDeLaTabla = null;
+                    $this->unidadSeleccionadaEnTabla = null;
+                    $this->precioSeleccionadoEnTabla = null;
+                } else {
+                    $this->ProvedoresAsignados[$key]['estado'] = 1;
+                    $this->provedorSeleccionadoDeLaTabla = $nombre;
+                    $this->unidadSeleccionadaEnTabla = $this->ProvedoresAsignados[$key]['unidad'];
+                    $this->precioSeleccionadoEnTabla = $this->ProvedoresAsignados[$key]['precio_compra'];
+                }
+            } else {
+                // Cambiar el estado de todos los demás a 0
+                $this->ProvedoresAsignados[$key]['estado'] = 0;
             }
-            // Seleccionar el nuevo proveedor
-            $this->ProvedoresAsignados[$index]['estado'] = 1;
-            $this->provedorSeleccionadoDeLaTabla = $index;
-            $this->unidadSeleccionadaEnTabla = $this->ProvedoresAsignados[$index]['unidad'];
-            $this->precioSeleccionadoEnTabla = $this->ProvedoresAsignados[$index]['precio_compra'];
         }
     }
 
@@ -261,7 +261,4 @@ class CreateItem extends Component
             $this->provedorSeleccionadoDeLaTabla = null;
         }
     }
-
-    
-    
 }
