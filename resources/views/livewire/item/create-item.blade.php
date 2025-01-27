@@ -1,5 +1,6 @@
 <div class="container-fluid px-4 sm:px-6 lg:px-8 py-1">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <div>
         <div>
             <div>
@@ -12,47 +13,41 @@
                         <div class="container">
                             <div class="row">
                                 <!-- Área de carga de la imagen -->
-                                <div class="col-md-4" class="form-group text-center">
+                                <div class="col-md-4 text-center">
                                     <label for="name">Imagen de item</label>
                                     <div class="form-group">
                                         <div class="text-center">
                                             <label class="btn btn-secondary btn-file">
                                                 Elegir archivo
-                                                <input type="file" wire:model="image" name="imagen" accept="image/*"
+                                                <input type="file" wire:model="nuevasImagenes" name="imagen" accept="image/*"
                                                     style="display: none;" multiple>
                                             </label>
-                                            @error('image')
+                                            @error('nuevasImagenes')
                                                 <span class="invalid-feedback">{{ $message }}</span>
                                             @enderror
                                         </div>
-                                        <div class="text-center">
+                                
+                                        <div class="form-group text-center mt-3">
                                             @if ($image)
-                                                <button href="#" wire:click="eliminarImagenes()"
-                                                    class="btn btn-danger mt-3">Eliminar Imagenes</button>
-                                            @endif
-                                        </div>
-                                        <div class="form-group text-center">
-                                            @if ($image)
-
-                                                @foreach ($image as $ima)
-                                                    <div class="mi-div" style="padding: 20px;">
-                                                        <img src="{{ $ima->temporaryUrl() }}" alt="Imagen"
-                                                            class="imagen-cuadrada">
+                                                @foreach ($image as $index => $ima)
+                                                    <div class="mi-div" style="padding: 20px; display: inline-block; position: relative;">
+                                                        <img src="{{ $ima->temporaryUrl() }}" alt="Imagen" class="imagen-cuadrada">
+                                                        <button wire:click="eliminarImagen({{ $index }})" class="btn btn-danger btn-sm"
+                                                            style="position: absolute; top: 5px; right: 5px;">
+                                                            &times;
+                                                        </button>
                                                     </div>
                                                 @endforeach
                                             @else
                                                 <div class="imagen-predeterminada">
                                                     <span class="file-upload-icon">&#128247;</span>
-                                                    <span class="file-upload-text">Sube tu imagen con el botón "Elegir
-                                                        archivo"</span>
+                                                    <span class="file-upload-text">Sube tu imagen con el botón "Elegir archivo"</span>
                                                 </div>
                                             @endif
-                                            @error('image')
-                                                <span class="invalid-feedback">{{ $message }}</span>
-                                            @enderror
                                         </div>
                                     </div>
                                 </div>
+                                
 
                                 <!-- Área del formulario -->
                                 <div class="col-md-8">
@@ -85,7 +80,7 @@
                                                             <th>Precio de Compra</th>
                                                             <th>Unidad</th>
                                                             <th></th>
-                                                            
+
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -140,12 +135,22 @@
 
                                                                 </td>
                                                                 <td>{{ $conexionObjeto->proveedor_nombre }}</td>
-                                                                <td>{{ $conexionObjeto->tiempo_minimo_entrega }}</td>
-                                                                <td>{{ $conexionObjeto->tiempo_maximo_entrega }}</td>
-                                                                <td>{{ $conexionObjeto->precio_compra }}</td>
-                                                                <td>{{ $conexionObjeto->unidad }}
+
+                                                                <td><input step="1" class="form-control"
+                                                                        wire:model.lazy="ProvedoresAsignados.{{ $index }}.tiempo_minimo_entrega">
                                                                 </td>
-                                                                
+                                                                <td><input step="1" class="form-control"
+                                                                        wire:model.lazy="ProvedoresAsignados.{{ $index }}.tiempo_maximo_entrega">
+                                                                </td>
+                                                                <td><input step="0.01" class="form-control"
+                                                                        wire:model.lazy="ProvedoresAsignados.{{ $index }}.precio_compra"
+                                                                        wire:keydown='handleKeydown({{ $index }})'>
+                                                                </td>
+                                                                <td><input step="0.01" class="form-control"
+                                                                        wire:model.lazy="ProvedoresAsignados.{{ $index }}.unidad"
+                                                                        wire:keydown='calcularPrecios'>
+                                                                </td>
+
                                                                 <td><button
                                                                         wire:click="eliminarProveedor({{ $index }})"
                                                                         class="btn btn-danger">Eliminar</button>
@@ -187,53 +192,64 @@
                                         <button href="#" wire:click="$set('openModalFamilias', true)"
                                             class="btn btn-secondary mt-3">Agregar Familia</button>
                                     </div>
-                                    <div class="form-group">
-                                        <label for="unidad">Unidad</label>
-                                        <label>{{ $unidadSeleccionadaEnTabla }}</label>
+
+                                    <div class="row">
+                                        <div class="col-md-4 mb-3">
+                                            <h4 for="unidad">Unidad</h4>
+                                            <label>{{ $unidadSeleccionadaEnTabla }}</label>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label for="stock" class="mr-2">Stock Acutal del Producto</label>
+                                            <input type="number" id="cantidad_piezas_mayoreo" class="form-control"
+                                                wire:model="stock" required>
+                                        </div>
+                                        
                                     </div>
-                                   
+
                                     @if ($provedorSeleccionadoDeLaTabla)
-                                    <label>El parametro por el que se hacen los calculos se basan en el proveedor{{ $provedorSeleccionadoDeLaTabla }}</label>
+                                        <label>El parametro por el que se hacen los calculos se basan en el proveedor
+                                            {{ $provedorSeleccionadoDeLaTabla }}</label>
                                         <div class="form-group">
                                             <div class="row">
                                                 <div class="col-md-2 mb-3">
                                                     <label for="cantidad_piezas_mayoreo" class="mr-2">Cant. Piezas
                                                         Mayoreo</label>
-                                                    <input type="number" id="cantidad_piezas_mayoreo"
-                                                        class="form-control" wire:model="pz_Mayoreo" required>
+                                                    <input id="cantidad_piezas_mayoreo" class="form-control"
+                                                        wire:model="pz_Mayoreo" required>
                                                 </div>
                                                 <div class="col-md-2 mb-3">
                                                     <label for="porcentaje_venta_mayorista" class="mr-2">% Venta
                                                         Mayorista</label>
-                                                    <input type="number" step="0.01" id="porcentaje_venta_mayorista"
+                                                    <input step="0.01" id="porcentaje_venta_mayorista"
                                                         class="form-control" wire:model="porcentaje_venta_mayorista"
-                                                        required>
+                                                        wire:keydown='calcularPrecios' required>
                                                 </div>
+
                                                 <div class="col-md-2 mb-3">
                                                     <label for="porcentaje_venta_minorista" class="mr-2">% Venta
                                                         Minorista</label>
-                                                    <input type="number" step="0.01" id="porcentaje_venta_minorista"
+                                                    <input step="0.01" id="porcentaje_venta_minorista"
                                                         class="form-control" wire:model="porcentaje_venta_minorista"
-                                                        required>
+                                                        wire:keydown='calcularPrecios' required>
                                                 </div>
+
                                                 <div class="col-md-2 mb-3">
                                                     <label for="precio_venta_mayorista" class="mr-2">Precio
                                                         Mayorista</label>
-                                                    <label>{{ $precio_venta_mayorista }}Aqui va </label>
+                                                    <label
+                                                        class="form-control">{{ $precio_venta_mayorista ?? 'N/A' }}</label>
                                                 </div>
+
                                                 <div class="col-md-2 mb-3">
                                                     <label for="precio_venta_minorista" class="mr-2">Precio
                                                         Minorista</label>
-                                                    <label>{{ $precio_venta_minorista }}Aqui Va </label>
+                                                    <label
+                                                        class="form-control">{{ $precio_venta_minorista ?? 'N/A' }}</label>
                                                 </div>
                                             </div>
                                         </div>
                                     @endif
-                                    <div class="col-md-2 mb-3">
-                                        <label for="stock" class="mr-2">Stock Acutal del Producto</label>
-                                        <input type="number" id="cantidad_piezas_mayoreo" class="form-control"
-                                            wire:model="stock" required>
-                                    </div>
+
                                     <div class="form-group">
                                         <label for="especificaciones">Especificaciones</label>
                                         <!-- Aquí puedes agregar cualquier contenido adicional que necesites -->
@@ -445,7 +461,7 @@
             @endif
         </x-slot>
         <x-slot name='footer'>
-            <button class="btn btn-secondary mr-2 disabled:opacity-50" wire:click="$set('openModalProveedores',false)"
+            <button class="btn btn-secondary mr-2 disabled:opacity-50" wire:click="cerrarModalProvedore"
                 wire:loading.attr="disabled">Cancelar</button>
             <button class="btn btn-primary disabled:opacity-50" wire:loading.attr="disabled"
                 wire:click="asignarProvedorArregloProvedor">Agregar Proveedor</button>
@@ -459,14 +475,14 @@
                 if (response) {
                     // Mostrar la alerta después de la creación si todo es correcto
                     Swal.fire({
-                        title: 'Proveedor creado',
-                        text: 'El proveedor ha sido creado exitosamente.',
+                        title: 'Item creado',
+                        text: 'El Item ha sido creado exitosamente.',
                         icon: 'success',
                         confirmButtonText: 'OK'
                     }).then((result) => {
                         if (result.isConfirmed) {
                             // Redirigir a la ruta deseada
-                            window.location.href = "{{ route('compras.proveedores.viewProveedores') }}";
+                            window.location.href = "{{ route('compras.items.viewItems') }}";
                         }
                     });
                 }
@@ -474,7 +490,7 @@
                 // Manejar error si es necesario
                 Swal.fire({
                     title: 'Error',
-                    text: 'Hubo un problema al crear el proveedor.',
+                    text: 'Hubo un problema al crear el item.',
                     icon: 'error',
                     confirmButtonText: 'OK'
                 });

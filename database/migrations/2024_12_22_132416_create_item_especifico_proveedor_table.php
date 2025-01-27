@@ -18,7 +18,7 @@ class CreateItemEspecificoProveedorTable extends Migration
             $table->unsignedBigInteger('item_especifico_id');
             $table->unsignedBigInteger('proveedor_id');
             $table->integer('tiempo_max_entrega');
-            $table->integer('tiempo_min_entrega');
+            $table->integer('tiempo_min_entrega');      
             $table->string('unidad')->nullable();
             $table->decimal('precio_compra', 10, 2);
             $table->boolean('estado')->default(true);

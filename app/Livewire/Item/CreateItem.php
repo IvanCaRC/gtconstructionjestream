@@ -10,13 +10,14 @@ use App\Models\Proveedor;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\WithFileUploads;
 use App\CustomClases\ConexionProveedorItemTemporal;
+use Illuminate\Support\Facades\DB;
 
 class CreateItem extends Component
 {
     use WithFileUploads;
     public $openModalProveedores = false;
     public $openModalFamilias = false;
-    public $nombre, $descripcion, $marca, $pz_Mayoreo, $pz_Minorista, $porcentaje_venta_minorista, $porcentaje_venta_mayorista, $dtock, $precio_venta_minorista, $precio_venta_mayorista, $unidad, $ficha_Tecnica_pdf;
+    public $nombre, $descripcion, $marca, $stock, $pz_Mayoreo, $pz_Minorista, $porcentaje_venta_minorista, $porcentaje_venta_mayorista, $dtock, $precio_venta_minorista, $precio_venta_mayorista, $unidad, $ficha_Tecnica_pdf;
     public $proveedores = [];
     public $especificaciones = [['enunciado' => '', 'concepto' => '']];
     public $familias, $familiasSeleccionadas = [''];
@@ -28,7 +29,7 @@ class CreateItem extends Component
     public $seleccionProvedorModal;
     public $seleccionProvedorModalNombre;
     public $searchTerm = '';
-
+    public $nuevasImagenes = [];
 
 
     public function mount()
@@ -87,6 +88,11 @@ class CreateItem extends Component
         $this->familiasSeleccionadas = array_values($this->familiasSeleccionadas); // Reindexar el arreglo
     }
 
+    public function cerrarModalProvedore()
+    {
+        $this->reset(['searchTerm', 'seleccionProvedorModalNombre', 'seleccionProvedorModal', 'tiempoMinEntrega', 'tiempoMaxEntrega', 'precioCompra', 'unidadSeleccionada', 'openModalProveedores']);
+    }
+
 
 
     public function render()
@@ -97,7 +103,8 @@ class CreateItem extends Component
 
     public function save()
     {
-
+        $porcentajeVentaMinorista = (float) ($this->porcentaje_venta_minorista ?? 0);
+        $porcentajeVentaMayorista = (float) ($this->porcentaje_venta_mayorista ?? 0);
 
         $ficha_Tecnica_pdf = null;
         if ($this->ficha_Tecnica_pdf) {
@@ -127,11 +134,11 @@ class CreateItem extends Component
             'marca' => $this->marca,
             'cantidad_piezas_mayoreo' => $this->pz_Mayoreo,
             'cantidad_piezas_minorista' => $this->pz_Mayoreo - 1,
-            'porcentaje_venta_minorista' => $this->porcentaje_venta_minorista,
-            'porcentaje_venta_mayorista' => $this->porcentaje_venta_mayorista,
+            'porcentaje_venta_minorista' => $porcentajeVentaMinorista,
+            'porcentaje_venta_mayorista' => $porcentajeVentaMayorista,
             'precio_venta_minorista' => $this->precio_venta_minorista,
             'precio_venta_mayorista' => $this->precio_venta_mayorista,
-            'unidad' => $this->unidad,
+            'unidad' => $this->unidadSeleccionadaEnTabla,
             'stock' => $this->stock,
             'especificaciones' => json_encode($this->especificaciones), // Guardar como JSON
             'ficha_tecnica_pdf' => $ficha_Tecnica_pdf,
@@ -144,6 +151,23 @@ class CreateItem extends Component
                 ItemEspecificoHasFamilia::create([
                     'item_especifico_id' => $itemEspe->id,
                     'familia_id' => $familia->id, // Acceder al ID de la familia
+                ]);
+            }
+        }
+
+        foreach ($this->ProvedoresAsignados as $proveedor) {
+            // Asegurarnos de que el arreglo contiene los datos necesarios
+            if (isset($proveedor['proveedor_id'], $proveedor['tiempo_minimo_entrega'], $proveedor['tiempo_maximo_entrega'], $proveedor['precio_compra'], $proveedor['unidad'], $proveedor['estado'])) {
+                DB::table('item_especifico_proveedor')->insert([
+                    'item_especifico_id' => $itemEspe->id,
+                    'proveedor_id' => $proveedor['proveedor_id'],
+                    'tiempo_min_entrega' => $proveedor['tiempo_minimo_entrega'],
+                    'tiempo_max_entrega' => $proveedor['tiempo_maximo_entrega'],
+                    'unidad' => $proveedor['unidad'],
+                    'precio_compra' => $proveedor['precio_compra'],
+                    'estado' => $proveedor['estado'], // Estado actual del proveedor
+                    'created_at' => now(),
+                    'updated_at' => now(),
                 ]);
             }
         }
@@ -162,10 +186,34 @@ class CreateItem extends Component
         $this->especificaciones = array_values($this->especificaciones); // Reindexar el array
     }
 
+    public function updatedNuevasImagenes()
+    {
+        // Agregar nuevas imágenes al arreglo existente
+        if ($this->nuevasImagenes) {
+            foreach ($this->nuevasImagenes as $nuevaImagen) {
+                $this->image[] = $nuevaImagen;
+            }
+        }
+
+        // Limpiar el campo de selección después de agregar
+        $this->reset('nuevasImagenes');
+    }
+
+    public function eliminarImagen($index)
+    {
+        // Eliminar la imagen específica del arreglo
+        unset($this->image[$index]);
+
+        // Reindexar el arreglo para mantener consistencia
+        $this->image = array_values($this->image);
+    }
+
     public function eliminarImagenes()
     {
-        $this->image = null;
+        // Eliminar todas las imágenes
+        $this->image = [];
     }
+
 
     public function montarModalProveedores()
     {
@@ -177,12 +225,16 @@ class CreateItem extends Component
     {
         if ($this->searchTerm) {
             $this->proveedores = Proveedor::where('estado', 1)
-                ->where('nombre', 'LIKE', "%{$this->searchTerm}%")
+                ->where(function ($query) {
+                    $query->where('nombre', 'LIKE', "%{$this->searchTerm}%")
+                        ->orWhere('rfc', 'LIKE', "%{$this->searchTerm}%");
+                })
                 ->get();
         } else {
             $this->proveedores = [];
         }
     }
+
 
     public function asignarValor($id, $name)
     {
@@ -196,7 +248,7 @@ class CreateItem extends Component
     }
 
     public $ProvedoresAsignados = [];
-    public $tiempoMinEntrega, $tiempoMaxEntrega, $precioCompra;
+    public $tiempoMinEntrega, $tiempoMaxEntrega, $precioCompra, $unidadPersonalizada;
 
 
     public function asignarProvedorArregloProvedor()
@@ -207,7 +259,7 @@ class CreateItem extends Component
             $this->tiempoMinEntrega,
             $this->tiempoMaxEntrega,
             $this->precioCompra,
-            $this->unidadSeleccionada,
+            $this->unidadSeleccionada === 'otro' ? $this->unidadPersonalizada : $this->unidadSeleccionada,
             0
         );
 
@@ -218,7 +270,7 @@ class CreateItem extends Component
         $this->ProvedoresAsignados[] = $conexionArray;
 
         // Limpiar los campos del formulario
-        $this->reset(['seleccionProvedorModalNombre', 'seleccionProvedorModal', 'tiempoMinEntrega', 'tiempoMaxEntrega', 'precioCompra', 'unidadSeleccionada', 'openModalProveedores']);
+        $this->reset(['searchTerm', 'seleccionProvedorModalNombre', 'seleccionProvedorModal', 'tiempoMinEntrega', 'tiempoMaxEntrega', 'precioCompra', 'unidadSeleccionada', 'openModalProveedores']);
     }
 
 
@@ -227,7 +279,7 @@ class CreateItem extends Component
     public $provedorSeleccionadoDeLaTabla;
 
 
-    public function seleccionarProveedor($index,$nombre)
+    public function seleccionarProveedor($index, $nombre)
     {
         foreach ($this->ProvedoresAsignados as $key => $proveedor) {
             if ($key === $index) {
@@ -242,11 +294,20 @@ class CreateItem extends Component
                     $this->provedorSeleccionadoDeLaTabla = $nombre;
                     $this->unidadSeleccionadaEnTabla = $this->ProvedoresAsignados[$key]['unidad'];
                     $this->precioSeleccionadoEnTabla = $this->ProvedoresAsignados[$key]['precio_compra'];
+                    $this->handleKeydown($index);
                 }
             } else {
                 // Cambiar el estado de todos los demás a 0
                 $this->ProvedoresAsignados[$key]['estado'] = 0;
             }
+        }
+    }
+
+    public function edcionDeTabalaProveedorPrecio($index)
+    {
+        if (isset($this->ProvedoresAsignados[$index]) && $this->ProvedoresAsignados[$index]['estado'] == 1) {
+            // Asignar el precio de compra del proveedor al precio seleccionado
+            $this->precioSeleccionadoEnTabla = $this->ProvedoresAsignados[$index]['precio_compra'];
         }
     }
 
@@ -260,5 +321,30 @@ class CreateItem extends Component
             $this->precioSeleccionadoEnTabla = null;
             $this->provedorSeleccionadoDeLaTabla = null;
         }
+    }
+
+    public function calcularPrecios()
+    {
+        // Manejar valores vacíos y convertirlos a números
+        $precioBase = (float) ($this->precioSeleccionadoEnTabla ?? 0);
+        $porcentajeMayorista = (float) ($this->porcentaje_venta_mayorista ?? 0);
+        $porcentajeMinorista = (float) ($this->porcentaje_venta_minorista ?? 0);
+
+        if ($precioBase > 0) {
+            // Calcular los precios mayorista y minorista
+            $this->precio_venta_mayorista = $precioBase + ($precioBase * ($porcentajeMayorista / 100));
+            $this->precio_venta_minorista = $precioBase + ($precioBase * ($porcentajeMinorista / 100));
+        } else {
+            // Si no hay precio base, los resultados son nulos
+            $this->precio_venta_mayorista = null;
+            $this->precio_venta_minorista = null;
+        }
+    }
+
+    public function handleKeydown($index)
+    {
+        // Ejecutar ambos métodos
+        $this->edcionDeTabalaProveedorPrecio($index);
+        $this->calcularPrecios();
     }
 }
