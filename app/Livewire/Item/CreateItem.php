@@ -9,13 +9,14 @@ use App\Models\ItemEspecificoHasFamilia;
 use App\Models\Proveedor;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\WithFileUploads;
+use App\CustomClases\ConexionProveedorItemTemporal;
 
 class CreateItem extends Component
 {
     use WithFileUploads;
-    public $openModalProveedores = true;
+    public $openModalProveedores = false;
     public $openModalFamilias = false;
-    public $nombre, $descripcion, $marca, $pz_Mayoreo, $pz_Minorista, $porcentaje_venta_minorista, $porcentaje_venta_mayorista, $precio_venta_minorista, $precio_venta_mayorista, $unidad, $ficha_Tecnica_pdf;
+    public $nombre, $descripcion, $marca, $pz_Mayoreo, $pz_Minorista, $porcentaje_venta_minorista, $porcentaje_venta_mayorista, $dtock, $precio_venta_minorista, $precio_venta_mayorista, $unidad, $ficha_Tecnica_pdf;
     public $proveedores = [];
     public $especificaciones = [['enunciado' => '', 'concepto' => '']];
     public $familias, $familiasSeleccionadas = [''];
@@ -25,8 +26,9 @@ class CreateItem extends Component
     public $fileNamePdf;
     public $unidadSeleccionada;
     public $seleccionProvedorModal;
+    public $seleccionProvedorModalNombre;
     public $searchTerm = '';
-    public $ProvedoresAsignados = [];
+
 
 
     public function mount()
@@ -86,7 +88,7 @@ class CreateItem extends Component
     }
 
 
-    
+
     public function render()
     {
         return view('livewire.item.create-item');
@@ -130,6 +132,7 @@ class CreateItem extends Component
             'precio_venta_minorista' => $this->precio_venta_minorista,
             'precio_venta_mayorista' => $this->precio_venta_mayorista,
             'unidad' => $this->unidad,
+            'stock' => $this->stock,
             'especificaciones' => json_encode($this->especificaciones), // Guardar como JSON
             'ficha_tecnica_pdf' => $ficha_Tecnica_pdf,
             'estado' => true,
@@ -180,10 +183,11 @@ class CreateItem extends Component
             $this->proveedores = [];
         }
     }
-        
-    public function asignarVlaor($id)
+
+    public function asignarValor($id, $name)
     {
         $this->seleccionProvedorModal = $id;
+        $this->seleccionProvedorModalNombre = $name;
     }
 
     public function asignarUnidad($unidad)
@@ -191,8 +195,73 @@ class CreateItem extends Component
         $this->unidadSeleccionada = $unidad;
     }
 
-    public function asignarProvedorArregloProvedor(){
-        
+    public $ProvedoresAsignados = [];
+    public $tiempoMinEntrega, $tiempoMaxEntrega, $precioCompra;
+
+
+    public function asignarProvedorArregloProvedor()
+    {
+        $conexion = new ConexionProveedorItemTemporal(
+            $this->seleccionProvedorModal,
+            $this->seleccionProvedorModalNombre,
+            $this->tiempoMinEntrega,
+            $this->tiempoMaxEntrega,
+            $this->precioCompra,
+            $this->unidadSeleccionada,
+            0
+        );
+
+        // Convertir el objeto a un array
+        $conexionArray = (array) $conexion;
+
+        // Almacenar el array en la propiedad de Livewire
+        $this->ProvedoresAsignados[] = $conexionArray;
+
+        // Limpiar los campos del formulario
+        $this->reset(['seleccionProvedorModalNombre', 'seleccionProvedorModal', 'tiempoMinEntrega', 'tiempoMaxEntrega', 'precioCompra', 'unidadSeleccionada', 'openModalProveedores']);
+    }
+    
+    
+    public $unidadSeleccionadaEnTabla;
+    public $precioSeleccionadoEnTabla;
+    public $provedorSeleccionadoDeLaTabla;
+
+    
+
+
+    public function seleccionarProveedor($index)
+    {
+        if ($this->provedorSeleccionadoDeLaTabla === $index) {
+            // Si el mismo proveedor ya está seleccionado, deseleccionarlo
+            $this->ProvedoresAsignados[$index]['estado'] = 0;
+            $this->provedorSeleccionadoDeLaTabla = null;
+            $this->unidadSeleccionadaEnTabla = null;
+            $this->precioSeleccionadoEnTabla = null;
+        } else {
+            // Deseleccionar cualquier otro proveedor
+            if ($this->provedorSeleccionadoDeLaTabla !== null) {
+                $this->ProvedoresAsignados[$this->provedorSeleccionadoDeLaTabla]['estado'] = 0;
+            }
+            // Seleccionar el nuevo proveedor
+            $this->ProvedoresAsignados[$index]['estado'] = 1;
+            $this->provedorSeleccionadoDeLaTabla = $index;
+            $this->unidadSeleccionadaEnTabla = $this->ProvedoresAsignados[$index]['unidad'];
+            $this->precioSeleccionadoEnTabla = $this->ProvedoresAsignados[$index]['precio_compra'];
+        }
     }
 
+    public function eliminarProveedor($index)
+    {
+        unset($this->ProvedoresAsignados[$index]);
+        $this->ProvedoresAsignados = array_values($this->ProvedoresAsignados); // Reindexar el array
+        // Si el proveedor eliminado estaba seleccionado, resetear los datos seleccionados
+        if ($this->provedorSeleccionadoDeLaTabla === $index) {
+            $this->unidadSeleccionadaEnTabla = null;
+            $this->precioSeleccionadoEnTabla = null;
+            $this->provedorSeleccionadoDeLaTabla = null;
+        }
+    }
+
+    
+    
 }

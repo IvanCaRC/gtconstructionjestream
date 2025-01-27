@@ -21,6 +21,7 @@ class ItemEspecifico extends Model
         'porcentaje_venta_mayorista',
         'precio_venta_minorista',
         'precio_venta_mayorista',
+        'stock',
         'unidad',
         'especificaciones',
         'ficha_tecnica_pdf',

@@ -74,9 +74,52 @@
                                         <label> Provedor</label>
                                         <div class="input-group mb-2">
 
-                                            <div class="no-familias-seleccionadas w-100">
-                                                No hay familias seleccionadas
-                                            </div>
+                                            @if (count($ProvedoresAsignados) > 0)
+                                                <table class="table">
+                                                    <thead>
+                                                        <tr>
+
+                                                            <th>Nombre</th>
+                                                            <th>Tiempo Mínimo de Entrega</th>
+                                                            <th>Tiempo Máximo de Entrega</th>
+                                                            <th>Precio de Compra</th>
+                                                            <th>Unidad</th>
+                                                            <th>Estado</th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+
+                                                        @foreach ($ProvedoresAsignados as $index => $conexion)
+                                                            @php
+                                                                $conexionObjeto = (object) $conexion;
+                                                            @endphp
+                                                            <tr>
+
+                                                                <td>{{ $conexionObjeto->proveedor_nombre }}</td>
+                                                                <td>{{ $conexionObjeto->tiempo_minimo_entrega }}</td>
+                                                                <td>{{ $conexionObjeto->tiempo_maximo_entrega }}</td>
+                                                                <td>{{ $conexionObjeto->precio_compra }}</td>
+                                                                <td>{{ $conexionObjeto->unidad }}{{ $conexionObjeto->estado }}</td>
+                                                                <td>
+                                                                    <input type="checkbox"
+                                                                        wire:click="seleccionarProveedor({{ $index }})"
+                                                                        {{ $conexionObjeto->estado == 1 ? 'checked' : '' }}>
+
+                                                                </td>
+                                                                <td><button
+                                                                        wire:click="eliminarProveedor({{ $index }})"
+                                                                        class="btn btn-danger">Eliminar</button>
+                                                                </td>
+                                                            </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+                                            @else
+                                                <div class="no-familias-seleccionadas w-100">
+                                                    No hay provedores seleccionadas
+                                                </div>
+                                            @endif
 
                                         </div>
                                         <button href="#" wire:click="montarModalProveedores()"
@@ -109,41 +152,48 @@
                                         <label for="unidad">Unidad</label>
                                         <label>{{ $unidad }}</label>
                                     </div>
-                                    <div class="form-group">
-                                        <div class="row">
-                                            <div class="col-md-2 mb-3">
-                                                <label for="cantidad_piezas_mayoreo" class="mr-2">Cant. Piezas
-                                                    Mayoreo</label>
-                                                <input type="number" id="cantidad_piezas_mayoreo" class="form-control"
-                                                    wire:model="pz_Mayoreo" required>
-                                            </div>
-                                            <div class="col-md-2 mb-3">
-                                                <label for="porcentaje_venta_mayorista" class="mr-2">% Venta
-                                                    Mayorista</label>
-                                                <input type="number" step="0.01" id="porcentaje_venta_mayorista"
-                                                    class="form-control" wire:model="porcentaje_venta_mayorista"
-                                                    required>
-                                            </div>
-                                            <div class="col-md-2 mb-3">
-                                                <label for="porcentaje_venta_minorista" class="mr-2">% Venta
-                                                    Minorista</label>
-                                                <input type="number" step="0.01" id="porcentaje_venta_minorista"
-                                                    class="form-control" wire:model="porcentaje_venta_minorista"
-                                                    required>
-                                            </div>
-                                            <div class="col-md-2 mb-3">
-                                                <label for="precio_venta_mayorista" class="mr-2">Precio
-                                                    Mayorista</label>
-                                                <label>{{ $precio_venta_mayorista }}Aqui va </label>
-                                            </div>
-                                            <div class="col-md-2 mb-3">
-                                                <label for="precio_venta_minorista" class="mr-2">Precio
-                                                    Minorista</label>
-                                                <label>{{ $precio_venta_minorista }}Aqui Va </label>
+                                    <label>{{ $unidadSeleccionadaEnTabla }}</label>
+                                    @if ($unidadSeleccionadaEnTabla)
+                                        <div class="form-group">
+                                            <div class="row">
+                                                <div class="col-md-2 mb-3">
+                                                    <label for="cantidad_piezas_mayoreo" class="mr-2">Cant. Piezas
+                                                        Mayoreo</label>
+                                                    <input type="number" id="cantidad_piezas_mayoreo"
+                                                        class="form-control" wire:model="pz_Mayoreo" required>
+                                                </div>
+                                                <div class="col-md-2 mb-3">
+                                                    <label for="porcentaje_venta_mayorista" class="mr-2">% Venta
+                                                        Mayorista</label>
+                                                    <input type="number" step="0.01" id="porcentaje_venta_mayorista"
+                                                        class="form-control" wire:model="porcentaje_venta_mayorista"
+                                                        required>
+                                                </div>
+                                                <div class="col-md-2 mb-3">
+                                                    <label for="porcentaje_venta_minorista" class="mr-2">% Venta
+                                                        Minorista</label>
+                                                    <input type="number" step="0.01" id="porcentaje_venta_minorista"
+                                                        class="form-control" wire:model="porcentaje_venta_minorista"
+                                                        required>
+                                                </div>
+                                                <div class="col-md-2 mb-3">
+                                                    <label for="precio_venta_mayorista" class="mr-2">Precio
+                                                        Mayorista</label>
+                                                    <label>{{ $precio_venta_mayorista }}Aqui va </label>
+                                                </div>
+                                                <div class="col-md-2 mb-3">
+                                                    <label for="precio_venta_minorista" class="mr-2">Precio
+                                                        Minorista</label>
+                                                    <label>{{ $precio_venta_minorista }}Aqui Va </label>
+                                                </div>
                                             </div>
                                         </div>
+                                    @endif
+                                    <div class="col-md-2 mb-3">
+                                        <label for="stock" class="mr-2">Stock Acutal del Producto</label>
+                                        <input type="number" id="cantidad_piezas_mayoreo" class="form-control"
+                                            wire:model="stock" required>
                                     </div>
-
                                     <div class="form-group">
                                         <label for="especificaciones">Especificaciones</label>
                                         <!-- Aquí puedes agregar cualquier contenido adicional que necesites -->
@@ -295,7 +345,8 @@
                                         <td>{{ $proveedor->direccion }}</td>
                                         <td>
                                             <button class="btn btn-secondary btn-custom"
-                                                wire:click="asignarVlaor({{ $proveedor->id }})">Selecionar</button>
+                                                wire:click="asignarValor({{ $proveedor->id }}, '{{ $proveedor->nombre }}')">Seleccionar</button>
+
                                         </td>
                                     </tr>
                                 @endforeach
@@ -309,6 +360,9 @@
                     @endif
                 @endif
             @else
+                <label for="proveedorNombre">Nombre del Proveedor Selecionado:</label>
+                <label id="proveedorNombre">{{ $seleccionProvedorModalNombre }}</label>
+
                 <div class="form-group">
                     <label for="tiempoMinEntrega">Tiempo mínimo de entrega (días)</label>
                     <input type="number" id="tiempoMinEntrega" wire:model="tiempoMinEntrega" class="form-control"
@@ -329,7 +383,8 @@
 
                 <div class="form-group">
                     <label for="unidad">Unidad</label>
-                    <select id="unidad" wire:model="unidadSeleccionada " class="form-control" required wire:change="asignarUnidad($event.target.value)">
+                    <select id="unidad" wire:model="unidadSeleccionada " class="form-control" required
+                        wire:change="asignarUnidad($event.target.value)">
                         <option value="">Seleccione una unidad</option>
                         <option value="pieza">Pieza</option>
                         <option value="kilo">Kilo</option>
@@ -353,7 +408,7 @@
             <button class="btn btn-secondary mr-2 disabled:opacity-50" wire:click="$set('openModalProveedores',false)"
                 wire:loading.attr="disabled">Cancelar</button>
             <button class="btn btn-primary disabled:opacity-50" wire:loading.attr="disabled"
-                wire:click="confirmFamilia">Agregar Proveedor</button>
+                wire:click="asignarProvedorArregloProvedor">Agregar Proveedor</button>
         </x-slot>
     </x-dialog-modal>
 
