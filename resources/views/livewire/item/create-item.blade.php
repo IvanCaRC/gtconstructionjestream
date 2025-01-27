@@ -78,14 +78,14 @@
                                                 <table class="table">
                                                     <thead>
                                                         <tr>
-
+                                                            <th></th>
                                                             <th>Nombre</th>
                                                             <th>Tiempo Mínimo de Entrega</th>
                                                             <th>Tiempo Máximo de Entrega</th>
                                                             <th>Precio de Compra</th>
                                                             <th>Unidad</th>
-                                                            <th>Estado</th>
                                                             <th></th>
+                                                            
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -95,18 +95,57 @@
                                                                 $conexionObjeto = (object) $conexion;
                                                             @endphp
                                                             <tr>
+                                                                <style>
+                                                                    .checkbox-btn {
+                                                                        display: inline-flex;
+                                                                        align-items: center;
+                                                                        justify-content: center;
+                                                                        width: 24px;
+                                                                        height: 24px;
+                                                                        border: 2px solid #ccc;
+                                                                        border-radius: 4px;
+                                                                        background-color: #fff;
+                                                                        cursor: pointer;
+                                                                        transition: all 0.2s ease;
+                                                                    }
 
+                                                                    .checkbox-btn.selected {
+                                                                        border-color: #4caf50;
+                                                                        background-color: #4caf50;
+                                                                        color: #fff;
+                                                                    }
+
+                                                                    .checkbox-btn:hover {
+                                                                        border-color: #999;
+                                                                    }
+
+                                                                    .checkbox-btn.selected:hover {
+                                                                        background-color: #45a045;
+                                                                        border-color: #45a045;
+                                                                    }
+
+                                                                    .checkbox-icon {
+                                                                        font-size: 16px;
+                                                                    }
+                                                                </style>
+
+                                                                <td>
+                                                                    <button
+                                                                        class="checkbox-btn {{ $conexionObjeto->estado == 1 ? 'selected' : '' }}"
+                                                                        wire:click="seleccionarProveedor({{ $index }}, '{{ $conexionObjeto->proveedor_nombre }}')">
+                                                                        @if ($conexionObjeto->estado == 1)
+                                                                            <span class="checkbox-icon">✓</span>
+                                                                        @endif
+                                                                    </button>
+
+                                                                </td>
                                                                 <td>{{ $conexionObjeto->proveedor_nombre }}</td>
                                                                 <td>{{ $conexionObjeto->tiempo_minimo_entrega }}</td>
                                                                 <td>{{ $conexionObjeto->tiempo_maximo_entrega }}</td>
                                                                 <td>{{ $conexionObjeto->precio_compra }}</td>
-                                                                <td>{{ $conexionObjeto->unidad }}{{ $conexionObjeto->estado }}</td>
-                                                                <td>
-                                                                    <input type="checkbox"
-                                                                        wire:click="seleccionarProveedor({{ $index }})"
-                                                                        {{ $conexionObjeto->estado == 1 ? 'checked' : '' }}>
-
+                                                                <td>{{ $conexionObjeto->unidad }}
                                                                 </td>
+                                                                
                                                                 <td><button
                                                                         wire:click="eliminarProveedor({{ $index }})"
                                                                         class="btn btn-danger">Eliminar</button>
@@ -150,10 +189,11 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="unidad">Unidad</label>
-                                        <label>{{ $unidad }}</label>
+                                        <label>{{ $unidadSeleccionadaEnTabla }}</label>
                                     </div>
-                                    <label>{{ $unidadSeleccionadaEnTabla }}</label>
-                                    @if ($unidadSeleccionadaEnTabla)
+                                   
+                                    @if ($provedorSeleccionadoDeLaTabla)
+                                    <label>El parametro por el que se hacen los calculos se basan en el proveedor{{ $provedorSeleccionadoDeLaTabla }}</label>
                                         <div class="form-group">
                                             <div class="row">
                                                 <div class="col-md-2 mb-3">
