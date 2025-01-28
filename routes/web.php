@@ -71,3 +71,5 @@ Route::get('compras/proveedores/viewProveedorEspecifico/{idproveedor}', [Proveed
 Route::get('compras/proveedores/editProveedores/{idproveedor}', [ProveedorController::class, 'editProveedor'])
     ->middleware('auth', 'nocache')
     ->name('compras.proveedores.editProveedores');
+
+Route::get('compras/items/edicionItem/{idItem}', [ItemController::class, 'editItem'])->middleware('auth', 'nocache')->name('compras.items.edicionItem');

@@ -17,4 +17,9 @@ class ItemController extends Controller
         // Retornar la vista de la lista de proveedores
         return view('compras.items.createItems');
     }
+
+    public function editItem($idItem)
+    {
+        return view('compras.items.edicionItem', ['idItem' => $idItem]);
+    }
 }

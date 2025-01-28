@@ -2,18 +2,21 @@
 
 namespace App\Livewire\Item;
 
-use App\Models\Familia;
 use App\Models\Item;
 use App\Models\ItemEspecifico;
+use Livewire\Component;
+
+use App\Models\Familia;
 use App\Models\ItemEspecificoHasFamilia;
 use App\Models\Proveedor;
-use Livewire\Component;
 use Livewire\Features\SupportFileUploads\WithFileUploads;
 use App\CustomClases\ConexionProveedorItemTemporal;
 use Illuminate\Support\Facades\DB;
 
-class CreateItem extends Component
+class EditItem extends Component
 {
+    public $item;
+    public $itemEspecifico;
     use WithFileUploads;
     public $openModalProveedores = false;
     public $openModalFamilias = false;
@@ -31,18 +34,23 @@ class CreateItem extends Component
     public $searchTerm = '';
     public $nuevasImagenes = [];
 
-    public function render()
+    public function mount($idItem)
     {
-        return view('livewire.item.create-item');
-    }
+        // Buscar el registro de ItemEspecifico
+        $this->itemEspecifico = ItemEspecifico::findOrFail($idItem);
 
-    public function mount()
-    {
+        // Buscar el registro de Item relacionado
+        $this->item = Item::findOrFail($this->itemEspecifico->item_id);
         $this->niveles[1] = Familia::whereNull('id_familia_padre')
             ->where('estadoEliminacion', 0)
             ->get();
         $this->familiasSeleccionadas = []; // Inicializar como arreglo vacío
         $this->actualizarProveedores();
+    }
+
+    public function render()
+    {
+        return view('livewire.item.edit-item');
     }
 
     public function calcularSubfamilias($idFamiliaSeleccionada, $nivel)
@@ -97,81 +105,76 @@ class CreateItem extends Component
         $this->reset(['searchTerm', 'seleccionProvedorModalNombre', 'seleccionProvedorModal', 'tiempoMinEntrega', 'tiempoMaxEntrega', 'precioCompra', 'unidadSeleccionada', 'openModalProveedores']);
     }
 
-
-
-    
-
-
     public function save()
     {
-        $porcentajeVentaMinorista = (float) ($this->porcentaje_venta_minorista ?? 0);
-        $porcentajeVentaMayorista = (float) ($this->porcentaje_venta_mayorista ?? 0);
+        // $porcentajeVentaMinorista = (float) ($this->porcentaje_venta_minorista ?? 0);
+        // $porcentajeVentaMayorista = (float) ($this->porcentaje_venta_mayorista ?? 0);
 
-        $ficha_Tecnica_pdf = null;
-        if ($this->ficha_Tecnica_pdf) {
-            $ficha_Tecnica_pdf = $this->ficha_Tecnica_pdf->store('archivosFacturacionProveedores', 'public');
-        }
-        // Crear el nuevo Item
-        $item = Item::create([
-            'nombre' => $this->nombre,
-            'descripcion' => $this->descripcion,
-        ]);
+        // $ficha_Tecnica_pdf = null;
+        // if ($this->ficha_Tecnica_pdf) {
+        //     $ficha_Tecnica_pdf = $this->ficha_Tecnica_pdf->store('archivosFacturacionProveedores', 'public');
+        // }
+        // // Crear el nuevo Item
+        // $item = Item::create([
+        //     'nombre' => $this->nombre,
+        //     'descripcion' => $this->descripcion,
+        // ]);
 
-        $imagenes = [];
+        // $imagenes = [];
 
-        if ($this->image) {
-            foreach ($this->image as $key => $imageI) {
-                $imagenes[] = $imageI->store('imagenesItems', 'public');
-            }
-        }
+        // if ($this->image) {
+        //     foreach ($this->image as $key => $imageI) {
+        //         $imagenes[] = $imageI->store('imagenesItems', 'public');
+        //     }
+        // }
 
-        // Convertir el array de imágenes a una cadena delimitada por comas o null si está vacío
-        $imagenesString = !empty($imagenes) ? implode(',', $imagenes) : null;
+        // // Convertir el array de imágenes a una cadena delimitada por comas o null si está vacío
+        // $imagenesString = !empty($imagenes) ? implode(',', $imagenes) : null;
 
 
-        $itemEspe = ItemEspecifico::create([
-            'item_id' => $item->id,
-            'image' => $imagenesString,
-            'marca' => $this->marca,
-            'cantidad_piezas_mayoreo' => $this->pz_Mayoreo,
-            'cantidad_piezas_minorista' => $this->pz_Mayoreo - 1,
-            'porcentaje_venta_minorista' => $porcentajeVentaMinorista,
-            'porcentaje_venta_mayorista' => $porcentajeVentaMayorista,
-            'precio_venta_minorista' => $this->precio_venta_minorista,
-            'precio_venta_mayorista' => $this->precio_venta_mayorista,
-            'unidad' => $this->unidadSeleccionadaEnTabla,
-            'stock' => $this->stock,
-            'especificaciones' => json_encode($this->especificaciones), // Guardar como JSON
-            'ficha_tecnica_pdf' => $ficha_Tecnica_pdf,
-            'estado' => true,
-            'estado_eliminacion' => true,
-        ]);
+        // $itemEspe = ItemEspecifico::create([
+        //     'item_id' => $item->id,
+        //     'image' => $imagenesString,
+        //     'marca' => $this->marca,
+        //     'cantidad_piezas_mayoreo' => $this->pz_Mayoreo,
+        //     'cantidad_piezas_minorista' => $this->pz_Mayoreo - 1,
+        //     'porcentaje_venta_minorista' => $porcentajeVentaMinorista,
+        //     'porcentaje_venta_mayorista' => $porcentajeVentaMayorista,
+        //     'precio_venta_minorista' => $this->precio_venta_minorista,
+        //     'precio_venta_mayorista' => $this->precio_venta_mayorista,
+        //     'unidad' => $this->unidadSeleccionadaEnTabla,
+        //     'stock' => $this->stock,
+        //     'especificaciones' => json_encode($this->especificaciones), // Guardar como JSON
+        //     'ficha_tecnica_pdf' => $ficha_Tecnica_pdf,
+        //     'estado' => true,
+        //     'estado_eliminacion' => true,
+        // ]);
 
-        foreach ($this->familiasSeleccionadas as $familia) {
-            if (is_object($familia) && get_class($familia) === Familia::class) {
-                ItemEspecificoHasFamilia::create([
-                    'item_especifico_id' => $itemEspe->id,
-                    'familia_id' => $familia->id, // Acceder al ID de la familia
-                ]);
-            }
-        }
+        // foreach ($this->familiasSeleccionadas as $familia) {
+        //     if (is_object($familia) && get_class($familia) === Familia::class) {
+        //         ItemEspecificoHasFamilia::create([
+        //             'item_especifico_id' => $itemEspe->id,
+        //             'familia_id' => $familia->id, // Acceder al ID de la familia
+        //         ]);
+        //     }
+        // }
 
-        foreach ($this->ProvedoresAsignados as $proveedor) {
-            // Asegurarnos de que el arreglo contiene los datos necesarios
-            if (isset($proveedor['proveedor_id'], $proveedor['tiempo_minimo_entrega'], $proveedor['tiempo_maximo_entrega'], $proveedor['precio_compra'], $proveedor['unidad'], $proveedor['estado'])) {
-                DB::table('item_especifico_proveedor')->insert([
-                    'item_especifico_id' => $itemEspe->id,
-                    'proveedor_id' => $proveedor['proveedor_id'],
-                    'tiempo_min_entrega' => $proveedor['tiempo_minimo_entrega'],
-                    'tiempo_max_entrega' => $proveedor['tiempo_maximo_entrega'],
-                    'unidad' => $proveedor['unidad'],
-                    'precio_compra' => $proveedor['precio_compra'],
-                    'estado' => $proveedor['estado'], // Estado actual del proveedor
-                    'created_at' => now(),
-                    'updated_at' => now(),
-                ]);
-            }
-        }
+        // foreach ($this->ProvedoresAsignados as $proveedor) {
+        //     // Asegurarnos de que el arreglo contiene los datos necesarios
+        //     if (isset($proveedor['proveedor_id'], $proveedor['tiempo_minimo_entrega'], $proveedor['tiempo_maximo_entrega'], $proveedor['precio_compra'], $proveedor['unidad'], $proveedor['estado'])) {
+        //         DB::table('item_especifico_proveedor')->insert([
+        //             'item_especifico_id' => $itemEspe->id,
+        //             'proveedor_id' => $proveedor['proveedor_id'],
+        //             'tiempo_min_entrega' => $proveedor['tiempo_minimo_entrega'],
+        //             'tiempo_max_entrega' => $proveedor['tiempo_maximo_entrega'],
+        //             'unidad' => $proveedor['unidad'],
+        //             'precio_compra' => $proveedor['precio_compra'],
+        //             'estado' => $proveedor['estado'], // Estado actual del proveedor
+        //             'created_at' => now(),
+        //             'updated_at' => now(),
+        //         ]);
+        //     }
+        // }
 
         return true;
     }

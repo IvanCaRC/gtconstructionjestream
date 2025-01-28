@@ -73,19 +73,18 @@
                                         </td>
                                         <td>
                                             <button class="btn btn-primary btn-custom"
-                                                onclick="window.location.href='{{ route('compras.proveedores.createProveedores') }}'">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
+                                            wire:click="editItem({{ $itemEspecifico->id }})"><i
+                                                class="fas fa-edit"></i></button>
                                         </td>
                                         <td>
                                             <button class="btn btn-danger btn-custom"
-                                                onclick="confirmDeletion({{ $itemEspecifico->id }}, '{{ $itemEspecifico->nombre }}')">
+                                                onclick="confirmDeletion({{ $itemEspecifico->id }}, '{{ $item->nombre  }}')">
                                                 <i class="fas fa-trash-alt"></i>
                                             </button>
                                             <script>
                                                 function confirmDeletion(itemEspecificoId, itemEspecificoNombre) {
                                                     Swal.fire({
-                                                        title: `¿Estás seguro de que deseas eliminar a: ${itemEspecificoNombre}?`,
+                                                        title: `¿Estás seguro de que deseas eliminar  ${itemEspecificoNombre}?`,
                                                         text: "¡No podrás revertir esto!",
                                                         icon: 'warning',
                                                         showCancelButton: true,

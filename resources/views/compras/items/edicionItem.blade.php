@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Crear Item')
+@section('title', 'Edicion Item')
 @section('activedesplegablefamilias', 'active')
 @section('activeCollapseCompras', 'show')
 @section('activeMateriales', 'active')
@@ -130,6 +130,6 @@
         .file-input {
             display: none;
         }
-    </style>
-    @livewire('item.create-item')
+    </style> 
+    @livewire('item.edit-item', ['idItem' => $idItem])
 @endsection
