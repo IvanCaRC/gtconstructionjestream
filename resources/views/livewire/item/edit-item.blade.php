@@ -30,14 +30,19 @@
 
                                         <div class="form-group text-center mt-3">
 
+                                            @foreach ($familiasSeleccionadas as $index => $famm)
+                                                <!-- Muestra el contenido del arreglo en un <label> -->
+                                                <label> {{ $famm['nombre'] }} {{ $famm['id'] }}</label><br>
+                                            @endforeach
+
                                             @if ($imagenesCargadas)
                                                 @foreach ($imagenesCargadas as $index => $imaCarg)
                                                     <div class="mi-div"
                                                         style="padding: 20px; display: inline-block; position: relative;">
                                                         <img src="{{ asset('storage/' . $imaCarg) }}" alt="Imagen"
                                                             class="imagen-cuadrada">
-                                                            
-                                                        <button wire:click="eliminarImagen({{ $index }})"
+
+                                                        <button wire:click="eliminarImagenActual({{ $index }})"
                                                             class="btn btn-danger btn-sm"
                                                             style="position: absolute; top: 5px; right: 5px;">
                                                             &times;
@@ -58,7 +63,7 @@
                                                         </button>
                                                     </div>
                                                 @endforeach
-                                            @endif                                            
+                                            @endif
                                             @if (!$image && !$imagenesCargadas)
                                                 <div class="imagen-predeterminada">
                                                     <span class="file-upload-icon">&#128247;</span>
@@ -223,7 +228,7 @@
                                         <div class="col-md-4 mb-3">
                                             <label for="stock" class="mr-2">Stock Acutal del Producto</label>
                                             <input type="number" id="cantidad_piezas_mayoreo" class="form-control"
-                                            wire:model.defer="itemEspecificoEdit.stock" required>
+                                                wire:model.defer="itemEspecificoEdit.stock" required>
                                         </div>
 
                                     </div>
@@ -240,7 +245,7 @@
                                                         wire:model.defer="itemEspecificoEdit.cantidad_piezas_mayoreo"
                                                         required>
                                                 </div>
-                                                
+
                                                 <div class="col-md-2 mb-3">
                                                     <label for="porcentaje_venta_mayorista" class="mr-2">% Venta
                                                         Mayorista</label>
@@ -340,7 +345,8 @@
                                         @endif
                                     </div>
 
-                                    <button type="button" onclick="confirmSave()" class="btn btn-primary mt-3">Actualizar Item</button>
+                                    <button type="button" onclick="confirmSave()"
+                                        class="btn btn-primary mt-3">Actualizar Item</button>
                                 </div>
                             </div>
                         </div>

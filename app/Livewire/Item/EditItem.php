@@ -21,7 +21,7 @@ class EditItem extends Component
     use WithFileUploads;
     public $openModalProveedores = false;
     public $openModalFamilias = false;
-    public $image = [];
+
     public $nombre, $descripcion, $marca, $stock, $pz_Mayoreo,
         $pz_Minorista, $porcentaje_venta_minorista, $porcentaje_venta_mayorista,
         $dtock, $precio_venta_minorista, $precio_venta_mayorista, $unidad, $ficha_Tecnica_pdf;
@@ -31,6 +31,7 @@ class EditItem extends Component
 
     public $niveles = []; // Array para almacenar las familias de cada nivel
     public $seleccionadas = []; // Array para almacenar las opciones seleccionadas de familia
+    public $image = [];
     public $imagenesCargadas = [];
 
     public $fileNamePdf;
@@ -56,6 +57,7 @@ class EditItem extends Component
         'estado' => '',
         'estado_eliminacion' => '',
     ];
+    public $ficahaTecnicaArchivoActual;
 
     public function cargarProvedoresParaEditar($idItem)
     {
@@ -88,20 +90,14 @@ class EditItem extends Component
         // Buscar el registro de Item relacionado
         $this->item = Item::findOrFail($this->itemEspecifico->item_id);
         //falta cargar imagenes
-
         //Falta cargar especificaciones
         $this->itemEdit['id'] = $this->item->id;
         $this->itemEdit['nombre'] = $this->item->nombre;
         $this->itemEdit['descripcion'] = $this->item->descripcion;
         $this->itemEspecificoEdit['id'] = $this->itemEspecifico->id;
         $this->itemEspecificoEdit['item_id'] = $this->itemEspecifico->item_id;
-
         $this->imagenesCargadas = explode(',', $this->itemEspecifico->image); // Dividir la cadena en un array
-
-
-
         $this->itemEspecificoEdit['marca'] = $this->itemEspecifico->marca;
-
         $this->cargarProvedoresParaEditar($idItem);
         $this->familiasSeleccionadas = ItemEspecificoHasFamilia::where('item_especifico_id', $idItem)
             ->with('familia')
@@ -113,24 +109,16 @@ class EditItem extends Component
         $this->itemEspecificoEdit['cantidad_piezas_minorista'] = $this->itemEspecifico->cantidad_piezas_minorista;
         $this->porcentaje_venta_minorista = $this->itemEspecifico->porcentaje_venta_minorista;
         $this->porcentaje_venta_mayorista = $this->itemEspecifico->porcentaje_venta_mayorista;
-
         $this->precio_venta_minorista = $this->itemEspecifico->precio_venta_minorista;
         $this->precio_venta_mayorista = $this->itemEspecifico->precio_venta_mayorista;
-
         $this->especificaciones = json_decode($this->itemEspecifico->especificaciones, true);
-
-        $this->itemEspecificoEdit['ficha_tecnica_pdf'] = $this->itemEspecifico->ficha_tecnica_pdf;
+        $this->ficahaTecnicaArchivoActual = $this->itemEspecifico->ficha_tecnica_pdf;
+        $this->ficha_Tecnica_pdf = $this->itemEspecifico->ficha_tecnica_pdf;
         $this->itemEspecificoEdit['estado'] = $this->itemEspecifico->estado;
         $this->itemEspecificoEdit['estado_eliminacion'] = $this->itemEspecifico->estado_eliminacion;
-
-        
-
-
-
         $this->niveles[1] = Familia::whereNull('id_familia_padre')
             ->where('estadoEliminacion', 0)
             ->get();
-
         $this->actualizarProveedores();
     }
 
@@ -193,74 +181,112 @@ class EditItem extends Component
 
     public function save()
     {
-        // $porcentajeVentaMinorista = (float) ($this->porcentaje_venta_minorista ?? 0);
-        // $porcentajeVentaMayorista = (float) ($this->porcentaje_venta_mayorista ?? 0);
+        $itemActual = Item::findOrFail($this->item->id);
+        $itemEspecificoActual = ItemEspecifico::findOrFail($this->itemEspecifico->id);
 
-        // $ficha_Tecnica_pdf = null;
-        // if ($this->ficha_Tecnica_pdf) {
-        //     $ficha_Tecnica_pdf = $this->ficha_Tecnica_pdf->store('archivosFacturacionProveedores', 'public');
-        // }
-        // // Crear el nuevo Item
-        // $item = Item::create([
-        //     'nombre' => $this->nombre,
-        //     'descripcion' => $this->descripcion,
-        // ]);
+        $porcentajeVentaMinorista = (float) ($this->porcentaje_venta_minorista ?? 0);
+        $porcentajeVentaMayorista = (float) ($this->porcentaje_venta_mayorista ?? 0);
 
-        // $imagenes = [];
+        $ficha_Tecnica_pdf = null;
+        if ($this->ficha_Tecnica_pdf) {
+            if ($this->ficha_Tecnica_pdf == $this->ficahaTecnicaArchivoActual) {
+                $ficha_Tecnica_pdf = $this->ficha_Tecnica_pdf;
+            } else {
+                $ficha_Tecnica_pdf = $this->ficha_Tecnica_pdf->store('archivosFacturacionProveedores', 'public');
+            }
+        }
 
-        // if ($this->image) {
-        //     foreach ($this->image as $key => $imageI) {
-        //         $imagenes[] = $imageI->store('imagenesItems', 'public');
-        //     }
-        // }
+        $itemActual->update([
+            'nombre' => $this->itemEdit['nombre'],
+            'descripcion' => $this->itemEdit['descripcion'],
+        ]);
 
-        // // Convertir el array de imágenes a una cadena delimitada por comas o null si está vacío
-        // $imagenesString = !empty($imagenes) ? implode(',', $imagenes) : null;
+        $imagenes = [];
+
+        if ($this->image) {
+            foreach ($this->image as $key => $imageI) {
+                $imagenes[] = $imageI->store('imagenesItems', 'public');
+            }
+        }
 
 
-        // $itemEspe = ItemEspecifico::create([
-        //     'item_id' => $item->id,
-        //     'image' => $imagenesString,
-        //     'marca' => $this->marca,
-        //     'cantidad_piezas_mayoreo' => $this->pz_Mayoreo,
-        //     'cantidad_piezas_minorista' => $this->pz_Mayoreo - 1,
-        //     'porcentaje_venta_minorista' => $porcentajeVentaMinorista,
-        //     'porcentaje_venta_mayorista' => $porcentajeVentaMayorista,
-        //     'precio_venta_minorista' => $this->precio_venta_minorista,
-        //     'precio_venta_mayorista' => $this->precio_venta_mayorista,
-        //     'unidad' => $this->unidadSeleccionadaEnTabla,
-        //     'stock' => $this->stock,
-        //     'especificaciones' => json_encode($this->especificaciones), // Guardar como JSON
-        //     'ficha_tecnica_pdf' => $ficha_Tecnica_pdf,
-        //     'estado' => true,
-        //     'estado_eliminacion' => true,
-        // ]);
+        $areglosumado = array_merge($this->imagenesCargadas, $this->image);
 
-        // foreach ($this->familiasSeleccionadas as $familia) {
-        //     if (is_object($familia) && get_class($familia) === Familia::class) {
-        //         ItemEspecificoHasFamilia::create([
-        //             'item_especifico_id' => $itemEspe->id,
-        //             'familia_id' => $familia->id, // Acceder al ID de la familia
-        //         ]);
-        //     }
-        // }
+        // Convertir el array combinado a una cadena delimitada por comas o null si está vacío
+        $imagenesString = !empty($areglosumado) ? implode(',', $areglosumado) : null;
 
-        // foreach ($this->ProvedoresAsignados as $proveedor) {
-        //     // Asegurarnos de que el arreglo contiene los datos necesarios
-        //     if (isset($proveedor['proveedor_id'], $proveedor['tiempo_minimo_entrega'], $proveedor['tiempo_maximo_entrega'], $proveedor['precio_compra'], $proveedor['unidad'], $proveedor['estado'])) {
-        //         DB::table('item_especifico_proveedor')->insert([
-        //             'item_especifico_id' => $itemEspe->id,
-        //             'proveedor_id' => $proveedor['proveedor_id'],
-        //             'tiempo_min_entrega' => $proveedor['tiempo_minimo_entrega'],
-        //             'tiempo_max_entrega' => $proveedor['tiempo_maximo_entrega'],
-        //             'unidad' => $proveedor['unidad'],
-        //             'precio_compra' => $proveedor['precio_compra'],
-        //             'estado' => $proveedor['estado'], // Estado actual del proveedor
-        //             'created_at' => now(),
-        //             'updated_at' => now(),
-        //         ]);
-        //     }
-        // }
+
+        $itemEspecificoActual->update([
+            'image' => $imagenesString,
+            'marca' => $this->itemEspecificoEdit['marca'],
+
+            'cantidad_piezas_mayoreo' => $this->itemEspecificoEdit['cantidad_piezas_mayoreo'],
+            'cantidad_piezas_minorista' => $this->itemEspecificoEdit['cantidad_piezas_mayoreo'] - 1,
+            'porcentaje_venta_minorista' => $porcentajeVentaMinorista,
+            'porcentaje_venta_mayorista' => $porcentajeVentaMayorista,
+            'precio_venta_minorista' => $this->precio_venta_minorista,
+            'precio_venta_mayorista' => $this->precio_venta_mayorista,
+
+            'unidad' => $this->unidadSeleccionadaEnTabla,
+            'stock' => $this->itemEspecificoEdit['stock'],
+            'especificaciones' => json_encode($this->especificaciones), // Guardar como JSON
+            'ficha_tecnica_pdf' => $ficha_Tecnica_pdf,
+            'estado' => true,
+        ]);
+
+        $famliasActualesSelecionadas = $this->familiasSeleccionadas;
+
+
+        ItemEspecificoProveedor::where('item_especifico_id', $itemEspecificoActual->id)->delete();
+
+
+
+        
+            // Obtener las familias actuales relacionadas con el item específico
+            $familiasActuales = ItemEspecificoHasFamilia::where('item_especifico_id', $itemEspecificoActual->id)
+                ->pluck('familia_id')
+                ->toArray();
+        
+            // Obtener las IDs de las familias seleccionadas
+            $familiasSeleccionadasIds = array_map(function ($familia) {
+                return $familia['id'];
+            }, $this->familiasSeleccionadas);
+
+
+        
+            // Comparar y actualizar familias si hay cambios
+            if ($familiasActuales !== $familiasSeleccionadasIds) {
+                // Eliminar relaciones antiguas
+                ItemEspecificoHasFamilia::where('item_especifico_id', $itemEspecificoActual->id)->delete();
+        
+                // Crear las nuevas relaciones
+                foreach ($familiasSeleccionadasIds as $familia_id) {
+                    ItemEspecificoHasFamilia::create([
+                        'item_especifico_id' => $itemEspecificoActual->id,
+                        'familia_id' => $familia_id,
+                    ]);
+                }
+            }
+        
+        
+
+
+        foreach ($this->ProvedoresAsignados as $proveedor) {
+            // Asegurarnos de que el arreglo contiene los datos necesarios
+            if (isset($proveedor['proveedor_id'], $proveedor['tiempo_minimo_entrega'], $proveedor['tiempo_maximo_entrega'], $proveedor['precio_compra'], $proveedor['unidad'], $proveedor['estado'])) {
+                DB::table('item_especifico_proveedor')->insert([
+                    'item_especifico_id' => $itemEspecificoActual->id,
+                    'proveedor_id' => $proveedor['proveedor_id'],
+                    'tiempo_min_entrega' => $proveedor['tiempo_minimo_entrega'],
+                    'tiempo_max_entrega' => $proveedor['tiempo_maximo_entrega'],
+                    'unidad' => $proveedor['unidad'],
+                    'precio_compra' => $proveedor['precio_compra'],
+                    'estado' => $proveedor['estado'], // Estado actual del proveedor
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]);
+            }
+        }
 
         return true;
     }
@@ -298,10 +324,13 @@ class EditItem extends Component
         $this->image = array_values($this->image);
     }
 
-    public function eliminarImagenes()
+    public function eliminarImagenActual($index)
     {
-        // Eliminar todas las imágenes
-        $this->image = [];
+        // Eliminar la imagen específica del arreglo
+        unset($this->imagenesCargadas[$index]);
+
+        // Reindexar el arreglo para mantener consistencia
+        $this->imagenesCargadas = array_values($this->imagenesCargadas);
     }
 
 
