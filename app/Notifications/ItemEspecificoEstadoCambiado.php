@@ -4,9 +4,7 @@ namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Messages\BroadcastMessage;
+use Illuminate\Support\Facades\Log;
 
 class ItemEspecificoEstadoCambiado extends Notification
 {
@@ -24,10 +22,15 @@ class ItemEspecificoEstadoCambiado extends Notification
 
     public function toArray($notifiable)
     {
+        // Generar la URL manualmente con 127.0.0.1
+        $url = 'http://127.0.0.1:8000/compras/items/viewItems';
+        Log::info('Generando URL para ItemEspecificoEstadoCambiado: ' . $url);
+
         return [
-            'message' => 'Un item se encuentra desactualizado',
-            'url' => url('/'), // Puedes agregar más detalles si es necesario
+            'message' => 'El estado de un item se encuentra desactualizado',
+            'url' => $url
         ];
     }
 }
+
 
