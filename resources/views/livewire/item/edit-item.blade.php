@@ -6,7 +6,7 @@
             <div>
                 <div class="card">
                     <div class="card-header">
-                        <h2>Edit Ítem  {{$item->nombre}}</h2>
+                        <h2>Edit Ítem {{ $item->nombre }}</h2>
                     </div>
                     <div class="card-body">
 
@@ -19,51 +19,73 @@
                                         <div class="text-center">
                                             <label class="btn btn-secondary btn-file">
                                                 Elegir archivo
-                                                <input type="file" wire:model="nuevasImagenes" name="imagen" accept="image/*"
-                                                    style="display: none;" multiple>
+
+                                                <input type="file" wire:model="nuevasImagenes" name="imagen"
+                                                    accept="image/*" style="display: none;" multiple>
                                             </label>
                                             @error('nuevasImagenes')
                                                 <span class="invalid-feedback">{{ $message }}</span>
                                             @enderror
                                         </div>
-                                
+
                                         <div class="form-group text-center mt-3">
-                                            @if ($image)
-                                                @foreach ($image as $index => $ima)
-                                                    <div class="mi-div" style="padding: 20px; display: inline-block; position: relative;">
-                                                        <img src="{{ $ima->temporaryUrl() }}" alt="Imagen" class="imagen-cuadrada">
-                                                        <button wire:click="eliminarImagen({{ $index }})" class="btn btn-danger btn-sm"
+
+                                            @if ($imagenesCargadas)
+                                                @foreach ($imagenesCargadas as $index => $imaCarg)
+                                                    <div class="mi-div"
+                                                        style="padding: 20px; display: inline-block; position: relative;">
+                                                        <img src="{{ asset('storage/' . $imaCarg) }}" alt="Imagen"
+                                                            class="imagen-cuadrada">
+                                                            
+                                                        <button wire:click="eliminarImagen({{ $index }})"
+                                                            class="btn btn-danger btn-sm"
                                                             style="position: absolute; top: 5px; right: 5px;">
                                                             &times;
                                                         </button>
                                                     </div>
                                                 @endforeach
-                                            @else
+                                            @endif
+                                            @if ($image)
+                                                @foreach ($image as $index => $ima)
+                                                    <div class="mi-div"
+                                                        style="padding: 20px; display: inline-block; position: relative;">
+                                                        <img src="{{ $ima->temporaryUrl() }}" alt="Imagen"
+                                                            class="imagen-cuadrada">
+                                                        <button wire:click="eliminarImagen({{ $index }})"
+                                                            class="btn btn-danger btn-sm"
+                                                            style="position: absolute; top: 5px; right: 5px;">
+                                                            &times;
+                                                        </button>
+                                                    </div>
+                                                @endforeach
+                                            @endif                                            
+                                            @if (!$image && !$imagenesCargadas)
                                                 <div class="imagen-predeterminada">
                                                     <span class="file-upload-icon">&#128247;</span>
-                                                    <span class="file-upload-text">Sube tu imagen con el botón "Elegir archivo"</span>
+                                                    <span class="file-upload-text">Sube tu imagen con el botón "Elegir
+                                                        archivo"</span>
                                                 </div>
                                             @endif
                                         </div>
                                     </div>
                                 </div>
-                                
+
 
                                 <!-- Área del formulario -->
                                 <div class="col-md-8">
                                     <div class="form-group">
                                         <label for="nombre">Nombre</label>
-                                        <input type="text" id="nombre" class="form-control" wire:model="nombre"
-                                            required>
+                                        <input type="text" id="nombre" class="form-control"
+                                            wire:model.defer="itemEdit.nombre" required>
                                     </div>
                                     <div class="form-group">
                                         <label for="descripcion">Descripción</label>
-                                        <textarea id="descripcion" class="form-control" wire:model="descripcion"></textarea>
+                                        <textarea id="descripcion" class="form-control" wire:model.defer="itemEdit.descripcion"></textarea>
                                     </div>
                                     <div class="form-group">
                                         <label for="marca">Marca</label>
-                                        <input type="text" id="marca" class="form-control" wire:model="marca"
-                                            required>
+                                        <input type="text" id="marca" class="form-control"
+                                            wire:model.defer="itemEspecificoEdit.marca" required>
                                     </div>
                                     <div class="form-group">
                                         <label> Provedor</label>
@@ -176,7 +198,7 @@
                                                 @foreach ($familiasSeleccionadas as $index => $familia)
                                                     <div class="w-100 d-flex align-items-center mb-2">
                                                         <div class="flex-grow-1">
-                                                            {{ $familia->nombre }}
+                                                            {{ $familia['nombre'] }}
                                                         </div>
                                                         <button type="button"
                                                             wire:click="removeFamilia({{ $index }})"
@@ -201,9 +223,9 @@
                                         <div class="col-md-4 mb-3">
                                             <label for="stock" class="mr-2">Stock Acutal del Producto</label>
                                             <input type="number" id="cantidad_piezas_mayoreo" class="form-control"
-                                                wire:model="stock" required>
+                                            wire:model.defer="itemEspecificoEdit.stock" required>
                                         </div>
-                                        
+
                                     </div>
 
                                     @if ($provedorSeleccionadoDeLaTabla)
@@ -215,8 +237,10 @@
                                                     <label for="cantidad_piezas_mayoreo" class="mr-2">Cant. Piezas
                                                         Mayoreo</label>
                                                     <input id="cantidad_piezas_mayoreo" class="form-control"
-                                                        wire:model="pz_Mayoreo" required>
+                                                        wire:model.defer="itemEspecificoEdit.cantidad_piezas_mayoreo"
+                                                        required>
                                                 </div>
+                                                
                                                 <div class="col-md-2 mb-3">
                                                     <label for="porcentaje_venta_mayorista" class="mr-2">% Venta
                                                         Mayorista</label>
@@ -233,15 +257,15 @@
                                                         wire:keydown='calcularPrecios' required>
                                                 </div>
 
-                                                <div class="col-md-2 mb-3">
-                                                    <label for="precio_venta_mayorista" class="mr-2">Precio
+                                                <div class="col-md-3 mb-3">
+                                                    <label for="precio_venta_mayorista" class="mr-2"><br>Precio
                                                         Mayorista</label>
                                                     <label
                                                         class="form-control">{{ $precio_venta_mayorista ?? 'N/A' }}</label>
                                                 </div>
 
-                                                <div class="col-md-2 mb-3">
-                                                    <label for="precio_venta_minorista" class="mr-2">Precio
+                                                <div class="col-md-3 mb-3">
+                                                    <label for="precio_venta_minorista" class="mr-2"><br>Precio
                                                         Minorista</label>
                                                     <label
                                                         class="form-control">{{ $precio_venta_minorista ?? 'N/A' }}</label>
@@ -316,8 +340,7 @@
                                         @endif
                                     </div>
 
-                                    <button type="button" onclick="confirmSave()" class="btn btn-primary mt-3">Crear
-                                        item</button>
+                                    <button type="button" onclick="confirmSave()" class="btn btn-primary mt-3">Actualizar Item</button>
                                 </div>
                             </div>
                         </div>
@@ -475,8 +498,8 @@
                 if (response) {
                     // Mostrar la alerta después de la creación si todo es correcto
                     Swal.fire({
-                        title: 'Item creado',
-                        text: 'El Item ha sido creado exitosamente.',
+                        title: 'Item Actualizado',
+                        text: 'El Item ha sido actualizado exitosamente.',
                         icon: 'success',
                         confirmButtonText: 'OK'
                     }).then((result) => {
@@ -490,7 +513,7 @@
                 // Manejar error si es necesario
                 Swal.fire({
                     title: 'Error',
-                    text: 'Hubo un problema al crear el item.',
+                    text: 'Hubo un problema al actualizar el item.',
                     icon: 'error',
                     confirmButtonText: 'OK'
                 });

@@ -54,7 +54,7 @@ class EditProveedor extends Component
         $this->proveedorEdit['datos_bancarios_pdf'] = $this->proveedor->datos_bancarios_pdf;
         $this->fileNameFacturacion = $this->proveedorEdit['archivo_facturacion_pdf'];
         $this->facturacion = $this->proveedorEdit['archivo_facturacion_pdf'];
-        $this->fileNameBancarios = $this->proveedorEdit['datos_bancarios_pdf'];
+        $this->fileNameBancarios = $this->proveedorEdit['datos_bancarios_pdf']; 
         $this->bancarios = $this->proveedorEdit['datos_bancarios_pdf'];
 
         // Obtiene los teléfonos del proveedor actual

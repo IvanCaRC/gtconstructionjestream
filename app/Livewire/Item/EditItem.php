@@ -11,6 +11,7 @@ use App\Models\ItemEspecificoHasFamilia;
 use App\Models\Proveedor;
 use Livewire\Features\SupportFileUploads\WithFileUploads;
 use App\CustomClases\ConexionProveedorItemTemporal;
+use App\Models\ItemEspecificoProveedor;
 use Illuminate\Support\Facades\DB;
 
 class EditItem extends Component
@@ -20,31 +21,116 @@ class EditItem extends Component
     use WithFileUploads;
     public $openModalProveedores = false;
     public $openModalFamilias = false;
-    public $nombre, $descripcion, $marca, $stock, $pz_Mayoreo, $pz_Minorista, $porcentaje_venta_minorista, $porcentaje_venta_mayorista, $dtock, $precio_venta_minorista, $precio_venta_mayorista, $unidad, $ficha_Tecnica_pdf;
+    public $image = [];
+    public $nombre, $descripcion, $marca, $stock, $pz_Mayoreo,
+        $pz_Minorista, $porcentaje_venta_minorista, $porcentaje_venta_mayorista,
+        $dtock, $precio_venta_minorista, $precio_venta_mayorista, $unidad, $ficha_Tecnica_pdf;
     public $proveedores = [];
     public $especificaciones = [['enunciado' => '', 'concepto' => '']];
-    public $familias, $familiasSeleccionadas = [''];
+    public $familiasSeleccionadas = [''];
+
     public $niveles = []; // Array para almacenar las familias de cada nivel
     public $seleccionadas = []; // Array para almacenar las opciones seleccionadas de familia
-    public $image = [];
+    public $imagenesCargadas = [];
+
     public $fileNamePdf;
     public $unidadSeleccionada;
     public $seleccionProvedorModal;
     public $seleccionProvedorModalNombre;
     public $searchTerm = '';
     public $nuevasImagenes = [];
+    public $itemEdit = [
+        'id' => '', // Identificador del proveedor
+        'nombre' => '', // Nombre del proveedor
+        'descripcion' => '', // Descripción del proveedor
+
+    ];
+    public $itemEspecificoEdit = [
+        'id' => '', // Identificador del proveedor
+        'iitem_id' => '', // Identificador del proveedor    
+        'marca' => '', // Descripción del proveedor
+        'cantidad_piezas_mayoreo' => '', // Correo del proveedor
+        'cantidad_piezas_minorista' => '', // RFC del proveedor
+        'stock' => '',
+        'ficha_tecnica_pdf' => '',
+        'estado' => '',
+        'estado_eliminacion' => '',
+    ];
+
+    public function cargarProvedoresParaEditar($idItem)
+    {
+        $proveedores = ItemEspecificoProveedor::where('item_especifico_id', $idItem)->get();
+
+        foreach ($proveedores as $proveedor) {
+            $conexion = new ConexionProveedorItemTemporal(
+                $proveedor->proveedor_id,
+                $proveedor->proveedor->nombre,
+                $proveedor->tiempo_min_entrega,
+                $proveedor->tiempo_max_entrega,
+                $proveedor->precio_compra,
+                $proveedor->unidad,
+                $proveedor->estado
+            );
+            if ($proveedor->estado == 1) {
+                $this->provedorSeleccionadoDeLaTabla = $proveedor->proveedor->nombre;
+                $this->precioSeleccionadoEnTabla =  $proveedor->precio_compra;
+                $this->unidadSeleccionadaEnTabla =  $proveedor->unidad;
+                $this->calcularPrecios();
+            }
+            $this->ProvedoresAsignados[] = (array) $conexion; // Convertir el objeto a un array y agregarlo al arreglo
+        }
+    }
 
     public function mount($idItem)
     {
         // Buscar el registro de ItemEspecifico
         $this->itemEspecifico = ItemEspecifico::findOrFail($idItem);
-
         // Buscar el registro de Item relacionado
         $this->item = Item::findOrFail($this->itemEspecifico->item_id);
+        //falta cargar imagenes
+
+        //Falta cargar especificaciones
+        $this->itemEdit['id'] = $this->item->id;
+        $this->itemEdit['nombre'] = $this->item->nombre;
+        $this->itemEdit['descripcion'] = $this->item->descripcion;
+        $this->itemEspecificoEdit['id'] = $this->itemEspecifico->id;
+        $this->itemEspecificoEdit['item_id'] = $this->itemEspecifico->item_id;
+
+        $this->imagenesCargadas = explode(',', $this->itemEspecifico->image); // Dividir la cadena en un array
+
+
+
+        $this->itemEspecificoEdit['marca'] = $this->itemEspecifico->marca;
+
+        $this->cargarProvedoresParaEditar($idItem);
+        $this->familiasSeleccionadas = ItemEspecificoHasFamilia::where('item_especifico_id', $idItem)
+            ->with('familia')
+            ->get()
+            ->pluck('familia')
+            ->toArray();
+        $this->itemEspecificoEdit['stock'] = $this->itemEspecifico->stock;
+        $this->itemEspecificoEdit['cantidad_piezas_mayoreo'] = $this->itemEspecifico->cantidad_piezas_mayoreo;
+        $this->itemEspecificoEdit['cantidad_piezas_minorista'] = $this->itemEspecifico->cantidad_piezas_minorista;
+        $this->porcentaje_venta_minorista = $this->itemEspecifico->porcentaje_venta_minorista;
+        $this->porcentaje_venta_mayorista = $this->itemEspecifico->porcentaje_venta_mayorista;
+
+        $this->precio_venta_minorista = $this->itemEspecifico->precio_venta_minorista;
+        $this->precio_venta_mayorista = $this->itemEspecifico->precio_venta_mayorista;
+
+        $this->especificaciones = json_decode($this->itemEspecifico->especificaciones, true);
+
+        $this->itemEspecificoEdit['ficha_tecnica_pdf'] = $this->itemEspecifico->ficha_tecnica_pdf;
+        $this->itemEspecificoEdit['estado'] = $this->itemEspecifico->estado;
+        $this->itemEspecificoEdit['estado_eliminacion'] = $this->itemEspecifico->estado_eliminacion;
+
+        
+
+
+
         $this->niveles[1] = Familia::whereNull('id_familia_padre')
             ->where('estadoEliminacion', 0)
             ->get();
-        $this->familiasSeleccionadas = []; // Inicializar como arreglo vacío
+
         $this->actualizarProveedores();
     }
 
@@ -293,6 +379,14 @@ class EditItem extends Component
                     $this->provedorSeleccionadoDeLaTabla = null;
                     $this->unidadSeleccionadaEnTabla = null;
                     $this->precioSeleccionadoEnTabla = null;
+
+                    $this->itemEspecificoEdit['cantidad_piezas_mayoreo'] = null;
+                    $this->itemEspecificoEdit['cantidad_piezas_minorista'] = null;
+                    $this->porcentaje_venta_minorista = null;
+                    $this->porcentaje_venta_mayorista = null;
+
+                    $this->precio_venta_minorista = null;
+                    $this->precio_venta_mayorista = null;
                 } else {
                     $this->ProvedoresAsignados[$key]['estado'] = 1;
                     $this->provedorSeleccionadoDeLaTabla = $nombre;
