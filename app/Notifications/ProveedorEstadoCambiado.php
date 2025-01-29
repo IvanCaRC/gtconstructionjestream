@@ -4,9 +4,7 @@ namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Notifications\Notification;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
-use Illuminate\Notifications\Messages\BroadcastMessage;
+use Illuminate\Support\Facades\Log;
 
 class ProveedorEstadoCambiado extends Notification
 {
@@ -19,15 +17,21 @@ class ProveedorEstadoCambiado extends Notification
 
     public function via($notifiable)
     {
-        return ['database']; // Usamos 'database' para almacenar la notificación
+        return ['database'];
     }
 
     public function toArray($notifiable)
     {
+        // Generar la URL manualmente con 127.0.0.1
+        $url = 'http://127.0.0.1:8000/compras/proveedores/viewProveedores';
+        Log::info('Generando URL para ProveedorEstadoCambiado: ' . $url);
+
         return [
             'message' => 'Un proveedor se encuentra desactualizado',
-            'url' => url('/'), // Puedes agregar más detalles si es necesario
+            'url' => $url
         ];
     }
 }
+
+
 

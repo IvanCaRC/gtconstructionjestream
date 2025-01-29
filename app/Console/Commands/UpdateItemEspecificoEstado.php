@@ -21,11 +21,14 @@ class UpdateItemEspecificoEstado extends Command
     {
         ItemEspecifico::where('estado', true)->update(['estado' => false]);
 
-        // Enviar notificación
-        $user = User::first(); // O cualquier usuario al que quieras notificar
-        $user->notify(new ItemEspecificoEstadoCambiado());
+        // Enviar notificación a todos los usuarios
+        $users = User::all();
+        foreach ($users as $user) {
+            $user->notify(new ItemEspecificoEstadoCambiado());
+            $this->info('Notificación enviada al usuario: ' . $user->id);
+        }
 
-        $this->info('El estado items se ha desactualizado.');
+        $this->info('Estado de un item desactualizado');
     }
 }
 

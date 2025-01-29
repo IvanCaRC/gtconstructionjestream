@@ -318,7 +318,7 @@
                                 @if (Auth::check())
                                     @forelse (Auth::user()->notifications as $notification)
                                         <a class="dropdown-item d-flex align-items-center"
-                                            href="{{ route('compras.proveedores.viewProveedores') }}">
+                                            href="{{ $notification->data['url'] }}">
                                             <div class="mr-3">
                                                 <div class="icon-circle bg-primary">
                                                     <i class="fas fa-file-alt text-white"></i>
