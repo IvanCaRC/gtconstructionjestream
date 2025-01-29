@@ -4,22 +4,9 @@ body {
     padding: 0;
 }
 
-.container-fluid {
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-}
 
-.card {
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
-    padding: 20px;
-}
+
+
 
 /* Formulario */
 .form-group {
@@ -42,11 +29,6 @@ body {
     border-radius: 5px;
 }
 
-.form-group button {
-    background-color: #007bff;
-    color: #fff;
-    cursor: pointer;
-}
 
 .form-group button:hover {
     background-color: #0056b3;

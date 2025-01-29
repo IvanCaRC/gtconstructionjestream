@@ -17,6 +17,7 @@ class CreateProveedoresTable extends Migration
             $table->id();
             $table->string('nombre');
             $table->text('descripcion')->nullable();
+            $table->text('contacto')->nullable();
             $table->string('correo')->unique();
             $table->string('rfc')->unique();
             $table->string('archivo_facturacion_pdf')->nullable();
