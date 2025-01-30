@@ -104,14 +104,14 @@
                 </div>
             @endif
         </div>
-        <button href="#" wire:click="$set('openModalFamilias', true)" class="btn btn-primary mt-3">Agregar
+        <button type="button"  wire:click="$set('openModalFamilias', true)" class="btn btn-primary mt-3">Agregar
             Familia</button>
     </div>
 
 
+    
+    {{-- <button type="submit" onclick="confirmSave()" class="btn btn-primary mt-3">Crear proveedor</button> --}}
 
-    {{-- <button type="submit" onclick="confirmSave()" class="btn btn-primary mt-3">Crear proveedor</button>
- --}}
 
     <x-dialog-modal wire:model="openModalFamilias">
         <x-slot name='title'>
@@ -141,9 +141,9 @@
             </form>
         </x-slot>
         <x-slot name='footer'>
-            <button class="btn btn-secondary mr-2 disabled:opacity-50" wire:click="$set('openModalFamilias',false)"
+            <button type="button" class="btn btn-secondary mr-2 disabled:opacity-50" wire:click="$set('openModalFamilias',false)"
                 wire:loading.attr="disabled">Cancelar</button>
-            <button class="btn btn-primary disabled:opacity-50" wire:loading.attr="disabled"
+            <button  type="button" class="btn btn-primary disabled:opacity-50" wire:loading.attr="disabled"
                 wire:click="confirmFamilia">Agregar familia</button>
         </x-slot>
     </x-dialog-modal>
