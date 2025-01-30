@@ -1,8 +1,9 @@
+let savedAddresses = []; // Array para almacenar las direcciones y coordenadas
 document.addEventListener("DOMContentLoaded", function () {
     let map;
     let marker;
     let selectedLatLng = null; // Variable para almacenar las coordenadas seleccionadas
-    let savedAddresses = []; // Array para almacenar las direcciones y coordenadas
+
 
     function initMap(lat, lon) {
         if (!map) {
@@ -169,23 +170,58 @@ document.addEventListener("DOMContentLoaded", function () {
                 const listItem = document.createElement("div");
                 listItem.classList.add("address-item");
 
-                listItem.innerHTML = `
-                    <input type="text" class="form-control" value="${entry.address.calle}" id="calle-${index}" oninput="autoSaveAddress(${index})">
-                    <input type="text" class="form-control" value="${entry.address.numero}" id="numero-${index}" oninput="autoSaveAddress(${index})">
-                    <input type="text" class="form-control" value="${entry.address.colonia}" id="colonia-${index}" oninput="autoSaveAddress(${index})">
-                    <input type="text" class="form-control" value="${entry.address.municipio}" id="municipio-${index}" oninput="autoSaveAddress(${index})">
-                    <input type="text" class="form-control" value="${entry.address.ciudad}" id="ciudad-${index}" oninput="autoSaveAddress(${index})">
-                    <input type="text" class="form-control" value="${entry.address.estado}" id="estado-${index}" oninput="autoSaveAddress(${index})">
-                    <input type="text" class="form-control" value="${entry.address.cp}" id="cp-${index}" oninput="autoSaveAddress(${index})">
-                    <input type="text" class="form-control" value="${entry.address.pais}" id="pais-${index}" oninput="autoSaveAddress(${index})">
-                    <input type="text" class="form-control" value="${entry.address.referencia}" id="referencia-${index}" oninput="autoSaveAddress(${index})">
-                    <input type="text" class="form-control" value="${entry.latlng ? entry.latlng.lat : ''}" id="latitud-${index}" oninput="autoSaveAddress(${index})">
-                    <input type="text" class="form-control" value="${entry.latlng ? entry.latlng.lng : ''}" id="longitud-${index}" oninput="autoSaveAddress(${index})">
-                    <div class="col-md-2 mb-3 d-flex align-items-end">
-                        <button type="button" class="btn btn-danger w-100" onclick="removeAddress(${index})">Eliminar</button>
-                    </div>
-                </div>
-            `;
+                listItem.innerHTML = `<div class="row align-items-end">
+        <div class="col-md-2 mb-3">
+            <label>Calle</label>
+            <input type="text" class="form-control" value="${entry.address.calle}" id="calle-${index}" oninput="autoSaveAddress(${index})">
+        </div>
+        <div class="col-md-2 mb-3">
+            <label>Número</label>
+            <input type="text" class="form-control" value="${entry.address.numero}" id="numero-${index}" oninput="autoSaveAddress(${index})">
+        </div>
+        <div class="col-md-2 mb-3">
+            <label>Colonia</label>
+            <input type="text" class="form-control" value="${entry.address.colonia}" id="colonia-${index}" oninput="autoSaveAddress(${index})">
+        </div>
+        <div class="col-md-2 mb-3">
+            <label>Municipio</label>
+            <input type="text" class="form-control" value="${entry.address.municipio}" id="municipio-${index}" oninput="autoSaveAddress(${index})">
+        </div>
+        <div class="col-md-2 mb-3">
+            <label>Ciudad</label>
+            <input type="text" class="form-control" value="${entry.address.ciudad}" id="ciudad-${index}" oninput="autoSaveAddress(${index})">
+        </div>
+        <div class="col-md-2 mb-3">
+            <label>Estado</label>
+            <input type="text" class="form-control" value="${entry.address.estado}" id="estado-${index}" oninput="autoSaveAddress(${index})">
+        </div>
+        <div class="col-md-2 mb-3">
+            <label>Código Postal</label>
+            <input type="text" class="form-control" value="${entry.address.cp}" id="cp-${index}" oninput="autoSaveAddress(${index})">
+        </div>
+        <div class="col-md-2 mb-3">
+            <label>País</label>
+            <input type="text" class="form-control" value="${entry.address.pais}" id="pais-${index}" oninput="autoSaveAddress(${index})">
+        </div>
+        <div class="col-md-2 mb-3">
+            <label>Referencia</label>
+            <input type="text" class="form-control" value="${entry.address.referencia}" id="referencia-${index}" placeholder="Capturar referencia" oninput="autoSaveAddress(${index})">
+        </div>
+       <div class="col-md-2 mb-3">
+    <label>Latitud</label>
+    <input type="text" class="form-control" value="${entry.latlng ? entry.latlng.lat : ''}" 
+           id="latitud-${index}" oninput="updateCoordinates(${index})">
+</div>
+<div class="col-md-2 mb-3">
+    <label>Longitud</label>
+    <input type="text" class="form-control" value="${entry.latlng ? entry.latlng.lng : ''}" 
+           id="longitud-${index}" oninput="updateCoordinates(${index})">
+</div>
+        <div class="col-md-2 mb-3 d-flex align-items-end">
+            <button type="button" class="btn btn-danger w-100" onclick="removeAddress(${index})">Eliminar</button>
+        </div>
+    </div>
+`;
 
                 addressList.appendChild(listItem);
             });
@@ -302,3 +338,41 @@ document.addEventListener("DOMContentLoaded", function () {
         submitForm(); // Llamar a la función para guardar las direcciones
     });
 });
+// Mover la función autoSaveAddress al ámbito global
+window.autoSaveAddress = function (index) {
+    const calle = document.getElementById(`calle-${index}`).value;
+    const numero = document.getElementById(`numero-${index}`).value;
+    const colonia = document.getElementById(`colonia-${index}`).value;
+    const municipio = document.getElementById(`municipio-${index}`).value;
+    const ciudad = document.getElementById(`ciudad-${index}`).value;
+    const estado = document.getElementById(`estado-${index}`).value;
+    const cp = document.getElementById(`cp-${index}`).value;
+    const pais = document.getElementById(`pais-${index}`).value;
+    const referencia = document.getElementById(`referencia-${index}`).value;
+
+    // Actualizar los datos en el arreglo de direcciones automáticamente
+    savedAddresses[index].address = {
+        calle: calle || 'Campo no recuperado',
+        numero: numero || 'Campo no recuperado',
+        colonia: colonia || 'Campo no recuperado',
+        municipio: municipio || 'Campo no recuperado',
+        ciudad: ciudad || 'Campo no recuperado',
+        estado: estado || 'Campo no recuperado',
+        cp: cp || 'Campo no recuperado',
+        pais: pais || 'Campo no recuperado',
+        referencia: referencia || ''
+    };
+
+    // También actualiza las coordenadas si es necesario
+    const latitud = document.getElementById(`latitud-${index}`).value;
+    const longitud = document.getElementById(`longitud-${index}`).value;
+
+    if (latitud && longitud) {
+        savedAddresses[index].latlng = {
+            lat: parseFloat(latitud),
+            lng: parseFloat(longitud)
+        };
+    }
+
+    console.log("Dirección actualizada:", savedAddresses[index]);
+};
