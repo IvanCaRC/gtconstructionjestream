@@ -16,6 +16,7 @@ class CreateTelefonoTable extends Migration
         Schema::create('telefonos', function (Blueprint $table) {
             $table->id();
             $table->string('numero');
+            $table->string('nombre')->nullable();
             $table->unsignedBigInteger('proveedor_id');
             $table->timestamps();
 

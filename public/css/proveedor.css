@@ -1,67 +1,4 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-}
-
-
-
-
-
-/* Formulario */
-.form-group {
-    margin-bottom: 15px;
-}
-
-.form-group label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-}
-
-.form-group input,
-.form-group textarea,
-.form-group select,
-.form-group button {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-}
-
-
-.form-group button:hover {
-    background-color: #0056b3;
-}
-
-.file-upload {
-    border: 2px dashed #ddd;
-    border-radius: 5px;
-    text-align: center;
-    padding: 20px;
-    cursor: pointer;
-}
-
-.file-upload-icon {
-    font-size: 50px;
-    color: #007bff;
-}
-
-.file-upload-text {
-    margin-top: 10px;
-    font-size: 14px;
-}
-
-/* Mapa */
-#map {
-    height: 300px;
-    width: 100%;
-    margin-top: 20px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-}
-
-/* Modal */
+/* Estilos para el modal */
 .modal {
     display: none;
     position: fixed;
@@ -78,10 +15,11 @@ body {
     display: flex;
 }
 
-.modal-content, .mapm-content {
+.mapm-content {
     background-color: white;
     padding: 20px;
     border-radius: 8px;
+    width: 600px;
     text-align: center;
 }
 
@@ -96,4 +34,47 @@ body {
 
 .close-btn:hover {
     background-color: #c82333;
+}
+
+/* Estilos para el mapa */
+#map {
+    width: 100%;
+    height: 300px; /* Puedes ajustar la altura según necesites */
+}
+
+
+.file-upload {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px dashed #007bff;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    padding: 20px;
+    cursor: pointer;
+}
+
+.file-upload .file-upload-icon {
+    font-size: 48px;
+    color: #007bff;
+}
+
+.file-upload .file-upload-text {
+    margin-left: 15px;
+    font-size: 16px;
+    color: #007bff;
+}
+
+.file-upload input[type="file"] {
+    display: none;
+}
+
+.btn-round {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    padding: 0;
+    font-size: 24px;
+    text-align: center;
+    line-height: 36px;
 }

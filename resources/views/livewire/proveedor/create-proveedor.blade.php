@@ -1,145 +1,118 @@
-<div class="container-fluid px-4 sm:px-6 lg:px-8 py-1">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-    <div class="container-fluid px-4 sm:px-6 lg:px-8 py-1">
-        <h1>Crear Nuevo Proveedor</h1>
-        
-        <div class="card">
-            <div class="card-body">
+<div>
+    <div class="form-group">
+        <label for="nombre">Nombre</label>
+        <input type="text" id="nombre" class="form-control"wire:model.defer="nombre">
+    </div>
 
-                <div class="form-group">
-                    <label for="nombre">Nombre</label>
-                    <input type="text" id="nombre" class="form-control"wire:model.defer="nombre">
-                </div>
+    <div class="form-group">
+        <label for="descripcion">Descripción</label>
+        <textarea rows="5" id="descripcion" class="form-control" wire:model="descripcion"></textarea>
+    </div>
+    <div class="row">
+        <div class="col-md-6 mb-3">
+            <label for="descripcion">Correo</label>
+            <input type="email" id="email" class="form-control" wire:model="correo"></input>
+        </div>
 
-                <div class="form-group">
-                    <label for="descripcion">Descripción</label>
-                    <textarea rows="5" id="descripcion" class="form-control" wire:model="descripcion"></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label for="descripcion">Correo</label>
-                    <input type="email" id="email" class="form-control" wire:model="correo"></input>
-                </div>
-
-                <div class="form-group">
-                    <label for="descripcion">RFC</label>
-                    <input id="descripcion" class="form-control" wire:model="rfc"></input>
-                </div>
-                <div class="form-group">
-                    <label>Teléfonos</label>
-                    @foreach ($telefonos as $index => $telefono)
-                        <div class="input-group mb-2">
-                            <input type="text" class="form-control" wire:model.defer="telefonos.{{ $index }}"
-                                placeholder="Teléfono">
-                            @if ($index > 0)
-                                <div class="input-group-append">
-                                    <button type="button" class="btn btn-danger ml-2"
-                                        wire:click="removeTelefono({{ $index }})">Eliminar</button>
-                                </div>
-                            @endif
-                        </div>
-                    @endforeach
-                    <button type="button" class="btn btn-primary mt-2" wire:click="addTelefono">Agregar otro
-                        teléfono</button>
-                </div>
-                <div class="form-group"> <label for="archivosFacturacion">Archivos de facturación</label>
-                    @if (!$facturacion)
-                        <div class="file-upload" onclick="document.getElementById('archivosFacturacion').click();">
-                            <span class="file-upload-icon">&#x1F4C2;</span> <span class="file-upload-text">Buscar
-                                archivos<br>Arrastre y suelte archivos aquí</span> <input type="file"
-                                id="archivosFacturacion" class="form-control-file" wire:model="facturacion"
-                                accept=".pdf">
-                        </div> <small class="form-text text-muted">Por favor, suba archivos en
-                            formato PDF solamente.</small>
-                    @else
-                        <div class="form-group">
-                            <div class="file-upload"
-                                onclick="document.getElementById('archivosFacturacionCar').click();">
-                                <span class="file-upload-icon">&#x1F4C4;</span>
-                                <span class="file-upload-text">Archivo Cargado<br>{{ $fileNameFacturacion }}</span>
-                                <input type="file" id="archivosFacturacionCar" class="form-control-file"
-                                    wire:model="facturacion" accept=".pdf">
-                            </div>
-                            <small class="form-text text-muted">Por favor, suba archivos en formato
-                                PDF solamente.</small>
-                        </div>
-                    @endif
-                </div>
-
-                <div class="form-group"> <label for="archivosFacturacion">Datos Bancarios</label>
-                    @if (!$bancarios)
-                        <div class="file-upload" onclick="document.getElementById('archivosBancarios').click();">
-                            <span class="file-upload-icon">&#x1F4C2;</span> <span class="file-upload-text">Buscar
-                                archivos<br>Arrastre y suelte archivos aquí</span> <input type="file"
-                                id="archivosBancarios" class="form-control-file" wire:model="bancarios" accept=".pdf">
-                        </div> <small class="form-text text-muted">Por favor, suba archivos en
-                            formato PDF solamente.</small>
-                    @else
-                        <div class="form-group">
-                            <div class="file-upload" onclick="document.getElementById('archivosBancariosCar').click();">
-                                <span class="file-upload-icon">&#x1F4C4;</span>
-                                <span class="file-upload-text">Archivo Cargado<br>{{ $fileNameBancarios }}</span>
-                                <input type="file" id="archivosBancariosCar" class="form-control-file"
-                                    wire:model="bancarios" accept=".pdf">
-                            </div>
-                            <small class="form-text text-muted">Por favor, suba archivos en formato
-                                PDFsolamente.</small>
-                        </div>
-                    @endif
-                </div>
-                <div class="form-group">
-                    <label>Familias</label>
-                    <div class="input-group mb-2">
-                        @if (count($familiasSeleccionadas) > 0)
-                            @foreach ($familiasSeleccionadas as $index => $familia)
-                                <div class="w-100 d-flex align-items-center mb-2">
-                                    <div class="flex-grow-1">
-                                        {{ $familia->nombre }}
-                                    </div>
-                                    <button type="button" wire:click="removeFamilia({{ $index }})"
-                                        class="btn btn-danger btn-sm ml-2">Eliminar</button>
-                                </div>
-                            @endforeach
-                        @else
-                            <div class="no-familias-seleccionadas w-100">
-                                No hay familias seleccionadas
-                            </div>
-                        @endif
-                    </div>
-                    <button href="#" wire:click="$set('openModalFamilias', true)"
-                        class="btn btn-primary mt-3">Agregar Familia</button>
-                </div>
-                {{-- <div class="form-group">
-                    <label>Direcciones</label>
-                    <div class="input-group mb-2">
-                        No hay direcciones asignadas
-                    </div>
-                    <button class="btn btn-primary mt-3" wire:click="$set('openModalDireccion', false)">Cerrar
-                        Dirección</button>
-                    <button class="btn btn-primary mt-3" wire:click="$set('openModalDireccion', true)">Abrir
-                        Dirección</button>
-                </div>
-
-                @if ($openModalDireccion)
-                    <div id="map" style="height: 500px; width: 100%;"></div>
-                @endif --}}
-
-
-
-                <button type="button" onclick="confirmSave()" class="btn btn-primary mt-3">Crear proveedor</button>
-            </div>
+        <div class="col-md-6 mb-3">
+            <label for="descripcion">RFC</label>
+            <input id="descripcion" class="form-control" wire:model="rfc"></input>
         </div>
     </div>
-    {{-- <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
-        integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-    <script>
-        var map = L.map('map').setView([51.505, -0.09], 14);
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        }).addTo(map);
-    </script> --}}
+    <div class="form-group">
+        <label>Teléfonos</label>
+        @foreach ($telefonos as $index => $telefono)
+            <div class="input-group mb-2">
+                <input type="text" class="form-control" wire:model.defer="telefonos.{{ $index }}.nombre"
+                    placeholder="Nombre de contacto">
+                <input type="text" class="form-control" wire:model.defer="telefonos.{{ $index }}.numero"
+                    placeholder="Teléfono">
+                @if ($index > 0)
+                    <div class="input-group-append">
+                        <button type="button" class="btn btn-danger ml-2"
+                            wire:click="removeTelefono({{ $index }})">Eliminar</button>
+                    </div>
+                @endif
+            </div>
+        @endforeach
+        <button type="button" class="btn btn-primary mt-2" wire:click="addTelefono">Agregar otro teléfono</button>
+    </div>
+    
+    
+
+    <div class="row">
+        <div class="col-md-6 mb-3"> <label for="archivosFacturacion">Archivos de facturación</label>
+            @if (!$facturacion)
+                <div class="file-upload" onclick="document.getElementById('archivosFacturacion').click();">
+                    <span class="file-upload-icon">&#x1F4C2;</span> <span class="file-upload-text">Buscar
+                        archivos<br>Arrastre y suelte archivos aquí</span> <input type="file"
+                        id="archivosFacturacion" class="form-control-file" wire:model="facturacion" accept=".pdf">
+                </div> <small class="form-text text-muted">Por favor, suba archivos en
+                    formato PDF solamente.</small>
+            @else
+                <div class="form-group">
+                    <div class="file-upload" onclick="document.getElementById('archivosFacturacionCar').click();">
+                        <span class="file-upload-icon">&#x1F4C4;</span>
+                        <span class="file-upload-text">Archivo Cargado<br>{{ $fileNameFacturacion }}</span>
+                        <input type="file" id="archivosFacturacionCar" class="form-control-file"
+                            wire:model="facturacion" accept=".pdf">
+                    </div>
+                    <small class="form-text text-muted">Por favor, suba archivos en formato
+                        PDF solamente.</small>
+                </div>
+            @endif
+        </div>
+
+        <div class="col-md-6 mb-3"> <label for="archivosFacturacion">Datos Bancarios</label>
+            @if (!$bancarios)
+                <div class="file-upload" onclick="document.getElementById('archivosBancarios').click();">
+                    <span class="file-upload-icon">&#x1F4C2;</span> <span class="file-upload-text">Buscar
+                        archivos<br>Arrastre y suelte archivos aquí</span> <input type="file" id="archivosBancarios"
+                        class="form-control-file" wire:model="bancarios" accept=".pdf">
+                </div> <small class="form-text text-muted">Por favor, suba archivos en
+                    formato PDF solamente.</small>
+            @else
+                <div class="form-group">
+                    <div class="file-upload" onclick="document.getElementById('archivosBancariosCar').click();">
+                        <span class="file-upload-icon">&#x1F4C4;</span>
+                        <span class="file-upload-text">Archivo Cargado<br>{{ $fileNameBancarios }}</span>
+                        <input type="file" id="archivosBancariosCar" class="form-control-file" wire:model="bancarios"
+                            accept=".pdf">
+                    </div>
+                    <small class="form-text text-muted">Por favor, suba archivos en formato
+                        PDFsolamente.</small>
+                </div>
+            @endif
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Familias</label>
+        <div class="input-group mb-2">
+            @if (count($familiasSeleccionadas) > 0)
+                @foreach ($familiasSeleccionadas as $index => $familia)
+                    <div class="w-100 d-flex align-items-center mb-2">
+                        <div class="flex-grow-1">
+                            {{ $familia->nombre }}
+                        </div>
+                        <button type="button" wire:click="removeFamilia({{ $index }})"
+                            class="btn btn-danger btn-sm ml-2">Eliminar</button>
+                    </div>
+                @endforeach
+            @else
+                <div class="no-familias-seleccionadas w-100">
+                    No hay familias seleccionadas
+                </div>
+            @endif
+        </div>
+        <button href="#" wire:click="$set('openModalFamilias', true)" class="btn btn-primary mt-3">Agregar
+            Familia</button>
+    </div>
+
+
+
+    {{-- <button type="submit" onclick="confirmSave()" class="btn btn-primary mt-3">Crear proveedor</button>
+ --}}
+
     <x-dialog-modal wire:model="openModalFamilias">
         <x-slot name='title'>
             Añadir Familia

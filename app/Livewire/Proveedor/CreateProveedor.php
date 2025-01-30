@@ -15,7 +15,9 @@ class CreateProveedor extends Component
     use WithFileUploads;
     public $openModalFamilias = false;
     public $openModalDireccion = false;
-    public $nombre, $descripcion, $correo, $rfc, $facturacion, $bancarios, $telefonos = [''];  // Inicializar con un campo de teléfono
+    public $nombre, $descripcion, $correo, $rfc, $facturacion, $bancarios;
+    public $telefonos = [['nombre' => '', 'numero' => '']];
+    // Inicializar con un campo de teléfono
     public $familias, $familiasSeleccionadas = [''];  // Inicializar con un campo de familia
     public $fileNameFacturacion, $fileNameBancarios;
 
@@ -32,15 +34,15 @@ class CreateProveedor extends Component
 
     public function addTelefono()
     {
-        $this->telefonos[] = '';
+        $this->telefonos[] = ['nombre' => '', 'numero' => ''];
     }
 
-    
     public function removeTelefono($index)
     {
         unset($this->telefonos[$index]);
         $this->telefonos = array_values($this->telefonos); // Reindexar el array
     }
+
 
     public function addFamilia()
     {
@@ -117,7 +119,8 @@ class CreateProveedor extends Component
         // Guardar los teléfonos en el modelo Telefono
         foreach ($this->telefonos as $telefono) {
             Telefono::create([
-                'numero' => $telefono,
+                'nombre' => $telefono['nombre'], // Guardar nombre de contacto
+                'numero' => $telefono['numero'], // Guardar número de teléfono
                 'proveedor_id' => $proveedor->id,
             ]);
         }
