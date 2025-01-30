@@ -15,9 +15,26 @@
     display: flex;
 }
 
+#search-results-container {
+    max-height: 200px;
+    overflow-y: auto;
+    border: 1px solid #ccc; /* Opcional: para darle un borde al contenedor */
+    padding: 5px; /* Opcional: agregar espacio interno */
+}
+
+.result-item {
+    padding: 8px;
+    cursor: pointer;
+}
+
+.result-item:hover {
+    background-color: #f0f0f0; /* Resaltar al pasar el ratón */
+}
+
+
 .mapm-content {
     background-color: white;
-    padding: 20px;
+        
     border-radius: 8px;
     width: 600px;
     text-align: center;

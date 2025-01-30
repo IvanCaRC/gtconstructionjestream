@@ -74,4 +74,4 @@ Route::get('compras/proveedores/editProveedores/{idproveedor}', [ProveedorContro
 
 Route::get('compras/items/edicionItem/{idItem}', [ItemController::class, 'editItem'])->middleware('auth', 'nocache')->name('compras.items.edicionItem');
 
-Route::post('compras/proveedores', [UserController::class, 'store'])->middleware('auth', 'nocache')->name('compras.proveedores.store');
+Route::post('compras/proveedores', [ProveedorController::class, 'store'])->middleware('auth', 'nocache')->name('compras.proveedores.store');

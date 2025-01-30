@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Direccion;
 use App\Models\Proveedor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProveedorController extends Controller
 {
@@ -18,32 +20,37 @@ class ProveedorController extends Controller
     }
     
     public function store(Request $request)
-    {
-        $request->validate([
-            'nombre' => 'required|string|max:255',
-            'descripcion' => 'nullable|string',
-            'email' => 'required|email|unique:proveedores,email',
-            'rfc' => 'required|string|max:13|unique:proveedores,rfc',
-            'telefono' => 'nullable|array',
-            'telefono.*' => 'nullable|string|max:20',
-        ]);
+{
+    DB::transaction(function () use ($request) {
+        // Crear el proveedor
+        $proveedor = Proveedor::create($request->except('direcciones'));
 
-        $proveedor = Proveedor::create([
-            'nombre' => $request->nombre,
-            'descripcion' => $request->descripcion,
-            'email' => $request->email,
-            'rfc' => $request->rfc,
-        ]);
-
-        // Guardar teléfonos si existen
-        if ($request->has('telefono')) {
-            foreach ($request->telefono as $tel) {
-                if (!empty($tel)) {
-                    $proveedor->telefonos()->create(['numero' => $tel]);
-                }
+        // Guardar direcciones si existen
+        if ($request->has('direcciones')) {
+            $direcciones = json_decode($request->direcciones, true);
+            
+            foreach ($direcciones as $dir) {
+                Direccion::create([
+                    'cp' => $dir['address']['cp'] ?? null,
+                    'estado' => $dir['address']['estado'] ?? null,
+                    'ciudad' => $dir['address']['ciudad'] ?? null,
+                    'municipio' => $dir['address']['municipio'] ?? null,
+                    'colonia' => $dir['address']['colonia'] ?? null,
+                    'calle' => $dir['address']['calle'] ?? null,
+                    'numero' => $dir['address']['numero'] ?? null,
+                    'referencia' => $dir['address']['referencia'] ?? null,
+                    'Latitud' => $dir['latlng']['lat'] ?? null,
+                    'Longitud' => $dir['latlng']['lng'] ?? null,
+                    'proveedor_id' => $proveedor->id
+                ]);
             }
         }
-    }
+    });
+
+    return redirect()->route('compras.proveedores.index');
+}
+
+
 
     public function verProveedor($idproveedor)
     {

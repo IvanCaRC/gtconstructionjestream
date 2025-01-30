@@ -17,8 +17,10 @@
 
             <div class="card">
                 <div class="card-body">
-                    <form action="{{ route('compras.proveedores.store') }}" method="POST">
-                        @livewire('proveedor.create-proveedor')
+                    @livewire('proveedor.create-proveedor')
+                    <form id="proveedor-form" action="{{ route('compras.proveedores.store') }}" method="POST">
+                        @csrf
+                        
                         <div class="form-group">
                             <label>Direcciones</label>
                             <div class="input-group mb-2" id="address-list">
@@ -26,9 +28,12 @@
                                 <p>No hay direcciones guardadas.</p>
                             </div>
                         </div>
+                    
                         @include('compras.proveedores.form')
-                        @csrf
-                        
+                    
+                        <!-- Campo oculto para enviar las direcciones -->
+                        <input type="hidden" name="direcciones" id="direcciones-input">
+                    
                         <button type="submit" class="btn btn-primary mt-3">Crear proveedor</button>
                     </form>
                 </div>

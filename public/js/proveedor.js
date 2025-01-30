@@ -6,32 +6,108 @@ document.addEventListener("DOMContentLoaded", function () {
 
     function initMap(lat, lon) {
         if (!map) {
-            // Crear el mapa si no existe
+            // Crear el mapa
             map = L.map('map').setView([lat, lon], 13);
             L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 maxZoom: 19,
                 attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
             }).addTo(map);
 
-            // Agregar evento de clic para obtener dirección y mostrar marcador
+            // Evento de clic para mover marcador
             map.on('click', function (e) {
-                // Eliminar el marcador anterior si existe
+                // Eliminar marcador si existe
                 if (marker) {
                     map.removeLayer(marker);
                 }
 
-                // Crear un nuevo marcador en la ubicación del clic
+                // Crear marcador en la ubicación clickeada
                 marker = L.marker(e.latlng).addTo(map);
 
-                // Almacenar las coordenadas seleccionadas
+                // Guardar la nueva latitud y longitud
                 selectedLatLng = e.latlng;
             });
         } else {
-            // Si el mapa ya está creado, solo cambiar la vista
+            // Cambiar la vista si el mapa ya está inicializado
             map.setView([lat, lon], 13);
         }
     }
+    function closeModal() {
+        document.getElementById("position-modal").classList.remove("active");
+    }
+    function searchLocation(query) {
+        const url = `https://nominatim.openstreetmap.org/search?format=json&q=${query}`;
 
+        const resultsDiv = document.getElementById('search-results');
+        const resultsContainer = document.getElementById('search-results-container');
+        resultsDiv.innerHTML = '<p>Cargando resultados...</p>'; // Mostrar mensaje de carga
+
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                resultsDiv.innerHTML = ''; // Limpiar resultados previos
+
+                if (data.length > 0) {
+                    data.forEach(result => {
+                        const resultItem = document.createElement('div');
+                        resultItem.classList.add('result-item');
+                        resultItem.innerHTML = `${result.display_name}`;
+                        resultItem.addEventListener('click', () => {
+                            // Mostrar marcador en la ubicación seleccionada
+                            const lat = result.lat;
+                            const lon = result.lon;
+                            if (marker) {
+                                map.removeLayer(marker);
+                            }
+                            marker = L.marker([lat, lon]).addTo(map);
+                            map.setView([lat, lon], 13); // Centrar el mapa en la ubicación
+                            selectedLatLng = L.latLng(lat, lon); // Guardar coordenadas
+                        });
+                        resultsDiv.appendChild(resultItem);
+                    });
+                } else {
+                    resultsDiv.innerHTML = 'No se encontraron resultados.';
+                }
+            })
+            .catch(error => {
+                console.error('Error al buscar ubicación:', error);
+                resultsDiv.innerHTML = 'Error al buscar la ubicación. Intenta nuevamente.';
+            });
+    }
+
+
+
+    document.getElementById('search-location').addEventListener('input', function () {
+        const query = this.value;
+        if (query.length > 3) { // Solo realizar búsqueda si la longitud es mayor a 3 caracteres
+            searchLocation(query);
+        }
+    });
+
+    document.getElementById("add-manual-address").addEventListener("click", function () {
+        addManualAddress();
+        closeModal(); // Cierra el modal automáticamente después de agregar una dirección manualmente
+    });
+
+    function addManualAddress() {
+        const emptyAddress = {
+            calle: "",
+            numero: "",
+            colonia: "",
+            municipio: "",
+            ciudad: "",
+            estado: "",
+            cp: "",
+            pais: "",
+            referencia: ""
+        };
+
+        savedAddresses.push({
+            address: emptyAddress,
+            latlng: null // No hay coordenadas para direcciones manuales
+        });
+
+        updateAddressList(); // Actualizar la vista con la nueva dirección vacía
+    }
     // Obtener la ubicación del usuario
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
@@ -51,7 +127,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Función para obtener la dirección a partir de coordenadas
     function getAddressFromCoordinates(lat, lng, latlng) {
         const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`;
-    
+
         fetch(url)
             .then(response => response.json())
             .then(data => {
@@ -67,12 +143,12 @@ document.addEventListener("DOMContentLoaded", function () {
                         pais: data.address.country || 'Campo no recuperado',
                         referencia: '' // Este campo se ingresará manualmente
                     };
-    
+
                     savedAddresses.push({
                         address: addressComponents,
                         latlng: latlng
                     });
-    
+
                     updateAddressList(); // Actualizar la lista de direcciones
                 } else {
                     alert("No se pudo obtener la dirección.");
@@ -85,76 +161,103 @@ document.addEventListener("DOMContentLoaded", function () {
     function updateAddressList() {
         const addressList = document.getElementById("address-list");
         addressList.innerHTML = ''; // Limpiar la lista antes de actualizar
-    
+
         if (savedAddresses.length === 0) {
             addressList.innerHTML = "<p>No hay direcciones guardadas.</p>";
         } else {
             savedAddresses.forEach((entry, index) => {
                 const listItem = document.createElement("div");
                 listItem.classList.add("address-item");
-    
-                // Crear campos de entrada para cada parte de la dirección, incluyendo la referencia
+
                 listItem.innerHTML = `
-                    <div class="form-group">
-                        <label>Calle</label>
-                        <input type="text" class="form-control" value="${entry.address.calle}" id="calle-${index}" oninput="autoSaveAddress(${index})">
-                    </div>
-                    <div class="form-group">
-                        <label>Número</label>
-                        <input type="text" class="form-control" value="${entry.address.numero}" id="numero-${index}" oninput="autoSaveAddress(${index})">
-                    </div>
-                    <div class="form-group">
-                        <label>Colonia</label>
-                        <input type="text" class="form-control" value="${entry.address.colonia}" id="colonia-${index}" oninput="autoSaveAddress(${index})">
-                    </div>
-                    <div class="form-group">
-                        <label>Municipio</label>
-                        <input type="text" class="form-control" value="${entry.address.municipio}" id="municipio-${index}" oninput="autoSaveAddress(${index})">
-                    </div>
-                    <div class="form-group">
-                        <label>Ciudad</label>
-                        <input type="text" class="form-control" value="${entry.address.ciudad}" id="ciudad-${index}" oninput="autoSaveAddress(${index})">
-                    </div>
-                    <div class="form-group">
-                        <label>Estado</label>
-                        <input type="text" class="form-control" value="${entry.address.estado}" id="estado-${index}" oninput="autoSaveAddress(${index})">
-                    </div>
-                    <div class="form-group">
-                        <label>Código Postal</label>
-                        <input type="text" class="form-control" value="${entry.address.cp}" id="cp-${index}" oninput="autoSaveAddress(${index})">
-                    </div>
-                    <div class="form-group">
-                        <label>País</label>
-                        <input type="text" class="form-control" value="${entry.address.pais}" id="pais-${index}" oninput="autoSaveAddress(${index})">
-                    </div>
-                    <div class="form-group">
-                        <label>Referencia</label>
-                        <input type="text" class="form-control" value="${entry.address.referencia}" id="referencia-${index}" placeholder="Capturar referencia" oninput="autoSaveAddress(${index})">
-                    </div>
-                    <button type="button" class="btn btn-danger" onclick="removeAddress(${index})">Eliminar</button>
-                `;
+    <div class="row align-items-end">
+        <div class="col-md-2 mb-3">
+            <label>Calle</label>
+            <input type="text" class="form-control" value="${entry.address.calle}" id="calle-${index}" oninput="autoSaveAddress(${index})">
+        </div>
+        <div class="col-md-2 mb-3">
+            <label>Número</label>
+            <input type="text" class="form-control" value="${entry.address.numero}" id="numero-${index}" oninput="autoSaveAddress(${index})">
+        </div>
+        <div class="col-md-2 mb-3">
+            <label>Colonia</label>
+            <input type="text" class="form-control" value="${entry.address.colonia}" id="colonia-${index}" oninput="autoSaveAddress(${index})">
+        </div>
+        <div class="col-md-2 mb-3">
+            <label>Municipio</label>
+            <input type="text" class="form-control" value="${entry.address.municipio}" id="municipio-${index}" oninput="autoSaveAddress(${index})">
+        </div>
+        <div class="col-md-2 mb-3">
+            <label>Ciudad</label>
+            <input type="text" class="form-control" value="${entry.address.ciudad}" id="ciudad-${index}" oninput="autoSaveAddress(${index})">
+        </div>
+        <div class="col-md-2 mb-3">
+            <label>Estado</label>
+            <input type="text" class="form-control" value="${entry.address.estado}" id="estado-${index}" oninput="autoSaveAddress(${index})">
+        </div>
+        <div class="col-md-2 mb-3">
+            <label>Código Postal</label>
+            <input type="text" class="form-control" value="${entry.address.cp}" id="cp-${index}" oninput="autoSaveAddress(${index})">
+        </div>
+        <div class="col-md-2 mb-3">
+            <label>País</label>
+            <input type="text" class="form-control" value="${entry.address.pais}" id="pais-${index}" oninput="autoSaveAddress(${index})">
+        </div>
+        <div class="col-md-2 mb-3">
+            <label>Referencia</label>
+            <input type="text" class="form-control" value="${entry.address.referencia}" id="referencia-${index}" placeholder="Capturar referencia" oninput="autoSaveAddress(${index})">
+        </div>
+       <div class="col-md-2 mb-3">
+    <label>Latitud</label>
+    <input type="text" class="form-control" value="${entry.latlng ? entry.latlng.lat : ''}" 
+           id="latitud-${index}" oninput="updateCoordinates(${index})">
+</div>
+<div class="col-md-2 mb-3">
+    <label>Longitud</label>
+    <input type="text" class="form-control" value="${entry.latlng ? entry.latlng.lng : ''}" 
+           id="longitud-${index}" oninput="updateCoordinates(${index})">
+</div>
+
+        <div class="col-md-2 mb-3 d-flex align-items-end">
+            <button type="button" class="btn btn-danger w-100" onclick="removeAddress(${index})">Eliminar</button>
+        </div>
+    </div>
+`;
+
                 addressList.appendChild(listItem);
             });
         }
     }
-    
 
+    window.updateCoordinates = function (index) {
+        const latInput = document.getElementById(`latitud-${index}`).value;
+        const lngInput = document.getElementById(`longitud-${index}`).value;
+    
+        const lat = parseFloat(latInput);
+        const lng = parseFloat(lngInput);
+    
+        if (!isNaN(lat) && !isNaN(lng)) {
+            savedAddresses[index].latlng = { lat, lng };
+        }
+    };
+    
     // Función para eliminar una dirección del arreglo
-    window.removeAddress = function(index) {
+    window.removeAddress = function (index) {
         savedAddresses.splice(index, 1); // Eliminar del arreglo
         updateAddressList(); // Actualizar la vista
     };
 
     // Función para guardar la ubicación seleccionada
-    window.savePosition = function() {
+    window.savePosition = function () {
         if (selectedLatLng) {
             getAddressFromCoordinates(selectedLatLng.lat, selectedLatLng.lng, selectedLatLng);
-           
+
             document.getElementById('position-modal').classList.remove('active');
         } else {
             alert("Por favor selecciona una ubicación en el mapa.");
         }
     };
+
     function autoSaveAddress(index) {
         const calle = document.getElementById(`calle-${index}`).value;
         const numero = document.getElementById(`numero-${index}`).value;
@@ -165,7 +268,7 @@ document.addEventListener("DOMContentLoaded", function () {
         const cp = document.getElementById(`cp-${index}`).value;
         const pais = document.getElementById(`pais-${index}`).value;
         const referencia = document.getElementById(`referencia-${index}`).value;
-    
+
         // Actualizar los datos en el arreglo de direcciones automáticamente
         savedAddresses[index].address = {
             calle: calle || 'Campo no recuperado',
@@ -186,7 +289,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     addPositionButton.addEventListener('click', () => {
         modalPos.classList.add('active');
-        setTimeout(() => {  
+        setTimeout(() => {
             map.invalidateSize();
         }, 300);
     });
@@ -195,5 +298,8 @@ document.addEventListener("DOMContentLoaded", function () {
     closeModalPosButton.addEventListener('click', () => {
         modalPos.classList.remove('active');
     });
+
+    
+    
     
 });
