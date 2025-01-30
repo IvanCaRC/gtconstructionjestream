@@ -170,59 +170,22 @@ document.addEventListener("DOMContentLoaded", function () {
                 listItem.classList.add("address-item");
 
                 listItem.innerHTML = `
-    <div class="row align-items-end">
-        <div class="col-md-2 mb-3">
-            <label>Calle</label>
-            <input type="text" class="form-control" value="${entry.address.calle}" id="calle-${index}" oninput="autoSaveAddress(${index})">
-        </div>
-        <div class="col-md-2 mb-3">
-            <label>Número</label>
-            <input type="text" class="form-control" value="${entry.address.numero}" id="numero-${index}" oninput="autoSaveAddress(${index})">
-        </div>
-        <div class="col-md-2 mb-3">
-            <label>Colonia</label>
-            <input type="text" class="form-control" value="${entry.address.colonia}" id="colonia-${index}" oninput="autoSaveAddress(${index})">
-        </div>
-        <div class="col-md-2 mb-3">
-            <label>Municipio</label>
-            <input type="text" class="form-control" value="${entry.address.municipio}" id="municipio-${index}" oninput="autoSaveAddress(${index})">
-        </div>
-        <div class="col-md-2 mb-3">
-            <label>Ciudad</label>
-            <input type="text" class="form-control" value="${entry.address.ciudad}" id="ciudad-${index}" oninput="autoSaveAddress(${index})">
-        </div>
-        <div class="col-md-2 mb-3">
-            <label>Estado</label>
-            <input type="text" class="form-control" value="${entry.address.estado}" id="estado-${index}" oninput="autoSaveAddress(${index})">
-        </div>
-        <div class="col-md-2 mb-3">
-            <label>Código Postal</label>
-            <input type="text" class="form-control" value="${entry.address.cp}" id="cp-${index}" oninput="autoSaveAddress(${index})">
-        </div>
-        <div class="col-md-2 mb-3">
-            <label>País</label>
-            <input type="text" class="form-control" value="${entry.address.pais}" id="pais-${index}" oninput="autoSaveAddress(${index})">
-        </div>
-        <div class="col-md-2 mb-3">
-            <label>Referencia</label>
-            <input type="text" class="form-control" value="${entry.address.referencia}" id="referencia-${index}" placeholder="Capturar referencia" oninput="autoSaveAddress(${index})">
-        </div>
-       <div class="col-md-2 mb-3">
-    <label>Latitud</label>
-    <input type="text" class="form-control" value="${entry.latlng ? entry.latlng.lat : ''}" 
-           id="latitud-${index}" oninput="updateCoordinates(${index})">
-</div>
-<div class="col-md-2 mb-3">
-    <label>Longitud</label>
-    <input type="text" class="form-control" value="${entry.latlng ? entry.latlng.lng : ''}" 
-           id="longitud-${index}" oninput="updateCoordinates(${index})">
-</div>
-
-        <div class="col-md-2 mb-3 d-flex align-items-end">
-            <button type="button" class="btn btn-danger w-100" onclick="removeAddress(${index})">Eliminar</button>
-        </div>
-    </div>
-`;
+                    <input type="text" class="form-control" value="${entry.address.calle}" id="calle-${index}" oninput="autoSaveAddress(${index})">
+                    <input type="text" class="form-control" value="${entry.address.numero}" id="numero-${index}" oninput="autoSaveAddress(${index})">
+                    <input type="text" class="form-control" value="${entry.address.colonia}" id="colonia-${index}" oninput="autoSaveAddress(${index})">
+                    <input type="text" class="form-control" value="${entry.address.municipio}" id="municipio-${index}" oninput="autoSaveAddress(${index})">
+                    <input type="text" class="form-control" value="${entry.address.ciudad}" id="ciudad-${index}" oninput="autoSaveAddress(${index})">
+                    <input type="text" class="form-control" value="${entry.address.estado}" id="estado-${index}" oninput="autoSaveAddress(${index})">
+                    <input type="text" class="form-control" value="${entry.address.cp}" id="cp-${index}" oninput="autoSaveAddress(${index})">
+                    <input type="text" class="form-control" value="${entry.address.pais}" id="pais-${index}" oninput="autoSaveAddress(${index})">
+                    <input type="text" class="form-control" value="${entry.address.referencia}" id="referencia-${index}" oninput="autoSaveAddress(${index})">
+                    <input type="text" class="form-control" value="${entry.latlng ? entry.latlng.lat : ''}" id="latitud-${index}" oninput="autoSaveAddress(${index})">
+                    <input type="text" class="form-control" value="${entry.latlng ? entry.latlng.lng : ''}" id="longitud-${index}" oninput="autoSaveAddress(${index})">
+                    <div class="col-md-2 mb-3 d-flex align-items-end">
+                        <button type="button" class="btn btn-danger w-100" onclick="removeAddress(${index})">Eliminar</button>
+                    </div>
+                </div>
+            `;
 
                 addressList.appendChild(listItem);
             });
@@ -232,15 +195,15 @@ document.addEventListener("DOMContentLoaded", function () {
     window.updateCoordinates = function (index) {
         const latInput = document.getElementById(`latitud-${index}`).value;
         const lngInput = document.getElementById(`longitud-${index}`).value;
-    
+
         const lat = parseFloat(latInput);
         const lng = parseFloat(lngInput);
-    
+
         if (!isNaN(lat) && !isNaN(lng)) {
             savedAddresses[index].latlng = { lat, lng };
         }
     };
-    
+
     // Función para eliminar una dirección del arreglo
     window.removeAddress = function (index) {
         savedAddresses.splice(index, 1); // Eliminar del arreglo
@@ -259,6 +222,7 @@ document.addEventListener("DOMContentLoaded", function () {
     };
 
     function autoSaveAddress(index) {
+        // Obtener los valores actualizados de los inputs
         const calle = document.getElementById(`calle-${index}`).value;
         const numero = document.getElementById(`numero-${index}`).value;
         const colonia = document.getElementById(`colonia-${index}`).value;
@@ -268,8 +232,20 @@ document.addEventListener("DOMContentLoaded", function () {
         const cp = document.getElementById(`cp-${index}`).value;
         const pais = document.getElementById(`pais-${index}`).value;
         const referencia = document.getElementById(`referencia-${index}`).value;
-
-        // Actualizar los datos en el arreglo de direcciones automáticamente
+    
+        console.log("Valores actualizados:", {
+            calle,
+            numero,
+            colonia,
+            municipio,
+            ciudad,
+            estado,
+            cp,
+            pais,
+            referencia
+        });
+        
+        // Actualizar el arreglo savedAddresses con los nuevos valores
         savedAddresses[index].address = {
             calle: calle || 'Campo no recuperado',
             numero: numero || 'Campo no recuperado',
@@ -281,6 +257,17 @@ document.addEventListener("DOMContentLoaded", function () {
             pais: pais || 'Campo no recuperado',
             referencia: referencia || ''
         };
+    
+        // También actualiza las coordenadas si es necesario
+        const latitud = document.getElementById(`latitud-${index}`).value;
+        const longitud = document.getElementById(`longitud-${index}`).value;
+    
+        if (latitud && longitud) {
+            savedAddresses[index].latlng = {
+                lat: parseFloat(latitud),
+                lng: parseFloat(longitud)
+            };
+        }
     }
     // Abrir el modal al hacer clic en el botón
     const addPositionButton = document.getElementById('add-position');
@@ -299,7 +286,19 @@ document.addEventListener("DOMContentLoaded", function () {
         modalPos.classList.remove('active');
     });
 
+    function submitForm() {
+        // Convertir las direcciones a formato JSON
+        const directionsJSON = JSON.stringify(savedAddresses);
     
+        // Asignar el valor al campo oculto
+        document.getElementById('direcciones-input').value = directionsJSON;
     
+        // Ahora el formulario puede ser enviado
+        document.getElementById('proveedor-form').submit();
+    }
     
+    document.querySelector('button[type="submit"]').addEventListener('click', function (event) {
+        event.preventDefault(); // Evitar el envío normal del formulario
+        submitForm(); // Llamar a la función para guardar las direcciones
+    });
 });

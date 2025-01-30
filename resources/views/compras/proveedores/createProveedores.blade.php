@@ -20,6 +20,7 @@
                     @livewire('proveedor.create-proveedor')
                     <form id="proveedor-form" action="{{ route('compras.proveedores.store') }}" method="POST">
                         @csrf
+                        <input type="hidden" id="direcciones-input" name="direcciones">
                         
                         <div class="form-group">
                             <label>Direcciones</label>
@@ -31,10 +32,7 @@
                     
                         @include('compras.proveedores.form')
                     
-                        <!-- Campo oculto para enviar las direcciones -->
-                        <input type="hidden" name="direcciones" id="direcciones-input">
-                    
-                        <button type="submit" class="btn btn-primary mt-3">Crear proveedor</button>
+                        <button type="submit" class="btn btn-primary mt-3">Guardar direcciones</button>
                     </form>
                 </div>
             </div>

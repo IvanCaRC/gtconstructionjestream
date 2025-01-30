@@ -13,18 +13,8 @@ class Direccion extends Model
     protected $table = 'direcciones';
 
     protected $fillable = [
-        'cp',
-        'estado',
-        'ciudad',
-        'municipio',
-        'colonia',
-        'calle',
-        'numero',
-        'referencia',
-        'proveedor_id',
-        'cliente_id',
+        'cp', 'estado', 'ciudad', 'municipio', 'colonia', 'calle', 'numero', 'referencia', 'Latitud', 'Longitud', 'proveedor_id', 'cliente_id'
     ];
-
     public function cliente()
     {
         return $this->belongsTo(Cliente::class);
