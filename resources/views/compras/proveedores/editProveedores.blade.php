@@ -33,7 +33,7 @@
                         
                         
                     
-                        <button  onclick="confirmSave()" class="btn btn-primary mt-3">Crear proveedor</button>
+                        <button  onclick="confirmUpdate()" class="btn btn-primary mt-3">Actualizar proveedor</button>
                     </form>
                 </div>
             </div>
@@ -43,6 +43,9 @@
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
     crossorigin=""></script>
     <script src="{{ asset('js/proveedor.js') }}"></script>
-
+    <script>
+        let savedAddresses = @json($direcciones); // Cargar las direcciones desde Laravel
+    </script>
+    
 
 @endsection

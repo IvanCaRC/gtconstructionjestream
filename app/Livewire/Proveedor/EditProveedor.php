@@ -28,11 +28,13 @@ class EditProveedor extends Component
         'archivo_facturacion_pdf' => '', // Archivo de facturación del proveedor
         'datos_bancarios_pdf' => '', // Archivo de datos bancarios del proveedor
     ];
-    public $familias, $familiasSeleccionadas = [''], $telefonos = ['']; // Arrays para familias y teléfonos
+    public $familias, $familiasSeleccionadas = [''], $telefonos =[['nombre' => '', 'numero' => '']]; // Arrays para familias y teléfonos
     public $fileNameFacturacion, $fileNameBancarios; // Nombres de los archivos de facturación y bancarios
 
     public $niveles = []; // Array para almacenar las familias de cada nivel
     public $seleccionadas = []; // Array para almacenar las opciones seleccionadas
+    public $facturacionDatosActual;
+    public $bancariosDatoActual;
 
     /**
      * Método mount
@@ -52,13 +54,24 @@ class EditProveedor extends Component
         $this->proveedorEdit['rfc'] = $this->proveedor->rfc;
         $this->proveedorEdit['archivo_facturacion_pdf'] = $this->proveedor->archivo_facturacion_pdf;
         $this->proveedorEdit['datos_bancarios_pdf'] = $this->proveedor->datos_bancarios_pdf;
+        $this->facturacionDatosActual = $this->proveedor->archivo_facturacion_pdf;
+        $this->bancariosDatoActual = $this->proveedor->datos_bancarios_pdf;
         $this->fileNameFacturacion = $this->proveedorEdit['archivo_facturacion_pdf'];
         $this->facturacion = $this->proveedorEdit['archivo_facturacion_pdf'];
-        $this->fileNameBancarios = $this->proveedorEdit['datos_bancarios_pdf']; 
+        $this->fileNameBancarios = $this->proveedorEdit['datos_bancarios_pdf'];
         $this->bancarios = $this->proveedorEdit['datos_bancarios_pdf'];
 
         // Obtiene los teléfonos del proveedor actual
-        $this->telefonos = Telefono::where('proveedor_id', $idproveedor)->pluck('numero')->toArray();
+        $this->telefonos = Telefono::where('proveedor_id', $idproveedor)
+            ->get(['nombre', 'numero'])
+            ->map(function ($telefono) {
+                return [
+                    'nombre' => $telefono->nombre,
+                    'numero' => $telefono->numero,
+                ];
+            })
+            ->toArray();
+
 
         // Obtiene las familias seleccionadas del proveedor actual
         $this->familiasSeleccionadas = ProveedorHasFamilia::where('proveedor_id', $idproveedor)
@@ -123,7 +136,7 @@ class EditProveedor extends Component
      */
     public function addTelefono()
     {
-        $this->telefonos[] = '';
+        $this->telefonos[] = ['nombre' => '', 'numero' => ''];
     }
 
     /**
@@ -208,20 +221,30 @@ class EditProveedor extends Component
     {
         // Obtener datos actuales del proveedor
         $proveedorActual = Proveedor::findOrFail($this->provedprEditId);
-    
+        //     public $facturacionDatosActual;
+        // public $bancariosDatoActual;
+
         // Manejar los archivos de facturación y datos bancarios
         if ($this->facturacion) {
-            $archivoFacturacion = $this->facturacion->store('archivosFacturacionProveedores', 'public');
+            if ($this->facturacion == $this->facturacionDatosActual) {
+                $archivoFacturacion = $this->facturacion;
+            } else {
+                $archivoFacturacion = $this->facturacion->store('archivosFacturacionProveedores', 'public');
+            }
         } else {
             $archivoFacturacion = $this->fileNameFacturacion ? $this->proveedorEdit['archivo_facturacion_pdf'] : null;
         }
-    
+
         if ($this->bancarios) {
-            $archivoBancarios = $this->bancarios->store('archivosBancariosProveedores', 'public');
+            if ($this->bancarios == $this->bancariosDatoActual) {
+                $archivoBancarios = $this->bancarios;
+            } else {
+                $archivoBancarios = $this->bancarios->store('archivosBancariosProveedores', 'public');
+            }
         } else {
             $archivoBancarios = $this->fileNameBancarios ? $this->proveedorEdit['datos_bancarios_pdf'] : null;
         }
-    
+
         // Actualizar campos básicos
         $proveedorActual->update([
             'nombre' => $this->proveedorEdit['nombre'],
@@ -231,29 +254,31 @@ class EditProveedor extends Component
             'archivo_facturacion_pdf' => $archivoFacturacion,
             'datos_bancarios_pdf' => $archivoBancarios,
         ]);
-    
+
         // Obtener teléfonos actuales del proveedor
         $telefonosActuales = Telefono::where('proveedor_id', $this->provedprEditId)->pluck('numero')->toArray();
-    
+
         // Comparar y actualizar teléfonos
+
         if ($telefonosActuales !== $this->telefonos) {
             Telefono::where('proveedor_id', $this->provedprEditId)->delete();
             foreach ($this->telefonos as $telefono) {
                 Telefono::create([
-                    'numero' => $telefono,
+                    'nombre' => $telefono['nombre'], // Guardar nombre de contacto
+                    'numero' => $telefono['numero'], // Guardar número de teléfono
                     'proveedor_id' => $this->provedprEditId,
                 ]);
             }
         }
-    
+
         // Obtener familias actuales del proveedor
         $familiasActuales = ProveedorHasFamilia::where('proveedor_id', $this->provedprEditId)->pluck('familia_id')->toArray();
-    
+
         // Comparar y actualizar familias
-        $familiasSeleccionadasIds = array_map(function($familia) {
+        $familiasSeleccionadasIds = array_map(function ($familia) {
             return $familia['id'];
         }, $this->familiasSeleccionadas);
-    
+
         if ($familiasActuales !== $familiasSeleccionadasIds) {
             ProveedorHasFamilia::where('proveedor_id', $this->provedprEditId)->delete();
             foreach ($familiasSeleccionadasIds as $familia_id) {
@@ -263,10 +288,9 @@ class EditProveedor extends Component
                 ]);
             }
         }
-    
+
         // Feedback al usuario
         session()->flash('message', 'Proveedor actualizado exitosamente.');
         return true;
     }
-    
 }

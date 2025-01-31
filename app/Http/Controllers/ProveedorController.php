@@ -32,7 +32,7 @@ class ProveedorController extends Controller
 
         // Decodificar las direcciones desde JSON
         $direcciones = json_decode($request->input('direcciones'), true);
-   
+
 
         // Obtener el proveedor con el ID recibido del formulario
         $proveedor = Proveedor::find($request->input('proveedor_id'));
@@ -76,8 +76,15 @@ class ProveedorController extends Controller
         return view('compras.proveedores.viewProveedorEspecifico', ['idproveedor' => $idproveedor]);
     }
 
+    // public function editProveedor($idproveedor)
+    // {
+    //     return view('compras.proveedores.editProveedores', ['idproveedor' => $idproveedor]);
+    // }
     public function editProveedor($idproveedor)
     {
-        return view('compras.proveedores.editProveedores', ['idproveedor' => $idproveedor]);
+        $proveedor = Proveedor::findOrFail($idproveedor);
+        $direcciones = Direccion::where('proveedor_id', $idproveedor)->get(); // Obtener direcciones del proveedor
+
+        return view('compras.proveedores.editProveedores', compact('idproveedor', 'direcciones'));
     }
 }

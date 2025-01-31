@@ -1,5 +1,23 @@
 let savedAddresses = []; // Array para almacenar las direcciones y coordenadas
 document.addEventListener("DOMContentLoaded", function () {
+    if (savedAddresses.length > 0) {
+        savedAddresses = savedAddresses.map(dir => ({
+            address: {
+                calle: dir.calle || '',
+                numero: dir.numero || '',
+                colonia: dir.colonia || '',
+                municipio: dir.municipio || '',
+                ciudad: dir.ciudad || '',
+                estado: dir.estado || '',
+                cp: dir.cp || '',
+                pais: dir.pais || '',
+                referencia: dir.referencia || ''
+            },
+            latlng: dir.latitud && dir.longitud ? { lat: parseFloat(dir.latitud), lng: parseFloat(dir.longitud) } : null
+        }));
+
+        updateAddressList();
+    }
     let map;
     let marker;
     let selectedLatLng = null; // Variable para almacenar las coordenadas seleccionadas
