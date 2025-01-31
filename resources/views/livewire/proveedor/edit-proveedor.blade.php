@@ -131,10 +131,75 @@
                 </div>
             @endif
         </div>
-        <button href="#" wire:click="$set('openModalFamilias', true)" class="btn btn-primary mt-3">Agregar
+        <button  type="button" wire:click="$set('openModalFamilias', true)" class="btn btn-primary mt-3">Agregar
             Familia</button>
-    </div>
 
+
+    </div>
+    <label>Direcciones</label>
+    @foreach ($direccionesAsignadas as $index => $direccion)
+        <div class="row align-items-end">
+            <div class="col-md-2 mb-3">
+                <label>Calle</label>
+                <input type="text" class="form-control"
+                    wire:model.defer="direccionesAsignadas.{{ $index }}.calle">
+            </div>
+            <div class="col-md-2 mb-3">
+                <label>Número</label>
+                <input type="text" class="form-control"
+                    wire:model.defer="direccionesAsignadas.{{ $index }}.numero">
+            </div>
+            <div class="col-md-2 mb-3">
+                <label>Colonia</label>
+                <input type="text" class="form-control"
+                    wire:model.defer="direccionesAsignadas.{{ $index }}.colonia">
+            </div>
+            <div class="col-md-2 mb-3">
+                <label>Municipio</label>
+                <input type="text" class="form-control"
+                    wire:model.defer="direccionesAsignadas.{{ $index }}.municipio">
+            </div>
+            <div class="col-md-2 mb-3">
+                <label>Ciudad</label>
+                <input type="text" class="form-control"
+                    wire:model.defer="direccionesAsignadas.{{ $index }}.ciudad">
+            </div>
+            <div class="col-md-2 mb-3">
+                <label>Estado</label>
+                <input type="text" class="form-control"
+                    wire:model.defer="direccionesAsignadas.{{ $index }}.estado">
+            </div>
+            <div class="col-md-2 mb-3">
+                <label>Código Postal</label>
+                <input type="text" class="form-control"
+                    wire:model.defer="direccionesAsignadas.{{ $index }}.cp">
+            </div>
+            <div class="col-md-2 mb-3">
+                <label>País</label>
+                <input type="text" class="form-control"
+                    wire:model.defer="direccionesAsignadas.{{ $index }}.pais">
+            </div>
+            <div class="col-md-2 mb-3">
+                <label>Referencia</label>
+                <input type="text" class="form-control"
+                    wire:model.defer="direccionesAsignadas.{{ $index }}.referencia">
+            </div>
+            <div class="col-md-2 mb-3">
+                <label>Latitud</label>
+                <input type="text" class="form-control"
+                    wire:model.defer="direccionesAsignadas.{{ $index }}.latitud">
+            </div>
+            <div class="col-md-2 mb-3">
+                <label>Longitud</label>
+                <input type="text" class="form-control"
+                    wire:model.defer="direccionesAsignadas.{{ $index }}.longitud">
+            </div>
+            <div class="col-md-2 mb-3 d-flex align-items-end">
+                <button type="button" class="btn btn-danger w-100"
+                    wire:click="removeDireccion({{ $index }})">Eliminar</button>
+            </div>
+        </div>
+    @endforeach
 
     {{-- <button type="button" onclick="confirmUpdate()" class="btn btn-primary mt-3">Actualizar proveedor</button> --}}
 
@@ -169,13 +234,13 @@
             </form>
         </x-slot>
         <x-slot name='footer'>
-            <button class="btn btn-secondary mr-2 disabled:opacity-50" wire:click="$set('openModalFamilias',false)"
+            <button type="button" class="btn btn-secondary mr-2 disabled:opacity-50" wire:click="$set('openModalFamilias',false)"
                 wire:loading.attr="disabled">Cancelar</button>
-            <button class="btn btn-primary disabled:opacity-50" wire:loading.attr="disabled"
+            <button type="button" class="btn btn-primary disabled:opacity-50" wire:loading.attr="disabled"
                 wire:click="confirmFamilia">Agregar familia</button>
         </x-slot>
     </x-dialog-modal>
-
+    {{-- 
     <script>
         function confirmUpdate() {
             // Llamar al método updateProveedor de Livewire
@@ -199,6 +264,44 @@
                 Swal.fire({
                     title: 'Error',
                     text: 'Hubo un problema al actualizar el proveedor.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            });
+        }
+    </script> --}}
+
+    <script>
+        function confirmUpdate() {
+            @this.call('updateProveedor').then(response => {
+                if (response.proveedor_id) {
+                    // Guardar el ID del proveedor recién creado en un campo oculto
+                    document.getElementById('proveedor-id-input').value = response.proveedor_id;
+
+                    // Convertir las direcciones a formato JSON
+                    const directionsJSON = JSON.stringify(savedAddresses);
+
+                    // Asignar el valor al campo oculto
+                    document.getElementById('direcciones-input').value = directionsJSON;
+
+                    // Mostrar la alerta después de la creación si todo es correcto
+                    Swal.fire({
+                        title: 'Proveedor creado',
+                        text: 'El proveedor ha sido creado exitosamente.',
+                        icon: 'success',
+                        confirmButtonText: 'OK'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            // Enviar el formulario
+                            document.getElementById('proveedor-form').submit();
+                        }
+                    });
+                }
+            }).catch(error => {
+                // Manejar error si es necesario
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Hubo un problema al crear el proveedor.',
                     icon: 'error',
                     confirmButtonText: 'OK'
                 });

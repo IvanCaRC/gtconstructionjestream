@@ -241,34 +241,34 @@ class EditItem extends Component
 
 
 
-        
-            // Obtener las familias actuales relacionadas con el item específico
-            $familiasActuales = ItemEspecificoHasFamilia::where('item_especifico_id', $itemEspecificoActual->id)
-                ->pluck('familia_id')
-                ->toArray();
-        
-            // Obtener las IDs de las familias seleccionadas
-            $familiasSeleccionadasIds = array_map(function ($familia) {
-                return $familia['id'];
-            }, $this->familiasSeleccionadas);
+
+        // Obtener las familias actuales relacionadas con el item específico
+        $familiasActuales = ItemEspecificoHasFamilia::where('item_especifico_id', $itemEspecificoActual->id)
+            ->pluck('familia_id')
+            ->toArray();
+
+        // Obtener las IDs de las familias seleccionadas
+        $familiasSeleccionadasIds = array_map(function ($familia) {
+            return $familia['id'];
+        }, $this->familiasSeleccionadas);
 
 
-        
-            // Comparar y actualizar familias si hay cambios
-            if ($familiasActuales !== $familiasSeleccionadasIds) {
-                // Eliminar relaciones antiguas
-                ItemEspecificoHasFamilia::where('item_especifico_id', $itemEspecificoActual->id)->delete();
-        
-                // Crear las nuevas relaciones
-                foreach ($familiasSeleccionadasIds as $familia_id) {
-                    ItemEspecificoHasFamilia::create([
-                        'item_especifico_id' => $itemEspecificoActual->id,
-                        'familia_id' => $familia_id,
-                    ]);
-                }
+
+        // Comparar y actualizar familias si hay cambios
+        if ($familiasActuales !== $familiasSeleccionadasIds) {
+            // Eliminar relaciones antiguas
+            ItemEspecificoHasFamilia::where('item_especifico_id', $itemEspecificoActual->id)->delete();
+
+            // Crear las nuevas relaciones
+            foreach ($familiasSeleccionadasIds as $familia_id) {
+                ItemEspecificoHasFamilia::create([
+                    'item_especifico_id' => $itemEspecificoActual->id,
+                    'familia_id' => $familia_id,
+                ]);
             }
-        
-        
+        }
+
+
 
 
         foreach ($this->ProvedoresAsignados as $proveedor) {

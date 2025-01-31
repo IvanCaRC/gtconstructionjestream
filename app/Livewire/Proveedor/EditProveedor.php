@@ -2,11 +2,14 @@
 
 namespace App\Livewire\Proveedor;
 
+use App\CustomClases\ConexionProveedroDireccion;
+use App\Models\Direccion;
 use App\Models\Proveedor;
 use Livewire\Component;
 use App\Models\Telefono;  // Importar el modelo de Telefonos
 use App\Models\Familia;   // Importar el modelo de Familia
 use App\Models\ProveedorHasFamilia;
+use Illuminate\Support\Facades\DB;
 use Livewire\Features\SupportFileUploads\WithFileUploads;
 
 class EditProveedor extends Component
@@ -28,13 +31,14 @@ class EditProveedor extends Component
         'archivo_facturacion_pdf' => '', // Archivo de facturación del proveedor
         'datos_bancarios_pdf' => '', // Archivo de datos bancarios del proveedor
     ];
-    public $familias, $familiasSeleccionadas = [''], $telefonos =[['nombre' => '', 'numero' => '']]; // Arrays para familias y teléfonos
+    public $familias, $familiasSeleccionadas = [''], $telefonos = [['nombre' => '', 'numero' => '']]; // Arrays para familias y teléfonos
     public $fileNameFacturacion, $fileNameBancarios; // Nombres de los archivos de facturación y bancarios
 
     public $niveles = []; // Array para almacenar las familias de cada nivel
     public $seleccionadas = []; // Array para almacenar las opciones seleccionadas
     public $facturacionDatosActual;
     public $bancariosDatoActual;
+    public $direccionesAsignadas = [];
 
     /**
      * Método mount
@@ -42,6 +46,30 @@ class EditProveedor extends Component
      *
      * @param int $idproveedor
      */
+    public function cargarDireccionesParaEditar($idProveedor)
+    {
+        $direcciones = Direccion::where('proveedor_id', $idProveedor)->get();
+
+
+        foreach ($direcciones as $direccion) {
+            $conexion = new ConexionProveedroDireccion(
+                $direccion->proveedor_id,
+                $direccion->cp,
+                $direccion->estado,
+                $direccion->ciudad,
+                $direccion->municipio,
+                $direccion->colonia,
+                $direccion->calle,
+                $direccion->numero,
+                $direccion->referencia,
+                $direccion->Latitud,
+                $direccion->Longitud
+            );
+
+            $this->direccionesAsignadas[] = (array) $conexion; // Convertir el objeto a un array y agregarlo al arreglo
+        }
+    }
+
     public function mount($idproveedor)
     {
         $this->proveedor = Proveedor::findOrFail($idproveedor); // Obtiene el proveedor por ID
@@ -60,7 +88,7 @@ class EditProveedor extends Component
         $this->facturacion = $this->proveedorEdit['archivo_facturacion_pdf'];
         $this->fileNameBancarios = $this->proveedorEdit['datos_bancarios_pdf'];
         $this->bancarios = $this->proveedorEdit['datos_bancarios_pdf'];
-
+        $this->cargarDireccionesParaEditar($idproveedor);
         // Obtiene los teléfonos del proveedor actual
         $this->telefonos = Telefono::where('proveedor_id', $idproveedor)
             ->get(['nombre', 'numero'])
@@ -86,6 +114,7 @@ class EditProveedor extends Component
             ->get();
     }
 
+
     /**
      * Método render
      * Renderiza la vista del componente
@@ -96,6 +125,12 @@ class EditProveedor extends Component
     {
         return view('livewire.proveedor.edit-proveedor');
     }
+    public function removeDireccion($index)
+    {
+        unset($this->direccionesAsignadas[$index]);
+        $this->direccionesAsignadas = array_values($this->direccionesAsignadas); // Reindexar el array
+    }
+
 
     /**
      * Elimina el archivo de facturación
@@ -289,8 +324,37 @@ class EditProveedor extends Component
             }
         }
 
+        Direccion::where('proveedor_id', $this->provedprEditId)->delete();
+
+        // Iterar sobre las direcciones asignadas y guardarlas en la base de datos
+        foreach ($this->direccionesAsignadas as $direccion) {
+            // Asegurarnos de que el arreglo contiene los datos necesarios
+            
+                // Insertar la nueva dirección
+                DB::table('direcciones')->insert(
+                    [
+                        'proveedor_id' => $direccion['proveedor_id'] ?? '',
+                'calle' => $direccion['calle'] ?? '',
+                'numero' => $direccion['numero'] ?? '',
+                'colonia' => $direccion['colonia'] ?? '',
+                'municipio' => $direccion['municipio'] ?? '',
+                'ciudad' => $direccion['ciudad'] ?? '',
+                'estado' => $direccion['estado'] ?? '',
+                'cp' => $direccion['cp'] ?? '',
+                'referencia' => $direccion['referencia'] ?? '',
+                'latitud' => $direccion['latitud'] ?? '',
+                'longitud' => $direccion['longitud'] ?? '',
+                'created_at' => now(),
+                'updated_at' => now(),
+            
+                    ]
+                );
+            
+        }
+
+
         // Feedback al usuario
         session()->flash('message', 'Proveedor actualizado exitosamente.');
-        return true;
+        return ['proveedor_id' => $proveedorActual->id];
     }
 }
