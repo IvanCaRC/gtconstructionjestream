@@ -5,24 +5,34 @@
         <h1>Editar Familia {{ $familia->nombre }}</h1>
         <div class="card">
             <div class="card-body">
-                <form>
+                <form id="familiaForm">
                     <!-- Nombre -->
                     <div class="form-group">
                         <label for="nombre">Nombre</label>
-                        <input type="text" id="nombre" class="form-control" wire:model="nombre"
+                        <input type="text" id="nombre" class="form-control @error('nombre') is-invalid @enderror"
                             wire:model.defer="familiaEdit.nombre">
+                        @error('nombre')
+                            <span class="invalid-feedback">{{ $message }}</span>
+                        @enderror
+                        <span id="nombreError" class="invalid-feedback" style="display:none;">El campo nombre es
+                            obligatorio.</span>
                     </div>
                     <!-- Descripción -->
                     <div class="form-group">
                         <label for="descripcion">Descripción</label>
-                        <textarea id="descripcion" class="form-control" wire:model.defer="familiaEdit.descripcion"></textarea>
+                        <textarea id="descripcion" class="form-control @error('descripcion') is-invalid @enderror"
+                            wire:model.defer="familiaEdit.descripcion"></textarea>
+                        @error('descripcion')
+                            <span class="invalid-feedback">{{ $message }}</span>
+                        @enderror
                     </div>
                     <!-- Niveles dinámicos -->
                     @foreach ($niveles as $nivel => $familias)
                         @if (count($familias) > 0)
                             <div class="form-group">
                                 <label for="familia_nivel_{{ $nivel }}">Nivel {{ $nivel }}</label>
-                                <select id="familia_nivel_{{ $nivel }}" class="form-control"
+                                <select id="familia_nivel_{{ $nivel }}"
+                                    class="form-control @error('seleccionadas.' . $nivel) is-invalid @enderror"
                                     wire:change="calcularSubfamilias($event.target.value, {{ $nivel }})">
                                     <option value="0"
                                         {{ !isset($seleccionadas[$nivel]) || $seleccionadas[$nivel] == 0 ? 'selected' : '' }}>
@@ -37,12 +47,16 @@
                                         @endif
                                     @endforeach
                                 </select>
+                                @error('seleccionadas.' . $nivel)
+                                    <span class="invalid-feedback">{{ $message }}</span>
+                                @enderror
                             </div>
                         @endif
                     @endforeach
                     <!-- Botón de envío -->
                     <button class="btn btn-secondary mr-2 disabled:opacity-50">Cancelar</button>
-                    <button type="button" class="btn btn-primary disabled:opacity-50" onclick="confirmUpdate()">Actualizar</button>
+                    <button type="button" class="btn btn-primary disabled:opacity-50"
+                        onclick="validateForm()">Actualizar</button>
                 </form>
                 <!-- Mensaje de éxito -->
             </div>
@@ -51,7 +65,20 @@
 </div>
 
 <script>
-    function confirmUpdate() {
+    function validateForm() {
+        const nombre = document.getElementById('nombre').value;
+        const nombreInput = document.getElementById('nombre');
+        const nombreError = document.getElementById('nombreError');
+
+        if (!nombre) {
+            nombreError.style.display = 'block';
+            nombreInput.classList.add('is-invalid');
+            return;
+        } else {
+            nombreError.style.display = 'none';
+            nombreInput.classList.remove('is-invalid');
+        }
+
         // Llamar al método update de Livewire
         @this.call('update').then(response => {
             if (response) {
