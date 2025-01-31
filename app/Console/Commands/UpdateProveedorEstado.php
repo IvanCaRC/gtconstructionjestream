@@ -4,8 +4,8 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Models\Proveedor;
-use App\Models\User; // Importar el modelo User
-use App\Notifications\ProveedorEstadoCambiado; // Importar la notificación
+use App\Models\User;
+use App\Notifications\ProveedorEstadoCambiado;
 
 class UpdateProveedorEstado extends Command
 {
@@ -27,15 +27,24 @@ class UpdateProveedorEstado extends Command
      */
     public function handle()
     {
-        Proveedor::where('estado', true)->update(['estado' => false]);
+        // Obtener la lista de proveedores desactualizados
+        $proveedores = Proveedor::where('estado', true)->get();
+        $this->info('Número de proveedores a desactualizar: ' . $proveedores->count()); // Mensaje de depuración
 
-        // Enviar notificación a el usuario administrador y del departamento de compras
-        $users = User::role(['Administrador','Compras'])->get();
-        foreach ($users as $user) {
-            $user->notify(new ProveedorEstadoCambiado());
-            $this->info('Notificación enviada al usuario: ' . $user->id);
+        foreach ($proveedores as $proveedor) {
+            $proveedor->update(['estado' => false]);
+            $this->info('Proveedor desactualizado: ' . $proveedor->nombre); // Mensaje de depuración
+
+            // Enviar notificación a los usuarios con roles 'Administrador' y 'Compras'
+            $users = User::role(['Administrador', 'Compras'])->get();
+            $this->info('Número de usuarios a notificar: ' . $users->count()); // Mensaje de depuración
+            foreach ($users as $user) {
+                $user->notify(new ProveedorEstadoCambiado($proveedor->nombre));
+                $this->info('Notificación enviada al usuario: ' . $user->id . ' para el proveedor: ' . $proveedor->nombre);
+            }
         }
 
-        $this->info('Estado de proveedor desactualizado');
+        $this->info('Estado de proveedores desactualizado');
     }
 }
+

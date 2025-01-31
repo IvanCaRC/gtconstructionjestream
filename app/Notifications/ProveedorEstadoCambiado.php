@@ -10,9 +10,11 @@ class ProveedorEstadoCambiado extends Notification
 {
     use Queueable;
 
-    public function __construct()
+    protected $nombreProveedor;
+
+    public function __construct($nombreProveedor)
     {
-        //
+        $this->nombreProveedor = $nombreProveedor;
     }
 
     public function via($notifiable)
@@ -27,7 +29,7 @@ class ProveedorEstadoCambiado extends Notification
         Log::info('Generando URL para ProveedorEstadoCambiado: ' . $url);
 
         return [
-            'message' => 'Un proveedor se encuentra desactualizado',
+            'message' => 'El proveedor "' . $this->nombreProveedor . '" se encuentra desactualizado',
             'url' => $url
         ];
     }
