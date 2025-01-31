@@ -5,6 +5,8 @@
 @section('activeMateriales', 'active')
 @section('activeFondoPermanenteMateriales', 'background-permanent')
 @section('contend')
-   
+   <style>
+    
+   </style>
     @livewire('item.vista-especifica', ['idItem' => $idItem])
 @endsection

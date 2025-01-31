@@ -12,7 +12,7 @@
      crossorigin=""/>
     <div class="container-fluid px-4 sm:px-6 lg:px-8 py-1">
         <div class="container-fluid px-4 sm:px-6 lg:px-8 py-1">
-            <h1>Crear Nuevo Proveedor</h1>
+            <h1>Editar Proveedor</h1>
 
             <div class="card">
                 <div class="card-body">

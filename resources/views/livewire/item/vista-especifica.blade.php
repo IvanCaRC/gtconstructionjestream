@@ -48,8 +48,8 @@
                                 </div>
                                 <div class="col-md-8">
                                     <div class="form-group">
-                                        <h2 for="nombre">Nombre</h2>
-                                        <h3 for="">{{ $item->nombre }}</h3>
+
+                                        <h1 for="">{{ $item->nombre }}</h1>
                                     </div>
                                     <div class="form-group">
                                         <h3 for="">Descripcion</h3>
@@ -72,8 +72,7 @@
                                                             <th>Tiempo Mínimo de Entrega</th>
                                                             <th>Tiempo Máximo de Entrega</th>
                                                             <th>Precio de Compra</th>
-                                                            <th>Unidad</th>x-dialog-modal
-
+                                                            <th>Unidad</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -144,9 +143,91 @@
                                             @endif
 
                                         </div>
-                                        <button href="#" wire:click="montarModalProveedores()"
-                                            class="btn btn-secondary mt-3">Agregar provedor</button>
+
                                     </div>
+                                    
+                                    <div class="row">
+                                        <div class="col-md-4 mb-3">
+                                            <label>Familias</label>
+                                            <div class="input-group mb-2">
+                                                @if (count($familiasSeleccionadas) > 0)
+                                                    @foreach ($familiasSeleccionadas as $index => $familia)
+                                                        <div class="w-100 d-flex align-items-center mb-2">
+                                                            <div class="flex-grow-1">
+                                                                {{ $familia['nombre'] }}
+                                                            </div>
+    
+                                                        </div>
+                                                    @endforeach
+                                                @else
+                                                    <div class="no-familias-seleccionadas w-100">
+                                                        No hay familias seleccionadas
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <h4 for="unidad">Unidad</h4>
+                                            <label>{{ $itemEspecifico->unidad }}/label>
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label for="stock" class="mr-2">Stock Acutal del Producto</label>
+                                            <br>
+                                            <label for="">{{ $itemEspecifico->stock }}</label>
+                                        </div>
+
+                                    </div>
+                                    <label>El parametro por el que se hacen los calculos se basan en el proveedor seleccionado</label>
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-2 mb-3">
+                                                <label for="cantidad_piezas_mayoreo" class="mr-2">Cant. Piezas
+                                                    Mayoreo</label>
+                                                <label for="">{{ $itemEspecifico->cantidad_piezas_mayoreo  }}</label>
+                                            </div>
+
+                                            <div class="col-md-2 mb-3">
+                                                <label for="porcentaje_venta_mayorista" class="mr-2">% Venta
+                                                    Mayorista</label>
+                                                    <label for="">{{ $itemEspecifico->porcentaje_venta_mayorista  }}</label>
+                                            </div>
+
+                                            <div class="col-md-2 mb-3">
+                                                <label for="porcentaje_venta_minorista" class="mr-2">% Venta
+                                                    Minorista</label>
+                                                    <label for="">{{ $itemEspecifico->porcentaje_venta_minorista  }}</label>
+                                            </div>
+
+                                            <div class="col-md-3 mb-3">
+                                                <label for="precio_venta_mayorista" class="mr-2"><br>Precio
+                                                    Mayorista</label>
+                                                    <label for="">{{ $itemEspecifico->precio_venta_mayorista  }}</label>
+                                            </div>
+
+                                            <div class="col-md-3 mb-3">
+                                                <label for="precio_venta_minorista" class="mr-2"><br>Precio
+                                                    Minorista</label>
+                                                    <label for="">{{ $itemEspecifico->precio_venta_minorista  }}</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                    
+                                    
+                                        @foreach ($especificaciones as $index => $especificacion)
+                                            <div class="input-group mb-2">
+                                                
+                                                    
+                                                                <label>{{ $especificacion['enunciado'] }}</label>
+                                                            
+                                                                <label>{{ $especificacion['concepto'] }}</label>
+                                                            
+                                            </div>
+                                        @endforeach
+                                    </div>
+                                    
+                                    
+                                    
                                 </div>
                             </div>
                         </div>

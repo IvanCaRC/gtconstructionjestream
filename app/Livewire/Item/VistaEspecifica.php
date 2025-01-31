@@ -5,6 +5,7 @@ namespace App\Livewire\Item;
 use App\CustomClases\ConexionProveedorItemTemporal;
 use App\Models\Item;
 use App\Models\ItemEspecifico;
+use App\Models\ItemEspecificoHasFamilia;
 use App\Models\ItemEspecificoProveedor;
 use Livewire\Component;
 
@@ -14,6 +15,7 @@ class VistaEspecifica extends Component
     public $imagenesCargadas;
     public $familiasSeleccionadas = [''];
     public $ProvedoresAsignados = [];
+    public $especificaciones = [['enunciado' => '', 'concepto' => '']];
 
     public function mount($idItem)
     {
@@ -23,6 +25,12 @@ class VistaEspecifica extends Component
         $this->item = Item::findOrFail($this->itemEspecifico->item_id);
         $this->imagenesCargadas = explode(',', $this->itemEspecifico->image); // Dividir la cadena en un array
         $this->cargarProvedoresParaEditar($idItem);
+        $this->familiasSeleccionadas = ItemEspecificoHasFamilia::where('item_especifico_id', $idItem)
+            ->with('familia')
+            ->get()
+            ->pluck('familia')
+            ->toArray();
+            $this->especificaciones = json_decode($this->itemEspecifico->especificaciones, true);
     }
     public function cargarProvedoresParaEditar($idItem)
     {
