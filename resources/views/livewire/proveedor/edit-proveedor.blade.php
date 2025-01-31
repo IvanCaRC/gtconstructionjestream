@@ -1,11 +1,4 @@
-<div class="container-fluid px-4 sm:px-6 lg:px-8 py-1">
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
-        integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
-    <div class="container-fluid px-4 sm:px-6 lg:px-8 py-1">
-        <h1>Editar Proveedor {{ $proveedor->nombre }}</h1>
-        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <div class="card">
-            <div class="card-body">
+<div>
 
                 <div class="form-group">
                     <label for="nombre">Nombre</label>
@@ -139,9 +132,7 @@
                     <button type="button" onclick="confirmUpdate()" class="btn btn-primary mt-3">Actualizar proveedor</button>
 
                 
-            </div>
-        </div>
-    </div>
+
 
     <x-dialog-modal wire:model="openModalFamilias">
         <x-slot name='title'>

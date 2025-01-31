@@ -13,7 +13,8 @@ class Telefono extends Model
 
     protected $fillable = [
         'proveedor_id',
-        'numero'
+        'numero',
+        'nombre'
     ];
 
     public function proveedor()
