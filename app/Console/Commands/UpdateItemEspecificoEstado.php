@@ -21,8 +21,8 @@ class UpdateItemEspecificoEstado extends Command
     {
         ItemEspecifico::where('estado', true)->update(['estado' => false]);
 
-        // Enviar notificación a todos los usuarios
-        $users = User::all();
+        // Enviar notificación a el usuario administrador y del departamento de compras
+        $users = User::role(['Administrador','Compras'])->get();
         foreach ($users as $user) {
             $user->notify(new ItemEspecificoEstadoCambiado());
             $this->info('Notificación enviada al usuario: ' . $user->id);

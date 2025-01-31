@@ -4,7 +4,6 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Models\Proveedor;
-use Illuminate\Support\Facades\Log;
 use App\Models\User; // Importar el modelo User
 use App\Notifications\ProveedorEstadoCambiado; // Importar la notificación
 
@@ -30,8 +29,8 @@ class UpdateProveedorEstado extends Command
     {
         Proveedor::where('estado', true)->update(['estado' => false]);
 
-        // Enviar notificación a todos los usuarios
-        $users = User::all();
+        // Enviar notificación a el usuario administrador y del departamento de compras
+        $users = User::role(['Administrador','Compras'])->get();
         foreach ($users as $user) {
             $user->notify(new ProveedorEstadoCambiado());
             $this->info('Notificación enviada al usuario: ' . $user->id);
