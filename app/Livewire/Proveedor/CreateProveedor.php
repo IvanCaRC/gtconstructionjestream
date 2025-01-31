@@ -97,6 +97,8 @@ class CreateProveedor extends Component
 
     public function save()
     {
+        $this->validate(Proveedor::rules(), Proveedor::messages());
+
         $facturacion = null;
         if ($this->facturacion) {
             $facturacion = $this->facturacion->store('archivosFacturacionProveedores', 'public');

@@ -1,7 +1,11 @@
 <div>
     <div class="form-group">
         <label for="nombre">Nombre</label>
-        <input type="text" id="nombre" class="form-control"wire:model.defer="nombre">
+        <input type="text" id="nombre" class="form-control @error('nombre') is-invalid @enderror"
+            wire:model.defer="nombre">
+        @error('nombre')
+            <span class="invalid-feedback">{{ $message }}</span>
+        @enderror
     </div>
 
     <div class="form-group">
@@ -10,14 +14,22 @@
     </div>
     <div class="row">
         <div class="col-md-6 mb-3">
-            <label for="descripcion">Correo</label>
-            <input type="email" id="email" class="form-control" wire:model="correo"></input>
+            <label for="correo">Correo</label>
+            <input type="email" id="correo" class="form-control @error('correo') is-invalid @enderror"
+                wire:model="correo">
+            @error('correo')
+                <span class="invalid-feedback">{{ $message }}</span>
+            @enderror
         </div>
 
         <div class="col-md-6 mb-3">
-            <label for="descripcion">RFC</label>
-            <input id="descripcion" class="form-control" wire:model="rfc"></input>
+            <label for="rfc">RFC</label>
+            <input id="rfc" class="form-control @error('rfc') is-invalid @enderror" wire:model="rfc">
+            @error('rfc')
+                <span class="invalid-feedback">{{ $message }}</span>
+            @enderror
         </div>
+
     </div>
     <div class="form-group">
         <label>Teléfonos</label>
@@ -37,8 +49,8 @@
         @endforeach
         <button type="button" class="btn btn-primary mt-2" wire:click="addTelefono">Agregar otro teléfono</button>
     </div>
-    
-    
+
+
 
     <div class="row">
         <div class="col-md-6 mb-3"> <label for="archivosFacturacion">Archivos de facturación</label>
@@ -104,12 +116,12 @@
                 </div>
             @endif
         </div>
-        <button type="button"  wire:click="$set('openModalFamilias', true)" class="btn btn-primary mt-3">Agregar
+        <button type="button" wire:click="$set('openModalFamilias', true)" class="btn btn-primary mt-3">Agregar
             Familia</button>
     </div>
 
 
-    
+
     {{-- <button type="submit" onclick="confirmSave()" class="btn btn-primary mt-3">Crear proveedor</button> --}}
 
 
@@ -141,9 +153,9 @@
             </form>
         </x-slot>
         <x-slot name='footer'>
-            <button type="button" class="btn btn-secondary mr-2 disabled:opacity-50" wire:click="$set('openModalFamilias',false)"
-                wire:loading.attr="disabled">Cancelar</button>
-            <button  type="button" class="btn btn-primary disabled:opacity-50" wire:loading.attr="disabled"
+            <button type="button" class="btn btn-secondary mr-2 disabled:opacity-50"
+                wire:click="$set('openModalFamilias',false)" wire:loading.attr="disabled">Cancelar</button>
+            <button type="button" class="btn btn-primary disabled:opacity-50" wire:loading.attr="disabled"
                 wire:click="confirmFamilia">Agregar familia</button>
         </x-slot>
     </x-dialog-modal>
@@ -157,13 +169,13 @@
                 if (response.proveedor_id) {
                     // Guardar el ID del proveedor recién creado en un campo oculto
                     document.getElementById('proveedor-id-input').value = response.proveedor_id;
-    
+
                     // Convertir las direcciones a formato JSON
                     const directionsJSON = JSON.stringify(savedAddresses);
-    
+
                     // Asignar el valor al campo oculto
                     document.getElementById('direcciones-input').value = directionsJSON;
-    
+
                     // Mostrar la alerta después de la creación si todo es correcto
                     Swal.fire({
                         title: 'Proveedor creado',
@@ -188,8 +200,8 @@
             });
         }
     </script>
-    
-    
-    
+
+
+
 
 </div>
