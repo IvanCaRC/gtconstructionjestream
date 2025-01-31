@@ -10,7 +10,8 @@
                     <!-- Nombre -->
                     <div class="form-group">
                         <label for="nombre">Nombre</label>
-                        <input type="text" id="nombre" class="form-control" wire:model="nombre">
+                        <input type="text" id="nombre" class="form-control @error('nombre') is-invalid @enderror"
+                            wire:model="nombre">
                         @error('nombre')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -19,7 +20,7 @@
                     <!-- Descripción -->
                     <div class="form-group">
                         <label for="descripcion">Descripción</label>
-                        <textarea id="descripcion" class="form-control" wire:model="descripcion"></textarea>
+                        <textarea id="descripcion" class="form-control @error('descripcion') is-invalid @enderror" wire:model="descripcion"></textarea>
                         @error('descripcion')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -27,14 +28,16 @@
 
                     <!-- Niveles dinámicos -->
                     @foreach ($niveles as $nivel => $familias)
-                        @if (count($familias) > 0)  
+                        @if (count($familias) > 0)
                             <div class="form-group">
                                 <label for="label_familia_nivel_{{ $nivel }}">Nivel {{ $nivel }}</label>
-                                <select id="familia_nivel_{{ $nivel }}" class="form-control"
+                                <select id="familia_nivel_{{ $nivel }}"
+                                    class="form-control @error('seleccionadas.' . $nivel) is-invalid @enderror"
                                     wire:change="calcularSubfamilias($event.target.value, {{ $nivel }})">
                                     <option value="0"
                                         {{ !isset($seleccionadas[$nivel]) || $seleccionadas[$nivel] == 0 ? 'selected' : '' }}>
-                                        Seleccione una familia</option>
+                                        Seleccione una familia
+                                    </option>
                                     @foreach ($familias as $familia)
                                         <option value="{{ $familia->id }}"
                                             {{ isset($seleccionadas[$nivel]) && $seleccionadas[$nivel] == $familia->id ? 'selected' : '' }}>
@@ -42,6 +45,9 @@
                                         </option>
                                     @endforeach
                                 </select>
+                                @error('seleccionadas.' . $nivel)
+                                    <span class="text-danger">{{ $message }}</span>
+                                @enderror
                             </div>
                         @endif
                     @endforeach
