@@ -212,19 +212,31 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                    
+                                        <style>
+                                            .enunciado-label {
+                                                color: #333; /* Color más oscuro */
+                                                font-size: 1.25rem; /* Tamaño de letra más grande */
+                                                font-weight: bold; /* Texto en negritas */
+                                                margin-right: 5px; /* Espacio entre labels */
+                                            }
+                                            .input-group {
+                                                display: flex;
+                                                align-items: center; /* Alinea verticalmente los labels */
+                                            }
+                                        </style>
                                     
                                         @foreach ($especificaciones as $index => $especificacion)
                                             <div class="input-group mb-2">
-                                                
-                                                    
-                                                                <label>{{ $especificacion['enunciado'] }}</label>
-                                                            
-                                                                <label>{{ $especificacion['concepto'] }}</label>
-                                                            
+                                                <label class="enunciado-label">
+                                                    {{ $especificacion['enunciado'] }}:
+                                                </label>
+                                                <label>
+                                                    {{ $especificacion['concepto'] }}
+                                                </label>
                                             </div>
                                         @endforeach
                                     </div>
+                                    
                                     
                                     
                                     
