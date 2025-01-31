@@ -6,7 +6,7 @@
 @section('activeProveedores', 'active')
 @section('activeFondoPermanenteProveedores', 'background-permanent')
 @section('contend')
-    
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="{{ asset('css/proveedor.css') }}">
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
      integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
@@ -21,6 +21,8 @@
                     <form id="proveedor-form" action="{{ route('compras.proveedores.store') }}" method="POST">
                         @csrf
                         <input type="hidden" id="direcciones-input" name="direcciones">
+                        <input type="hidden" id="proveedor-id-input" name="proveedor_id" value="">
+
                         @livewire('proveedor.create-proveedor')
                         <div class="form-group">
                             <label>Direcciones</label>
@@ -32,7 +34,7 @@
                         
                         
                     
-                        <button type="submit" onclick="confirmSave()" class="btn btn-primary mt-3">Crear proveedor</button>
+                        <button  onclick="confirmSave()" class="btn btn-primary mt-3">Crear proveedor</button>
                     </form>
                 </div>
             </div>
@@ -42,4 +44,5 @@
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
     crossorigin=""></script>
     <script src="{{ asset('js/proveedor.js') }}"></script>
+    
 @endsection

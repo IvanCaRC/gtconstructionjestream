@@ -153,9 +153,17 @@
 
     <script>
         function confirmSave() {
-            // Llamar al método save de Livewire
             @this.call('save').then(response => {
-                if (response) {
+                if (response.proveedor_id) {
+                    // Guardar el ID del proveedor recién creado en un campo oculto
+                    document.getElementById('proveedor-id-input').value = response.proveedor_id;
+    
+                    // Convertir las direcciones a formato JSON
+                    const directionsJSON = JSON.stringify(savedAddresses);
+    
+                    // Asignar el valor al campo oculto
+                    document.getElementById('direcciones-input').value = directionsJSON;
+    
                     // Mostrar la alerta después de la creación si todo es correcto
                     Swal.fire({
                         title: 'Proveedor creado',
@@ -164,8 +172,8 @@
                         confirmButtonText: 'OK'
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            // Redirigir a la ruta deseada
-                            window.location.href = "{{ route('compras.proveedores.viewProveedores') }}";
+                            // Enviar el formulario
+                            document.getElementById('proveedor-form').submit();
                         }
                     });
                 }
@@ -180,5 +188,8 @@
             });
         }
     </script>
+    
+    
+    
 
 </div>

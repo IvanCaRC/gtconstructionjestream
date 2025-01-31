@@ -21,20 +21,21 @@ class ProveedorController extends Controller
 
     public function store(Request $request)
     {
-        // Validar los datos de las direcciones
-        // $request->validate([
-        //     'direcciones' => 'required|json',
-        // ]);
+        // Validar los datos de las direcciones y el ID del proveedor
+        $request->validate([
+            'direcciones' => 'required|json',
+            'proveedor_id' => 'required|integer|exists:proveedores,id',
+        ]);
+
+        // Log para verificar los valores recibidos
+
 
         // Decodificar las direcciones desde JSON
         $direcciones = json_decode($request->input('direcciones'), true);
+   
 
-        // Obtener el proveedor con id = 1
-        $proveedor = Proveedor::find(1);
-
-        if (!$proveedor) {
-            return redirect()->back()->with('error', 'No se encontró el proveedor con id = 1.');
-        }
+        // Obtener el proveedor con el ID recibido del formulario
+        $proveedor = Proveedor::find($request->input('proveedor_id'));
 
         // Iniciar una transacción de base de datos
         DB::beginTransaction();
@@ -53,7 +54,7 @@ class ProveedorController extends Controller
                     'referencia' => $direccionData['address']['referencia'],
                     'Latitud' => $direccionData['latlng']['lat'] ?? null,
                     'Longitud' => $direccionData['latlng']['lng'] ?? null,
-                    'proveedor_id' => $proveedor->id, // Asociar al proveedor con id = 1
+                    'proveedor_id' => $proveedor->id, // Asociar al proveedor recién creado
                 ]);
 
                 $direccion->save();

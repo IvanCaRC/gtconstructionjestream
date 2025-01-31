@@ -138,7 +138,8 @@ class CreateProveedor extends Component
 
         $this->reset('openModalFamilias', 'nombre', 'descripcion', 'correo', 'rfc', 'facturacion', 'bancarios', 'telefonos');
 
-        return true;
+        
+    return ['proveedor_id' => $proveedor->id];
     }
 
     public function calcularSubfamilias($idFamiliaSeleccionada, $nivel)
