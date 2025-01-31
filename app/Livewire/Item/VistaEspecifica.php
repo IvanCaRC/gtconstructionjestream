@@ -16,6 +16,7 @@ class VistaEspecifica extends Component
     public $familiasSeleccionadas = [''];
     public $ProvedoresAsignados = [];
     public $especificaciones = [['enunciado' => '', 'concepto' => '']];
+    public $ficha_Tecnica_pdf;
 
     public function mount($idItem)
     {
@@ -31,7 +32,9 @@ class VistaEspecifica extends Component
             ->pluck('familia')
             ->toArray();
             $this->especificaciones = json_decode($this->itemEspecifico->especificaciones, true);
+            $this->ficha_Tecnica_pdf = $this->itemEspecifico->ficha_tecnica_pdf;
     }
+    
     public function cargarProvedoresParaEditar($idItem)
     {
         $proveedores = ItemEspecificoProveedor::where('item_especifico_id', $idItem)->get();
