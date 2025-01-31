@@ -22,4 +22,10 @@ class ItemController extends Controller
     {
         return view('compras.items.edicionItem', ['idItem' => $idItem]);
     }
+    
+
+    public function ciewEspecItem($idItem)
+    {
+        return view('compras.items.vistaEspecificaItem', ['idItem' => $idItem]);
+    }
 }

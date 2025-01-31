@@ -30,11 +30,6 @@
 
                                         <div class="form-group text-center mt-3">
 
-                                            @foreach ($familiasSeleccionadas as $index => $famm)
-                                                <!-- Muestra el contenido del arreglo en un <label> -->
-                                                <label> {{ $famm['nombre'] }} {{ $famm['id'] }}</label><br>
-                                            @endforeach
-
                                             @if ($imagenesCargadas)
                                                 @foreach ($imagenesCargadas as $index => $imaCarg)
                                                     <div class="mi-div"

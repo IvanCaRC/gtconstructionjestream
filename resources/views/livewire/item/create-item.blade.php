@@ -143,7 +143,7 @@
                                                                         wire:model.lazy="ProvedoresAsignados.{{ $index }}.tiempo_maximo_entrega">
                                                                 </td>
                                                                 <td><input step="0.01" class="form-control"
-                                                                        wire:model.lazy="ProvedoresAsignados.{{ $index }}.precio_compra"
+                                                                        wire:m>nombreodel.lazy="ProvedoresAsignados.{{ $index }}.precio_compra"
                                                                         wire:keydown='handleKeydown({{ $index }})'>
                                                                 </td>
                                                                 <td><input step="0.01" class="form-control"

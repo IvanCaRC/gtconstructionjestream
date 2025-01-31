@@ -35,6 +35,12 @@ class ItemComponent extends Component
     {
         return redirect()->route('compras.items.edicionItem', ['idItem' => $idItem]);
     }
+
+    public function viewItem($idItem)
+    {
+        return redirect()->route('compras.items.vistaEspecificaItem', ['idItem' => $idItem]);
+    }
+
     public function render()
     {
         // Consulta para el modelo Item y sus ItemEspecifico relacionados

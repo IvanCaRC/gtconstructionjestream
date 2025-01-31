@@ -22,7 +22,7 @@
                         <thead>
                             <tr>
                                 <th>Estado</th>
-                                <th>Imagen</th>
+                                
                                 <th>Nombre</th>
                                 <th>Categoria</th>
                                 <th>Precio de proveedor</th>
@@ -46,7 +46,7 @@
                                                 <span class="badge badge-danger">Desactualizado</span>
                                             @endif
                                         </td>
-                                        <td>---</td>
+                                        
                                         <td class="align-middle d-none d-md-table-cell">{{ $item->nombre }}</td>
                                         <td class="align-middle d-none d-md-table-cell">
                                             @foreach ($itemEspecifico->familias as $familia)
@@ -67,7 +67,7 @@
                                         <td class="align-middle d-none d-md-table-cell">{{ $item->updated_at }}</td>
                                         <td>
                                             <button class="btn btn-info btn-custom"
-                                                wire:click="viewProveedor({{ $itemEspecifico->id }})">
+                                                wire:click="viewItem({{ $itemEspecifico->id }})">
                                                 <i class="fas fa-eye"></i>
                                             </button>
                                         </td>
