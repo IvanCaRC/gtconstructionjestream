@@ -38,7 +38,7 @@ class CreateCategoria extends Component
     public function save()
     {
         // Validar los datos del formulario
-        $this->validate();
+        $this->validate(Familia::rules(), Familia::messages());
 
         // Determinar el ID de la familia padre
         // Encontrar el último valor seleccionado que no sea 0

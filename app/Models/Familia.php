@@ -84,27 +84,18 @@ class Familia extends Model
     public static function rules($prefix = '', $id = null)
     {
         return [
-            $prefix . 'id_familia_padre' => 'nullable|exists:familias,id',
             $prefix . 'nombre' => 'required|string|max:255',
             $prefix . 'descripcion' => 'nullable|string',
-            $prefix . 'nivel' => 'required|integer|min:1',
-            $prefix . 'estadoEliminacion' => 'required|boolean',
         ];
     }
 
     public static function messages($prefix = '')
     {
         return [
-            $prefix . 'id_familia_padre.exists' => 'La familia padre seleccionada no es válida.',
-            $prefix . 'nombre.required' => 'Agregue un nombre.',
+            $prefix . 'nombre.required' => 'Asigne nombre para crear una familia',
             $prefix . 'nombre.string' => 'El nombre debe ser un texto',
             $prefix . 'nombre.max' => 'El nombre no puede tener más de 255 caracteres.',
             $prefix . 'descripcion.string' => 'La descripción debe ser una cadena de texto.',
-            $prefix . 'nivel.required' => 'El nivel es obligatorio.',
-            $prefix . 'nivel.integer' => 'El nivel debe ser un número entero.',
-            $prefix . 'nivel.min' => 'El nivel debe ser al menos 1.',
-            $prefix . 'estadoEliminacion.required' => 'El estado de eliminación es obligatorio.',
-            $prefix . 'estadoEliminacion.boolean' => 'El estado de eliminación debe ser verdadero o falso.',
         ];
     }
 }
