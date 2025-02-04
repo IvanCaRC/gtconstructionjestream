@@ -16,6 +16,7 @@ class ItemComponent extends Component
     public $searchTerm = '';
     public $sort = 'id';
     public $direction = 'desc';
+    public $tipoDeVista = true;
 
     public function search()
     {
