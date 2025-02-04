@@ -2,8 +2,11 @@
 
     <div class="form-group">
         <label for="nombre">Nombre</label>
-        <input type="text" id="nombre" class="form-control" wire:model.defer="proveedorEdit.nombre"
-            wire:model="nombre">
+        <input type="text" id="nombre" class="form-control @error('proveedorEdit.nombre') is-invalid @enderror"
+            wire:model.defer="proveedorEdit.nombre">
+        @error('proveedorEdit.nombre')
+            <span class="invalid-feedback">{{ $message }}</span>
+        @enderror
     </div>
 
     <div class="form-group">
@@ -14,14 +17,22 @@
 
     <div class="row">
         <div class="col-md-6 mb-3">
-            <label for="descripcion">Correo</label>
-            <input type="email" id="email" class="form-control" wire:model.defer="proveedorEdit.correo"
-                wire:model="correo"></input>
+            <label for="correo">Correo</label>
+            <input type="email" id="correo"
+                class="form-control @error('proveedorEdit.correo') is-invalid @enderror"
+                wire:model.defer="proveedorEdit.correo">
+            @error('proveedorEdit.correo')
+                <span class="invalid-feedback">{{ $message }}</span>
+            @enderror
         </div>
 
         <div class="col-md-6 mb-3">
-            <label for="descripcion">RFC</label>
-            <input id="descripcion" class="form-control" wire:model.defer="proveedorEdit.rfc" wire:model="rfc"></input>
+            <label for="rfc">RFC</label>
+            <input id="rfc" class="form-control @error('proveedorEdit.rfc') is-invalid @enderror"
+                wire:model.defer="proveedorEdit.rfc">
+            @error('proveedorEdit.rfc')
+                <span class="invalid-feedback">{{ $message }}</span>
+            @enderror
         </div>
     </div>
 
@@ -131,7 +142,7 @@
                 </div>
             @endif
         </div>
-        <button  type="button" wire:click="$set('openModalFamilias', true)" class="btn btn-primary mt-3">Agregar
+        <button type="button" wire:click="$set('openModalFamilias', true)" class="btn btn-primary mt-3">Agregar
             Familia</button>
 
 
@@ -234,8 +245,8 @@
             </form>
         </x-slot>
         <x-slot name='footer'>
-            <button type="button" class="btn btn-secondary mr-2 disabled:opacity-50" wire:click="$set('openModalFamilias',false)"
-                wire:loading.attr="disabled">Cancelar</button>
+            <button type="button" class="btn btn-secondary mr-2 disabled:opacity-50"
+                wire:click="$set('openModalFamilias',false)" wire:loading.attr="disabled">Cancelar</button>
             <button type="button" class="btn btn-primary disabled:opacity-50" wire:loading.attr="disabled"
                 wire:click="confirmFamilia">Agregar familia</button>
         </x-slot>
