@@ -9,6 +9,7 @@ use App\Models\ItemEspecifico;
 use App\Models\ItemEspecificoHasFamilia;
 use App\Models\ItemEspecificoProveedor;
 
+
 class ItemComponent extends Component
 {
     use WithPagination;
@@ -44,28 +45,27 @@ class ItemComponent extends Component
 
     public function render()
     {
-        // Consulta para el modelo Item y sus ItemEspecifico relacionados
-        $query = Item::query()
-            ->with(['itemEspecificos' => function ($query) {
-                $query->where('estado_eliminacion', 1)
-                    ->with(['familias', 'proveedores']); //Relaciones con familias y proveedores
-                if ($this->searchTerm) {
-                    $query->where('estado', 'LIKE', "%{$this->searchTerm}%")
-                        ->orWhere('precio_venta_minorista', 'LIKE', "%{$this->searchTerm}%")
-                        ->orWhere('precio_venta_mayorista', 'LIKE', "%{$this->searchTerm}%")
-                        ->orWhere('unidad', 'LIKE', "%{$this->searchTerm}%");
-                }
-            }]);
-
+        $query = ItemEspecifico::query()
+            ->where('estado_eliminacion', 1)
+            ->with(['item', 'familias', 'proveedores']);
+    
         if ($this->searchTerm) {
-            $query->where('nombre', 'LIKE', "%{$this->searchTerm}%")
-                ->orWhere('updated_at', 'LIKE', "%{$this->searchTerm}%");
+            $query->where(function ($q) {
+                $q->where('estado', 'LIKE', "%{$this->searchTerm}%")
+                    ->orWhere('precio_venta_minorista', 'LIKE', "%{$this->searchTerm}%")
+                    ->orWhere('precio_venta_mayorista', 'LIKE', "%{$this->searchTerm}%")
+                    ->orWhere('unidad', 'LIKE', "%{$this->searchTerm}%")
+                    ->orWhereHas('item', function ($query) {
+                        $query->where('nombre', 'LIKE', "%{$this->searchTerm}%");
+                    });
+            });
         }
-
-        $items = $query->get();
-
+    
+        $itemEspecificos = $query->paginate(2);
+    
         return view('livewire.item.item-component', [
-            'items' => $items,
+            'itemEspecificos' => $itemEspecificos,
         ]);
     }
+    
 }
