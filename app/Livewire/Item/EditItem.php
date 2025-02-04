@@ -38,6 +38,7 @@ class EditItem extends Component
     public $unidadSeleccionada;
     public $seleccionProvedorModal;
     public $seleccionProvedorModalNombre;
+    public $ficha_Tecnica_pdf_actual;
     public $searchTerm = '';
     public $nuevasImagenes = [];
     public $itemEdit = [
@@ -114,6 +115,7 @@ class EditItem extends Component
         $this->especificaciones = json_decode($this->itemEspecifico->especificaciones, true);
         $this->ficahaTecnicaArchivoActual = $this->itemEspecifico->ficha_tecnica_pdf;
         $this->ficha_Tecnica_pdf = $this->itemEspecifico->ficha_tecnica_pdf;
+        $this->ficha_Tecnica_pdf_actual = $this->itemEspecifico->ficha_tecnica_pdf;
         $this->itemEspecificoEdit['estado'] = $this->itemEspecifico->estado;
         $this->itemEspecificoEdit['estado_eliminacion'] = $this->itemEspecifico->estado_eliminacion;
         $this->niveles[1] = Familia::whereNull('id_familia_padre')
@@ -151,12 +153,13 @@ class EditItem extends Component
         }
     }
 
-    public function updatedficha_Tecnica_pdf()
-    {
-        if ($this->ficha_Tecnica_pdf) {
-            $this->fileNamePdf = $this->ficha_Tecnica_pdf->getClientOriginalName();
-        }
+    public function updatedFichaTecnicaPdf()
+{
+    if ($this->ficha_Tecnica_pdf) {
+        $this->fileNamePdf = $this->ficha_Tecnica_pdf->getClientOriginalName();
     }
+}
+
 
     public function confirmFamilia()
     {

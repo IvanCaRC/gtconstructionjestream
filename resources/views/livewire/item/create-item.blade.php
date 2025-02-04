@@ -19,20 +19,23 @@
                                         <div class="text-center">
                                             <label class="btn btn-secondary btn-file">
                                                 Elegir archivo
-                                                <input type="file" wire:model="nuevasImagenes" name="imagen" accept="image/*"
-                                                    style="display: none;" multiple>
+                                                <input type="file" wire:model="nuevasImagenes" name="imagen"
+                                                    accept="image/*" style="display: none;" multiple>
                                             </label>
                                             @error('nuevasImagenes')
                                                 <span class="invalid-feedback">{{ $message }}</span>
                                             @enderror
                                         </div>
-                                
+
                                         <div class="form-group text-center mt-3">
                                             @if ($image)
                                                 @foreach ($image as $index => $ima)
-                                                    <div class="mi-div" style="padding: 20px; display: inline-block; position: relative;">
-                                                        <img src="{{ $ima->temporaryUrl() }}" alt="Imagen" class="imagen-cuadrada">
-                                                        <button wire:click="eliminarImagen({{ $index }})" class="btn btn-danger btn-sm"
+                                                    <div class="mi-div"
+                                                        style="padding: 20px; display: inline-block; position: relative;">
+                                                        <img src="{{ $ima->temporaryUrl() }}" alt="Imagen"
+                                                            class="imagen-cuadrada">
+                                                        <button wire:click="eliminarImagen({{ $index }})"
+                                                            class="btn btn-danger btn-sm"
                                                             style="position: absolute; top: 5px; right: 5px;">
                                                             &times;
                                                         </button>
@@ -41,13 +44,14 @@
                                             @else
                                                 <div class="imagen-predeterminada">
                                                     <span class="file-upload-icon">&#128247;</span>
-                                                    <span class="file-upload-text">Sube tu imagen con el botón "Elegir archivo"</span>
+                                                    <span class="file-upload-text">Sube tu imagen con el botón "Elegir
+                                                        archivo"</span>
                                                 </div>
                                             @endif
                                         </div>
                                     </div>
                                 </div>
-                                
+
 
                                 <!-- Área del formulario -->
                                 <div class="col-md-8">
@@ -143,7 +147,7 @@
                                                                         wire:model.lazy="ProvedoresAsignados.{{ $index }}.tiempo_maximo_entrega">
                                                                 </td>
                                                                 <td><input step="0.01" class="form-control"
-                                                                        wire:m>nombreodel.lazy="ProvedoresAsignados.{{ $index }}.precio_compra"
+                                                                        wire:model.lazy="ProvedoresAsignados.{{ $index }}.precio_compra"
                                                                         wire:keydown='handleKeydown({{ $index }})'>
                                                                 </td>
                                                                 <td><input step="0.01" class="form-control"
@@ -169,44 +173,48 @@
                                         <button href="#" wire:click="montarModalProveedores()"
                                             class="btn btn-secondary mt-3">Agregar provedor</button>
                                     </div>
-                                    <div class="form-group">
-                                        <label>Familias</label>
-                                        <div class="input-group mb-2">
-                                            @if (count($familiasSeleccionadas) > 0)
-                                                @foreach ($familiasSeleccionadas as $index => $familia)
-                                                    <div class="w-100 d-flex align-items-center mb-2">
-                                                        <div class="flex-grow-1">
-                                                            {{ $familia->nombre }}
-                                                        </div>
-                                                        <button type="button"
-                                                            wire:click="removeFamilia({{ $index }})"
-                                                            class="btn btn-danger btn-sm ml-2">Eliminar</button>
-                                                    </div>
-                                                @endforeach
-                                            @else
-                                                <div class="no-familias-seleccionadas w-100">
-                                                    No hay familias seleccionadas
-                                                </div>
-                                            @endif
-                                        </div>
-                                        <button href="#" wire:click="$set('openModalFamilias', true)"
-                                            class="btn btn-secondary mt-3">Agregar Familia</button>
-                                    </div>
+                                    
 
                                     <div class="row">
-                                        <div class="col-md-4 mb-3">
-                                            <h4 for="unidad">Unidad</h4>
-                                            <label>{{ $unidadSeleccionadaEnTabla }}</label>
+                                        <div class="col-md-8 mb-3">
+                                            <label>Familias</label>
+                                            <div class="input-group mb-2">
+                                                @if (count($familiasSeleccionadas) > 0)
+                                                    @foreach ($familiasSeleccionadas as $index => $familia)
+                                                        <div class="w-100 d-flex align-items-center mb-2">
+                                                            <div class="flex-grow-1">
+                                                                {{ $familia->nombre }}
+                                                            </div>
+                                                            <button type="button"
+                                                                wire:click="removeFamilia({{ $index }})"
+                                                                class="btn btn-danger btn-sm ml-2">Eliminar</button>
+                                                        </div>
+                                                    @endforeach
+                                                @else
+                                                    <div class="no-familias-seleccionadas w-100">
+                                                        No hay familias seleccionadas
+                                                    </div>
+                                                @endif
+                                            </div>
+                                            <button href="#" wire:click="$set('openModalFamilias', true)"
+                                                class="btn btn-secondary mt-3">Agregar Familia</button>
                                         </div>
                                         <div class="col-md-4 mb-3">
                                             <label for="stock" class="mr-2">Stock Acutal del Producto</label>
                                             <input type="number" id="cantidad_piezas_mayoreo" class="form-control"
                                                 wire:model="stock" required>
                                         </div>
-                                        
+
                                     </div>
+                                    
 
                                     @if ($provedorSeleccionadoDeLaTabla)
+                                    <div class="row">
+                                        <div class="col-md-4 mb-3">
+                                            <h4 for="unidad">Unidad</h4>
+                                            <label>{{ $unidadSeleccionadaEnTabla }}</label>
+                                        </div>
+                                    </div>
                                         <label>El parametro por el que se hacen los calculos se basan en el proveedor
                                             {{ $provedorSeleccionadoDeLaTabla }}</label>
                                         <div class="form-group">

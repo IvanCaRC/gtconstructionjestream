@@ -29,7 +29,6 @@
                                         </div>
 
                                         <div class="form-group text-center mt-3">
-
                                             @if ($imagenesCargadas)
                                                 @foreach ($imagenesCargadas as $index => $imaCarg)
                                                     <div class="mi-div"
@@ -191,34 +190,30 @@
                                         <button href="#" wire:click="montarModalProveedores()"
                                             class="btn btn-secondary mt-3">Agregar provedor</button>
                                     </div>
-                                    <div class="form-group">
-                                        <label>Familias</label>
-                                        <div class="input-group mb-2">
-                                            @if (count($familiasSeleccionadas) > 0)
-                                                @foreach ($familiasSeleccionadas as $index => $familia)
-                                                    <div class="w-100 d-flex align-items-center mb-2">
-                                                        <div class="flex-grow-1">
-                                                            {{ $familia['nombre'] }}
-                                                        </div>
-                                                        <button type="button"
-                                                            wire:click="removeFamilia({{ $index }})"
-                                                            class="btn btn-danger btn-sm ml-2">Eliminar</button>
-                                                    </div>
-                                                @endforeach
-                                            @else
-                                                <div class="no-familias-seleccionadas w-100">
-                                                    No hay familias seleccionadas
-                                                </div>
-                                            @endif
-                                        </div>
-                                        <button href="#" wire:click="$set('openModalFamilias', true)"
-                                            class="btn btn-secondary mt-3">Agregar Familia</button>
-                                    </div>
-
+                                    
                                     <div class="row">
-                                        <div class="col-md-4 mb-3">
-                                            <h4 for="unidad">Unidad</h4>
-                                            <label>{{ $unidadSeleccionadaEnTabla }}</label>
+                                        <div class="col-md-8 mb-3">
+                                            <label>Familias</label>
+                                            <div class="input-group mb-2">
+                                                @if (count($familiasSeleccionadas) > 0)
+                                                    @foreach ($familiasSeleccionadas as $index => $familia)
+                                                        <div class="w-100 d-flex align-items-center mb-2">
+                                                            <div class="flex-grow-1">
+                                                                {{ $familia['nombre'] }}
+                                                            </div>
+                                                            <button type="button"
+                                                                wire:click="removeFamilia({{ $index }})"
+                                                                class="btn btn-danger btn-sm ml-2">Eliminar</button>
+                                                        </div>
+                                                    @endforeach
+                                                @else
+                                                    <div class="no-familias-seleccionadas w-100">
+                                                        No hay familias seleccionadas
+                                                    </div>
+                                                @endif
+                                            </div>
+                                            <button href="#" wire:click="$set('openModalFamilias', true)"
+                                                class="btn btn-secondary mt-3">Agregar Familia</button>
                                         </div>
                                         <div class="col-md-4 mb-3">
                                             <label for="stock" class="mr-2">Stock Acutal del Producto</label>
@@ -229,6 +224,10 @@
                                     </div>
 
                                     @if ($provedorSeleccionadoDeLaTabla)
+                                    <div >
+                                        <h4 for="unidad">Unidad</h4>
+                                        <label>{{ $unidadSeleccionadaEnTabla }}</label>
+                                    </div>
                                         <label>El parametro por el que se hacen los calculos se basan en el proveedor
                                             {{ $provedorSeleccionadoDeLaTabla }}</label>
                                         <div class="form-group">
@@ -325,6 +324,7 @@
                                                 formato PDF solamente.</small>
                                         @else
                                             <div class="form-group">
+                                                
                                                 <div class="file-upload"
                                                     onclick="document.getElementById('ficha_Tecnica_pdf_car').click();">
                                                     <span class="file-upload-icon">&#x1F4C4;</span>
@@ -336,6 +336,12 @@
                                                 </div>
                                                 <small class="form-text text-muted">Por favor, suba archivos en formato
                                                     PDFsolamente.</small>
+                                                    <div class="form-group">
+                                                        <a href="{{ asset('storage/' . $ficha_Tecnica_pdf_actual) }}" target="_blank"
+                                                            class="btn btn-secondary">
+                                                            Ver Archivo Actual
+                                                        </a>
+                                                    </div>
                                             </div>
                                         @endif
                                     </div>
