@@ -57,8 +57,12 @@
                                 <div class="col-md-8">
                                     <div class="form-group">
                                         <label for="nombre">Nombre</label>
-                                        <input type="text" id="nombre" class="form-control" wire:model="nombre"
-                                            required>
+                                        <input type="text" id="nombre"
+                                            class="form-control @error('nombre') is-invalid @enderror"
+                                            wire:model.defer="nombre" required>
+                                        @error('nombre')
+                                            <span class="invalid-feedback">{{ $message }}</span>
+                                        @enderror
                                     </div>
                                     <div class="form-group">
                                         <label for="descripcion">Descripción</label>
@@ -173,7 +177,7 @@
                                         <button href="#" wire:click="montarModalProveedores()"
                                             class="btn btn-secondary mt-3">Agregar provedor</button>
                                     </div>
-                                    
+
 
                                     <div class="row">
                                         <div class="col-md-8 mb-3">
@@ -206,15 +210,15 @@
                                         </div>
 
                                     </div>
-                                    
+
 
                                     @if ($provedorSeleccionadoDeLaTabla)
-                                    <div class="row">
-                                        <div class="col-md-4 mb-3">
-                                            <h4 for="unidad">Unidad</h4>
-                                            <label>{{ $unidadSeleccionadaEnTabla }}</label>
+                                        <div class="row">
+                                            <div class="col-md-4 mb-3">
+                                                <h4 for="unidad">Unidad</h4>
+                                                <label>{{ $unidadSeleccionadaEnTabla }}</label>
+                                            </div>
                                         </div>
-                                    </div>
                                         <label>El parametro por el que se hacen los calculos se basan en el proveedor
                                             {{ $provedorSeleccionadoDeLaTabla }}</label>
                                         <div class="form-group">

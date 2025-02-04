@@ -97,13 +97,17 @@ class CreateItem extends Component
         $this->reset(['searchTerm', 'seleccionProvedorModalNombre', 'seleccionProvedorModal', 'tiempoMinEntrega', 'tiempoMaxEntrega', 'precioCompra', 'unidadSeleccionada', 'openModalProveedores']);
     }
 
-
-
-
-
-
     public function save()
     {
+
+        $this->validate(array_merge(
+            Item::rules(),
+            ItemEspecifico::rules()
+        ), array_merge(
+            Item::messages(),
+            ItemEspecifico::messages()
+        ));
+        
         $porcentajeVentaMinorista = (float) ($this->porcentaje_venta_minorista ?? 0);
         $porcentajeVentaMayorista = (float) ($this->porcentaje_venta_mayorista ?? 0);
 
