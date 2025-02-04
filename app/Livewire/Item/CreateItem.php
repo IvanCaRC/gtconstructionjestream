@@ -69,7 +69,7 @@ class CreateItem extends Component
         }
     }
 
-    public function updatedficha_Tecnica_pdf()
+    public function updatedFichaTecnicaPdf()
     {
         if ($this->ficha_Tecnica_pdf) {
             $this->fileNamePdf = $this->ficha_Tecnica_pdf->getClientOriginalName();
@@ -99,7 +99,7 @@ class CreateItem extends Component
 
 
 
-    
+
 
 
     public function save()
