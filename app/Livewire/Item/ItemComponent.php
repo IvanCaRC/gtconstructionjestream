@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Item;
 
+use App\Models\Familia;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Item;
@@ -18,6 +19,7 @@ class ItemComponent extends Component
     public $sort = 'id';
     public $direction = 'desc';
     public $tipoDeVista = true;
+    public $statusFiltroDeBusqueda;
 
     public function search()
     {
@@ -45,10 +47,19 @@ class ItemComponent extends Component
 
     public function render()
     {
+        $queryfamilia = Familia::whereNull('id_familia_padre')
+            ->where('estadoEliminacion', 0);
+
+        $familias = $queryfamilia->with(['subfamiliasRecursivas' => function ($q) {
+            $q->where('estadoEliminacion', 0); // Filtrar subfamilias por estado_eliminacion igual a 0
+        }])->get();
+
+
+
         $query = ItemEspecifico::query()
             ->where('estado_eliminacion', 1)
             ->with(['item', 'familias', 'proveedores']);
-    
+
         if ($this->searchTerm) {
             $query->where(function ($q) {
                 $q->where('estado', 'LIKE', "%{$this->searchTerm}%")
@@ -60,12 +71,21 @@ class ItemComponent extends Component
                     });
             });
         }
-    
-        $itemEspecificos = $query->paginate(2);
-    
+
+        if ($this->statusFiltroDeBusqueda !== "2" && $this->statusFiltroDeBusqueda !== null) {
+            $query->where('estado', $this->statusFiltroDeBusqueda);
+        }
+
+        $itemEspecificos = $query->paginate(35);
+
         return view('livewire.item.item-component', [
             'itemEspecificos' => $itemEspecificos,
+            'familias' => $familias, // Agregar familias a la vista
         ]);
     }
-    
+
+    public function filter()
+    {
+        $this->resetPage();  // Asegura que la paginación se restablezca
+    }
 }
