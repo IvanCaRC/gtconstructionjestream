@@ -213,8 +213,12 @@
                                         </div>
                                         <div class="col-md-4 mb-3">
                                             <label for="stock" class="mr-2">Stock Actual del Producto</label>
-                                            <input type="number" id="cantidad_piezas_mayoreo" class="form-control"
-                                                wire:model="stock" required>
+                                            <input type="number" id="stock"
+                                                class="form-control @error('stock') is-invalid @enderror"
+                                                wire:model.defer="stock" required>
+                                            @error('stock')
+                                                <span class="invalid-feedback">{{ $message }}</span>
+                                            @enderror
                                         </div>
 
                                     </div>
