@@ -140,11 +140,18 @@
                                     @foreach ($itemEspecificos as $itemEspecifico)
                                         <div class="col-md-3 mb-4">
                                             <div class="card shadow-sm">
-                                                <div class="card-body text-center" style="cursor: pointer;">
+                                                <div class="card-body text-center d-flex justify-content-center align-items-center" style="cursor: pointer;">
                                                     <!-- Imagen del Item -->
-                                                    <img src="{{ $itemEspecifico->image ? asset('storage/' . explode(',', $itemEspecifico->image)[0]) : asset('storage/ruta_por_defecto.jpg') }}"
-                                                        class="card-img-top" alt="{{ $itemEspecifico->item->nombre }}"
-                                                        style="width: 200px; height: 200px; object-fit: cover;" wire:click="viewItem({{ $itemEspecifico->id }})">
+                                                    @if (empty($itemEspecifico->image))
+                                                        <!-- Mostrar ícono o mensaje alternativo -->
+                                                        <div class="no-image-icon" style="width: 200px; height: 200px; display: flex; justify-content: center; align-items: center; border: 1px solid #ddd; background-color: #f8f8f8;">
+                                                            📷 No hay imagen subida
+                                                        </div>
+                                                    @else
+                                                        <!-- Mostrar imagen -->
+                                                        <img src="{{ asset('storage/' . explode(',', $itemEspecifico->image)[0]) }}" class="card-img-top" alt="{{ $itemEspecifico->item->nombre }}"
+                                                            style="width: 200px; height: 200px; object-fit: cover;" wire:click="viewItem({{ $itemEspecifico->id }})">
+                                                    @endif
                                                 </div>
                                             </div>
 
@@ -158,7 +165,7 @@
                                                     <br>
                                                     <!-- Nombre con enlace a la vista específica -->
                                                     <div>
-                                                        <label style="width: 200px; height: 75px; object-fit: cover;">
+                                                        <label style="width: 200px; height: 65px; object-fit: cover;">
                                                             <a class="text-primary"
                                                                 wire:click="viewItem({{ $itemEspecifico->id }})"
                                                                 style="cursor: pointer;">
@@ -178,13 +185,7 @@
                                                     </p>
 
                                                     <!-- Stock -->
-                                                    <p class="card-text"><h5 class="card-title">
-                                                        <a class="text-primary"
-                                                            wire:click="viewItem({{ $itemEspecifico->id }})"
-                                                            style="cursor: pointer;">
-                                                            {{ \Illuminate\Support\Str::limit($itemEspecifico->item->nombre, 10, '...') }}
-                                                        </a>
-                                                    </h5>
+                                                    <p class="card-text">
                                                         <strong>Stock:</strong> {{ $itemEspecifico->stock ?? 'N/A' }}
                                                     </p>
 
