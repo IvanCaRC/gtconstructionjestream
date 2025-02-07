@@ -179,8 +179,10 @@
                                                     <!-- Precios -->
                                                     <p class="card-text">
                                                         <strong>Precio Minorista:</strong>
+                                                        <br>
                                                         {{ $itemEspecifico->precio_venta_minorista ?? 'N/A' }} <br>
                                                         <strong>Precio Mayorista:</strong>
+                                                        <br>
                                                         {{ $itemEspecifico->precio_venta_mayorista ?? 'N/A' }}
                                                     </p>
 

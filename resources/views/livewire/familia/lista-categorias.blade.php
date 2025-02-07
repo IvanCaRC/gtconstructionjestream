@@ -21,7 +21,7 @@
 
         .checkbox-btn:hover {
             border-color: #999;
-        }
+        }   
 
         .checkbox-btn.selected:hover {
             background-color: #45a045;
