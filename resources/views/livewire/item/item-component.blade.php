@@ -239,23 +239,14 @@
                             <strong>Categorías</strong>
                         </div>
                         <div>
-                            
-                            <ul>
-                                @foreach($familias as $familia)
-                                    <li class="list-group-item">
-                                        <strong>{{ $familia->nombre }}</strong>
-                                        @if ($familia->subfamiliasRecursivas->count() > 0)
-                                            <ul>
-                                                @foreach ($familia->subfamiliasRecursivas as $subfamilia)
-                                                    <li>{{ $subfamilia->nombre }}</li>
-                                                @endforeach
-                                            </ul>
-                                        @endif
-                                    </li>
-                                @endforeach
-                            </ul>
+                            <div>
+                                <ul >
+                                    @foreach($familias as $familia)
+                                        @include('livewire.familia.lista-categorias', ['familia' => $familia, 'nivel' => 0])
+                                    @endforeach
+                                </ul>
+                            </div>
                         </div>
-                        
                     </div>
                 </div>
             </div>
