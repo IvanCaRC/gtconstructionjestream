@@ -15,6 +15,7 @@ class ProveedorComponent extends Component
     public $sort = 'id';
     public $direction = 'desc';
     protected $listeners = ['renderVistaProv' => 'render'];
+    public $statusFiltroDeBusqueda;
 
     public function search()
     {
