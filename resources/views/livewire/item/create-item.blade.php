@@ -211,22 +211,12 @@
                                             <button href="#" wire:click="$set('openModalFamilias', true)"
                                                 class="btn btn-secondary mt-3">Agregar Familia</button>
                                         </div>
-                                        <div class="col-md-2 mb-3">
+                                        <div class="col-md-4 mb-3">
                                             <label for="stock" class="mr-2">Stock Actual del Producto</label>
                                             <input type="number" id="stock"
                                                 class="form-control @error('stock') is-invalid @enderror"
                                                 wire:model.defer="stock" required>
                                             @error('stock')
-                                                <span class="invalid-feedback">{{ $message }}</span>
-                                            @enderror
-                                        </div>
-                                        <div class="col-md-2 mb-3">
-                                            <label for="cantidad_piezas_mayoreo" class="mr-2">Cant. Piezas
-                                                Mayoreo</label>
-                                            <input id="pz_Mayoreo"
-                                                class="form-control @error('pz_Mayoreo') is-invalid @enderror"
-                                                wire:model.defer="pz_Mayoreo" required>
-                                            @error('pz_Mayoreo')
                                                 <span class="invalid-feedback">{{ $message }}</span>
                                             @enderror
                                         </div>
@@ -245,7 +235,16 @@
                                             {{ $provedorSeleccionadoDeLaTabla }}</label>
                                         <div class="form-group">
                                             <div class="row">
-                                                
+                                                <div class="col-md-2 mb-3">
+                                                    <label for="cantidad_piezas_mayoreo" class="mr-2">Cant. Piezas
+                                                        Mayoreo</label>
+                                                    <input id="pz_Mayoreo"
+                                                        class="form-control @error('pz_Mayoreo') is-invalid @enderror"
+                                                        wire:model.defer="pz_Mayoreo" required>
+                                                    @error('pz_Mayoreo')
+                                                        <span class="invalid-feedback">{{ $message }}</span>
+                                                    @enderror
+                                                </div>
                                                 <div class="col-md-2 mb-3">
                                                     <label for="porcentaje_venta_mayorista" class="mr-2">% Venta
                                                         Mayorista</label>

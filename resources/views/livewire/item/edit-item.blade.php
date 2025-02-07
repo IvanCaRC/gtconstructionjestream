@@ -215,18 +215,12 @@
                                             <button href="#" wire:click="$set('openModalFamilias', true)"
                                                 class="btn btn-secondary mt-3">Agregar Familia</button>
                                         </div>
-                                        <div class="col-md-2 mb-3">
+                                        <div class="col-md-4 mb-3">
                                             <label for="stock" class="mr-2">Stock Acutal del Producto</label>
                                             <input type="number" id="cantidad_piezas_mayoreo" class="form-control"
                                                 wire:model.defer="itemEspecificoEdit.stock" required>
                                         </div>
-                                        <div class="col-md-2 mb-3">
-                                            <label for="cantidad_piezas_mayoreo" class="mr-2">Cant. Piezas
-                                                Mayoreo</label>
-                                            <input id="cantidad_piezas_mayoreo" class="form-control"
-                                                wire:model.defer="itemEspecificoEdit.cantidad_piezas_mayoreo"
-                                                required>
-                                        </div>
+
                                     </div>
 
                                     @if ($provedorSeleccionadoDeLaTabla)
@@ -238,7 +232,13 @@
                                             {{ $provedorSeleccionadoDeLaTabla }}</label>
                                         <div class="form-group">
                                             <div class="row">
-                                                
+                                                <div class="col-md-2 mb-3">
+                                                    <label for="cantidad_piezas_mayoreo" class="mr-2">Cant. Piezas
+                                                        Mayoreo</label>
+                                                    <input id="cantidad_piezas_mayoreo" class="form-control"
+                                                        wire:model.defer="itemEspecificoEdit.cantidad_piezas_mayoreo"
+                                                        required>
+                                                </div>
 
                                                 <div class="col-md-2 mb-3">
                                                     <label for="porcentaje_venta_mayorista" class="mr-2">% Venta
