@@ -166,7 +166,18 @@
                     </div>
                     <br>
                     <div>
-                       
+                        <div>
+                            <strong>Categorías</strong>
+                        </div>
+                        <div>
+                            <div>
+                                <ul >
+                                    @foreach($familias as $familia)
+                                        @include('livewire.familia.lista-categorias', ['familia' => $familia, 'nivel' => 0])
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
