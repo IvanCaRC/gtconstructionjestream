@@ -48,18 +48,18 @@ class ItemEspecifico extends Model
     public static function rules($prefix = '', $id = null)
     {
         return [
-            $prefix . 'image' => 'nullable|mimes:jpg,jpeg,png,gif,webp|max:1024',
+            // $prefix . 'image' => 'nullable|mimes:jpg,jpeg,png,gif,webp|max:1024',
             $prefix . 'marca' => 'required|string|max:255',
-            // $prefix . 'cantidad_piezas_mayoreo' => 'required|integer',
-            // $prefix . 'cantidad_piezas_minorista' => 'required|integer',
+            $prefix . 'descripcion' => 'required',
+            $prefix . 'pz_Mayoreo' => 'required|integer',
             $prefix . 'porcentaje_venta_minorista' => 'nullable|numeric|min:0',
             $prefix . 'porcentaje_venta_mayorista' => 'nullable|numeric|min:0',
             $prefix . 'precio_venta_minorista' => 'nullable|numeric|min:0',
             $prefix . 'precio_venta_mayorista' => 'nullable|numeric|min:0',
             $prefix . 'unidad' => 'nullable|string|max:50',
             $prefix . 'stock' => 'nullable|integer|min:0',
-            $prefix . 'especificaciones' => 'nullable|string',
-            // $prefix . 'ficha_tecnica_pdf' => 'nullable|mimes:pdf|max:2048',
+            $prefix . 'especificaciones' => 'nullable',
+            $prefix . 'ficha_Tecnica_pdf' => 'nullable|mimes:pdf|max:2048',
         ];
     }
 
@@ -71,10 +71,9 @@ class ItemEspecifico extends Model
             $prefix . 'marca.required' => 'Registrar una marca es obligatorio.',
             $prefix . 'marca.string' => 'La marca debe ser un texto.',
             $prefix . 'marca.max' => 'El nombre de la marca excede la cantidad de caracteres.',
-            $prefix . 'cantidad_piezas_mayoreo.required' => 'Registra la cantidad de piezas de mayoreo.',
-            $prefix . 'cantidad_piezas_mayoreo.integer' => 'Registra la cantidad de piezas de mayoreo como un numero.',
-            $prefix . 'cantidad_piezas_minorista.required' => 'Registra la cantidad de piezas minorista.',
-            $prefix . 'cantidad_piezas_minorista.integer' => 'Registra la cantidad de piezas minorista como un numero.',
+            $prefix . 'descripcion.required' => 'Registra una descripcion para el item',
+            $prefix . 'pz_Mayoreo.required' => 'Registra la cantidad de piezas de mayoreo.',
+            $prefix . 'pz_Mayoreo.integer' => 'Registra la cantidad de piezas de mayoreo como un numero.',
             $prefix . 'porcentaje_venta_minorista.numeric' => 'El porcentaje de venta minorista debe ser un número.',
             $prefix . 'porcentaje_venta_minorista.min' => 'No puedes ingresar un porcentaje negativo.',
             $prefix . 'porcentaje_venta_mayorista.numeric' => 'El porcentaje de venta mayorista debe ser un número.',
@@ -87,9 +86,8 @@ class ItemEspecifico extends Model
             $prefix . 'unidad.max' => 'La unidad no puede tener más de 50 caracteres.',
             $prefix . 'stock.integer' => 'El stock debe ser un número entero.',
             $prefix . 'stock.min' => 'No puedes registrar un stock negativo.',
-            $prefix . 'especificaciones.string' => 'Las especificaciones deben ser un texto.',
-            $prefix . 'ficha_tecnica_pdf.mimes' => 'La ficha técnica debe ser un archivo PDF.',
-            $prefix . 'ficha_tecnica_pdf.max' => 'La ficha técnica no puede exceder los 2048KB.',
+            $prefix . 'ficha_Tecnica_pdf.mimes' => 'La ficha técnica debe ser un archivo PDF.',
+            $prefix . 'ficha_Tecnica_pdf.max' => 'La ficha técnica no puede exceder los 2048KB.',
         ];
     }
 }

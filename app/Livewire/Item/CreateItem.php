@@ -100,13 +100,13 @@ class CreateItem extends Component
     public function save()
     {
 
-        // $this->validate(array_merge(
-        //     Item::rules(),
-        //     ItemEspecifico::rules()
-        // ), array_merge(
-        //     Item::messages(),
-        //     ItemEspecifico::messages()
-        // ));
+        $this->validate(array_merge(
+            Item::rules(),
+            ItemEspecifico::rules()
+        ), array_merge(
+            Item::messages(),
+            ItemEspecifico::messages()
+        ));
         
         $porcentajeVentaMinorista = (float) ($this->porcentaje_venta_minorista ?? 0);
         $porcentajeVentaMayorista = (float) ($this->porcentaje_venta_mayorista ?? 0);
@@ -146,7 +146,7 @@ class CreateItem extends Component
             'unidad' => $this->unidadSeleccionadaEnTabla,
             'stock' => $this->stock,
             'especificaciones' => json_encode($this->especificaciones), // Guardar como JSON
-            'ficha_tecnica_pdf' => $ficha_Tecnica_pdf,
+            'ficha_Tecnica_pdf' => $ficha_Tecnica_pdf,
             'estado' => true,
             'estado_eliminacion' => true,
         ]);
