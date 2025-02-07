@@ -66,12 +66,20 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="descripcion">Descripción</label>
-                                        <textarea id="descripcion" class="form-control" wire:model="descripcion"></textarea>
+                                        <textarea id="descripcion" class="form-control @error('descripcion') is-invalid @enderror"
+                                            wire:model.defer="descripcion"></textarea>
+                                        @error('descripcion')
+                                            <span class="invalid-feedback">{{ $message }}</span>
+                                        @enderror
                                     </div>
                                     <div class="form-group">
                                         <label for="marca">Marca</label>
-                                        <input type="text" id="marca" class="form-control" wire:model="marca"
-                                            required>
+                                        <input type="text" id="marca"
+                                            class="form-control @error('marca') is-invalid @enderror"
+                                            wire:model.defer="marca" required>
+                                        @error('marca')
+                                            <span class="invalid-feedback">{{ $message }}</span>
+                                        @enderror
                                     </div>
                                     <div class="form-group">
                                         <label> Provedor</label>
@@ -204,7 +212,7 @@
                                                 class="btn btn-secondary mt-3">Agregar Familia</button>
                                         </div>
                                         <div class="col-md-4 mb-3">
-                                            <label for="stock" class="mr-2">Stock Acutal del Producto</label>
+                                            <label for="stock" class="mr-2">Stock Actual del Producto</label>
                                             <input type="number" id="cantidad_piezas_mayoreo" class="form-control"
                                                 wire:model="stock" required>
                                         </div>
@@ -226,8 +234,12 @@
                                                 <div class="col-md-2 mb-3">
                                                     <label for="cantidad_piezas_mayoreo" class="mr-2">Cant. Piezas
                                                         Mayoreo</label>
-                                                    <input id="cantidad_piezas_mayoreo" class="form-control"
-                                                        wire:model="pz_Mayoreo" required>
+                                                    <input id="pz_Mayoreo"
+                                                        class="form-control @error('pz_Mayoreo') is-invalid @enderror"
+                                                        wire:model.defer="pz_Mayoreo" required>
+                                                    @error('pz_Mayoreo')
+                                                        <span class="invalid-feedback">{{ $message }}</span>
+                                                    @enderror
                                                 </div>
                                                 <div class="col-md-2 mb-3">
                                                     <label for="porcentaje_venta_mayorista" class="mr-2">% Venta
@@ -319,11 +331,14 @@
                                                     <span class="file-upload-text">Archivo
                                                         Cargado<br>{{ $fileNamePdf }}</span>
                                                     <input type="file" id="ficha_Tecnica_pdf_car"
-                                                        class="form-control-file" wire:model="ficha_Tecnica_pdf"
-                                                        accept=".pdf">
+                                                        class="form-control-file @error('ficha_Tecnica_pdf') is-invalid @enderror"
+                                                        wire:model="ficha_Tecnica_pdf" accept=".pdf">
+                                                    @error('ficha_Tecnica_pdf')
+                                                        <span class="invalid-feedback">{{ $message }}</span>
+                                                    @enderror
                                                 </div>
                                                 <small class="form-text text-muted">Por favor, suba archivos en formato
-                                                    PDFsolamente.</small>
+                                                    PDF solamente.</small>
                                             </div>
                                         @endif
                                     </div>
