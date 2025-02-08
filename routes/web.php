@@ -2,7 +2,12 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\adminController;
+use App\Http\Controllers\FamiliaController;
+use App\Http\Controllers\ItemController;
+use App\Http\Controllers\ProveedorController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\NotificationController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -39,3 +44,39 @@ Route::get('admin/userView/{iduser}', [UserController::class, 'verUsuario'])
 Route::get('admin/roles', [UserController::class, 'verRoles'])->middleware('auth', 'nocache')->name('admin.roles');
 
 Route::get('profile/profileView', [UserController::class, 'verPerfil'])->middleware('auth', 'nocache')->name('profile.profileView');
+
+Route::get('compras/familias/viewFamilias', [FamiliaController::class, 'index'])->middleware('auth', 'nocache')->name('compras.familias.viewFamilias');
+
+Route::get('compras/familias/createFamilias', [FamiliaController::class, 'crearUsuario'])->middleware('auth', 'nocache')->name('compras.familias.createFamilias');
+
+Route::get('compras/items/viewItems', [ItemController::class, 'index'])->middleware('auth', 'nocache')->name('compras.items.viewItems');
+
+Route::get('compras/items/createItems', [ItemController::class, 'crearItem'])->middleware('auth', 'nocache')->name('compras.items.createItems');
+
+Route::get('compras/familias/viewFamiliaEspecifica/{idfamilia}', [FamiliaController::class, 'verFamilia'])
+    ->middleware('auth', 'nocache')
+    ->name('compras.familias.viewFamiliaEspecifica');
+
+Route::get('compras/familias/edicionFamilia/{idfamilia}', [FamiliaController::class, 'editarFamilia'])
+    ->middleware('auth', 'nocache')
+    ->name('compras.familias.edicionFamilia');
+
+Route::get('compras/proveedores/viewProveedores', [ProveedorController::class, 'index'])->middleware('auth', 'nocache')->name('compras.proveedores.viewProveedores');
+
+Route::get('compras/proveedores/createProveedores', [ProveedorController::class, 'crearProveedor'])->middleware('auth', 'nocache')->name('compras.proveedores.createProveedores');
+
+Route::get('compras/proveedores/viewProveedorEspecifico/{idproveedor}', [ProveedorController::class, 'verProveedor'])
+    ->middleware('auth', 'nocache')
+    ->name('compras.proveedores.viewProveedorEspecifico');
+
+Route::get('compras/proveedores/editProveedores/{idproveedor}', [ProveedorController::class, 'editProveedor'])
+    ->middleware('auth', 'nocache')
+    ->name('compras.proveedores.editProveedores');
+
+Route::get('compras/items/edicionItem/{idItem}', [ItemController::class, 'editItem'])->middleware('auth', 'nocache')->name('compras.items.edicionItem');
+
+Route::post('compras/proveedores', [ProveedorController::class, 'store'])->middleware('auth', 'nocache')->name('compras.proveedores.store');
+
+Route::get('compras/items/vistaEspecificaItem/{idItem}', [ItemController::class, 'ciewEspecItem'])->middleware('auth', 'nocache')->name('compras.items.vistaEspecificaItem');
+//Ruta para marcar leida la notificacion
+Route::get('/mark-as-read/{id}', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');

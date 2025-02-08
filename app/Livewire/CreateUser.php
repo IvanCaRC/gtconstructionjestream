@@ -30,7 +30,7 @@ class CreateUser extends Component
 
     public function save()
     {
-        $this->validate(User::rules());
+        $this->validate(User::rules(), User::messages());
 
         $image = null;
         if ($this->image) {

@@ -44,6 +44,23 @@ class User extends Authenticatable
             'image' => 'nullable|mimes:jpg,jpeg,png,gif,webp|max:1024'
         ];
     }
+
+    public static function messages($prefix = '')
+{
+    return [
+        $prefix . 'name.required' => 'Registrar un nombre es obligatorio.',
+        $prefix . 'first_last_name.required' => 'Al menos un apellido es obligatorio',
+        $prefix . 'email.required' => 'El correo electrónico es obligatorio.',
+        $prefix . 'email.email' => 'Debe proporcionar una dirección de correo electrónico válida.',
+        $prefix . 'email.unique' => 'Esta dirección de correo electrónico ya está registrada.',
+        $prefix . 'status.required' => 'El estado es obligatorio.',
+        $prefix . 'password.required' => 'Registrar una contraseña es obligatorio',
+        'selectedRoles.required' => 'Debe seleccionar al menos un rol.',
+        'image.mimes' => 'La imagen debe ser un archivo de tipo: jpg, jpeg, png, gif, webp.',
+        'image.max' => 'La imagen no puede exceder los 1024KB.',
+    ];
+}
+
 }
 
 

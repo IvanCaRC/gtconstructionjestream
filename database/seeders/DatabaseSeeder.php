@@ -3,6 +3,9 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use App\Models\ItemEspecifico;
+use App\Models\ItemTemporal;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Hash;
@@ -17,10 +20,21 @@ class DatabaseSeeder extends Seeder
 
         Storage::deleteDirectory('users');
         Storage::makeDirectory('users');
-         \App\Models\User::factory(10)->create();
+         \App\Models\User::factory(15)->create();
 
         $this->call(RoleSeeder::class);
-
+        $this->call(familiaSeeder::class);
+        $this->call(ProveedoresSeeder::class);
+        $this->call(TelefonosSeeder::class);
+        $this->call(DireccionesSeeder::class);
+        $this->call(ClientesSeeder::class);
+        $this->call(ItemsSeeder::class);
+        $this->call(ItemEspecificoSeeder::class);
+        $this->call(ItemTemporalSeeder::class);
+        $this->call(ItemEspecificoProveedorSeeder::class);
+        $this->call(ItemEspecificoHasFamiliaSeeder::class);
+        $this->call(ProveedorHasFamiliaSeeder::class);
+        
          \App\Models\User::factory()->create([
              'name' => 'Marisela',
              'first_last_name' => 'Gonzalez',
@@ -32,5 +46,6 @@ class DatabaseSeeder extends Seeder
              'password' => Hash::make('gtconstructions'),
          ])->assignRole('Administrador');
          
-    }
+         
+    }   
 }

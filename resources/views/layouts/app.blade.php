@@ -8,6 +8,11 @@
 
     <title>@yield('title')</title>
 
+    <!-- Leaflet CSS -->
+
+
+
+
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
@@ -24,6 +29,8 @@
     <!-- Custom styles for this template-->
     <link href="{{ asset('css/sb-admin-2.min.css') }}" rel="stylesheet">
 
+
+
     @livewireStyles
     <style>
         .img-redonda {
@@ -32,28 +39,28 @@
             height: 50px;
             object-fit: cover;
         }
-
-        .table th,
-        .table td {
-            border-top: 1px solid #dee2e6;
-            border-left: none;
-            border-right: none;
+    </style>
+    <style>
+        .background-permanent {
+            background-color: #003366 !important;
         }
 
-        .btn-custom {
-            font-size: 1rem;
-            padding: 0.45rem .75rem;
+        .background-default {
+            background-color: initial !important;
         }
 
-        .table-responsive .btn {
-            margin-left: -10%;
-            /* Ajusta el margen para acercar los botones entre sí */
+        .container-flex2 {
+            display: flex;
+            flex-direction: column;
+            gap: 100mm;
+            /* Espacio de 1 milímetro entre los elementos */
         }
     </style>
 
 </head>
 
 <body class="font-sans antialiased">
+
     <!-- Page Wrapper -->
     <div id="wrapper">
 
@@ -139,30 +146,44 @@
 
             @can('compras.collapsed')
                 <!-- Nav Item - Pagina colapsada de departamentos-->
-                <li class="nav-item">
+                <li class="nav-item @yield('activedesplegablefamilias')">
                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCompras"
                         aria-expanded="true" aria-controls="collapseCompras">
                         <i class="fas fa-fw fa-building"></i>
                         <span>Compras</span>
                     </a>
-                    <div id="collapseCompras" class="collapse" aria-labelledby="headingPages"
-                        data-parent="#accordionSidebar">
+                    <div id="collapseCompras" class="collapse @yield('activeCollapseCompras') container-flex2"
+                        aria-labelledby="headingPages" data-parent="#accordionSidebar">
                         <div class="bg-primary-dark text-white py-2 collapse-inner rounded">
-                            <a class="collapse-item @yield('activeAlogin') text-white" href="#"
+
+                            <a class="collapse-item @yield('activeCategorias') text-white @yield('activeFondoPermanente') mb-2"
+                                href="{{ route('compras.familias.viewFamilias') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
-                                onmouseout="this.style.backgroundColor='';">Categorias</a>
-                            <a class="collapse-item @yield('activeAregister') text-white" href="#"
+                                onmouseout="this.style.backgroundColor='@yield('activeAforgot')';">
+                                Familias
+                            </a>
+                            <a class="collapse-item @yield('activeProveedores') text-white @yield('activeFondoPermanenteProveedores') mb-2"
+                                href="{{ route('compras.proveedores.viewProveedores') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
-                                onmouseout="this.style.backgroundColor='';">Materiales</a>
-                            <a class="collapse-item @yield('activeAforgot') text-white" href="#"
+                                onmouseout="this.style.backgroundColor='@yield('activeBackgroundProveedores')';">
+                                Proveedores
+                            </a>
+                            <a class="collapse-item @yield('activeMateriales') text-white @yield('activeFondoPermanenteMateriales') mb-2"
+                                href="{{ route('compras.items.viewItems') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
-                                onmouseout="this.style.backgroundColor='';">Proveedores</a>
-                            <a class="collapse-item @yield('activeAforgot') text-white" href="#"
+                                onmouseout="this.style.backgroundColor='@yield('activeBackgroundMateriales')';">
+                                Materiales
+                            </a>
+                            <a class="collapse-item @yield('activeAforgot') text-white mb-2" href="#"
                                 onmouseover="this.style.backgroundColor='#003366';"
-                                onmouseout="this.style.backgroundColor='';">Cotizaciones</a>
-                            <a class="collapse-item @yield('activeAforgot') text-white" href="#"
+                                onmouseout="this.style.backgroundColor='';">
+                                Cotizaciones
+                            </a>
+                            <a class="collapse-item @yield('activeAforgot') text-white mb-2" href="#"
                                 onmouseover="this.style.backgroundColor='#003366';"
-                                onmouseout="this.style.backgroundColor='';">Ordenes de Compra</a>
+                                onmouseout="this.style.backgroundColor='';">
+                                Ordenes de Compra
+                            </a>
                             <div class="collapse-divider"></div>
                         </div>
                     </div>
@@ -256,36 +277,13 @@
                     <ul class="navbar-nav ml-auto">
 
                         <!-- Nav Item - Search Dropdown (Visible Only XS) -->
-                        <li class="nav-item dropdown no-arrow d-sm-none">
-                            <a class="nav-link dropdown-toggle" href="#" id="searchDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-search fa-fw"></i>
-                            </a>
-                            <!-- Dropdown - Messages -->
-                            <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
-                                aria-labelledby="searchDropdown">
-                                <form class="form-inline mr-auto w-100 navbar-search">
-                                    <div class="input-group">
-                                        <input type="text" class="form-control bg-light border-0 small"
-                                            placeholder="Search for..." aria-label="Search"
-                                            aria-describedby="basic-addon2">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-primary" type="button">
-                                                <i class="fas fa-search fa-sm"></i>
-                                            </button>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </li>
-
-                        <!-- Nav Item - Alerts -->
                         <li class="nav-item dropdown no-arrow mx-1">
                             <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-bell fa-fw"></i>
                                 <!-- Counter - Alerts -->
-                                <span class="badge badge-danger badge-counter">3+</span>
+                                <span
+                                    class="badge badge-danger badge-counter">{{ Auth::user()->unreadNotifications->count() }}</span>
                             </a>
                             <!-- Dropdown - Alerts -->
                             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
@@ -293,41 +291,28 @@
                                 <h6 class="dropdown-header">
                                     Notificaciones
                                 </h6>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-primary">
-                                            <i class="fas fa-file-alt text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500">Diciembre 9, 2024</div>
-                                        <span class="font-weight-bold">¡Tu nuevo informe mensual esta listo!</span>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-success">
-                                            <i class="fas fa-donate text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500">Diciembre 3, 2024</div>
-                                        Se ha cerrado un proyecto por $200,000!!!
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="mr-3">
-                                        <div class="icon-circle bg-warning">
-                                            <i class="fas fa-exclamation-triangle text-white"></i>
-                                        </div>
-                                    </div>
-                                    <div>
-                                        <div class="small text-gray-500">Diciembre 3, 2024</div>
-                                        Se a genera un nuevo gasto.
-                                    </div>
-                                </a>
-                                <a class="dropdown-item text-center small text-gray-500" href="#">Ver todas las
-                                    notificaciones</a>
+                                @if (Auth::check())
+                                    @forelse (Auth::user()->unreadNotifications as $notification)
+                                        <a class="dropdown-item d-flex align-items-center"
+                                            href="{{ route('notifications.markAsRead', $notification->id) }}?redirect_to={{ urlencode($notification->data['url']) }}">
+                                            <div class="mr-3">
+                                                <div class="icon-circle bg-primary">
+                                                    <i class="fas fa-file-alt text-white"></i>
+                                                </div>
+                                            </div>
+                                            <div>
+                                                <div class="small text-gray-500">
+                                                    {{ $notification->created_at->diffForHumans() }}</div>
+                                                <span
+                                                    class="font-weight-bold">{{ $notification->data['message'] }}</span>
+                                            </div>
+                                        </a>
+                                    @empty
+                                        <p class="dropdown-item">No hay notificaciones.</p>
+                                    @endforelse
+                                @else
+                                    <p class="dropdown-item">No hay un usuario autenticado.</p>
+                                @endif
                             </div>
                         </li>
 
@@ -420,8 +405,7 @@
                             <!-- Dropdown - User Information -->
                             <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="userDropdown">
-                                <a class="dropdown-item"
-                                    href="{{ route('profile.profileView') }}">
+                                <a class="dropdown-item" href="{{ route('profile.profileView') }}">
                                     <i class="fas fa-user fa-sm fa-fw mr-2 text-gray-400"></i>
                                     Mi perfil
                                 </a>
@@ -464,7 +448,7 @@
     </div>
     <!-- End of Page Wrapper -->
 
-    <!-- Scroll to Top Button-->
+
     <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
     </a>
