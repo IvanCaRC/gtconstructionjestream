@@ -310,6 +310,7 @@ class EditProveedor extends Component
             'rfc' => $this->proveedorEdit['rfc'],
             'archivo_facturacion_pdf' => $archivoFacturacion,
             'datos_bancarios_pdf' => $archivoBancarios,
+            'estado' => true,
         ]);
 
         // Obtener teléfonos actuales del proveedor
