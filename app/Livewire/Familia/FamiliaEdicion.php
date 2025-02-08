@@ -96,7 +96,7 @@ class FamiliaEdicion extends Component
             'id_familia_padre' => $idFamiliaPadre,
         ]);
         $this->dispatch('editFamilia');
-        return redirect()->route('compras.familias.edicionFamilia', ['idfamilia' => $this->familiaEditId]);
+        return view('livewire.familia.familia-component');
     }
 
     private function crearArregloDeFamiliasPadre($familiaActual)
