@@ -297,8 +297,8 @@
 
                     // Mostrar la alerta después de la creación si todo es correcto
                     Swal.fire({
-                        title: 'Proveedor creado',
-                        text: 'El proveedor ha sido creado exitosamente.',
+                        title: 'Proveedor actualizado',
+                        text: 'El proveedor ha sido actualizado exitosamente.',
                         icon: 'success',
                         confirmButtonText: 'OK'
                     }).then((result) => {

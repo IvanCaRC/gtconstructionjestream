@@ -52,8 +52,6 @@ class Proveedor extends Model
             $prefix . 'rfc' => 'required|string|unique:proveedores,rfc,' . $id,
             // $prefix . 'archivo_facturacion_pdf' => 'nullable|mimes:pdf|max:2048',
             // $prefix . 'datos_bancarios_pdf' => 'nullable|mimes:pdf|max:2048',
-            // $prefix . 'estado' => 'required|boolean',
-            // $prefix . 'estado_eliminacion' => 'required|boolean',
         ];
     }
 
@@ -74,10 +72,6 @@ class Proveedor extends Model
             $prefix . 'archivo_facturacion_pdf.max' => 'El archivo de facturación no puede exceder los 2048KB.',
             $prefix . 'datos_bancarios_pdf.mimes' => 'El archivo de datos bancarios debe ser un archivo PDF.',
             $prefix . 'datos_bancarios_pdf.max' => 'El archivo de datos bancarios no puede exceder los 2048KB.',
-            $prefix . 'estado.required' => 'El estado es obligatorio.',
-            $prefix . 'estado.boolean' => 'El estado debe ser verdadero o falso.',
-            $prefix . 'estado_eliminacion.required' => 'El estado de eliminación es obligatorio.',
-            $prefix . 'estado_eliminacion.boolean' => 'El estado de eliminación debe ser verdadero o falso.',
         ];
     }
 }

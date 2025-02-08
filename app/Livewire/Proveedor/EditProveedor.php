@@ -263,8 +263,8 @@ class EditProveedor extends Component
             'proveedorEdit.descripcion' => 'nullable|string',
             'proveedorEdit.correo' => 'required|email|unique:proveedores,correo,' . $this->proveedorEdit['id'],
             'proveedorEdit.rfc' => 'required|string|unique:proveedores,rfc,' . $this->proveedorEdit['id'],
-            'proveedorEdit.archivo_facturacion_pdf' => 'nullable|mimes:pdf|max:2048',
-            'proveedorEdit.datos_bancarios_pdf' => 'nullable|mimes:pdf|max:2048',
+            'proveedorEdit.archivo_facturacion_pdf' => 'nullable|max:2048',
+            'proveedorEdit.datos_bancarios_pdf' => 'nullable|max:2048',
         ], [
             'proveedorEdit.nombre.required' => 'Registrar un nombre es obligatorio.',
             'proveedorEdit.nombre.string' => 'Registra un nombre valido.',
