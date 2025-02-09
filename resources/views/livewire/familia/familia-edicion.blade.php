@@ -14,8 +14,8 @@
                         @error('nombre')
                             <span class="invalid-feedback">{{ $message }}</span>
                         @enderror
-                        <span id="nombreError" class="invalid-feedback" style="display:none;">El campo nombre es
-                            obligatorio.</span>
+                        <span id="nombreError" class="invalid-feedback" style="display:none;">Registrar un nombre para
+                            la familia es obligatorio.</span>
                     </div>
                     <!-- Descripción -->
                     <div class="form-group">
