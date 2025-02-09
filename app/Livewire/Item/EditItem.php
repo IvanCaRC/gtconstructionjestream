@@ -451,13 +451,23 @@ class EditItem extends Component
 
     public function eliminarProveedor($index)
     {
+
+        $proveedorEliminado = $this->ProvedoresAsignados[$index]['proveedor_nombre'] ?? null;
         unset($this->ProvedoresAsignados[$index]);
         $this->ProvedoresAsignados = array_values($this->ProvedoresAsignados); // Reindexar el array
         // Si el proveedor eliminado estaba seleccionado, resetear los datos seleccionados
-        if ($this->provedorSeleccionadoDeLaTabla === $index) {
+        if ($this->provedorSeleccionadoDeLaTabla === $proveedorEliminado) {
             $this->unidadSeleccionadaEnTabla = null;
             $this->precioSeleccionadoEnTabla = null;
             $this->provedorSeleccionadoDeLaTabla = null;
+        }
+    }
+
+    public function edcionDeTabalaProveedorUnidad($index)
+    {
+        if (isset($this->ProvedoresAsignados[$index]) && $this->ProvedoresAsignados[$index]['estado'] == 1) {
+            // Asignar el precio de compra del proveedor al precio seleccionado
+            $this->unidadSeleccionadaEnTabla = $this->ProvedoresAsignados[$index]['unidad'];
         }
     }
 
@@ -484,5 +494,12 @@ class EditItem extends Component
         // Ejecutar ambos métodos
         $this->edcionDeTabalaProveedorPrecio($index);
         $this->calcularPrecios();
+    }
+
+    public function handleKeydownUnidad($index)
+    {
+        // Ejecutar ambos métodos
+        $this->edcionDeTabalaProveedorUnidad($index);
+
     }
 }

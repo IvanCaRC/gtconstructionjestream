@@ -183,7 +183,7 @@
                                                                 </td>
                                                                 <td><input step="0.01" class="form-control"
                                                                         wire:model.lazy="ProvedoresAsignados.{{ $index }}.unidad"
-                                                                        wire:keydown='calcularPrecios'>
+                                                                        wire:keydown='handleKeydownUnidad({{ $index }})'>
                                                                 </td>
 
                                                                 <td><button
@@ -240,6 +240,7 @@
                                     </div>
 
                                     @if ($provedorSeleccionadoDeLaTabla)
+                                    <label for="">{{$provedorSeleccionadoDeLaTabla}}</label>
                                         <div>
                                             <h4 for="unidad">Unidad</h4>
                                             <label>{{ $unidadSeleccionadaEnTabla }}</label>
