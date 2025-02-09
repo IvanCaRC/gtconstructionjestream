@@ -98,6 +98,8 @@
                                         <input type="text" id="marca" class="form-control"
                                             wire:model.defer="itemEspecificoEdit.marca" required>
                                     </div>
+                                    
+
                                     <div class="form-group">
                                         <label> Provedor</label>
                                         <div class="input-group mb-2">
@@ -204,7 +206,7 @@
                                     </div>
 
                                     <div class="row">
-                                        <div class="col-md-8 mb-3">
+                                        <div class="col-md-4 mb-3">
                                             <label>Familias</label>
                                             <div class="input-group mb-2">
                                                 @if (count($familiasSeleccionadas) > 0)
@@ -231,7 +233,9 @@
                                             <label for="stock" class="mr-2">Stock Acutal del Producto</label>
                                             <input type="number" id="cantidad_piezas_mayoreo" class="form-control"
                                                 wire:model.defer="itemEspecificoEdit.stock" required>
+                                                
                                         </div>
+
 
                                     </div>
 
@@ -281,6 +285,12 @@
                                                     <label
                                                         class="form-control">{{ $precio_venta_minorista ?? 'N/A' }}</label>
                                                 </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="moc">MOC (Minimo de venta a cliente)</label>
+                                                <input type="number" id="moc" class="form-control"
+                                                    wire:model.defer="itemEspecificoEdit.moc" required>
+        
                                             </div>
                                         </div>
                                     @endif

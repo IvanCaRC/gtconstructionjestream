@@ -11,7 +11,7 @@ use Livewire\Component;
 
 class VistaEspecifica extends Component
 {
-    public $item,$itemEspecifico;
+    public $item, $itemEspecifico;
     public $imagenesCargadas;
     public $familiasSeleccionadas = [''];
     public $ProvedoresAsignados = [];
@@ -28,17 +28,29 @@ class VistaEspecifica extends Component
             $this->imagenesCargadas = null;
         } else {
             $this->imagenesCargadas = explode(',', $this->itemEspecifico->image);
-        }  
+        }
         $this->cargarProvedoresParaEditar($idItem);
         $this->familiasSeleccionadas = ItemEspecificoHasFamilia::where('item_especifico_id', $idItem)
             ->with('familia')
             ->get()
             ->pluck('familia')
             ->toArray();
-            $this->especificaciones = json_decode($this->itemEspecifico->especificaciones, true);
-            $this->ficha_Tecnica_pdf = $this->itemEspecifico->ficha_tecnica_pdf;
-    }
+
+            $especificaciones = json_decode($this->itemEspecifico->especificaciones, true);
     
+            // Filtrar especificaciones vacías
+            $especificaciones = array_filter($especificaciones, function($especificacion) {
+                return !empty($especificacion['enunciado']) || !empty($especificacion['concepto']);
+            });
+        
+            if (!empty($especificaciones)) {
+                $this->especificaciones = $especificaciones;
+            } else {
+                $this->especificaciones = null;
+            }
+        $this->ficha_Tecnica_pdf = $this->itemEspecifico->ficha_tecnica_pdf;
+    }
+
     public function cargarProvedoresParaEditar($idItem)
     {
         $proveedores = ItemEspecificoProveedor::where('item_especifico_id', $idItem)->get();
@@ -53,13 +65,27 @@ class VistaEspecifica extends Component
                 $proveedor->unidad,
                 $proveedor->estado
             );
-            
+
             $this->ProvedoresAsignados[] = (array) $conexion; // Convertir el objeto a un array y agregarlo al arreglo
         }
     }
 
+    public function eliminar($itemId)
+    {
+        ItemEspecificoHasFamilia::where('item_especifico_id', $itemId)->delete();
+        ItemEspecificoProveedor::where('item_especifico_id', $itemId)->delete();
+        $ItemEspecifico = ItemEspecifico::findOrFail($itemId);
+        $ItemEspecifico->update(['estado_eliminacion' => false]);
+        $this->dispatch('renderVistaProv');
+    }
+    
     public function render()
     {
         return view('livewire.item.vista-especifica');
+    }
+
+    public function editItem($idItem)
+    {
+        return redirect()->route('compras.items.edicionItem', ['idItem' => $idItem]);
     }
 }

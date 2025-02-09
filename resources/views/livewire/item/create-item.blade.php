@@ -81,6 +81,7 @@
                                             <span class="invalid-feedback">{{ $message }}</span>
                                         @enderror
                                     </div>
+                                    
                                     <div class="form-group">
                                         <label> Provedor</label>
                                         <div class="input-group mb-2">
@@ -190,6 +191,7 @@
                                     <div class="row">
                                         <div class="col-md-4 mb-3">
                                             <label>Familias</label>
+                                            
                                             <div class="input-group mb-2">
                                                 @if (count($familiasSeleccionadas) > 0)
                                                     @foreach ($familiasSeleccionadas as $index => $familia)
@@ -213,6 +215,7 @@
                                         </div>
                                         <div class="col-md-4 mb-3">
                                             <label for="stock" class="mr-2">Stock Actual del Producto</label>
+                                           
                                             <input type="number" id="stock"
                                                 class="form-control @error('stock') is-invalid @enderror"
                                                 wire:model.defer="stock" required>
@@ -220,12 +223,7 @@
                                                 <span class="invalid-feedback">{{ $message }}</span>
                                             @enderror
                                         </div>
-                                        <div class="col-md-4 mb-3">
-                                            <label for="moc" class="mr-2">MOC</label>
-                                            <input type="number" id="moc" class="form-control"
-                                                wire:model.defer="moc">
-
-                                        </div>
+                                        
 
                                     </div>
 
@@ -280,6 +278,12 @@
                                                     <label
                                                         class="form-control">{{ $precio_venta_minorista ?? 'N/A' }}</label>
                                                 </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="moc">MOC (Minimo de venta a cliente)</label>
+                                                <input type="number" id="moc" class="form-control"
+                                                    wire:model.defer="moc">
+        
                                             </div>
                                         </div>
                                     @endif

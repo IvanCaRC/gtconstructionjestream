@@ -54,6 +54,7 @@ class EditItem extends Component
         'cantidad_piezas_mayoreo' => '', // Correo del proveedor
         'cantidad_piezas_minorista' => '', // RFC del proveedor
         'stock' => '',
+        'moc' => '',
         'ficha_tecnica_pdf' => '',
         'estado' => '',
         'estado_eliminacion' => '',
@@ -110,6 +111,7 @@ class EditItem extends Component
             ->pluck('familia')
             ->toArray();
         $this->itemEspecificoEdit['stock'] = $this->itemEspecifico->stock;
+        $this->itemEspecificoEdit['moc'] = $this->itemEspecifico->moc;
         $this->itemEspecificoEdit['cantidad_piezas_mayoreo'] = $this->itemEspecifico->cantidad_piezas_mayoreo;
         $this->itemEspecificoEdit['cantidad_piezas_minorista'] = $this->itemEspecifico->cantidad_piezas_minorista;
         $this->porcentaje_venta_minorista = $this->itemEspecifico->porcentaje_venta_minorista;
@@ -226,21 +228,18 @@ class EditItem extends Component
 
         // Convertir el array combinado a una cadena delimitada por comas o null si está vacío
         $imagenesString = !empty($areglosumado) ? implode(',', $areglosumado) : null;
-
-
         $itemEspecificoActual->update([
             'image' => $imagenesString,
             'marca' => $this->itemEspecificoEdit['marca'],
-
             'cantidad_piezas_mayoreo' => $this->itemEspecificoEdit['cantidad_piezas_mayoreo'],
             'cantidad_piezas_minorista' => $this->itemEspecificoEdit['cantidad_piezas_mayoreo'] - 1,
             'porcentaje_venta_minorista' => $porcentajeVentaMinorista,
             'porcentaje_venta_mayorista' => $porcentajeVentaMayorista,
             'precio_venta_minorista' => $this->precio_venta_minorista,
             'precio_venta_mayorista' => $this->precio_venta_mayorista,
-
             'unidad' => $this->unidadSeleccionadaEnTabla,
             'stock' => $this->itemEspecificoEdit['stock'],
+            'moc' => $this->itemEspecificoEdit['moc'],
             'especificaciones' => json_encode($this->especificaciones), // Guardar como JSON
             'ficha_tecnica_pdf' => $ficha_Tecnica_pdf,
             'estado' => true,
