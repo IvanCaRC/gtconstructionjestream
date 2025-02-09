@@ -24,7 +24,11 @@ class VistaEspecifica extends Component
         $this->itemEspecifico = ItemEspecifico::findOrFail($idItem);
         // Buscar el registro de Item relacionado
         $this->item = Item::findOrFail($this->itemEspecifico->item_id);
-        $this->imagenesCargadas = explode(',', $this->itemEspecifico->image); // Dividir la cadena en un array
+        if ($this->itemEspecifico->image === null) {
+            $this->imagenesCargadas = null;
+        } else {
+            $this->imagenesCargadas = explode(',', $this->itemEspecifico->image);
+        }  
         $this->cargarProvedoresParaEditar($idItem);
         $this->familiasSeleccionadas = ItemEspecificoHasFamilia::where('item_especifico_id', $idItem)
             ->with('familia')

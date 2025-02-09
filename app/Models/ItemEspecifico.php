@@ -26,6 +26,7 @@ class ItemEspecifico extends Model
         'especificaciones',
         'ficha_tecnica_pdf',
         'estado',
+        'moc',
         'estado_eliminacion',
     ];
 

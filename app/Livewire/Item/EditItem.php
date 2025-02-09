@@ -97,7 +97,11 @@ class EditItem extends Component
         $this->itemEdit['descripcion'] = $this->item->descripcion;
         $this->itemEspecificoEdit['id'] = $this->itemEspecifico->id;
         $this->itemEspecificoEdit['item_id'] = $this->itemEspecifico->item_id;
-        $this->imagenesCargadas = explode(',', $this->itemEspecifico->image); // Dividir la cadena en un array
+        if ($this->itemEspecifico->image === null) {
+            $this->imagenesCargadas = null;
+        } else {
+            $this->imagenesCargadas = explode(',', $this->itemEspecifico->image);
+        }    
         $this->itemEspecificoEdit['marca'] = $this->itemEspecifico->marca;
         $this->cargarProvedoresParaEditar($idItem);
         $this->familiasSeleccionadas = ItemEspecificoHasFamilia::where('item_especifico_id', $idItem)
@@ -212,8 +216,13 @@ class EditItem extends Component
             }
         }
 
-
-        $areglosumado = array_merge($this->imagenesCargadas, $this->image);
+        if(!$this->imagenesCargadas == null){
+            $areglosumado = array_merge($this->imagenesCargadas,$imagenes);
+        }else{
+            $areglosumado = array_merge($imagenes);
+        }
+        
+        
 
         // Convertir el array combinado a una cadena delimitada por comas o null si está vacío
         $imagenesString = !empty($areglosumado) ? implode(',', $areglosumado) : null;

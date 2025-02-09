@@ -54,7 +54,8 @@
                         @endif
                     @endforeach
                     <!-- Botón de envío -->
-                    {{-- <button class="btn btn-secondary mr-2 disabled:opacity-50">Cancelar</button> --}}
+                    {{--     --}}
+                    <button type="button" class="btn btn-secondary" onclick="cancelar()">Cancelar</button>
                     <button type="button" class="btn btn-primary disabled:opacity-50"
                         onclick="validateForm()">Actualizar</button>
                 </form>
@@ -105,5 +106,11 @@
                 confirmButtonText: 'OK'
             });
         });
+    }
+</script>
+<script>
+    function cancelar() {
+        // Llamar al método update2 de Livewire
+        window.location.href = "{{ route('compras.familias.viewFamilias') }}";
     }
 </script>

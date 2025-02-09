@@ -188,7 +188,7 @@
 
 
                                     <div class="row">
-                                        <div class="col-md-8 mb-3">
+                                        <div class="col-md-4 mb-3">
                                             <label>Familias</label>
                                             <div class="input-group mb-2">
                                                 @if (count($familiasSeleccionadas) > 0)
@@ -219,6 +219,12 @@
                                             @error('stock')
                                                 <span class="invalid-feedback">{{ $message }}</span>
                                             @enderror
+                                        </div>
+                                        <div class="col-md-4 mb-3">
+                                            <label for="moc" class="mr-2">MOC</label>
+                                            <input type="number" id="moc" class="form-control"
+                                                wire:model.defer="moc">
+
                                         </div>
 
                                     </div>
@@ -346,7 +352,8 @@
                                             </div>
                                         @endif
                                     </div>
-
+                                    <button type="button" class="btn btn-secondary mt-3"
+                                        onclick="cancelar()">Cancelar</button>
                                     <button type="button" onclick="confirmSave()" class="btn btn-primary mt-3">Crear
                                         item</button>
                                 </div>
@@ -526,6 +533,13 @@
                     confirmButtonText: 'OK'
                 });
             });
+        }
+    </script>
+
+    <script>
+        function cancelar() {
+            // Llamar al método update2 de Livewire
+            window.location.href = "{{ route('compras.items.viewItems') }}";
         }
     </script>
 

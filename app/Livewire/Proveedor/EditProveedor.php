@@ -54,6 +54,7 @@ class EditProveedor extends Component
         foreach ($direcciones as $direccion) {
             $conexion = new ConexionProveedroDireccion(
                 $direccion->proveedor_id,
+                $direccion->pais,
                 $direccion->cp,
                 $direccion->estado,
                 $direccion->ciudad,
@@ -358,6 +359,7 @@ class EditProveedor extends Component
                     [
                         'proveedor_id' => $direccion['proveedor_id'] ?? '',
                 'calle' => $direccion['calle'] ?? '',
+                'pais' => $direccion['pais'] ?? '',
                 'numero' => $direccion['numero'] ?? '',
                 'colonia' => $direccion['colonia'] ?? '',
                 'municipio' => $direccion['municipio'] ?? '',
@@ -365,8 +367,8 @@ class EditProveedor extends Component
                 'estado' => $direccion['estado'] ?? '',
                 'cp' => $direccion['cp'] ?? '',
                 'referencia' => $direccion['referencia'] ?? '',
-                'latitud' => $direccion['Latitud'] ?? '',
-                'longitud' => $direccion['Longitud'] ?? '',
+                'Latitud' => $direccion['Latitud'] ?? '',
+                'Longitud' => $direccion['Longitud'] ?? '',
                 'created_at' => now(),
                 'updated_at' => now(),
             

@@ -31,7 +31,7 @@
                         </div>@include('compras.proveedores.form')
                         
                         
-                    
+                        <button class="btn btn-secondary mt-3" onclick="cancelar()">Cancelar</button>
                         <button  onclick="confirmUpdate()" class="btn btn-primary mt-3">Actualizar proveedor</button>
                     </form>
                 </div>

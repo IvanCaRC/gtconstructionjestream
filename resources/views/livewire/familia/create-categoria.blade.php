@@ -53,6 +53,8 @@
                     @endforeach
 
                     <!-- Botón de envío -->
+                    <button type="button" class="btn btn-secondary mt-3" onclick="cancelar()">Cancelar</button>
+
                     <button type="button" onclick="confirmSave()" class="btn btn-primary mt-3">Crear Familia</button>
                 </form>
 
@@ -95,5 +97,12 @@
                 confirmButtonText: 'OK'
             });
         });
+    }
+</script>
+
+<script>
+    function cancelar() {
+        // Llamar al método update2 de Livewire
+        window.location.href = "{{ route('compras.familias.viewFamilias') }}";
     }
 </script>

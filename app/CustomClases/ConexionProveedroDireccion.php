@@ -5,6 +5,7 @@ namespace App\CustomClases;
 class ConexionProveedroDireccion
 {
     public $proveedor_id;
+    public $pais;
     public $cp;
     public $estado;
     public $ciudad;
@@ -13,12 +14,13 @@ class ConexionProveedroDireccion
     public $calle;    
     public $numero;   
     public $refernecia;   
-    public $latitud;   
-    public $longitud;            
+    public $Latitud;   
+    public $Longitud;            
 
-    public function __construct($proveedor_id,$cp, $estado, $ciudad, $municipio, $colonia, $calle,$numero,$refernecia, $latitud, $longitud )
+    public function __construct($proveedor_id,$pais,$cp, $estado, $ciudad, $municipio, $colonia, $calle,$numero,$refernecia, $Latitud, $Longitud )
     {
         $this->proveedor_id = $proveedor_id;
+        $this->pais = $pais;
         $this->cp = $cp;
         $this->estado = $estado;
         $this->ciudad = $ciudad;
@@ -27,7 +29,7 @@ class ConexionProveedroDireccion
         $this->calle = $calle;
         $this->numero = $numero;
         $this->refernecia = $refernecia;
-        $this->latitud = $latitud;
-        $this->longitud = $longitud;
+        $this->Latitud = $Latitud;
+        $this->Longitud = $Longitud;
     }
 }

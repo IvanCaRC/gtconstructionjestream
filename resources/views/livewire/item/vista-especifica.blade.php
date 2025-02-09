@@ -2,7 +2,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
-
     <div>
         <div>
             <div>
@@ -15,12 +14,13 @@
                                     <div class="form-group">
                                         <div class="form-group text-center mt-3">
                                             @if ($imagenesCargadas == null || count($imagenesCargadas) == 0)
-                                                <div class="imagen-predeterminada">
-                                                    <span class="file-upload-icon">&#128247;</span>
-                                                    <span class="file-upload-text">Sin imágenes que mostrar</span>
-                                                </div>
+                                            <div class="imagen-predeterminada">
+                                                <span class="file-upload-icon">&#128247;</span>
+                                                <span class="file-upload-text">Sin imagenes, sube tu imagen con el botón
+                                                    "Elegir
+                                                    archivo"</span>
+                                            </div>
                                             @else
-                                                {{-- Imagen Principal con flechas --}}
                                                 <div class="galeria">
                                                     <div class="imagen-grande-container">
                                                         <img id="imagenGrande"

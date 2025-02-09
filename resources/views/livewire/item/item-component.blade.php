@@ -174,7 +174,13 @@
                                                         </label>
                                                     </div>
                                                    
-
+                                                    <div>
+                                                        <label >
+                                                            <strong>Marca:</strong>
+                                                                {{$itemEspecifico->marca}}
+                                                            
+                                                        </label>
+                                                    </div>
 
                                                     <!-- Precios -->
                                                     <p class="card-text">
