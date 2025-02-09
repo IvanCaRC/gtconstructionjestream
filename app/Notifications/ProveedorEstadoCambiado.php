@@ -24,8 +24,8 @@ class ProveedorEstadoCambiado extends Notification
 
     public function toArray($notifiable)
     {
-        // Generar la URL manualmente con 127.0.0.1
-        $url = 'http://127.0.0.1:8000/compras/proveedores/viewProveedores';
+        // Usar la ruta definida en web.php
+        $url = config('app.url') . route('compras.proveedores.viewProveedores', [], false);
         Log::info('Generando URL para ProveedorEstadoCambiado: ' . $url);
 
         return [
