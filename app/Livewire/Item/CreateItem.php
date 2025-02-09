@@ -318,6 +318,14 @@ class CreateItem extends Component
         }
     }
 
+    public function edcionDeTabalaProveedorUnidad($index)
+    {
+        if (isset($this->ProvedoresAsignados[$index]) && $this->ProvedoresAsignados[$index]['estado'] == 1) {
+            // Asignar el precio de compra del proveedor al precio seleccionado
+            $this->unidadSeleccionadaEnTabla = $this->ProvedoresAsignados[$index]['unidad'];
+        }
+    }
+
     public function eliminarProveedor($index)
     {
         unset($this->ProvedoresAsignados[$index]);
@@ -353,5 +361,12 @@ class CreateItem extends Component
         // Ejecutar ambos métodos
         $this->edcionDeTabalaProveedorPrecio($index);
         $this->calcularPrecios();
+    }
+
+    public function handleKeydownUnidad($index)
+    {
+        // Ejecutar ambos métodos
+        $this->edcionDeTabalaProveedorUnidad($index);
+
     }
 }

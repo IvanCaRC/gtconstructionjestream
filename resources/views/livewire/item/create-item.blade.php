@@ -165,7 +165,7 @@
                                                                 </td>
                                                                 <td><input step="0.01" class="form-control"
                                                                         wire:model.lazy="ProvedoresAsignados.{{ $index }}.unidad"
-                                                                        wire:keydown='calcularPrecios'>
+                                                                        wire:keydown='handleKeydownUnidad({{ $index }})'>
                                                                 </td>
 
                                                                 <td><button
