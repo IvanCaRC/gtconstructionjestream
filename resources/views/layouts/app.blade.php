@@ -174,12 +174,13 @@
                                 onmouseout="this.style.backgroundColor='@yield('activeBackgroundMateriales')';">
                                 Materiales
                             </a>
-                            <a class="collapse-item @yield('activeAforgot') text-white mb-2" href="#"
+                            <a class="collapse-item @yield('activeAforgot') text-white mb-2" 
+                            href="{{ route('mantenimiento.enconstruccion') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
                                 onmouseout="this.style.backgroundColor='';">
                                 Cotizaciones
                             </a>
-                            <a class="collapse-item @yield('activeAforgot') text-white mb-2" href="#"
+                            <a class="collapse-item @yield('activeAforgot') text-white mb-2" href="{{ route('mantenimiento.enconstruccion') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
                                 onmouseout="this.style.backgroundColor='';">
                                 Ordenes de Compra
@@ -201,16 +202,16 @@
                     <div id="collapseVentas" class="collapse" aria-labelledby="headingPages"
                         data-parent="#accordionSidebar">
                         <div class="bg-primary-dark text-white py-2 collapse-inner rounded">
-                            <a class="collapse-item @yield('activeAlogin') text-white" href="#"
+                            <a class="collapse-item @yield('activeAlogin') text-white"href="{{ route('mantenimiento.enconstruccion') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
                                 onmouseout="this.style.backgroundColor='';">Gestion de proyectos</a>
-                            <a class="collapse-item @yield('activeAregister') text-white" href="#"
+                            <a class="collapse-item @yield('activeAregister') text-white" href="{{ route('mantenimiento.enconstruccion') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
                                 onmouseout="this.style.backgroundColor='';">Recepcion de llamadas</a>
-                            <a class="collapse-item @yield('activeAforgot') text-white" href="#"
+                            <a class="collapse-item @yield('activeAforgot') text-white" href="{{ route('mantenimiento.enconstruccion') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
                                 onmouseout="this.style.backgroundColor='';">Fichas tecnicas</a>
-                            <a class="collapse-item @yield('activeAforgot') text-white" href="#"
+                            <a class="collapse-item @yield('activeAforgot') text-white" href="{{ route('mantenimiento.enconstruccion') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
                                 onmouseout="this.style.backgroundColor='';">Recepcion de Cotizaciones</a>
                             <div class="collapse-divider"></div>
@@ -230,13 +231,13 @@
                     <div id="collapseFinanzas" class="collapse" aria-labelledby="headingPages"
                         data-parent="#accordionSidebar">
                         <div class="bg-primary-dark text-white py-2 collapse-inner rounded">
-                            <a class="collapse-item @yield('activeAlogin') text-white" href="#"
+                            <a class="collapse-item @yield('activeAlogin') text-white" href="{{ route('mantenimiento.enconstruccion') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
                                 onmouseout="this.style.backgroundColor='';">Control de Ingresos/Egresos</a>
-                            <a class="collapse-item @yield('activeAregister') text-white" href="#"
+                            <a class="collapse-item @yield('activeAregister') text-white" href="{{ route('mantenimiento.enconstruccion') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
                                 onmouseout="this.style.backgroundColor='';">Seguimiento Mensual</a>
-                            <a class="collapse-item @yield('activeAforgot') text-white" href="#"
+                            <a class="collapse-item @yield('activeAforgot') text-white" href="{{ route('mantenimiento.enconstruccion') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
                                 onmouseout="this.style.backgroundColor='';">Reportes</a>
                             <div class="collapse-divider"></div>
@@ -449,9 +450,9 @@
     <!-- End of Page Wrapper -->
 
 
-    <a class="scroll-to-top rounded" href="#page-top">
+    {{-- <a class="scroll-to-top rounded" href="#page-top">
         <i class="fas fa-angle-up"></i>
-    </a>
+    </a> --}}
 
     <!-- Logout Modal-->
     <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"

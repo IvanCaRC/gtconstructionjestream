@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\adminController;
 use App\Http\Controllers\FamiliaController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\MantenimientoController;
 use App\Http\Controllers\ProveedorController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\NotificationController;
@@ -80,3 +81,5 @@ Route::post('compras/proveedores', [ProveedorController::class, 'store'])->middl
 Route::get('compras/items/vistaEspecificaItem/{idItem}', [ItemController::class, 'ciewEspecItem'])->middleware('auth', 'nocache')->name('compras.items.vistaEspecificaItem');
 //Ruta para marcar leida la notificacion
 Route::get('/mark-as-read/{id}', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
+
+Route::get('mantenimiento/enconstruccion', [MantenimientoController::class, 'index'])->middleware('auth', 'nocache')->name('mantenimiento.enconstruccion');
