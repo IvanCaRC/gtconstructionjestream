@@ -98,6 +98,7 @@ class CreateProveedor extends Component
     public function save()
     {
         $this->validate(Proveedor::rules(), Proveedor::messages());
+        $this->validate(Telefono::rules(), Telefono::messages());
 
         $facturacion = null;
         if ($this->facturacion) {
