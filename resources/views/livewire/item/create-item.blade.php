@@ -81,6 +81,7 @@
                                             <span class="invalid-feedback">{{ $message }}</span>
                                         @enderror
                                     </div>
+                                    
                                     <div class="form-group">
                                         <label> Provedor</label>
                                         <div class="input-group mb-2">
@@ -164,7 +165,7 @@
                                                                 </td>
                                                                 <td><input step="0.01" class="form-control"
                                                                         wire:model.lazy="ProvedoresAsignados.{{ $index }}.unidad"
-                                                                        wire:keydown='calcularPrecios'>
+                                                                        wire:keydown='handleKeydownUnidad({{ $index }})'>
                                                                 </td>
 
                                                                 <td><button
@@ -188,8 +189,9 @@
 
 
                                     <div class="row">
-                                        <div class="col-md-8 mb-3">
+                                        <div class="col-md-4 mb-3">
                                             <label>Familias</label>
+                                            
                                             <div class="input-group mb-2">
                                                 @if (count($familiasSeleccionadas) > 0)
                                                     @foreach ($familiasSeleccionadas as $index => $familia)
@@ -213,6 +215,7 @@
                                         </div>
                                         <div class="col-md-4 mb-3">
                                             <label for="stock" class="mr-2">Stock Actual del Producto</label>
+                                           
                                             <input type="number" id="stock"
                                                 class="form-control @error('stock') is-invalid @enderror"
                                                 wire:model.defer="stock" required>
@@ -220,6 +223,7 @@
                                                 <span class="invalid-feedback">{{ $message }}</span>
                                             @enderror
                                         </div>
+                                        
 
                                     </div>
 
@@ -274,6 +278,12 @@
                                                     <label
                                                         class="form-control">{{ $precio_venta_minorista ?? 'N/A' }}</label>
                                                 </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="moc">MOC (Minimo de venta a cliente)</label>
+                                                <input type="number" id="moc" class="form-control"
+                                                    wire:model.defer="moc">
+        
                                             </div>
                                         </div>
                                     @endif
@@ -346,7 +356,8 @@
                                             </div>
                                         @endif
                                     </div>
-
+                                    <button type="button" class="btn btn-secondary mt-3"
+                                        onclick="cancelar()">Cancelar</button>
                                     <button type="button" onclick="confirmSave()" class="btn btn-primary mt-3">Crear
                                         item</button>
                                 </div>
@@ -526,6 +537,13 @@
                     confirmButtonText: 'OK'
                 });
             });
+        }
+    </script>
+
+    <script>
+        function cancelar() {
+            // Llamar al método update2 de Livewire
+            window.location.href = "{{ route('compras.items.viewItems') }}";
         }
     </script>
 

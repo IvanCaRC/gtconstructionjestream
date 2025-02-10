@@ -44,9 +44,14 @@ class FamiliaComponent extends Component
         ]);
     }
 
-
     public function editCategory($idfamilia)
     {
+        $familia = Familia::find($idfamilia);
+
+        if ($familia === null) {
+            abort(404, 'Familia no encontrada');
+        }
+
         return redirect()->route('compras.familias.edicionFamilia', ['idfamilia' => $idfamilia]);
     }
 
@@ -59,6 +64,13 @@ class FamiliaComponent extends Component
 
     public function viewFamilia($idfamilia)
     {
+        $familia = Familia::find($idfamilia);
+
+        if ($familia === null) {
+            abort(404, 'Familia no encontrada');
+        }
+
+
         return redirect()->route('compras.familias.viewFamiliaEspecifica', ['idfamilia' => $idfamilia]);
     }
 
@@ -96,7 +108,12 @@ class FamiliaComponent extends Component
     public function eliminarFamiliaConSubfamilias($familiaId)
     {
         // Obtener la familia principal
-        $familia = Familia::findOrFail($familiaId);
+        $familia = Familia::find($familiaId);
+
+        if ($familia === null) {
+            abort(404, 'Familia no encontrada');
+        }
+
 
         // Cambiar estado de eliminación a 1 (eliminar)
         $familia->estadoEliminacion = 1;

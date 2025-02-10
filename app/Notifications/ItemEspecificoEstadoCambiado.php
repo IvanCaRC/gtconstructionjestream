@@ -11,9 +11,11 @@ class ItemEspecificoEstadoCambiado extends Notification
     use Queueable;
 
     protected $nombreItem;
+    protected $idItem;
 
-    public function __construct($nombreItem)
+    public function __construct($idItem, $nombreItem)
     {
+        $this->idItem = $idItem;
         $this->nombreItem = $nombreItem;
     }
 
@@ -25,7 +27,7 @@ class ItemEspecificoEstadoCambiado extends Notification
     public function toArray($notifiable)
     {
         // Generar la URL manualmente con 127.0.0.1
-        $url = 'http://127.0.0.1:8000/compras/items/viewItems';
+        $url = config('app.url') . route('compras.items.vistaEspecificaItem', ['idItem' => $this->idItem], false);
         Log::info('Generando URL para ItemEspecificoEstadoCambiado: ' . $url);
 
         return [

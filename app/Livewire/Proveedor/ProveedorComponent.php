@@ -18,6 +18,9 @@ class ProveedorComponent extends Component
     protected $listeners = ['renderVistaProv' => 'render'];
     public $statusFiltroDeBusqueda;
     public $familiasSeleccionadas = [];
+    public $desplegables = [];
+
+    
 
     public function search()
     {
@@ -136,5 +139,16 @@ class ProveedorComponent extends Component
     public function editProveedor($proveedorId){
         return redirect()->route('compras.proveedores.editProveedores', ['idproveedor' => $proveedorId]);
     }
+
+    public function toggleDesplegable($idfamilia)
+    {
+        if (isset($this->desplegables[$idfamilia])) {
+            $this->desplegables[$idfamilia] = !$this->desplegables[$idfamilia];
+        } else {
+            $this->desplegables[$idfamilia] = true;
+        }
+    }
+
+    
 }
 

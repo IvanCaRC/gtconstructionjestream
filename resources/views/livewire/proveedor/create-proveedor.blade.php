@@ -201,7 +201,12 @@
         }
     </script>
 
-
+<script>
+    function cancelar() {
+        // Llamar al método update2 de Livewire
+        window.location.href = "{{ route('compras.proveedores.viewProveedores') }}";
+    }
+</script>
 
 
 </div>

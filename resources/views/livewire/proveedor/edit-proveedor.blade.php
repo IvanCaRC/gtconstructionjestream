@@ -198,12 +198,12 @@
             <div class="col-md-2 mb-3">
                 <label>Latitud</label>
                 <input type="text" class="form-control"
-                    wire:model.defer="direccionesAsignadas.{{ $index }}.latitud">
+                    wire:model.defer="direccionesAsignadas.{{ $index }}.Latitud">
             </div>
             <div class="col-md-2 mb-3">
                 <label>Longitud</label>
                 <input type="text" class="form-control"
-                    wire:model.defer="direccionesAsignadas.{{ $index }}.longitud">
+                    wire:model.defer="direccionesAsignadas.{{ $index }}.Longitud">
             </div>
             <div class="col-md-2 mb-3 d-flex align-items-end">
                 <button type="button" class="btn btn-danger w-100"
@@ -319,6 +319,12 @@
             });
         }
     </script>
+<script>
+    function cancelar() {
+        // Llamar al método update2 de Livewire
+        window.location.href = "{{ route('compras.proveedores.viewProveedores') }}";
+    }
+</script>
 
 
 </div>

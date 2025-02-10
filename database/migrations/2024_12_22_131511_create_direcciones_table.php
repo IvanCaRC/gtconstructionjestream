@@ -15,6 +15,7 @@ class CreateDireccionesTable extends Migration
         Schema::create('direcciones', function (Blueprint $table) {
             $table->id();
             $table->string('cp');
+            $table->string('pais')->nullable();
             $table->string('estado')->nullable();
             $table->string('ciudad')->nullable();
             $table->string('municipio')->nullable();

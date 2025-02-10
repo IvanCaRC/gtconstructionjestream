@@ -31,7 +31,7 @@ class UpdateItemEspecificoEstado extends Command
             $users = User::role(['Administrador', 'Compras'])->get();
             $this->info('Número de usuarios a notificar: ' . $users->count()); // Mensaje de depuración
             foreach ($users as $user) {
-                $user->notify(new ItemEspecificoEstadoCambiado($itemEspecifico->item->nombre)); // Usar la relación para obtener el nombre del ítem
+                $user->notify(new ItemEspecificoEstadoCambiado($itemEspecifico->id, $itemEspecifico->item->nombre)); // Usar la relación para obtener el nombre del ítem
                 $this->info('Notificación enviada al usuario: ' . $user->id . ' para el ítem: ' . $itemEspecifico->item->nombre);
             }
         }

@@ -24,6 +24,7 @@ class CreateItemEspecificoTable extends Migration
             $table->decimal('precio_venta_minorista', 10, 2)->nullable();
             $table->decimal('precio_venta_mayorista', 10, 2)->nullable();
             $table->string('unidad')->nullable();
+            $table->string('moc')->nullable();
             $table->integer('stock')->nullable();
             $table->text('especificaciones')->nullable();
             $table->string('ficha_tecnica_pdf')->nullable();

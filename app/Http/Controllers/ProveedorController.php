@@ -44,6 +44,7 @@ class ProveedorController extends Controller
             // Guardar cada dirección asociada al proveedor
             foreach ($direcciones as $direccionData) {
                 $direccion = new Direccion([
+                    'pais' => $direccionData['address']['pais'],
                     'cp' => $direccionData['address']['cp'],
                     'estado' => $direccionData['address']['estado'],
                     'ciudad' => $direccionData['address']['ciudad'],

@@ -118,9 +118,6 @@
                                                         <i class="fas fa-edit"></i>
                                                     </button>
                                                 </td>
-
-
-
                                                 <td>
                                                     <button class="btn btn-danger btn-custom"
                                                         onclick="confirmDeletion({{ $itemEspecifico->id }}, '{{ $itemEspecifico->item->nombre }}')">
@@ -140,17 +137,22 @@
                                     @foreach ($itemEspecificos as $itemEspecifico)
                                         <div class="col-md-3 mb-4">
                                             <div class="card shadow-sm">
-                                                <div class="card-body text-center d-flex justify-content-center align-items-center" style="cursor: pointer;">
+                                                <div class="card-body text-center d-flex justify-content-center align-items-center"
+                                                    style="cursor: pointer;">
                                                     <!-- Imagen del Item -->
                                                     @if (empty($itemEspecifico->image))
                                                         <!-- Mostrar ícono o mensaje alternativo -->
-                                                        <div class="no-image-icon" style="width: 200px; height: 200px; display: flex; justify-content: center; align-items: center; border: 1px solid #ddd; background-color: #f8f8f8;">
+                                                        <div class="no-image-icon"
+                                                            style="width: 200px; height: 200px; display: flex; justify-content: center; align-items: center; border: 1px solid #ddd; background-color: #f8f8f8;">
                                                             📷 No hay imagen subida
                                                         </div>
                                                     @else
                                                         <!-- Mostrar imagen -->
-                                                        <img src="{{ asset('storage/' . explode(',', $itemEspecifico->image)[0]) }}" class="card-img-top" alt="{{ $itemEspecifico->item->nombre }}"
-                                                            style="width: 200px; height: 200px; object-fit: cover;" wire:click="viewItem({{ $itemEspecifico->id }})">
+                                                        <img src="{{ asset('storage/' . explode(',', $itemEspecifico->image)[0]) }}"
+                                                            class="card-img-top"
+                                                            alt="{{ $itemEspecifico->item->nombre }}"
+                                                            style="width: 200px; height: 200px; object-fit: cover;"
+                                                            wire:click="viewItem({{ $itemEspecifico->id }})">
                                                     @endif
                                                 </div>
                                             </div>
@@ -169,12 +171,18 @@
                                                             <a class="text-primary"
                                                                 wire:click="viewItem({{ $itemEspecifico->id }})"
                                                                 style="cursor: pointer;">
-                                                                {{$itemEspecifico->item->nombre}}
+                                                                {{ $itemEspecifico->item->nombre }}
                                                             </a>
                                                         </label>
                                                     </div>
-                                                   
 
+                                                    <div>
+                                                        <label>
+                                                            <strong>Marca:</strong>
+                                                            {{ $itemEspecifico->marca }}
+
+                                                        </label>
+                                                    </div>
 
                                                     <!-- Precios -->
                                                     <p class="card-text">
@@ -196,6 +204,19 @@
                                                         Última actualización:
                                                         {{ $itemEspecifico->item->updated_at->format('d/m/Y') }}
                                                     </p>
+                                                    <td>
+                                                        <button class="btn btn-primary btn-custom"
+                                                            wire:click="editItem({{ $itemEspecifico->id }})">
+                                                            <i class="fas fa-edit"></i>
+                                                        </button>
+                                                    </td>
+
+                                                    <td>
+                                                        <button class="btn btn-danger btn-custom"
+                                                            onclick="confirmDeletion({{ $itemEspecifico->id }}, '{{ $itemEspecifico->item->nombre }}')">
+                                                            <i class="fas fa-trash-alt"></i>
+                                                        </button>
+                                                    </td>
                                                 </div>
                                             </div>
                                         </div>
@@ -219,43 +240,26 @@
                 </div>
             </div>
             <!-- Segunda sección (15%) -->
-            <div class=" bg-white rounded-lg border border-black" style="flex: 0 0 15%;">
+            <div class="bg-white rounded-lg border border-black p-4" style="flex: 0 0 15%;">
                 <div class="card-body">
-                    <div>
-                        <h3>Filtros</h3>
-                    </div>
-                    <div>
-                        <div>
-                            Estado
-                        </div>
-                        <div>
-                            <select class="form-control mr-2" wire:model="statusFiltroDeBusqueda" wire:change="filter">
-                                <option value="2">Todos</option>
-                                <option value="1">Actualizado</option>
-                                <option value="0">Desactualizado</option>
-                            </select>
-                        </div>
-                    </div>
+                    <h3>Filtros</h3>
+                    <select class="form-control" wire:model="statusFiltroDeBusqueda" wire:change="filter">
+                        <option value="2">Todos</option>
+                        <option value="1">Actualizado</option>
+                        <option value="0">Desactualizado</option>
+                    </select>
                     <br>
-                    <div>
-                        <div>
-                            <strong>Categorías</strong>
-                        </div>
-                        <div>
-                            <div>
-                                <ul >
-                                    @foreach($familias as $familia)
-                                        @include('livewire.familia.lista-categorias', ['familia' => $familia, 'nivel' => 0])
-                                    @endforeach
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
+                    <strong>Categorías</strong>
+                    <ul>
+                        @foreach($familias as $familia)
+                            @include('livewire.familia.lista-categorias', ['familia' => $familia, 'nivel' => 0])
+                        @endforeach
+                    </ul>
                 </div>
             </div>
         </div>
     </div>
-    
+
     <script>
         function confirmDeletion(itemEspecificoId, itemEspecificoNombre) {
             Swal.fire({
@@ -270,10 +274,13 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     @this.call('eliminar', itemEspecificoId);
+
+                    
                     Swal.fire(
                         'Eliminado!',
                         `${itemEspecificoNombre} ha sido eliminado.`,
                         'success'
+                        // window.location.href = "{{ route('compras.proveedores.viewProveedores') }}";
                     )
                 }
             })

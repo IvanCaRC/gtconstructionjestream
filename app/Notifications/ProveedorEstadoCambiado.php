@@ -11,9 +11,11 @@ class ProveedorEstadoCambiado extends Notification
     use Queueable;
 
     protected $nombreProveedor;
+    protected $idProveedor;
 
-    public function __construct($nombreProveedor)
+    public function __construct($idProveedor, $nombreProveedor)
     {
+        $this->idProveedor = $idProveedor;
         $this->nombreProveedor = $nombreProveedor;
     }
 
@@ -24,8 +26,8 @@ class ProveedorEstadoCambiado extends Notification
 
     public function toArray($notifiable)
     {
-        // Generar la URL manualmente con 127.0.0.1
-        $url = 'http://127.0.0.1:8000/compras/proveedores/viewProveedores';
+        // Usar la ruta definida en web.php
+        $url = config('app.url') . route('compras.proveedores.viewProveedorEspecifico', ['idproveedor' => $this->idProveedor], false);
         Log::info('Generando URL para ProveedorEstadoCambiado: ' . $url);
 
         return [

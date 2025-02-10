@@ -54,6 +54,7 @@ class EditItem extends Component
         'cantidad_piezas_mayoreo' => '', // Correo del proveedor
         'cantidad_piezas_minorista' => '', // RFC del proveedor
         'stock' => '',
+        'moc' => '',
         'ficha_tecnica_pdf' => '',
         'estado' => '',
         'estado_eliminacion' => '',
@@ -97,7 +98,11 @@ class EditItem extends Component
         $this->itemEdit['descripcion'] = $this->item->descripcion;
         $this->itemEspecificoEdit['id'] = $this->itemEspecifico->id;
         $this->itemEspecificoEdit['item_id'] = $this->itemEspecifico->item_id;
-        $this->imagenesCargadas = explode(',', $this->itemEspecifico->image); // Dividir la cadena en un array
+        if ($this->itemEspecifico->image === null) {
+            $this->imagenesCargadas = null;
+        } else {
+            $this->imagenesCargadas = explode(',', $this->itemEspecifico->image);
+        }    
         $this->itemEspecificoEdit['marca'] = $this->itemEspecifico->marca;
         $this->cargarProvedoresParaEditar($idItem);
         $this->familiasSeleccionadas = ItemEspecificoHasFamilia::where('item_especifico_id', $idItem)
@@ -106,6 +111,7 @@ class EditItem extends Component
             ->pluck('familia')
             ->toArray();
         $this->itemEspecificoEdit['stock'] = $this->itemEspecifico->stock;
+        $this->itemEspecificoEdit['moc'] = $this->itemEspecifico->moc;
         $this->itemEspecificoEdit['cantidad_piezas_mayoreo'] = $this->itemEspecifico->cantidad_piezas_mayoreo;
         $this->itemEspecificoEdit['cantidad_piezas_minorista'] = $this->itemEspecifico->cantidad_piezas_minorista;
         $this->porcentaje_venta_minorista = $this->itemEspecifico->porcentaje_venta_minorista;
@@ -212,26 +218,28 @@ class EditItem extends Component
             }
         }
 
-
-        $areglosumado = array_merge($this->imagenesCargadas, $this->image);
+        if(!$this->imagenesCargadas == null){
+            $areglosumado = array_merge($this->imagenesCargadas,$imagenes);
+        }else{
+            $areglosumado = array_merge($imagenes);
+        }
+        
+        
 
         // Convertir el array combinado a una cadena delimitada por comas o null si está vacío
         $imagenesString = !empty($areglosumado) ? implode(',', $areglosumado) : null;
-
-
         $itemEspecificoActual->update([
             'image' => $imagenesString,
             'marca' => $this->itemEspecificoEdit['marca'],
-
             'cantidad_piezas_mayoreo' => $this->itemEspecificoEdit['cantidad_piezas_mayoreo'],
             'cantidad_piezas_minorista' => $this->itemEspecificoEdit['cantidad_piezas_mayoreo'] - 1,
             'porcentaje_venta_minorista' => $porcentajeVentaMinorista,
             'porcentaje_venta_mayorista' => $porcentajeVentaMayorista,
             'precio_venta_minorista' => $this->precio_venta_minorista,
             'precio_venta_mayorista' => $this->precio_venta_mayorista,
-
             'unidad' => $this->unidadSeleccionadaEnTabla,
             'stock' => $this->itemEspecificoEdit['stock'],
+            'moc' => $this->itemEspecificoEdit['moc'],
             'especificaciones' => json_encode($this->especificaciones), // Guardar como JSON
             'ficha_tecnica_pdf' => $ficha_Tecnica_pdf,
             'estado' => true,
@@ -443,13 +451,23 @@ class EditItem extends Component
 
     public function eliminarProveedor($index)
     {
+
+        $proveedorEliminado = $this->ProvedoresAsignados[$index]['proveedor_nombre'] ?? null;
         unset($this->ProvedoresAsignados[$index]);
         $this->ProvedoresAsignados = array_values($this->ProvedoresAsignados); // Reindexar el array
         // Si el proveedor eliminado estaba seleccionado, resetear los datos seleccionados
-        if ($this->provedorSeleccionadoDeLaTabla === $index) {
+        if ($this->provedorSeleccionadoDeLaTabla === $proveedorEliminado) {
             $this->unidadSeleccionadaEnTabla = null;
             $this->precioSeleccionadoEnTabla = null;
             $this->provedorSeleccionadoDeLaTabla = null;
+        }
+    }
+
+    public function edcionDeTabalaProveedorUnidad($index)
+    {
+        if (isset($this->ProvedoresAsignados[$index]) && $this->ProvedoresAsignados[$index]['estado'] == 1) {
+            // Asignar el precio de compra del proveedor al precio seleccionado
+            $this->unidadSeleccionadaEnTabla = $this->ProvedoresAsignados[$index]['unidad'];
         }
     }
 
@@ -476,5 +494,12 @@ class EditItem extends Component
         // Ejecutar ambos métodos
         $this->edcionDeTabalaProveedorPrecio($index);
         $this->calcularPrecios();
+    }
+
+    public function handleKeydownUnidad($index)
+    {
+        // Ejecutar ambos métodos
+        $this->edcionDeTabalaProveedorUnidad($index);
+
     }
 }

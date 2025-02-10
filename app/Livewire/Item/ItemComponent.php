@@ -21,7 +21,7 @@ class ItemComponent extends Component
     public $tipoDeVista = true;
     public $statusFiltroDeBusqueda;
     public $familiasSeleccionadas = [];
-
+    public $desplegables = [];
     public function seleccionarFamilia($familiaId)
     {
         $familia = Familia::with('subfamiliasRecursivas')->find($familiaId);
@@ -130,5 +130,14 @@ class ItemComponent extends Component
     public function filter()
     {
         $this->resetPage();  // Asegura que la paginación se restablezca
+    }
+
+    public function toggleDesplegable($idfamilia)
+    {
+        if (isset($this->desplegables[$idfamilia])) {
+            $this->desplegables[$idfamilia] = !$this->desplegables[$idfamilia];
+        } else {
+            $this->desplegables[$idfamilia] = true;
+        }
     }
 }

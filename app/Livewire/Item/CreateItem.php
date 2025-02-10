@@ -30,6 +30,7 @@ class CreateItem extends Component
     public $seleccionProvedorModalNombre;
     public $searchTerm = '';
     public $nuevasImagenes = [];
+    public $moc;
 
     public function render()
     {
@@ -147,6 +148,7 @@ class CreateItem extends Component
             'stock' => $this->stock,
             'especificaciones' => json_encode($this->especificaciones), // Guardar como JSON
             'ficha_Tecnica_pdf' => $ficha_Tecnica_pdf,
+            'moc' => $this->moc,
             'estado' => true,
             'estado_eliminacion' => true,
         ]);
@@ -229,7 +231,7 @@ class CreateItem extends Component
     public function actualizarProveedores()
     {
         if ($this->searchTerm) {
-            $this->proveedores = Proveedor::where('estado', 1)
+            $this->proveedores = Proveedor::where('estado_eliminacion', 1)
                 ->where(function ($query) {
                     $query->where('nombre', 'LIKE', "%{$this->searchTerm}%")
                         ->orWhere('rfc', 'LIKE', "%{$this->searchTerm}%");
@@ -316,6 +318,14 @@ class CreateItem extends Component
         }
     }
 
+    public function edcionDeTabalaProveedorUnidad($index)
+    {
+        if (isset($this->ProvedoresAsignados[$index]) && $this->ProvedoresAsignados[$index]['estado'] == 1) {
+            // Asignar el precio de compra del proveedor al precio seleccionado
+            $this->unidadSeleccionadaEnTabla = $this->ProvedoresAsignados[$index]['unidad'];
+        }
+    }
+
     public function eliminarProveedor($index)
     {
         unset($this->ProvedoresAsignados[$index]);
@@ -351,5 +361,12 @@ class CreateItem extends Component
         // Ejecutar ambos métodos
         $this->edcionDeTabalaProveedorPrecio($index);
         $this->calcularPrecios();
+    }
+
+    public function handleKeydownUnidad($index)
+    {
+        // Ejecutar ambos métodos
+        $this->edcionDeTabalaProveedorUnidad($index);
+
     }
 }

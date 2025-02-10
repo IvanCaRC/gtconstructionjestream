@@ -2,7 +2,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
-
     <div>
         <div>
             <div>
@@ -13,14 +12,15 @@
                                 <!-- Área de carga de la imagen -->
                                 <div class="col-md-4">
                                     <div class="form-group">
+
                                         <div class="form-group text-center mt-3">
                                             @if ($imagenesCargadas == null || count($imagenesCargadas) == 0)
                                                 <div class="imagen-predeterminada">
                                                     <span class="file-upload-icon">&#128247;</span>
-                                                    <span class="file-upload-text">Sin imágenes que mostrar</span>
+                                                    <span class="file-upload-text">Sin imagenes, sube tu editando el
+                                                        item</span>
                                                 </div>
                                             @else
-                                                {{-- Imagen Principal con flechas --}}
                                                 <div class="galeria">
                                                     <div class="imagen-grande-container">
                                                         <img id="imagenGrande"
@@ -41,6 +41,7 @@
                                             @endif
                                         </div>
                                     </div>
+
                                 </div>
                                 <script>
                                     let imagenes = @json($imagenesCargadas); // Array de imágenes desde Blade
@@ -116,7 +117,7 @@
                                         <h3 for="">Descripcion</h3>
                                         <label for="">{{ $item->descripcion }} </label>
                                     </div>
-                                    
+
                                     <div class="form-group">
                                         <h3 for="">Marca</h3>
                                         <label for="">{{ $itemEspecifico->marca }} </label>
@@ -140,16 +141,18 @@
                                                 /* Alinea verticalmente los labels */
                                             }
                                         </style>
-                                        @foreach ($especificaciones as $index => $especificacion)
-                                            <div class="input-group mb-2">
-                                                <label class="enunciado-label">
-                                                    {{ $especificacion['enunciado'] }}:
-                                                </label>
-                                                <label>
-                                                    {{ $especificacion['concepto'] }}
-                                                </label>
-                                            </div>
-                                        @endforeach
+                                        @if ($especificaciones)
+                                            @foreach ($especificaciones as $index => $especificacion)
+                                                <div class="input-group mb-2">
+                                                    <label class="enunciado-label">
+                                                        {{ $especificacion['enunciado'] }}:
+                                                    </label>
+                                                    <label>
+                                                        {{ $especificacion['concepto'] }}
+                                                    </label>
+                                                </div>
+                                            @endforeach
+                                        @endif
                                     </div>
                                     <div class="form-group">
                                         @if (count($ProvedoresAsignados) > 1)
@@ -238,7 +241,7 @@
                                         </div>
                                     </div>
                                     <div class="row">
-                                        <div class="col-md-4 mb-3">
+                                        <div class="col-md-3 mb-3">
                                             <label>Familias</label>
                                             <div class="input-group mb-2">
                                                 @if (count($familiasSeleccionadas) > 0)
@@ -256,14 +259,20 @@
                                                 @endif
                                             </div>
                                         </div>
-                                        <div class="col-md-4 mb-3">
+                                        <div class="col-md-3 mb-3">
                                             <h4 for="unidad">Unidad</h4>
                                             <label>{{ $itemEspecifico->unidad }}</label>
                                         </div>
-                                        <div class="col-md-4 mb-3">
+                                        <div class="col-md-3 mb-3">
                                             <label for="stock" class="mr-2">Stock Acutal del Producto</label>
                                             <br>
                                             <label for="">{{ $itemEspecifico->stock }}</label>
+                                        </div>
+                                        <div class="col-md-3 mb-3">
+                                            <label for="moc" class="mr-2">MOC (Minimo de venta a cliente)</label>
+
+                                            <br>
+                                            <label for="">{{ $itemEspecifico->moc }}</label>
                                         </div>
                                     </div>
                                     <label>El parametro por el que se hacen los calculos se basan en el proveedor
@@ -300,15 +309,28 @@
                                                 <label
                                                     for="">{{ $itemEspecifico->precio_venta_minorista }}</label>
                                             </div>
+
+
                                         </div>
+                                        <div>
+                                            <a href="#" wire:click="editItem({{ $itemEspecifico->id }})"
+                                                class="d-block mb-3" wire:click="">Editar item</a>
+
+                                            <a href="#"
+                                                class=" text-danger d-block mb-3"
+                                                onclick="confirmDeletion({{ $itemEspecifico->id }}, '{{ $itemEspecifico->item->nombre }}'
+                                                )">Eliminar</a>
+
+                                        </div>
+
                                     </div>
                                 </div>
                             </div>
-                            
+
                         </div>
                         <div class="row">
                             <div class="col-md-2 mb-3">
-                                
+
                             </div>
                             <div class="col-md-2 mb-3">
                                 <div id="pdf-container"></div>
@@ -349,5 +371,34 @@
             });
         });
     </script>
-
+    <script>
+        function confirmDeletion(itemEspecificoId, itemEspecificoNombre) {
+            Swal.fire({
+                title: `¿Estás seguro de que deseas eliminar  ${itemEspecificoNombre}?`,
+                text: "¡No podrás revertir esto!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'Sí, eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    @this.call('eliminar', itemEspecificoId);
+                    Swal.fire({
+                        title: 'ELiminado',
+                        text: 'el item fue eliminado correctamenteha sido creada exitosamente.',
+                        icon: 'success',
+                        confirmButtonText: 'OK',
+                        allowOutsideClick: false // Deshabilitar el clic fuera para cerrar
+                    }).then((result) => {
+                        // Redirigir al hacer clic en el botón "OK"
+                        if (result.isConfirmed) {
+                            window.location.href = "{{ route('compras.items.viewItems') }}";
+                        }
+                    });
+                }
+            })
+        }
+    </script>
 </div>

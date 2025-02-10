@@ -16,6 +16,7 @@
                                 <div class="col-md-4 text-center">
                                     <label for="name">Imagen de item</label>
                                     <div class="form-group">
+
                                         <div class="text-center">
                                             <label class="btn btn-secondary btn-file">
                                                 Elegir archivo
@@ -27,45 +28,56 @@
                                                 <span class="invalid-feedback">{{ $message }}</span>
                                             @enderror
                                         </div>
+                                        @if ($image || $imagenesCargadas)
+                                            <div class="form-group text-center mt-3">
+                                                @if ($imagenesCargadas)
+                                                    @foreach ($imagenesCargadas as $index => $imaCarg)
+                                                        <div class="mi-div"
+                                                            style="padding: 20px; display: inline-block; position: relative;">
+                                                            <img src="{{ asset('storage/' . $imaCarg) }}" alt="Imagen"
+                                                                class="imagen-cuadrada">
 
-                                        <div class="form-group text-center mt-3">
-                                            @if ($imagenesCargadas)
-                                                @foreach ($imagenesCargadas as $index => $imaCarg)
-                                                    <div class="mi-div"
-                                                        style="padding: 20px; display: inline-block; position: relative;">
-                                                        <img src="{{ asset('storage/' . $imaCarg) }}" alt="Imagen"
-                                                            class="imagen-cuadrada">
+                                                            <button
+                                                                wire:click="eliminarImagenActual({{ $index }})"
+                                                                class="btn btn-danger btn-sm"
+                                                                style="position: absolute; top: 5px; right: 5px;">
+                                                                &times;
+                                                            </button>
+                                                        </div>
+                                                    @endforeach
+                                                @endif
+                                                @if ($image)
+                                                    @foreach ($image as $index => $ima)
+                                                        <div class="mi-div"
+                                                            style="padding: 20px; display: inline-block; position: relative;">
+                                                            <img src="{{ $ima->temporaryUrl() }}" alt="Imagen"
+                                                                class="imagen-cuadrada">
+                                                            <button wire:click="eliminarImagen({{ $index }})"
+                                                                class="btn btn-danger btn-sm"
+                                                                style="position: absolute; top: 5px; right: 5px;">
+                                                                &times;
+                                                            </button>
+                                                        </div>
+                                                    @endforeach
+                                                @endif
+                                                @if (!$image && !$imagenesCargadas)
+                                                    <div class="imagen-predeterminada">
+                                                        <span class="file-upload-icon">&#128247;</span>
+                                                        <span class="file-upload-text">Sube tu imagen con el botón
+                                                            "Elegir
+                                                            archivo"</span>
+                                                    </div>
+                                                @endif
+                                            </div>
+                                        @else
+                                            <div class="imagen-predeterminada">
+                                                <span class="file-upload-icon">&#128247;</span>
+                                                <span class="file-upload-text">Sin imagenes, sube tu imagen con el botón
+                                                    "Elegir
+                                                    archivo"</span>
+                                            </div>
+                                        @endif
 
-                                                        <button wire:click="eliminarImagenActual({{ $index }})"
-                                                            class="btn btn-danger btn-sm"
-                                                            style="position: absolute; top: 5px; right: 5px;">
-                                                            &times;
-                                                        </button>
-                                                    </div>
-                                                @endforeach
-                                            @endif
-                                            @if ($image)
-                                                @foreach ($image as $index => $ima)
-                                                    <div class="mi-div"
-                                                        style="padding: 20px; display: inline-block; position: relative;">
-                                                        <img src="{{ $ima->temporaryUrl() }}" alt="Imagen"
-                                                            class="imagen-cuadrada">
-                                                        <button wire:click="eliminarImagen({{ $index }})"
-                                                            class="btn btn-danger btn-sm"
-                                                            style="position: absolute; top: 5px; right: 5px;">
-                                                            &times;
-                                                        </button>
-                                                    </div>
-                                                @endforeach
-                                            @endif
-                                            @if (!$image && !$imagenesCargadas)
-                                                <div class="imagen-predeterminada">
-                                                    <span class="file-upload-icon">&#128247;</span>
-                                                    <span class="file-upload-text">Sube tu imagen con el botón "Elegir
-                                                        archivo"</span>
-                                                </div>
-                                            @endif
-                                        </div>
                                     </div>
                                 </div>
 
@@ -86,6 +98,8 @@
                                         <input type="text" id="marca" class="form-control"
                                             wire:model.defer="itemEspecificoEdit.marca" required>
                                     </div>
+                                    
+
                                     <div class="form-group">
                                         <label> Provedor</label>
                                         <div class="input-group mb-2">
@@ -169,7 +183,7 @@
                                                                 </td>
                                                                 <td><input step="0.01" class="form-control"
                                                                         wire:model.lazy="ProvedoresAsignados.{{ $index }}.unidad"
-                                                                        wire:keydown='calcularPrecios'>
+                                                                        wire:keydown='handleKeydownUnidad({{ $index }})'>
                                                                 </td>
 
                                                                 <td><button
@@ -190,9 +204,9 @@
                                         <button href="#" wire:click="montarModalProveedores()"
                                             class="btn btn-secondary mt-3">Agregar provedor</button>
                                     </div>
-                                    
+
                                     <div class="row">
-                                        <div class="col-md-8 mb-3">
+                                        <div class="col-md-4 mb-3">
                                             <label>Familias</label>
                                             <div class="input-group mb-2">
                                                 @if (count($familiasSeleccionadas) > 0)
@@ -219,15 +233,18 @@
                                             <label for="stock" class="mr-2">Stock Acutal del Producto</label>
                                             <input type="number" id="cantidad_piezas_mayoreo" class="form-control"
                                                 wire:model.defer="itemEspecificoEdit.stock" required>
+                                                
                                         </div>
+
 
                                     </div>
 
                                     @if ($provedorSeleccionadoDeLaTabla)
-                                    <div >
-                                        <h4 for="unidad">Unidad</h4>
-                                        <label>{{ $unidadSeleccionadaEnTabla }}</label>
-                                    </div>
+                                    <label for="">{{$provedorSeleccionadoDeLaTabla}}</label>
+                                        <div>
+                                            <h4 for="unidad">Unidad</h4>
+                                            <label>{{ $unidadSeleccionadaEnTabla }}</label>
+                                        </div>
                                         <label>El parametro por el que se hacen los calculos se basan en el proveedor
                                             {{ $provedorSeleccionadoDeLaTabla }}</label>
                                         <div class="form-group">
@@ -269,6 +286,12 @@
                                                     <label
                                                         class="form-control">{{ $precio_venta_minorista ?? 'N/A' }}</label>
                                                 </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="moc">MOC (Minimo de venta a cliente)</label>
+                                                <input type="number" id="moc" class="form-control"
+                                                    wire:model.defer="itemEspecificoEdit.moc" required>
+        
                                             </div>
                                         </div>
                                     @endif
@@ -324,7 +347,7 @@
                                                 formato PDF solamente.</small>
                                         @else
                                             <div class="form-group">
-                                                
+
                                                 <div class="file-upload"
                                                     onclick="document.getElementById('ficha_Tecnica_pdf_car').click();">
                                                     <span class="file-upload-icon">&#x1F4C4;</span>
@@ -336,16 +359,17 @@
                                                 </div>
                                                 <small class="form-text text-muted">Por favor, suba archivos en formato
                                                     PDFsolamente.</small>
-                                                    <div class="form-group">
-                                                        <a href="{{ asset('storage/' . $ficha_Tecnica_pdf_actual) }}" target="_blank"
-                                                            class="btn btn-secondary">
-                                                            Ver Archivo Actual
-                                                        </a>
-                                                    </div>
+                                                <div class="form-group">
+                                                    <a href="{{ asset('storage/' . $ficha_Tecnica_pdf_actual) }}"
+                                                        target="_blank" class="btn btn-secondary">
+                                                        Ver Archivo Actual
+                                                    </a>
+                                                </div>
                                             </div>
                                         @endif
                                     </div>
-
+                                    <button type="button" class="btn btn-secondary mt-3"
+                                        onclick="cancelar()">Cancelar</button>
                                     <button type="button" onclick="confirmSave()"
                                         class="btn btn-primary mt-3">Actualizar Item</button>
                                 </div>
@@ -527,5 +551,10 @@
             });
         }
     </script>
-
+    <script>
+        function cancelar() {
+            // Llamar al método update2 de Livewire
+            window.location.href = "{{ route('compras.items.viewItems') }}";
+        }
+    </script>
 </div>

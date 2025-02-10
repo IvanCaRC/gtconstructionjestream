@@ -39,7 +39,7 @@ class UpdateProveedorEstado extends Command
             $users = User::role(['Administrador', 'Compras'])->get();
             $this->info('Número de usuarios a notificar: ' . $users->count()); // Mensaje de depuración
             foreach ($users as $user) {
-                $user->notify(new ProveedorEstadoCambiado($proveedor->nombre));
+                $user->notify(new ProveedorEstadoCambiado($proveedor->id, $proveedor->nombre));
                 $this->info('Notificación enviada al usuario: ' . $user->id . ' para el proveedor: ' . $proveedor->nombre);
             }
         }
