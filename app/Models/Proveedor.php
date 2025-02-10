@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Rules\ValidaRfc; // Regla de validacion personalizada
 
 class Proveedor extends Model
 {
@@ -49,7 +50,7 @@ class Proveedor extends Model
             $prefix . 'nombre' => 'required|string|max:255',
             $prefix . 'descripcion' => 'nullable|string',
             $prefix . 'correo' => 'required|email|unique:proveedores,correo,' . $id,
-            $prefix . 'rfc' => 'required|string|unique:proveedores,rfc,' . $id,
+            $prefix . 'rfc' => ['required', 'string', 'unique:proveedores,rfc,' . $id, new ValidaRfc],
             // $prefix . 'archivo_facturacion_pdf' => 'nullable|mimes:pdf|max:2048',
             // $prefix . 'datos_bancarios_pdf' => 'nullable|mimes:pdf|max:2048',
         ];
@@ -68,6 +69,7 @@ class Proveedor extends Model
             $prefix . 'rfc.required' => 'El RFC es obligatorio.',
             $prefix . 'rfc.string' => 'El RFC debe ser una cadena de texto.',
             $prefix . 'rfc.unique' => 'Este RFC ya está registrado.',
+            $prefix . 'rfc.valid' => 'El RFC registrado no es valido.',
             $prefix . 'archivo_facturacion_pdf.mimes' => 'El archivo de facturación debe ser un archivo PDF.',
             $prefix . 'archivo_facturacion_pdf.max' => 'El archivo de facturación no puede exceder los 2048KB.',
             $prefix . 'datos_bancarios_pdf.mimes' => 'El archivo de datos bancarios debe ser un archivo PDF.',
