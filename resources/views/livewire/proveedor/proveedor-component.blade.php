@@ -1,4 +1,7 @@
 <div class="container-fluid px-4 sm:px-6 lg:px-8 py-1">
+        <!-- Otros enlaces y estilos -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    
     <h1 class="pl-4">Proveedores registrados</h1>
     <div class="container-fluid px-4 sm:px-6 lg:px-8 py-1">
         <div class="flex h-screen gap-4 p-4">
@@ -152,35 +155,24 @@
                     </div>
                 </div>
             </div>
-            <div class=" bg-white rounded-lg border border-black" style="flex: 0 0 15%;">
+            <div class="bg-white rounded-lg border border-black p-4" style="flex: 0 0 15%;">
                 <div class="card-body">
-                    <div>
-                        <h3>Filtros</h3>
-                    </div>
-                    <div>
-                        <select class="form-control mr-2" wire:model="statusFiltroDeBusqueda" wire:change="filter">
-                            <option value="2">Todos</option>
-                            <option value="1">Actualizado</option>
-                            <option value="0">Desactualizado</option>
-                        </select>
-                    </div>
+                    <h3>Filtros</h3>
+                    <select class="form-control" wire:model="statusFiltroDeBusqueda" wire:change="filter">
+                        <option value="2">Todos</option>
+                        <option value="1">Actualizado</option>
+                        <option value="0">Desactualizado</option>
+                    </select>
                     <br>
-                    <div>
-                        <div>
-                            <strong>Categorías</strong>
-                        </div>
-                        <div>
-                            <div>
-                                <ul >
-                                    @foreach($familias as $familia)
-                                        @include('livewire.familia.lista-categorias', ['familia' => $familia, 'nivel' => 0])
-                                    @endforeach
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
+                    <strong>Categorías</strong>
+                    <ul>
+                        @foreach($familias as $familia)
+                            @include('livewire.familia.lista-categorias', ['familia' => $familia, 'nivel' => 0])
+                        @endforeach
+                    </ul>
                 </div>
             </div>
+            
         </div>
 
     </div>
