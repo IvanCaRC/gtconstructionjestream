@@ -4,7 +4,6 @@ namespace App\Livewire\Familia;
 
 use Livewire\Component;
 use App\Models\Familia;
-use Illuminate\Support\Facades\Redirect;
 
 class CreateCategoria extends Component
 {
@@ -75,7 +74,6 @@ class CreateCategoria extends Component
 
     }
     
-        
 
     public function render()
     {
