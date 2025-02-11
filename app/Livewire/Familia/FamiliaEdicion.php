@@ -78,9 +78,6 @@ class FamiliaEdicion extends Component
     {
 
         // $this->validate(Familia::updateRules(), Familia::updateMessages());
-<<<<<<< HEAD
-        $validator = Validator::make($this->familiaEdit, Familia::updateRules(), Familia::updateMessages());
-=======
 
         
         $validator = Validator::make($this->familiaEdit, Familia::updateRules(), Familia::updateMessages());
@@ -96,7 +93,6 @@ class FamiliaEdicion extends Component
         // ]);
     
         
->>>>>>> 4333849b626d2e3021216ddf5d9677354774b259
 
         $familia = Familia::find($this->familiaEditId);
 
