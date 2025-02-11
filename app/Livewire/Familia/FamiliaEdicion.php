@@ -76,6 +76,9 @@ class FamiliaEdicion extends Component
 
     public function update()
     {
+
+        $this->validate(Familia::updateRules(), Familia::updateMessages());
+
         $familia = Familia::find($this->familiaEditId);
 
         if (!$familia) {

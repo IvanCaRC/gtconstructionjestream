@@ -9,20 +9,21 @@
                     <!-- Nombre -->
                     <div class="form-group">
                         <label for="nombre">Nombre</label>
-                        <input type="text" id="nombre" class="form-control @error('nombre') is-invalid @enderror"
+                        <input type="text" id="nombre"
+                            class="form-control @error('familiaEdit.nombre') is-invalid @enderror"
                             wire:model.defer="familiaEdit.nombre">
-                        @error('nombre')
+                        @error('familiaEdit.nombre')
                             <span class="invalid-feedback">{{ $message }}</span>
                         @enderror
-                        <span id="nombreError" class="invalid-feedback" style="display:none;">Registrar un nombre para
-                            la familia es obligatorio.</span>
+                        <span id="nombreError" class="invalid-feedback" style="display:none;">Asigne nombre para
+                            actualizar la familia.</span>
                     </div>
                     <!-- Descripción -->
                     <div class="form-group">
                         <label for="descripcion">Descripción</label>
-                        <textarea id="descripcion" class="form-control @error('descripcion') is-invalid @enderror"
+                        <textarea id="descripcion" class="form-control @error('familiaEdit.descripcion') is-invalid @enderror"
                             wire:model.defer="familiaEdit.descripcion"></textarea>
-                        @error('descripcion')
+                        @error('familiaEdit.descripcion')
                             <span class="invalid-feedback">{{ $message }}</span>
                         @enderror
                     </div>
