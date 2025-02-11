@@ -18,12 +18,12 @@ class CreateProveedorTest extends TestCase
 {
     use RefreshDatabase;
 
-     /** @test */
-     public function test_componente_se_renderiza_correctamente()
-     {
-         Livewire::test(CreateProveedor::class)
-             ->assertStatus(200); // Cambia esto por un texto relevante en la vista
-     }
+    /** @test */
+    public function test_componente_se_renderiza_correctamente()
+    {
+        Livewire::test(CreateProveedor::class)
+            ->assertStatus(200); // Cambia esto por un texto relevante en la vista
+    }
 
     /** @test */
     public function it_creates_a_proveedor_correctly()
@@ -53,8 +53,7 @@ class CreateProveedorTest extends TestCase
             ->set('rfc', 'GARC840215HDF')
             ->set('telefonos', $telefonos)
             ->set('facturacion', $facturacion)
-            ->set('bancarios', $bancarios)
-;
+            ->set('bancarios', $bancarios);
 
         // Llamar al método `save()` del componente
         $component->call('save');
@@ -71,11 +70,11 @@ class CreateProveedorTest extends TestCase
         $this->assertEquals('987654321', $proveedor->telefonos[1]->numero);
 
         // Verificar que la familia ha sido asociada al proveedor
-       
+
         // Verificar que los archivos se han guardado
-       
+
     }
-    
+
 
     /** @test */
     public function no_puede_crear_un_proveedor_sin_nombre()
@@ -101,20 +100,25 @@ class CreateProveedorTest extends TestCase
     public function puede_eliminar_telefonos()
     {
         Livewire::test(CreateProveedor::class)
+            ->call('addTelefono') // Añade un teléfono extra para eliminar
             ->call('removeTelefono', 0)
             ->assertSet('telefonos', [['nombre' => '', 'numero' => '']]);
     }
 
+
     /** @test */
     public function puede_agregar_familias_a_un_proveedor()
     {
-        $familia = Familia::create(['nombre' => 'Familia de prueba']);
+        $familia = Familia::create(['nombre' => 'Familia de prueba', 'estadoEliminacion' => 0]);
 
         Livewire::test(CreateProveedor::class)
             ->set('seleccionadas', [$familia->id])
             ->call('addFamilia')
-            ->assertSet('familiasSeleccionadas', [$familia]);
+            ->assertSet('familiasSeleccionadas', function ($familiasSeleccionadas) use ($familia) {
+                return $familiasSeleccionadas[0]->id === $familia->id;
+            });
     }
+
 
     /** @test */
     public function puede_eliminar_familias_seleccionadas()
@@ -126,7 +130,7 @@ class CreateProveedorTest extends TestCase
             ->call('removeFamilia', 0)
             ->assertSet('familiasSeleccionadas', []);
     }
-    
+
     /** @test */
     public function test_calcular_subfamilias()
     {
@@ -148,5 +152,45 @@ class CreateProveedorTest extends TestCase
         Livewire::test(CreateProveedor::class)
             ->call('calcularSubfamilias', $familiaPadre->id, 1)
             ->assertSee($subfamilia->nombre);
+    }
+    /** @test */
+    public function no_puede_crear_un_proveedor_con_correo_invalido()
+    {
+        Livewire::test(CreateProveedor::class)
+            ->set('nombre', 'Proveedor Test')
+            ->set('descripcion', 'Descripción del proveedor')
+            ->set('correo', 'correo_no_valido') // Correo inválido
+            ->set('rfc', 'GARC840215HDF')
+            ->call('save')
+            ->assertHasErrors(['correo' => 'email']);
+    }
+    /** @test */
+    public function no_puede_crear_un_proveedor_con_rfc_invalido()
+    {
+        Livewire::test(CreateProveedor::class)
+            ->set('nombre', 'Proveedor Test')
+            ->set('descripcion', 'Descripción del proveedor')
+            ->set('correo', 'correo@prueba.com')
+            ->set('rfc', 'RFCINVALIDO') // RFC inválido
+            ->call('save')
+            ->assertHasErrors(['rfc' => 'Este RFC no es válido, verificalo.']);
+    }
+
+
+
+
+
+    /** @test */
+    /** @test */
+    public function no_puede_crear_un_proveedor_con_numero_de_telefono_invalido()
+    {
+        Livewire::test(CreateProveedor::class)
+            ->set('nombre', 'Proveedor Test')
+            ->set('descripcion', 'Descripción del proveedor')
+            ->set('correo', 'correo@prueba.com')
+            ->set('rfc', 'GARC840215HDF')
+            ->set('telefonos', [['nombre' => 'Telefono 1', 'numero' => 'abcde']]) // Número de teléfono inválido
+            ->call('save')
+            ->assertHasErrors(['telefonos.0.numero' => 'numeric']);
     }
 }

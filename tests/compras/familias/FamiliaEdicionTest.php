@@ -11,7 +11,11 @@ use Tests\TestCase;
 class FamiliaEdicionTest extends TestCase
 {
     use RefreshDatabase;
-
+    public function renderizaElComponenete()
+    {
+        Livewire::test(FamiliaEdicion::class)
+            ->assertStatus(200);
+    }
     /** @test */
     public function puede_editar_una_familia_existente()
     {
@@ -55,72 +59,9 @@ class FamiliaEdicionTest extends TestCase
             ->call('update')
             ->assertHasErrors(['id_familia_padre']); // Verifica que Livewire genera un error
     }
-//////////////////////////////////////////////////////////////////////
-    // /** @test */
-    // public function no_puede_editar_familia_sin_nombre()
-    // {
-    //     $familia = Familia::create([
-    //         'nombre' => 'Familia Original',
-    //         'descripcion' => 'Descripción',
-    //         'nivel' => 1,
-    //         'estadoEliminacion' => false,
-    //         'id_familia_padre' => null,
-    //     ]);
 
-    //     Livewire::test(FamiliaEdicion::class, ['idfamilia' => $familia->id])
-    //         ->set('familiaEdit.nombre', '') // Deja el nombre vacío
-    //         ->call('update') // Llama al método de actualización
-    //         ->assertHasErrors(['familiaEdit.nombre' => 'required']); // Verifica que se dé un error de "required"
-    // }
-    // /** @test */
-    // public function no_puede_editar_familia_con_nombre_muy_largo()
-    // {
-    //     $familia = Familia::create([
-    //         'nombre' => 'Familia Original',
-    //         'descripcion' => 'Descripción',
-    //         'nivel' => 1,
-    //         'estadoEliminacion' => false,
-    //         'id_familia_padre' => null,
-    //     ]);
 
-    //     Livewire::test(FamiliaEdicion::class, ['idfamilia' => $familia->id])
-    //         ->set('familiaEdit.nombre', str_repeat('A', 256)) // Nombre de 256 caracteres
-    //         ->call('update') // Llama al método de actualización
-    //         ->assertHasErrors(['familiaEdit.nombre' => 'max']); // Verifica que se dé un error de "max"
-    // }
-
-    // /** @test */
-    // public function no_puede_editar_familia_con_descripcion_invalida()
-    // {
-    //     $familia = Familia::create([
-    //         'nombre' => 'Familia Original',
-    //         'descripcion' => 'Descripción',
-    //         'nivel' => 1,
-    //         'estadoEliminacion' => false,
-    //         'id_familia_padre' => null,
-    //     ]);
-
-    //     Livewire::test(FamiliaEdicion::class, ['idfamilia' => $familia->id])
-    //         ->set('familiaEdit.descripcion', ['esto', 'no', 'es', 'una', 'string']) // Descripción no es una cadena
-    //         ->call('update') // Llama al método de actualización
-    //         ->assertHasErrors(['familiaEdit.descripcion' => 'string']); // Verifica que se dé un error de "string"
-    // }
-    // /** @test */
-    // public function maneja_datos_excesivos_en_edicion()
-    // {
-    //     $familia = Familia::create([
-    //         'nombre' => 'Familia Original',
-    //         'descripcion' => 'Descripción',
-    //         'nivel' => 1,
-    //         'estadoEliminacion' => false,
-    //         'id_familia_padre' => null,
-    //     ]);
-
-    //     Livewire::test(FamiliaEdicion::class, ['idfamilia' => $familia->id])
-    //         ->set('familiaEdit.nombre', str_repeat('X', 10000)) // 10,000 caracteres
-    //         ->call('update') // Llama al método de actualización
-    //         ->assertHasErrors(['familiaEdit.nombre' => 'max']); // Verifica que se dé un error de "max"
-    // }
+    
     /** @test */
     public function test_calcular_subfamilias_en_edicion()
     {
