@@ -23,7 +23,7 @@ class ValidaRfc implements Rule
 
     public function message()
     {
-        return 'El RFC no es válido.';
+        return 'Este RFC no es válido, verificalo.';
     }
 }
 
