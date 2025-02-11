@@ -263,6 +263,7 @@ class EditProveedor extends Component
             Proveedor::updateRules('proveedorEdit.', $this->provedprEditId), 
             Proveedor::updateMessages('proveedorEdit.')
         );
+        $this->validate(Telefono::rules(), Telefono::messages());
         // $this->validate([
         //     'proveedorEdit.nombre' => 'required|string|max:255',
         //     'proveedorEdit.descripcion' => 'nullable|string',

@@ -8,7 +8,6 @@ use App\Models\Familia;   // Importar el modelo de Familia
 use App\Models\ProveedorHasFamilia;
 use Livewire\Features\SupportFileUploads\WithFileUploads;
 use Livewire\Component;
-use App\Rules\ValidaRFC;
 
 class CreateProveedor extends Component
 {
@@ -99,6 +98,7 @@ class CreateProveedor extends Component
     public function save()
     {
         $this->validate(Proveedor::rules(), Proveedor::messages());
+        $this->validate(Telefono::rules(), Telefono::messages());
 
         $facturacion = null;
         if ($this->facturacion) {
