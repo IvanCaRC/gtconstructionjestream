@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Rules\ValidaRfc; // Regla de validacion personalizada
+use App\Rules\ValidaRFC; // Regla de validacion personalizada
 
 class Proveedor extends Model
 {

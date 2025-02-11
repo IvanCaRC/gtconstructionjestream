@@ -28,7 +28,8 @@ class FamiliaEdicionTest extends TestCase
         Livewire::test(FamiliaEdicion::class, ['idfamilia' => $familia->id])
             ->set('familiaEdit.nombre', 'Familia Editada')
             ->set('familiaEdit.descripcion', 'Descripción Editada')
-            ->call('update');
+            ->call('update')
+            ->assertHasNoErrors(); 
 
         // Verificar que los cambios se guardaron en la base de datos
         $this->assertDatabaseHas('familias', [
