@@ -40,11 +40,13 @@
         <label>Teléfonos</label>
         @foreach ($telefonos as $index => $telefono)
             <div class="input-group mb-2">
-                <input type="text" class="form-control @error('telefonos.' . $index . '.nombre') is-invalid @enderror" wire:model.defer="telefonos.{{ $index }}.nombre"
-                    placeholder="Nombre de contacto">
-                <input type="text" class="form-control @error('telefonos.' . $index . '.numero') is-invalid @enderror" wire:model.defer="telefonos.{{ $index }}.numero"
-                    placeholder="Teléfono">
-                    @if ($errors->has('telefonos.' . $index . '.nombre') || $errors->has('telefonos.' . $index . '.numero'))
+                <input type="text"
+                    class="form-control @error('telefonos.' . $index . '.nombre') is-invalid @enderror"
+                    wire:model.defer="telefonos.{{ $index }}.nombre" placeholder="Nombre de contacto">
+                <input type="text"
+                    class="form-control @error('telefonos.' . $index . '.numero') is-invalid @enderror"
+                    wire:model.defer="telefonos.{{ $index }}.numero" placeholder="Teléfono">
+                @if ($errors->has('telefonos.' . $index . '.nombre') || $errors->has('telefonos.' . $index . '.numero'))
                     <div class="invalid-feedback">
                         @error('telefonos.' . $index . '.nombre')
                             <div>{{ $message }}</div>
@@ -329,12 +331,12 @@
             });
         }
     </script>
-<script>
-    function cancelar() {
-        // Llamar al método update2 de Livewire
-        window.location.href = "{{ route('compras.proveedores.viewProveedores') }}";
-    }
-</script>
+    <script>
+        function cancelar() {
+            // Llamar al método update2 de Livewire
+            window.location.href = "{{ route('compras.proveedores.viewProveedores') }}";
+        }
+    </script>
 
 
 </div>
