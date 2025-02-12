@@ -97,4 +97,55 @@ class ItemEspecifico extends Model
             $prefix . 'ficha_Tecnica_pdf.max' => 'La ficha técnica no puede exceder los 2048KB.',
         ];
     }
+
+    public static function rulesUpdate($prefix = '', $id = null)
+    {
+        return [
+            'itemEspecificoEdit.marca' => 'required|string|max:255',
+            'itemEspecificoEdit.descripcion' => 'required',
+            'itemEspecificoEdit.pz_Mayoreo' => 'required|integer',
+            'itemEspecificoEdit.porcentaje_venta_minorista' => 'required|numeric|min:0',
+            'itemEspecificoEdit.porcentaje_venta_mayorista' => 'required|numeric|min:0',
+            'itemEspecificoEdit.precio_venta_minorista' => 'nullable|numeric|min:0',
+            'itemEspecificoEdit.precio_venta_mayorista' => 'nullable|numeric|min:0',
+            'itemEspecificoEdit.unidad' => 'required|string|max:50',
+            'itemEspecificoEdit.stock' => 'nullable|integer|min:0',
+            'itemEspecificoEdit.especificaciones' => 'nullable',
+            'itemEspecificoEdit.moc' => 'nullable|integer|min:0',
+            'itemEspecificoEdit.ficha_Tecnica_pdf' => 'nullable|mimes:pdf|max:2048',
+        ];
+    }
+
+    public static function messagesUpdate($prefix = '')
+    {
+        return [
+            'itemEspecificoEdit.image.mimes' => 'La imagen debe ser un archivo de tipo: jpg, jpeg, png, gif, webp.',
+            'itemEspecificoEdit.image.max' => 'La imagen no puede exceder los 1024KB.',
+            'itemEspecificoEdit.marca.required' => 'Registrar una marca es obligatorio.',
+            'itemEspecificoEdit.marca.string' => 'La marca debe ser un texto.',
+            'itemEspecificoEdit.marca.max' => 'El nombre de la marca excede la cantidad de caracteres.',
+            'itemEspecificoEdit.descripcion.required' => 'Registra una descripcion para el item',
+            'itemEspecificoEdit.pz_Mayoreo.required' => 'Registra la cantidad de piezas de mayoreo.',
+            'itemEspecificoEdit.pz_Mayoreo.integer' => 'Registra la cantidad de piezas de mayoreo como un numero.',
+            'itemEspecificoEdit.porcentaje_venta_minorista.required' => 'Registra este porcentaje.',
+            'itemEspecificoEdit.porcentaje_venta_minorista.numeric' => 'El porcentaje de venta minorista debe ser un número.',
+            'itemEspecificoEdit.porcentaje_venta_minorista.min' => 'No puedes ingresar un porcentaje negativo.',
+            'itemEspecificoEdit.porcentaje_venta_mayorista.required' => 'Registra este porcentaje.',
+            'itemEspecificoEdit.porcentaje_venta_mayorista.numeric' => 'El porcentaje de venta mayorista debe ser un número.',
+            'itemEspecificoEdit.porcentaje_venta_mayorista.min' => 'No puedes ingresar un porcentaje negativo',
+            'itemEspecificoEdit.precio_venta_minorista.numeric' => 'El precio de venta minorista debe ser un número.',
+            'itemEspecificoEdit.precio_venta_minorista.min' => 'El precio de venta minorista no puede ser negativo.',
+            'itemEspecificoEdit.precio_venta_mayorista.numeric' => 'El precio de venta mayorista debe ser un número.',
+            'itemEspecificoEdit.precio_venta_mayorista.min' => 'El precio de venta mayorista no puede ser negativo.',
+            'itemEspecificoEdit.unidad.required' => 'Ingrese el tipo de unidad.',
+            'itemEspecificoEdit.unidad.string' => 'La unidad debe ser un texto.',
+            'itemEspecificoEdit.unidad.max' => 'La unidad no puede tener más de 50 caracteres.',
+            'itemEspecificoEdit.stock.integer' => 'El stock debe ser un número entero.',
+            'itemEspecificoEdit.stock.min' => 'No puedes registrar un stock negativo.',
+            'itemEspecificoEdit.moc.integer' => 'El valor minimo de venta al cliente debe ser un valor numerico entero.',
+            'itemEspecificoEdit.moc.min' => 'No se permiten valores negativos.',
+            'itemEspecificoEdit.ficha_Tecnica_pdf.mimes' => 'La ficha técnica debe ser un archivo PDF.',
+            'itemEspecificoEdit.ficha_Tecnica_pdf.max' => 'La ficha técnica no puede exceder los 2048KB.',
+        ];
+    }
 }

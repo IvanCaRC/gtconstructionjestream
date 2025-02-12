@@ -103,10 +103,13 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="marca">Marca</label>
-                                        <input type="text" id="marca" class="form-control"
+                                        <input type="text" id="marca"
+                                            class="form-control @error('itemEspecificoEdit.marca') is-invalid @enderror"
                                             wire:model.defer="itemEspecificoEdit.marca" required>
+                                        @error('itemEspecificoEdit.marca')
+                                            <span class="invalid-feedback">{{ $message }}</span>
+                                        @enderror
                                     </div>
-
 
                                     <div class="form-group">
                                         <label> Provedor</label>
