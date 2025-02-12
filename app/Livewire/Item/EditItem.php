@@ -95,7 +95,7 @@ class EditItem extends Component
         //Falta cargar especificaciones
         $this->itemEdit['id'] = $this->item->id;
         $this->itemEdit['nombre'] = $this->item->nombre;
-        $this->itemEdit['descripcion'] = $this->item->descripcion;
+        $this->itemEspecificoEdit['descripcion'] = $this->item->descripcion;
         $this->itemEspecificoEdit['id'] = $this->itemEspecifico->id;
         $this->itemEspecificoEdit['item_id'] = $this->itemEspecifico->item_id;
         if ($this->itemEspecifico->image === null) {
@@ -210,7 +210,7 @@ class EditItem extends Component
 
         $itemActual->update([
             'nombre' => $this->itemEdit['nombre'],
-            'descripcion' => $this->itemEdit['descripcion'],
+            'descripcion' => $this->itemEspecificoEdit['descripcion'],
         ]);
 
         $imagenes = [];

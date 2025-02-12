@@ -103,16 +103,16 @@ class ItemEspecifico extends Model
         return [
             'itemEspecificoEdit.marca' => 'required|string|max:255',
             'itemEspecificoEdit.descripcion' => 'required',
-            'itemEspecificoEdit.pz_Mayoreo' => 'required|integer',
-            'itemEspecificoEdit.porcentaje_venta_minorista' => 'required|numeric|min:0',
-            'itemEspecificoEdit.porcentaje_venta_mayorista' => 'required|numeric|min:0',
-            'itemEspecificoEdit.precio_venta_minorista' => 'nullable|numeric|min:0',
-            'itemEspecificoEdit.precio_venta_mayorista' => 'nullable|numeric|min:0',
-            'itemEspecificoEdit.unidad' => 'required|string|max:50',
-            'itemEspecificoEdit.stock' => 'nullable|integer|min:0',
-            'itemEspecificoEdit.especificaciones' => 'nullable',
-            'itemEspecificoEdit.moc' => 'nullable|integer|min:0',
-            'itemEspecificoEdit.ficha_Tecnica_pdf' => 'nullable|mimes:pdf|max:2048',
+            // 'itemEspecificoEdit.pz_Mayoreo' => 'required|integer',
+            // 'itemEspecificoEdit.porcentaje_venta_minorista' => 'required|numeric|min:0',
+            // 'itemEspecificoEdit.porcentaje_venta_mayorista' => 'required|numeric|min:0',
+            // 'itemEspecificoEdit.precio_venta_minorista' => 'nullable|numeric|min:0',
+            // 'itemEspecificoEdit.precio_venta_mayorista' => 'nullable|numeric|min:0',
+            // 'itemEspecificoEdit.unidad' => 'required|string|max:50',
+            // 'itemEspecificoEdit.stock' => 'nullable|integer|min:0',
+            // 'itemEspecificoEdit.especificaciones' => 'nullable',
+            // 'itemEspecificoEdit.moc' => 'nullable|integer|min:0',
+            // 'itemEspecificoEdit.ficha_Tecnica_pdf' => 'nullable|mimes:pdf|max:2048',
         ];
     }
 

@@ -95,9 +95,9 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="descripcion">Descripción</label>
-                                        <textarea id="descripcion" class="form-control @error('itemEdit.descripcion') is-invalid @enderror"
-                                            wire:model.defer="itemEdit.descripcion"></textarea>
-                                        @error('itemEdit.descripcion')
+                                        <textarea id="descripcion" class="form-control @error('itemEspecificoEdit.descripcion') is-invalid @enderror"
+                                            wire:model.defer="itemEspecificoEdit.descripcion"></textarea>
+                                        @error('itemEspecificoEdit.descripcion')
                                             <span class="invalid-feedback">{{ $message }}</span>
                                         @enderror
                                     </div>
