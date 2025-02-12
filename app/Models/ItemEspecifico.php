@@ -61,7 +61,7 @@ class ItemEspecifico extends Model
             $prefix . 'stock' => 'nullable|integer|min:0',
             $prefix . 'especificaciones' => 'nullable',
             $prefix . 'moc' => 'nullable|integer|min:0',
-            $prefix . 'ficha_Tecnica_pdf' => 'nullable|mimes:pdf|max:2048',
+            // $prefix . 'ficha_Tecnica_pdf' => 'nullable|mimes:pdf|max:2048',
         ];
     }
 
