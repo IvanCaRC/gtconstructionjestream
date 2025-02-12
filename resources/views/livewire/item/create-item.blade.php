@@ -83,16 +83,16 @@
                                     </div>
 
                                     @if ($errors->has('ProvedoresAsignados.*'))
-                                                            <tr>
-                                                                <td colspan="6">
-                                                                    <span class="invalid-feedback"
-                                                                        style="display: block; color: red; font-weight: bold; text-align: center; padding: 10px; border: 2px solid red; border-radius: 5px; background-color: #f8d7da;">
-                                                                        Debes requisitar todos los campos
-                                                                        correspondientes al proveedor.
-                                                                    </span>
-                                                                </td>
-                                                            </tr>
-                                                        @endif
+                                        <tr>
+                                            <td colspan="6">
+                                                <span class="invalid-feedback"
+                                                    style="display: block; color: red; font-weight: bold; text-align: center; padding: 10px; border: 2px solid red; border-radius: 5px; background-color: #f8d7da;">
+                                                    Debes requisitar todos los campos
+                                                    correspondientes al proveedor.
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    @endif
 
                                     <div class="form-group">
                                         <label> Provedor</label>
@@ -153,62 +153,62 @@
                                                                     }
                                                                 </style>
 
-                                                        <tr>
-                                                            <td>
-                                                                <button
-                                                                    class="checkbox-btn {{ $conexionObjeto->estado == 1 ? 'selected' : '' }}"
-                                                                    wire:click="seleccionarProveedor({{ $index }}, '{{ $conexionObjeto->proveedor_nombre }}')">
-                                                                    @if ($conexionObjeto->estado == 1)
-                                                                        <span class="checkbox-icon">✓</span>
-                                                                    @endif
-                                                                </button>
-                                                            </td>
-                                                            <td>{{ $conexionObjeto->proveedor_nombre }}</td>
-                                                            <td>
-                                                                <input step="1"
-                                                                    class="form-control @error('ProvedoresAsignados.' . $index . '.tiempo_minimo_entrega') is-invalid @enderror"
-                                                                    wire:model.lazy="ProvedoresAsignados.{{ $index }}.tiempo_minimo_entrega"
-                                                                    name="ProvedoresAsignados[{{ $index }}][tiempo_minimo_entrega]"
-                                                                    required min="0">
-                                                            </td>
-                                                            <td>
-                                                                <input step="1"
-                                                                    class="form-control @error('ProvedoresAsignados.' . $index . '.tiempo_maximo_entrega') is-invalid @enderror"
-                                                                    wire:model.lazy="ProvedoresAsignados.{{ $index }}.tiempo_maximo_entrega"
-                                                                    name="ProvedoresAsignados[{{ $index }}][tiempo_maximo_entrega]"
-                                                                    required min="0"
-                                                                    onblur="if(parseInt(this.value) < parseInt(document.querySelector('input[name=\'ProvedoresAsignados[{{ $index }}][tiempo_minimo_entrega]\']').value)) { this.setCustomValidity('El tiempo máximo de entrega no puede ser menor que el tiempo mínimo de entrega.'); } else { this setCustomValidity(''); }">
-                                                            </td>
-                                                            <td>
-                                                                <input step="0.01"
-                                                                    class="form-control @error('ProvedoresAsignados.' . $index . '.precio_compra') is-invalid @enderror"
-                                                                    wire:model.lazy="ProvedoresAsignados.{{ $index }}.precio_compra"
-                                                                    name="ProvedoresAsignados[{{ $index }}][precio_compra]"
-                                                                    required min="0"
-                                                                    wire:keydown='handleKeydown({{ $index }})'>
-                                                            </td>
-                                                            <td>
-                                                                <input step="0.01"
-                                                                    class="form-control @error('ProvedoresAsignados.' . $index . '.unidad') is-invalid @enderror"
-                                                                    wire:model.lazy="ProvedoresAsignados.{{ $index }}.unidad"
-                                                                    name="ProvedoresAsignados[{{ $index }}][unidad]"
-                                                                    wire:keydown='handleKeydownUnidad({{ $index }})'>
-                                                            </td>
-                                                            <td>
-                                                                <button
-                                                                    wire:click="eliminarProveedor({{ $index }})"
-                                                                    class="btn btn-danger">Eliminar</button>
-                                                            </td>
-                                                        </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <button
+                                                                        class="checkbox-btn {{ $conexionObjeto->estado == 1 ? 'selected' : '' }}"
+                                                                        wire:click="seleccionarProveedor({{ $index }}, '{{ $conexionObjeto->proveedor_nombre }}')">
+                                                                        @if ($conexionObjeto->estado == 1)
+                                                                            <span class="checkbox-icon">✓</span>
+                                                                        @endif
+                                                                    </button>
+                                                                </td>
+                                                                <td>{{ $conexionObjeto->proveedor_nombre }}</td>
+                                                                <td>
+                                                                    <input step="1"
+                                                                        class="form-control @error('ProvedoresAsignados.' . $index . '.tiempo_minimo_entrega') is-invalid @enderror"
+                                                                        wire:model.lazy="ProvedoresAsignados.{{ $index }}.tiempo_minimo_entrega"
+                                                                        name="ProvedoresAsignados[{{ $index }}][tiempo_minimo_entrega]"
+                                                                        required min="0">
+                                                                </td>
+                                                                <td>
+                                                                    <input step="1"
+                                                                        class="form-control @error('ProvedoresAsignados.' . $index . '.tiempo_maximo_entrega') is-invalid @enderror"
+                                                                        wire:model.lazy="ProvedoresAsignados.{{ $index }}.tiempo_maximo_entrega"
+                                                                        name="ProvedoresAsignados[{{ $index }}][tiempo_maximo_entrega]"
+                                                                        required min="0"
+                                                                        onblur="if(parseInt(this.value) < parseInt(document.querySelector('input[name=\'ProvedoresAsignados[{{ $index }}][tiempo_minimo_entrega]\']').value)) { this.setCustomValidity('El tiempo máximo de entrega no puede ser menor que el tiempo mínimo de entrega.'); } else { this setCustomValidity(''); }">
+                                                                </td>
+                                                                <td>
+                                                                    <input step="0.01"
+                                                                        class="form-control @error('ProvedoresAsignados.' . $index . '.precio_compra') is-invalid @enderror"
+                                                                        wire:model.lazy="ProvedoresAsignados.{{ $index }}.precio_compra"
+                                                                        name="ProvedoresAsignados[{{ $index }}][precio_compra]"
+                                                                        required min="0"
+                                                                        wire:keydown='handleKeydown({{ $index }})'>
+                                                                </td>
+                                                                <td>
+                                                                    <input step="0.01"
+                                                                        class="form-control @error('ProvedoresAsignados.' . $index . '.unidad') is-invalid @enderror"
+                                                                        wire:model.lazy="ProvedoresAsignados.{{ $index }}.unidad"
+                                                                        name="ProvedoresAsignados[{{ $index }}][unidad]"
+                                                                        wire:keydown='handleKeydownUnidad({{ $index }})'>
+                                                                </td>
+                                                                <td>
+                                                                    <button
+                                                                        wire:click="eliminarProveedor({{ $index }})"
+                                                                        class="btn btn-danger">Eliminar</button>
+                                                                </td>
+                                                            </tr>
 
-                                                        </tr>
-                                            @endforeach
-                                            </tbody>
-                                            </table>
-                                        @else
-                                            <div class="no-familias-seleccionadas w-100">
-                                                No hay provedores seleccionadas
-                                            </div>
+                                                            </tr>
+                                                        @endforeach
+                                                    </tbody>
+                                                </table>
+                                            @else
+                                                <div class="no-familias-seleccionadas w-100">
+                                                    No hay provedores seleccionadas
+                                                </div>
                                             @endif
 
                                         </div>
@@ -279,26 +279,28 @@
                                                     @enderror
                                                 </div>
                                                 <div class="col-md-2 mb-3">
-                                                    <label for="porcentaje_venta_mayorista" class="mr-2">% Venta Mayorista</label>
+                                                    <label for="porcentaje_venta_mayorista" class="mr-2">% Venta
+                                                        Mayorista</label>
                                                     <input step="0.01" id="porcentaje_venta_mayorista"
-                                                           class="form-control @error('porcentaje_venta_mayorista') is-invalid @enderror"
-                                                           wire:model="porcentaje_venta_mayorista"
-                                                           wire:keydown='calcularPrecios' required>
+                                                        class="form-control @error('porcentaje_venta_mayorista') is-invalid @enderror"
+                                                        wire:model="porcentaje_venta_mayorista"
+                                                        wire:keydown='calcularPrecios' required>
                                                     @error('porcentaje_venta_mayorista')
                                                         <span class="invalid-feedback">{{ $message }}</span>
                                                     @enderror
-                                                </div>                                                
+                                                </div>
 
                                                 <div class="col-md-2 mb-3">
-                                                    <label for="porcentaje_venta_minorista" class="mr-2">% Venta Minorista</label>
+                                                    <label for="porcentaje_venta_minorista" class="mr-2">% Venta
+                                                        Minorista</label>
                                                     <input step="0.01" id="porcentaje_venta_minorista"
-                                                           class="form-control @error('porcentaje_venta_minorista') is-invalid @enderror"
-                                                           wire:model="porcentaje_venta_minorista"
-                                                           wire:keydown='calcularPrecios' required>
+                                                        class="form-control @error('porcentaje_venta_minorista') is-invalid @enderror"
+                                                        wire:model="porcentaje_venta_minorista"
+                                                        wire:keydown='calcularPrecios' required>
                                                     @error('porcentaje_venta_minorista')
                                                         <span class="invalid-feedback">{{ $message }}</span>
                                                     @enderror
-                                                </div>                                                
+                                                </div>
 
                                                 <div class="col-md-2 mb-3">
                                                     <label for="precio_venta_mayorista" class="mr-2">Precio
@@ -317,12 +319,12 @@
                                             <div class="form-group">
                                                 <label for="moc">MOC (Minimo de venta a cliente)</label>
                                                 <input type="number" id="moc"
-                                                       class="form-control @error('moc') is-invalid @enderror"
-                                                       wire:model.defer="moc">
+                                                    class="form-control @error('moc') is-invalid @enderror"
+                                                    wire:model.defer="moc">
                                                 @error('moc')
                                                     <span class="invalid-feedback">{{ $message }}</span>
                                                 @enderror
-                                            </div>                                            
+                                            </div>
                                         </div>
                                     @endif
 
