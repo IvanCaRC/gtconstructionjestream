@@ -86,19 +86,27 @@
                                 <div class="col-md-8">
                                     <div class="form-group">
                                         <label for="nombre">Nombre</label>
-                                        <input type="text" id="nombre" class="form-control"
+                                        <input type="text" id="nombre"
+                                            class="form-control @error('itemEdit.nombre') is-invalid @enderror"
                                             wire:model.defer="itemEdit.nombre" required>
+                                        @error('itemEdit.nombre')
+                                            <span class="invalid-feedback">{{ $message }}</span>
+                                        @enderror
                                     </div>
                                     <div class="form-group">
                                         <label for="descripcion">Descripción</label>
-                                        <textarea id="descripcion" class="form-control" wire:model.defer="itemEdit.descripcion"></textarea>
+                                        <textarea id="descripcion" class="form-control @error('itemEdit.descripcion') is-invalid @enderror"
+                                            wire:model.defer="itemEdit.descripcion"></textarea>
+                                        @error('itemEdit.descripcion')
+                                            <span class="invalid-feedback">{{ $message }}</span>
+                                        @enderror
                                     </div>
                                     <div class="form-group">
                                         <label for="marca">Marca</label>
                                         <input type="text" id="marca" class="form-control"
                                             wire:model.defer="itemEspecificoEdit.marca" required>
                                     </div>
-                                    
+
 
                                     <div class="form-group">
                                         <label> Provedor</label>
@@ -233,14 +241,14 @@
                                             <label for="stock" class="mr-2">Stock Acutal del Producto</label>
                                             <input type="number" id="cantidad_piezas_mayoreo" class="form-control"
                                                 wire:model.defer="itemEspecificoEdit.stock" required>
-                                                
+
                                         </div>
 
 
                                     </div>
 
                                     @if ($provedorSeleccionadoDeLaTabla)
-                                    <label for="">{{$provedorSeleccionadoDeLaTabla}}</label>
+                                        <label for="">{{ $provedorSeleccionadoDeLaTabla }}</label>
                                         <div>
                                             <h4 for="unidad">Unidad</h4>
                                             <label>{{ $unidadSeleccionadaEnTabla }}</label>
@@ -291,7 +299,7 @@
                                                 <label for="moc">MOC (Minimo de venta a cliente)</label>
                                                 <input type="number" id="moc" class="form-control"
                                                     wire:model.defer="itemEspecificoEdit.moc" required>
-        
+
                                             </div>
                                         </div>
                                     @endif

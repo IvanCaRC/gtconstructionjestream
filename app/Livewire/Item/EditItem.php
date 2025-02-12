@@ -193,6 +193,8 @@ class EditItem extends Component
         $itemActual = Item::findOrFail($this->item->id);
         $itemEspecificoActual = ItemEspecifico::findOrFail($this->itemEspecifico->id);
 
+        $this->validate(Item::rulesUpdate(), Item::messagesUpdate());
+
         $porcentajeVentaMinorista = (float) ($this->porcentaje_venta_minorista ?? 0);
         $porcentajeVentaMayorista = (float) ($this->porcentaje_venta_mayorista ?? 0);
 
