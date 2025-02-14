@@ -25,7 +25,7 @@ class Telefono extends Model
     public static function rules($prefix = '', $id = null)
     {
         return [
-            $prefix . 'telefonos.0.numero' => 'required|numeric|unique:telefonos,numero,' . $id,
+            $prefix . 'telefonos.0.numero' => 'required|numeric' . $id,
             $prefix . 'telefonos.0.nombre' => 'required|string|max:255',
         ];
     }
@@ -35,7 +35,6 @@ class Telefono extends Model
         return [
             $prefix . 'telefonos.0.numero.required' => 'Registra al menos un telefono de contacto al proveedor.',
             $prefix . 'telefonos.0.numero.numeric' => 'El teléfono registrado no es válido',
-            $prefix . 'telefonos.0.numero.unique' => 'Este número de teléfono ya está registrado.',
             $prefix . 'telefonos.0.nombre.required' => 'Registra al menos un contacto al proveedor.',
             $prefix . 'telefonos.0.nombre.string' => 'El nombre registrado no es aceptado.',
             $prefix . 'telefonos.0.nombre.max' => 'El nombre es demasiado largo.',
