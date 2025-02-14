@@ -45,7 +45,7 @@ class ItemEspecificoProveedor extends Model
                 },
             ],
             'ProvedoresAsignados.*.tiempo_minimo_entrega' => 'required|integer|min:0',
-            'ProvedoresAsignados.*.unidad' => 'nullable|string|max:255',
+            'ProvedoresAsignados.*.unidad' => 'required|string|max:255',
             'ProvedoresAsignados.*.precio_compra' => 'required|numeric|min:0',
         ];
     }
