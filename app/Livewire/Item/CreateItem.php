@@ -102,7 +102,6 @@ class CreateItem extends Component
     public function save()
     {
 
-        
         $this->validate(array_merge(
             Item::rules(),
             ItemEspecifico::rules()

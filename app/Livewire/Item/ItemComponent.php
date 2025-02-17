@@ -75,11 +75,22 @@ class ItemComponent extends Component
 
     public function editItem($idItem)
     {
+        $item = ItemEspecifico::find($idItem);
+
+        if ($item === null) {
+            abort(404, 'item no encontrada');
+        }
+        
         return redirect()->route('compras.items.edicionItem', ['idItem' => $idItem]);
     }
 
     public function viewItem($idItem)
     {
+        $item = ItemEspecifico::find($idItem);
+
+        if ($item === null) {
+            abort(404, 'item no encontrada');
+        }
         return redirect()->route('compras.items.vistaEspecificaItem', ['idItem' => $idItem]);
     }
 
