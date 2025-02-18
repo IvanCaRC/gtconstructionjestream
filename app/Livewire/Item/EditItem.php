@@ -195,6 +195,7 @@ class EditItem extends Component
 
         $this->validate(Item::rulesUpdate(), Item::messagesUpdate());
         $this->validate(ItemEspecifico::rulesUpdate(), ItemEspecifico::messagesUpdate());
+        $this->validate(ItemEspecificoProveedor::rulesUpdate(), ItemEspecificoProveedor::messagesUpdate());
 
         $porcentajeVentaMinorista = (float) ($this->porcentaje_venta_minorista ?? 0);
         $porcentajeVentaMayorista = (float) ($this->porcentaje_venta_mayorista ?? 0);

@@ -111,6 +111,18 @@
                                         @enderror
                                     </div>
 
+                                    @if ($errors->has('ProvedoresAsignados.*'))
+                                        <tr>
+                                            <td colspan="6">
+                                                <span class="invalid-feedback"
+                                                    style="display: block; color: red; font-weight: bold; text-align: center; padding: 10px; border: 2px solid red; border-radius: 5px; background-color: #f8d7da;">
+                                                    Debes requisitar todos los campos
+                                                    correspondientes al proveedor.
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    @endif
+
                                     <div class="form-group">
                                         <label> Provedor</label>
                                         <div class="input-group mb-2">
@@ -182,17 +194,17 @@
                                                                 </td>
                                                                 <td>{{ $conexionObjeto->proveedor_nombre }}</td>
 
-                                                                <td><input step="1" class="form-control"
+                                                                <td><input step="1" class="form-control @error('ProvedoresAsignados.' . $index . '.tiempo_minimo_entrega') is-invalid @enderror"
                                                                         wire:model.lazy="ProvedoresAsignados.{{ $index }}.tiempo_minimo_entrega">
                                                                 </td>
-                                                                <td><input step="1" class="form-control"
+                                                                <td><input step="1" class="form-control @error('ProvedoresAsignados.' . $index . '.tiempo_maximo_entrega') is-invalid @enderror"
                                                                         wire:model.lazy="ProvedoresAsignados.{{ $index }}.tiempo_maximo_entrega">
                                                                 </td>
-                                                                <td><input step="0.01" class="form-control"
+                                                                <td><input step="0.01" class="form-control @error('ProvedoresAsignados.' . $index . '.precio_compra') is-invalid @enderror"
                                                                         wire:model.lazy="ProvedoresAsignados.{{ $index }}.precio_compra"
                                                                         wire:keydown='handleKeydown({{ $index }})'>
                                                                 </td>
-                                                                <td><input step="0.01" class="form-control"
+                                                                <td><input step="0.01" class="form-control @error('ProvedoresAsignados.' . $index . '.unidad') is-invalid @enderror"
                                                                         wire:model.lazy="ProvedoresAsignados.{{ $index }}.unidad"
                                                                         wire:keydown='handleKeydownUnidad({{ $index }})'>
                                                                 </td>
