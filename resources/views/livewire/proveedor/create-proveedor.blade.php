@@ -205,7 +205,7 @@
                 // Manejar error si es necesario
                 Swal.fire({
                     title: 'Error',
-                    text: 'Hubo un problema al crear el proveedor.',
+                    text: 'Hubo un problema al crear el proveedor, verifica tu formulario.',
                     icon: 'error',
                     confirmButtonText: 'OK'
                 });
