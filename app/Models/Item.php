@@ -39,4 +39,22 @@ class Item extends Model
             $prefix . 'descripcion.string' => 'La descripción debe ser una cadena de texto.',
         ];
     }
+
+    public static function rulesUpdate($prefix = '', $id = null)
+    {
+        return [
+            'itemEdit.nombre' => 'required|string|max:255',
+            'itemEdit.descripcion' => 'nullable|string',
+        ];
+    }
+
+    public static function messagesUpdate($prefix = '')
+    {
+        return [
+            'itemEdit.nombre.required' => 'Para actualizar, asigne un nombre al item.',
+            'itemEdit.nombre.string' => 'El nombre debe ser un texto.',
+            'itemEdit.nombre.max' => 'El nombre es demasiado largo.',
+            'itemEdit.descripcion.string' => 'La descripción debe ser una cadena de texto.',
+        ];
+    }
 }

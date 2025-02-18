@@ -10,6 +10,7 @@ use App\Models\Proveedor;
 use Livewire\Component;
 use Livewire\Features\SupportFileUploads\WithFileUploads;
 use App\CustomClases\ConexionProveedorItemTemporal;
+use App\Models\ItemEspecificoProveedor;
 use Illuminate\Support\Facades\DB;
 
 class CreateItem extends Component
@@ -108,6 +109,7 @@ class CreateItem extends Component
             Item::messages(),
             ItemEspecifico::messages()
         ));
+        $this->validate(ItemEspecificoProveedor::rules(), ItemEspecificoProveedor::messages());
         
         $porcentajeVentaMinorista = (float) ($this->porcentaje_venta_minorista ?? 0);
         $porcentajeVentaMayorista = (float) ($this->porcentaje_venta_mayorista ?? 0);

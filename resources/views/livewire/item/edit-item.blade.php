@@ -86,19 +86,42 @@
                                 <div class="col-md-8">
                                     <div class="form-group">
                                         <label for="nombre">Nombre</label>
-                                        <input type="text" id="nombre" class="form-control"
+                                        <input type="text" id="nombre"
+                                            class="form-control @error('itemEdit.nombre') is-invalid @enderror"
                                             wire:model.defer="itemEdit.nombre" required>
+                                        @error('itemEdit.nombre')
+                                            <span class="invalid-feedback">{{ $message }}</span>
+                                        @enderror
                                     </div>
                                     <div class="form-group">
                                         <label for="descripcion">Descripción</label>
-                                        <textarea id="descripcion" class="form-control" wire:model.defer="itemEdit.descripcion"></textarea>
+                                        <textarea id="descripcion" class="form-control @error('itemEspecificoEdit.descripcion') is-invalid @enderror"
+                                            wire:model.defer="itemEspecificoEdit.descripcion"></textarea>
+                                        @error('itemEspecificoEdit.descripcion')
+                                            <span class="invalid-feedback">{{ $message }}</span>
+                                        @enderror
                                     </div>
                                     <div class="form-group">
                                         <label for="marca">Marca</label>
-                                        <input type="text" id="marca" class="form-control"
+                                        <input type="text" id="marca"
+                                            class="form-control @error('itemEspecificoEdit.marca') is-invalid @enderror"
                                             wire:model.defer="itemEspecificoEdit.marca" required>
+                                        @error('itemEspecificoEdit.marca')
+                                            <span class="invalid-feedback">{{ $message }}</span>
+                                        @enderror
                                     </div>
-                                    
+
+                                    @if ($errors->has('ProvedoresAsignados.*'))
+                                        <tr>
+                                            <td colspan="6">
+                                                <span class="invalid-feedback"
+                                                    style="display: block; color: red; font-weight: bold; text-align: center; padding: 10px; border: 2px solid red; border-radius: 5px; background-color: #f8d7da;">
+                                                    Debes requisitar todos los campos
+                                                    correspondientes al proveedor.
+                                                </span>
+                                            </td>
+                                        </tr>
+                                    @endif
 
                                     <div class="form-group">
                                         <label> Provedor</label>
@@ -171,17 +194,17 @@
                                                                 </td>
                                                                 <td>{{ $conexionObjeto->proveedor_nombre }}</td>
 
-                                                                <td><input step="1" class="form-control"
+                                                                <td><input step="1" class="form-control @error('ProvedoresAsignados.' . $index . '.tiempo_minimo_entrega') is-invalid @enderror"
                                                                         wire:model.lazy="ProvedoresAsignados.{{ $index }}.tiempo_minimo_entrega">
                                                                 </td>
-                                                                <td><input step="1" class="form-control"
+                                                                <td><input step="1" class="form-control @error('ProvedoresAsignados.' . $index . '.tiempo_maximo_entrega') is-invalid @enderror"
                                                                         wire:model.lazy="ProvedoresAsignados.{{ $index }}.tiempo_maximo_entrega">
                                                                 </td>
-                                                                <td><input step="0.01" class="form-control"
+                                                                <td><input step="0.01" class="form-control @error('ProvedoresAsignados.' . $index . '.precio_compra') is-invalid @enderror"
                                                                         wire:model.lazy="ProvedoresAsignados.{{ $index }}.precio_compra"
                                                                         wire:keydown='handleKeydown({{ $index }})'>
                                                                 </td>
-                                                                <td><input step="0.01" class="form-control"
+                                                                <td><input step="0.01" class="form-control @error('ProvedoresAsignados.' . $index . '.unidad') is-invalid @enderror"
                                                                         wire:model.lazy="ProvedoresAsignados.{{ $index }}.unidad"
                                                                         wire:keydown='handleKeydownUnidad({{ $index }})'>
                                                                 </td>
@@ -230,17 +253,17 @@
                                                 class="btn btn-secondary mt-3">Agregar Familia</button>
                                         </div>
                                         <div class="col-md-4 mb-3">
-                                            <label for="stock" class="mr-2">Stock Acutal del Producto</label>
+                                            <label for="stock" class="mr-2">Stock Actual del Producto</label>
                                             <input type="number" id="cantidad_piezas_mayoreo" class="form-control"
                                                 wire:model.defer="itemEspecificoEdit.stock" required>
-                                                
+
                                         </div>
 
 
                                     </div>
 
                                     @if ($provedorSeleccionadoDeLaTabla)
-                                    <label for="">{{$provedorSeleccionadoDeLaTabla}}</label>
+                                        <label for="">{{ $provedorSeleccionadoDeLaTabla }}</label>
                                         <div>
                                             <h4 for="unidad">Unidad</h4>
                                             <label>{{ $unidadSeleccionadaEnTabla }}</label>
@@ -252,25 +275,37 @@
                                                 <div class="col-md-2 mb-3">
                                                     <label for="cantidad_piezas_mayoreo" class="mr-2">Cant. Piezas
                                                         Mayoreo</label>
-                                                    <input id="cantidad_piezas_mayoreo" class="form-control"
+                                                    <input id="itemEspecificoEdit.cantidad_piezas_mayoreo"
+                                                        class="form-control @error('itemEspecificoEdit.cantidad_piezas_mayoreo') is-invalid @enderror"
                                                         wire:model.defer="itemEspecificoEdit.cantidad_piezas_mayoreo"
                                                         required>
+                                                    @error('itemEspecificoEdit.cantidad_piezas_mayoreo')
+                                                        <span class="invalid-feedback">{{ $message }}</span>
+                                                    @enderror
                                                 </div>
 
                                                 <div class="col-md-2 mb-3">
                                                     <label for="porcentaje_venta_mayorista" class="mr-2">% Venta
                                                         Mayorista</label>
                                                     <input step="0.01" id="porcentaje_venta_mayorista"
-                                                        class="form-control" wire:model="porcentaje_venta_mayorista"
+                                                        class="form-control @error('porcentaje_venta_mayorista') is-invalid @enderror" wire:model="porcentaje_venta_mayorista"
                                                         wire:keydown='calcularPrecios' required>
+                                                        @error('porcentaje_venta_mayorista')
+                                                        <span class="invalid-feedback">{{ $message }}</span>
+                                                    @enderror
                                                 </div>
 
                                                 <div class="col-md-2 mb-3">
                                                     <label for="porcentaje_venta_minorista" class="mr-2">% Venta
                                                         Minorista</label>
-                                                    <input step="0.01" id="porcentaje_venta_minorista"
-                                                        class="form-control" wire:model="porcentaje_venta_minorista"
+                                                    <input step="0.01"
+                                                        id="porcentaje_venta_minorista"
+                                                        class="form-control @error('porcentaje_venta_minorista') is-invalid @enderror"
+                                                        wire:model="porcentaje_venta_minorista"
                                                         wire:keydown='calcularPrecios' required>
+                                                    @error('porcentaje_venta_minorista')
+                                                        <span class="invalid-feedback">{{ $message }}</span>
+                                                    @enderror
                                                 </div>
 
                                                 <div class="col-md-3 mb-3">
@@ -291,7 +326,7 @@
                                                 <label for="moc">MOC (Minimo de venta a cliente)</label>
                                                 <input type="number" id="moc" class="form-control"
                                                     wire:model.defer="itemEspecificoEdit.moc" required>
-        
+
                                             </div>
                                         </div>
                                     @endif

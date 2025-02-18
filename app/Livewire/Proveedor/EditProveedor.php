@@ -259,30 +259,12 @@ class EditProveedor extends Component
         $proveedorActual = Proveedor::findOrFail($this->provedprEditId);
         //     public $facturacionDatosActual;
         // public $bancariosDatoActual;
-        $this->validate([
-            'proveedorEdit.nombre' => 'required|string|max:255',
-            'proveedorEdit.descripcion' => 'nullable|string',
-            'proveedorEdit.correo' => 'required|email|unique:proveedores,correo,' . $this->proveedorEdit['id'],
-            'proveedorEdit.rfc' => 'required|string|unique:proveedores,rfc,' . $this->proveedorEdit['id'],
-            'proveedorEdit.archivo_facturacion_pdf' => 'nullable|max:2048',
-            'proveedorEdit.datos_bancarios_pdf' => 'nullable|max:2048',
-        ], [
-            'proveedorEdit.nombre.required' => 'Registrar un nombre es obligatorio.',
-            'proveedorEdit.nombre.string' => 'Registra un nombre valido.',
-            'proveedorEdit.nombre.max' => 'No puedes registrar un nombre tan largo.',
-            'proveedorEdit.descripcion.string' => 'La descripción debe ser una cadena de texto.',
-            'proveedorEdit.correo.required' => 'Registrar un correo electronico es obligatorio.',
-            'proveedorEdit.correo.email' => 'La direccion de correo electronico registrada no es valida.',
-            'proveedorEdit.correo.unique' => 'Esta dirección de correo electrónico ya está registrada.',
-            'proveedorEdit.rfc.required' => 'Registrar el RFC es obligatorio.',
-            'proveedorEdit.rfc.string' => 'El RFC registrado no es valido.',
-            'proveedorEdit.rfc.unique' => 'Este RFC ya se encuentra registrado.',
-            'proveedorEdit.archivo_facturacion_pdf.mimes' => 'El archivo de facturación debe ser un archivo PDF.',
-            'proveedorEdit.archivo_facturacion_pdf.max' => 'El archivo de facturación no puede exceder los 2048KB.',
-            'proveedorEdit.datos_bancarios_pdf.mimes' => 'El archivo de datos bancarios debe ser un archivo PDF.',
-            'proveedorEdit.datos_bancarios_pdf.max' => 'El archivo de datos bancarios no puede exceder los 2048KB.',
-        ]);
-        // Manejar los archivos de facturación y datos bancarios
+        $this->validate(
+            Proveedor::updateRules('proveedorEdit.', $this->provedprEditId), 
+            Proveedor::updateMessages('proveedorEdit.')
+        );
+        $this->validate(Telefono::rules(), Telefono::messages());
+
         if ($this->facturacion) {
             if ($this->facturacion == $this->facturacionDatosActual) {
                 $archivoFacturacion = $this->facturacion;

@@ -3,7 +3,11 @@
 namespace App\Livewire\Familia;
 
 use App\Models\Familia;
+use Dotenv\Exception\ValidationException;
+
 use Livewire\Component;
+use Illuminate\Support\Facades\Validator;
+
 
 class FamiliaEdicion extends Component
 {
@@ -72,7 +76,30 @@ class FamiliaEdicion extends Component
 
     public function update()
     {
+
+        // $this->validate(Familia::updateRules(), Familia::updateMessages());
+
+        
+        $validator = Validator::make($this->familiaEdit, Familia::updateRules(), Familia::updateMessages());
+
+        if ($validator->fails()) {
+            $this->addError('familiaEdit', $validator->errors()->first());
+            return;
+        }
+
+        // $this->validate([
+        //     'familiaEdit.nombre' => 'required|string|max:255',
+        //     'familiaEdit.descripcion' => 'nullable|string',
+        // ]);
+    
+        
+
         $familia = Familia::find($this->familiaEditId);
+
+        if (!$familia) {
+            $this->addError('familia', 'La familia no existe.');
+            return;
+        }
 
         $idFamiliaPadre = null;
         foreach (array_reverse($this->seleccionadas) as $seleccionada) {
@@ -83,7 +110,12 @@ class FamiliaEdicion extends Component
                 }
             }
         }
-        
+
+        // ❌ Validación: No puede asignar una familia padre inexistente
+        if ($idFamiliaPadre && !Familia::find($idFamiliaPadre)) {
+            $this->addError('id_familia_padre', 'No se puede asignar una familia padre inexistente.');
+            return;
+        }
 
         // Calcular el nivel
         // Si hay una familia padre, el nivel será el de la familia padre + 1; de lo contrario, será 1
@@ -123,3 +155,5 @@ class FamiliaEdicion extends Component
         $this->seleccionadas = $resultado['seleccionadas'];
     }
 }
+
+

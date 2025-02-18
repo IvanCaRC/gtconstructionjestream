@@ -8,6 +8,7 @@ use Livewire\WithPagination;
 use App\Models\Proveedor;
 use App\Models\ProveedorHasFamilia;
 use Illuminate\Support\Facades\DB;
+
 class ProveedorComponent extends Component
 {
     use WithPagination;
@@ -20,7 +21,7 @@ class ProveedorComponent extends Component
     public $familiasSeleccionadas = [];
     public $desplegables = [];
 
-    
+
 
     public function search()
     {
@@ -77,14 +78,14 @@ class ProveedorComponent extends Component
     public function seleccionarFamilia($familiaId)
     {
         $familia = Familia::with('subfamiliasRecursivas')->find($familiaId);
-    
+
         if (!$familia) {
             return;
         }
-    
+
         // Obtener todos los IDs de la familia y sus subfamilias
         $idsFamilia = $this->obtenerTodosLosIds($familia);
-    
+
         if (in_array($familiaId, $this->familiasSeleccionadas)) {
             // Si ya estaba seleccionada, eliminar todas las familias relacionadas
             $this->familiasSeleccionadas = array_diff($this->familiasSeleccionadas, $idsFamilia);
@@ -92,22 +93,22 @@ class ProveedorComponent extends Component
             // Agregar todas las familias relacionadas
             $this->familiasSeleccionadas = array_merge($this->familiasSeleccionadas, $idsFamilia);
         }
-    
+
         // Eliminar duplicados
         $this->familiasSeleccionadas = array_unique($this->familiasSeleccionadas);
     }
-    
+
     /**
      * Función recursiva para obtener todos los IDs de una familia y sus subfamilias
      */
     private function obtenerTodosLosIds($familia)
     {
         $ids = [$familia->id];
-    
+
         foreach ($familia->subfamiliasRecursivas as $subfamilia) {
             $ids = array_merge($ids, $this->obtenerTodosLosIds($subfamilia));
         }
-    
+
         return $ids;
     }
     public function eliminar($proveedorId)
@@ -120,6 +121,12 @@ class ProveedorComponent extends Component
 
     public function viewProveedor($idproveedor)
     {
+        $proveedor = Proveedor::find($idproveedor);
+
+        if ($proveedor === null) {
+            abort(404, 'proveedor no encontrada');
+        }
+
         return redirect()->route('compras.proveedores.viewProveedorEspecifico', ['idproveedor' => $idproveedor]);
     }
 
@@ -135,8 +142,15 @@ class ProveedorComponent extends Component
         // Si la familia o alguna subfamilia está asignada, retornar verdadero
         return $proveedorAsignado;
     }
-    
-    public function editProveedor($proveedorId){
+
+    public function editProveedor($proveedorId)
+    {
+        $proveedor = Proveedor::find($proveedorId);
+
+        if ($proveedor === null) {
+            abort(404, 'proveedor no encontrada');
+        }
+
         return redirect()->route('compras.proveedores.editProveedores', ['idproveedor' => $proveedorId]);
     }
 
@@ -148,7 +162,4 @@ class ProveedorComponent extends Component
             $this->desplegables[$idfamilia] = true;
         }
     }
-
-    
 }
-

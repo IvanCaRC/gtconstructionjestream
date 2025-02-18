@@ -98,4 +98,22 @@ class Familia extends Model
             $prefix . 'descripcion.string' => 'La descripción debe ser una cadena de texto.',
         ];
     }
+
+    public static function updateRules($prefix = '', $id = null)
+    {
+        return [
+            $prefix . 'nombre' => 'required|string|max:255',
+            $prefix . 'descripcion' => 'nullable|string',
+        ];
+    }
+
+    public static function updateMessages($prefix = '')
+    {
+        return [
+            $prefix . 'nombre.required' => 'Asigne nombre para actualizar la familia.',
+            $prefix . 'nombre.string' => 'El nombre debe ser un texto.',
+            $prefix . 'nombre.max' => 'El nombre no puede tener más de 255 caracteres.',
+            $prefix . 'descripcion.string' => 'La descripción debe ser una cadena de texto.',
+        ];
+    }
 }

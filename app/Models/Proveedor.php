@@ -4,7 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use App\Rules\ValidaRfc; // Regla de validacion personalizada
+use App\Rules\ValidaRFC; // Regla de validacion personalizada
 
 class Proveedor extends Model
 {
@@ -76,4 +76,32 @@ class Proveedor extends Model
             $prefix . 'datos_bancarios_pdf.max' => 'El archivo de datos bancarios no puede exceder los 2048KB.',
         ];
     }
+
+    public static function updateRules($prefix = '', $id)
+{
+    return [
+        $prefix . 'nombre' => 'required|string|max:255',
+        $prefix . 'descripcion' => 'nullable|string',
+        $prefix . 'correo' => 'required|email|unique:proveedores,correo,' . $id,
+        $prefix . 'rfc' => ['required', 'string', 'unique:proveedores,rfc,' . $id, new ValidaRfc],
+    ];
+}
+
+public static function updateMessages($prefix = '')
+{
+    return [
+        $prefix . 'nombre.required' => 'Registrar nombre del proveedor es obligatorio.',
+        $prefix . 'nombre.string' => 'El nombre debe ser un texto.',
+        $prefix . 'nombre.max' => 'El nombre es demasiado largo.',
+        $prefix . 'descripcion.string' => 'La descripción debe ser una cadena de texto.',
+        $prefix . 'correo.required' => 'Registrar un correo electrónico es obligatorio.',
+        $prefix . 'correo.email' => 'Debe proporcionar una dirección de correo electrónico válida.',
+        $prefix . 'correo.unique' => 'Esta dirección de correo electrónico ya está registrada.',
+        $prefix . 'rfc.required' => 'Registrar el RFC es obligatorio.',
+        $prefix . 'rfc.string' => 'El RFC debe ser una cadena de texto.',
+        $prefix . 'rfc.unique' => 'Este RFC ya está registrado.',
+        $prefix . 'rfc.valid' => 'El RFC registrado no es válido, verificalo.',
+    ];
+}
+
 }

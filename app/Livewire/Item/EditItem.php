@@ -95,7 +95,7 @@ class EditItem extends Component
         //Falta cargar especificaciones
         $this->itemEdit['id'] = $this->item->id;
         $this->itemEdit['nombre'] = $this->item->nombre;
-        $this->itemEdit['descripcion'] = $this->item->descripcion;
+        $this->itemEspecificoEdit['descripcion'] = $this->item->descripcion;
         $this->itemEspecificoEdit['id'] = $this->itemEspecifico->id;
         $this->itemEspecificoEdit['item_id'] = $this->itemEspecifico->item_id;
         if ($this->itemEspecifico->image === null) {
@@ -193,6 +193,10 @@ class EditItem extends Component
         $itemActual = Item::findOrFail($this->item->id);
         $itemEspecificoActual = ItemEspecifico::findOrFail($this->itemEspecifico->id);
 
+        $this->validate(Item::rulesUpdate(), Item::messagesUpdate());
+        $this->validate(ItemEspecifico::rulesUpdate(), ItemEspecifico::messagesUpdate());
+        $this->validate(ItemEspecificoProveedor::rulesUpdate(), ItemEspecificoProveedor::messagesUpdate());
+
         $porcentajeVentaMinorista = (float) ($this->porcentaje_venta_minorista ?? 0);
         $porcentajeVentaMayorista = (float) ($this->porcentaje_venta_mayorista ?? 0);
 
@@ -207,7 +211,7 @@ class EditItem extends Component
 
         $itemActual->update([
             'nombre' => $this->itemEdit['nombre'],
-            'descripcion' => $this->itemEdit['descripcion'],
+            'descripcion' => $this->itemEspecificoEdit['descripcion'],
         ]);
 
         $imagenes = [];
