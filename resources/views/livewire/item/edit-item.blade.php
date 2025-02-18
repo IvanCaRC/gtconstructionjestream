@@ -241,7 +241,7 @@
                                                 class="btn btn-secondary mt-3">Agregar Familia</button>
                                         </div>
                                         <div class="col-md-4 mb-3">
-                                            <label for="stock" class="mr-2">Stock Acutal del Producto</label>
+                                            <label for="stock" class="mr-2">Stock Actual del Producto</label>
                                             <input type="number" id="cantidad_piezas_mayoreo" class="form-control"
                                                 wire:model.defer="itemEspecificoEdit.stock" required>
 
@@ -263,25 +263,37 @@
                                                 <div class="col-md-2 mb-3">
                                                     <label for="cantidad_piezas_mayoreo" class="mr-2">Cant. Piezas
                                                         Mayoreo</label>
-                                                    <input id="cantidad_piezas_mayoreo" class="form-control"
+                                                    <input id="itemEspecificoEdit.cantidad_piezas_mayoreo"
+                                                        class="form-control @error('itemEspecificoEdit.cantidad_piezas_mayoreo') is-invalid @enderror"
                                                         wire:model.defer="itemEspecificoEdit.cantidad_piezas_mayoreo"
                                                         required>
+                                                    @error('itemEspecificoEdit.cantidad_piezas_mayoreo')
+                                                        <span class="invalid-feedback">{{ $message }}</span>
+                                                    @enderror
                                                 </div>
 
                                                 <div class="col-md-2 mb-3">
                                                     <label for="porcentaje_venta_mayorista" class="mr-2">% Venta
                                                         Mayorista</label>
                                                     <input step="0.01" id="porcentaje_venta_mayorista"
-                                                        class="form-control" wire:model="porcentaje_venta_mayorista"
+                                                        class="form-control @error('porcentaje_venta_mayorista') is-invalid @enderror" wire:model="porcentaje_venta_mayorista"
                                                         wire:keydown='calcularPrecios' required>
+                                                        @error('porcentaje_venta_mayorista')
+                                                        <span class="invalid-feedback">{{ $message }}</span>
+                                                    @enderror
                                                 </div>
 
                                                 <div class="col-md-2 mb-3">
                                                     <label for="porcentaje_venta_minorista" class="mr-2">% Venta
                                                         Minorista</label>
-                                                    <input step="0.01" id="porcentaje_venta_minorista"
-                                                        class="form-control" wire:model="porcentaje_venta_minorista"
+                                                    <input step="0.01"
+                                                        id="porcentaje_venta_minorista"
+                                                        class="form-control @error('porcentaje_venta_minorista') is-invalid @enderror"
+                                                        wire:model="porcentaje_venta_minorista"
                                                         wire:keydown='calcularPrecios' required>
+                                                    @error('porcentaje_venta_minorista')
+                                                        <span class="invalid-feedback">{{ $message }}</span>
+                                                    @enderror
                                                 </div>
 
                                                 <div class="col-md-3 mb-3">
