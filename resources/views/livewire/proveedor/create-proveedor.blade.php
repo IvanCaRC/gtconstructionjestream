@@ -196,8 +196,7 @@
                         title: 'Proveedor creado',
                         text: 'El proveedor ha sido creado exitosamente.',
                         icon: 'success',
-                        confirmButtonText: 'OK',
-                        allowOutsideClick: false // Deshabilitar el clic fuera para cerrar
+                        confirmButtonText: 'OK'
                     }).then((result) => {
                         if (result.isConfirmed) {
                             // Enviar el formulario
