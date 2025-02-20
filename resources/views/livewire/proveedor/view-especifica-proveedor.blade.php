@@ -10,9 +10,8 @@
                     </div>
                     <div class="card-body d-flex">
                         <div class="pl-3">
-                            <a href="#"
-                               
-                                class="d-block mb-3"  wire:click="editProveedor({{ $proveedor->id }})">Editar Proveedor</a>
+                            <a href="#" class="d-block mb-3"
+                                wire:click="editProveedor({{ $proveedor->id }})">Editar Proveedor</a>
                             <h5 class="card-title mt-4 role-description">Nombre: {{ $proveedor->nombre }}</h5>
                             <h5 class="card-title mt-3">Descripción: {{ $proveedor->descripcion ?? '' }}</h5>
                             <h5 class="card-title mt-3">Correo: {{ $proveedor->correo ?? '' }}</h5>
@@ -49,18 +48,24 @@
                             </h5>
                             <h5 class="card-title mt-3">Archivo de Facturación PDF:</h5>
                             @if ($proveedor->archivo_facturacion_pdf)
-                                <iframe src="{{ asset('storage/' . $proveedor->archivo_facturacion_pdf) }}"
-                                    width="100%" height="600px"></iframe>
+                                <a href="{{ asset('storage/' . $proveedor->archivo_facturacion_pdf) }}" target="_blank"
+                                    class="btn btn-secondary">
+                                    Ver Archivo de Facturación
+                                </a>
                             @else
                                 <p>No hay archivo de facturación disponible.</p>
                             @endif
+
                             <h5 class="card-title mt-3">Datos bancarios:</h5>
                             @if ($proveedor->datos_bancarios_pdf)
-                                <iframe src="{{ asset('storage/' . $proveedor->datos_bancarios_pdf) }}" width="100%"
-                                    height="600px"></iframe>
+                                <a href="{{ asset('storage/' . $proveedor->datos_bancarios_pdf) }}" target="_blank"
+                                    class="btn btn-secondary">
+                                    Ver Archivo de Datos Bancarios
+                                </a>
                             @else
-                                <p>No hay archivo de bancario disponible.</p>
+                                <p>No hay archivo bancario disponible.</p>
                             @endif
+
                         </div>
                     </div>
                     <div class="card-footer text-right">
@@ -133,7 +138,7 @@
                 </div>
             </div>
         </div>
-        
+
     </div>
     <script>
         function confirmDeletion(proveedorId, proveedorNombre) {
