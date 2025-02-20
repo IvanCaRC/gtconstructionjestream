@@ -34,17 +34,14 @@ class CreateProveedorTest extends TestCase
             'descripcion' => 'Descripción de la familia',
             'nivel' => 1,
         ]);
-
         // Crear algunos teléfonos de ejemplo
         $telefonos = [
             ['nombre' => 'Telefono 1', 'numero' => '123456789'],
             ['nombre' => 'Telefono 2', 'numero' => '987654321'],
         ];
-
         // Simular la subida de archivos
         $facturacion = UploadedFile::fake()->create('facturacion.pdf', 100);
         $bancarios = UploadedFile::fake()->create('bancarios.pdf', 100);
-
         // Instanciar el componente Livewire
         $component = Livewire::test('proveedor.create-proveedor')
             ->set('nombre', 'Proveedor Test')
@@ -54,16 +51,13 @@ class CreateProveedorTest extends TestCase
             ->set('telefonos', $telefonos)
             ->set('facturacion', $facturacion)
             ->set('bancarios', $bancarios);
-
         // Llamar al método `save()` del componente
         $component->call('save');
-
         // Verificar que el proveedor se ha creado correctamente
         $proveedor = Proveedor::first();
         $this->assertEquals('Proveedor Test', $proveedor->nombre);
         $this->assertEquals('correo@proveedor.com', $proveedor->correo);
         $this->assertEquals('GARC840215HDF', $proveedor->rfc);
-
         // Verificar que los teléfonos se han creado
         $this->assertCount(2, $proveedor->telefonos);
         $this->assertEquals('123456789', $proveedor->telefonos[0]->numero);

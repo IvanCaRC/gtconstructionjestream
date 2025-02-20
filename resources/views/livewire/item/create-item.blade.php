@@ -504,7 +504,8 @@
                 <div class="form-group">
                     <label for="tiempoMinEntrega">Tiempo mínimo de entrega (días)</label>
                     <input type="number" id="tiempoMinEntrega" wire:model="tiempoMinEntrega" class="form-control"
-                        min="0" placeholder="Ingrese los días mínimos" required>
+                        min="0" placeholder="Ingrese los días mínimos" required
+                        oninput="validateNumberInput(this)">
                 </div>
 
                 <div class="form-group">
@@ -586,5 +587,10 @@
             window.location.href = "{{ route('compras.items.viewItems') }}";
         }
     </script>
-
+    <script>
+        function validateNumberInput(element) {
+            // Eliminar cualquier carácter no numérico
+            element.value = element.value.replace(/[^0-9]/g, '');
+        }
+    </script>
 </div>

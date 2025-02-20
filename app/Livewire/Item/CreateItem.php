@@ -38,6 +38,8 @@ class CreateItem extends Component
         return view('livewire.item.create-item');
     }
 
+    
+
     public function mount()
     {
         $this->niveles[1] = Familia::whereNull('id_familia_padre')

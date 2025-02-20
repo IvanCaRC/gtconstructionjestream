@@ -87,20 +87,12 @@ class FamiliaEdicion extends Component
             return;
         }
 
-        // $this->validate([
-        //     'familiaEdit.nombre' => 'required|string|max:255',
-        //     'familiaEdit.descripcion' => 'nullable|string',
-        // ]);
-    
-        
 
         $familia = Familia::find($this->familiaEditId);
-
         if (!$familia) {
             $this->addError('familia', 'La familia no existe.');
             return;
         }
-
         $idFamiliaPadre = null;
         foreach (array_reverse($this->seleccionadas) as $seleccionada) {
             if ($seleccionada != 0) {
@@ -110,17 +102,14 @@ class FamiliaEdicion extends Component
                 }
             }
         }
-
-        // ❌ Validación: No puede asignar una familia padre inexistente
+        // Validación: No puede asignar una familia padre inexistente
         if ($idFamiliaPadre && !Familia::find($idFamiliaPadre)) {
             $this->addError('id_familia_padre', 'No se puede asignar una familia padre inexistente.');
             return;
         }
-
         // Calcular el nivel
         // Si hay una familia padre, el nivel será el de la familia padre + 1; de lo contrario, será 1
         $nivel = $idFamiliaPadre ? Familia::find($idFamiliaPadre)->nivel + 1 : 1;
-
         $familia->update([
             'nombre' => $this->familiaEdit['nombre'],
             'descripcion' => $this->familiaEdit['descripcion'],
@@ -130,12 +119,10 @@ class FamiliaEdicion extends Component
         $this->dispatch('editFamilia');
         return view('livewire.familia.familia-component');
     }
-
     private function crearArregloDeFamiliasPadre($familiaActual)
     {
         $this->familiasPadre = [];
         $contador = 0;
-
         $this->familiasPadre[$contador] = $familiaActual;
         $contador++;
         while ($familiaActual) {
@@ -145,9 +132,6 @@ class FamiliaEdicion extends Component
         }
         $this->familiasPadre = array_reverse($this->familiasPadre, true);
     }
-
-
-
     public function calcularSubfamilias($idFamiliaSeleccionada, $nivel)
     {
         $resultado = Familia::calcularSubfamilias($idFamiliaSeleccionada, $nivel, $this->niveles, $this->seleccionadas);

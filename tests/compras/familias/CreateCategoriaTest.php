@@ -78,6 +78,7 @@ class CreateCategoriaTest extends TestCase
             ->call('save')
             ->assertHasErrors(['nombre' => 'max']);
     }
+    
     /** @test */
     public function test_calcular_subfamilias()
     {

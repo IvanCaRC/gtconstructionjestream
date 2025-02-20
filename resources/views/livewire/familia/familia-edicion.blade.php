@@ -71,7 +71,6 @@
         const nombre = document.getElementById('nombre').value;
         const nombreInput = document.getElementById('nombre');
         const nombreError = document.getElementById('nombreError');
-
         if (!nombre) {
             nombreError.style.display = 'block';
             nombreInput.classList.add('is-invalid');
@@ -80,7 +79,6 @@
             nombreError.style.display = 'none';
             nombreInput.classList.remove('is-invalid');
         }
-
         // Llamar al método update de Livewire
         @this.call('update').then(response => {
             if (response) {

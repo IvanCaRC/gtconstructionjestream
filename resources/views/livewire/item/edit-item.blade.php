@@ -510,7 +510,7 @@
 
                 <div class="form-group">
                     <label for="tiempoMinEntrega">Tiempo mínimo de entrega (días)</label>
-                    <input type="number" id="tiempoMinEntrega" wire:model="tiempoMinEntrega" class="form-control"
+                    <input type="number" id="tiempoMinEntrega" wire:model="tiempoMinEntrega" wire:taper="number" class="form-control"
                         min="0" placeholder="Ingrese los días mínimos" required>
                 </div>
 

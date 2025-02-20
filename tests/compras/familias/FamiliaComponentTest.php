@@ -177,10 +177,6 @@ class FamiliaComponentTest extends TestCase
             ->assertSet('subfamilias', []); // Verificar que no hay subfamilias
     }
 
-
-    /** @test */
-   
-
     /** @test */
     public function obtenerFalsoSiNoEstaAsignado()
     {
@@ -207,6 +203,8 @@ class FamiliaComponentTest extends TestCase
         $result = $component->verificarAsignacion($familia->id);
         $this->assertFalse($result);
     }
+
+    /** @test */
     public function verificarAsignacion($familiaId)
     {
         // Verificar si la familia está asignada en 'proveedor_has_familia' o 'item_especifico_has_familia'
@@ -232,7 +230,6 @@ class FamiliaComponentTest extends TestCase
         return $proveedorAsignado || $itemAsignado || $subfamiliasAsignadas;
     }
 
-    /** @test */
     /** @test */
     public function verificarAsignacionTrue()
     {

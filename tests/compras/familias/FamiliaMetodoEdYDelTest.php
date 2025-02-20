@@ -51,6 +51,7 @@ class FamiliaMetodoEdYDelTest extends TestCase
             ->call('editCategory', null)
             ->assertStatus(404); // Verificar que devuelve un código de estado 404
     }
+
     /** @test */
     public function llamarRutaDeEdicionDeIdInvalido()
     {
@@ -61,7 +62,6 @@ class FamiliaMetodoEdYDelTest extends TestCase
             ->call('editCategory', $invalidFamilyId)
             ->assertStatus(404); // Verificar que devuelve un código de estado 404
     }
-
 
     /** @test */
     public function llamaRutaDeEliminacion()
@@ -93,7 +93,6 @@ class FamiliaMetodoEdYDelTest extends TestCase
             'estadoEliminacion' => false,
             'id_familia_padre' => null,
         ]);
-
         // Crear subfamilias
         $subfamilia1 = Familia::create([
             'nombre' => 'Subfamilia 1',
@@ -102,7 +101,6 @@ class FamiliaMetodoEdYDelTest extends TestCase
             'estadoEliminacion' => false,
             'id_familia_padre' => $familia->id,
         ]);
-
         $subfamilia2 = Familia::create([
             'nombre' => 'Subfamilia 2',
             'descripcion' => 'Descripción de subfamilia 2',
@@ -110,24 +108,20 @@ class FamiliaMetodoEdYDelTest extends TestCase
             'estadoEliminacion' => false,
             'id_familia_padre' => $familia->id,
         ]);
-
         // Probar el componente Livewire
         Livewire::test(FamiliaComponent::class)
             ->set('subfamilias', [$subfamilia1, $subfamilia2]) // Establecer subfamilias en el componente
             ->call('eliminarFamiliaConSubfamilias', $familia->id);
-
         // Verificar que la familia principal tiene estadoEliminacion = 1
         $this->assertDatabaseHas('familias', [
             'id' => $familia->id,
             'estadoEliminacion' => 1,
         ]);
-
         // Verificar que las subfamilias tienen estadoEliminacion = 1
         $this->assertDatabaseHas('familias', [
             'id' => $subfamilia1->id,
             'estadoEliminacion' => 1,
         ]);
-
         $this->assertDatabaseHas('familias', [
             'id' => $subfamilia2->id,
             'estadoEliminacion' => 1,
