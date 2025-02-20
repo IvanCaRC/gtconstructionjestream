@@ -1,8 +1,9 @@
 let savedAddresses = []; // Array para almacenar las direcciones y coordenadas
+let selectedLatLng = null; // Variable para almacenar las coordenadas seleccionadas
 document.addEventListener("DOMContentLoaded", function () {
     let map;
     let marker;
-    let selectedLatLng = null; // Variable para almacenar las coordenadas seleccionadas
+    
 
 
     function initMap(lat, lon) {
@@ -208,28 +209,21 @@ document.addEventListener("DOMContentLoaded", function () {
             <input type="text" class="form-control" value="${entry.address.referencia}" id="referencia-${index}" placeholder="Capturar referencia" oninput="autoSaveAddress(${index})">
         </div>
        <div class="col-md-2 mb-3">
-            <label>Latitud</label>
-            <input type="text" class="form-control" value="${entry.latlng ? entry.latlng.lat : ''}" 
-                id="latitud-${index}" oninput="updateCoordinates(${index})">
-        </div>
-        <div class="col-md-2 mb-3">
-            <label>Longitud</label>
-            <input type="text" class="form-control" value="${entry.latlng ? entry.latlng.lng : ''}" 
-                id="longitud-${index}" oninput="updateCoordinates(${index})">
-        </div>
+    <label>Latitud</label>
+    <input type="text" class="form-control" value="${entry.latlng ? entry.latlng.lat : ''}" 
+        id="latitud-${index}" 
+        onkeydown="return validateCoordinateKey(event)" 
+        oninput="validateCoordinateValue(this); autoSaveAddress(${index})">
+</div>
+<div class="col-md-2 mb-3">
+    <label>Longitud</label>
+    <input type="text" class="form-control" value="${entry.latlng ? entry.latlng.lng : ''}" 
+        id="longitud-${index}" 
+        onkeydown="return validateCoordinateKey(event)" 
+        oninput="validateCoordinateValue(this); autoSaveAddress(${index})">
+</div>
 
-        <div class="col-md-2 mb-3">
-            <label>Latitud</label>
-            <input type="text" class="form-control" value="${entry.latlng ? entry.latlng.lat : ''}" 
-                id="latitud-${index}" oninput="validateLatLngInput(this, ${index})">
-        </div>
-        <div class="col-md-2 mb-3">
-            <label>Longitud</label>
-            <input type="text" class="form-control" value="${entry.latlng ? entry.latlng.lng : ''}" 
-                id="longitud-${index}" oninput="validateLatLngInput(this, ${index})">
-        </div>
-
-        <div class="col-md-2 mb-3 d-flex align-items-end">  
+        <div class="col-md-2 mb-3 d-flex align-items-end">
             <button type="button" class="btn btn-danger w-100" onclick="removeAddress(${index})">Eliminar</button>
         </div>
     </div>
@@ -238,12 +232,6 @@ document.addEventListener("DOMContentLoaded", function () {
                 addressList.appendChild(listItem);
             });
         }
-    }
-
-    function validateLatLngInput(element, index) {
-        // Permitir solo números, puntos, signos '-' y '+'
-        element.value = element.value.replace(/[^0-9.\-+]/g, '');
-        updateCoordinates(index);
     }
 
     window.updateCoordinates = function (index) {

@@ -45,7 +45,7 @@
                     wire:model.defer="telefonos.{{ $index }}.nombre" placeholder="Nombre de contacto">
                 <input type="text"
                     class="form-control @error('telefonos.' . $index . '.numero') is-invalid @enderror"
-                    wire:model.defer="telefonos.{{ $index }}.numero" placeholder="Teléfono">
+                    wire:model.defer="telefonos.{{ $index }}.numero" placeholder="Teléfono" oninput="validatePhoneInput(this)">
                 @if ($errors->has('telefonos.' . $index . '.nombre') || $errors->has('telefonos.' . $index . '.numero'))
                     <div class="invalid-feedback">
                         @error('telefonos.' . $index . '.nombre')
@@ -210,12 +210,12 @@
             <div class="col-md-2 mb-3">
                 <label>Latitud</label>
                 <input type="text" class="form-control"
-                    wire:model.defer="direccionesAsignadas.{{ $index }}.Latitud">
+                    wire:model.defer="direccionesAsignadas.{{ $index }}.Latitud" oninput="validateCoordinateValue(this)">
             </div>
             <div class="col-md-2 mb-3">
                 <label>Longitud</label>
                 <input type="text" class="form-control"
-                    wire:model.defer="direccionesAsignadas.{{ $index }}.Longitud">
+                    wire:model.defer="direccionesAsignadas.{{ $index }}.Longitud" oninput="validateCoordinateValue(this)">
             </div>
             <div class="col-md-2 mb-3 d-flex align-items-end">
                 <button type="button" class="btn btn-danger w-100"
@@ -337,6 +337,11 @@
             window.location.href = "{{ route('compras.proveedores.viewProveedores') }}";
         }
     </script>
-
+    <script>
+        function validatePhoneInput(element) {
+            // Permitir solo números, espacios y el signo de +
+            element.value = element.value.replace(/[^0-9\s+]/g, '');
+        }
+    </script>
 
 </div>
