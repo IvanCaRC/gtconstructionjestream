@@ -211,7 +211,7 @@
                     <label for="email">Correo Electrónico</label>
                     <input type="email" id="email"
                         class="form-control @error('userEdit.email') is-invalid @enderror"
-                        wire:model.defer="userEdit.email">
+                        wire:model.defer="userEdit.email" wire:blur="validateField('userEdit.email')">
                     @error('userEdit.email')
                         <span class="invalid-feedback">{{ $message }}</span>
                     @enderror

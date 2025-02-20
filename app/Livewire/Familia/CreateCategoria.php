@@ -35,6 +35,7 @@ class CreateCategoria extends Component
         $this->seleccionadas = $resultado['seleccionadas'];
     }
 
+    //Funcion de validacion en tiempo real
     public function updated($propertyName)
     {
         $this->validateOnly($propertyName);

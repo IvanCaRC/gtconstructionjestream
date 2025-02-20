@@ -28,6 +28,28 @@ class CreateUser extends Component
         $this->resetErrorBag('selectedRoles');
     }
 
+    //Funcion de validacion en tiempo real
+    public function updated($propertyName)
+    {
+        //Implementar mensajes personalizados
+        $this->validateOnly($propertyName, User::rules(), User::messages());
+    }
+
+    public function validateField($field)
+    {
+        $this->validateOnly($field);
+    }
+    //Mandar a llamar las reglas del modelo de manera local
+    protected function rules()
+    {
+        return User::rules();
+    }
+
+    protected function messages()
+    {
+        return User::messages();
+    }
+
     public function save()
     {
         $this->validate(User::rules(), User::messages());
