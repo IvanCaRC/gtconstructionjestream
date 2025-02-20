@@ -78,7 +78,8 @@
                 </div>
                 <div class="form-group">
                     <label for="number">Teléfono</label>
-                    <input type="text" id="number" class="form-control" wire:model.defer="number">
+                    <input type="text" id="number" class="form-control" wire:model.defer="number"
+                        oninput="validatePhoneInput(this)">
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-6">
@@ -138,7 +139,8 @@
                         title: 'Usuario creado',
                         text: 'El usuario ha sido creado exitosamente.',
                         icon: 'success',
-                        confirmButtonText: 'OK'
+                        confirmButtonText: 'OK',
+                        allowOutsideClick: false // Deshabilitar el clic fuera para cerrar
                     });
                 }
             }).catch(error => {
@@ -147,7 +149,8 @@
                     title: 'Error',
                     text: 'Hubo un problema al crear el usuario.',
                     icon: 'error',
-                    confirmButtonText: 'OK'
+                    confirmButtonText: 'OK',
+                    allowOutsideClick: false // Deshabilitar el clic fuera para cerrar
                 });
             });
         }
@@ -211,4 +214,17 @@
         }
     </style>
 
+
+    <script>
+        function validatePhoneInput(element) {
+            // Permitir solo números, espacios y el signo de +
+            element.value = element.value.replace(/[^0-9\s+]/g, '');
+    
+            // Limitar la longitud a 16 caracteres
+            if (element.value.length > 20) {
+                element.value = element.value.substring(0, 20);
+            }
+        }
+    </script>
+    
 </div>

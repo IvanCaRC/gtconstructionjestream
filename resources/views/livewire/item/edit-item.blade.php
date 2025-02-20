@@ -271,7 +271,7 @@
                                             <h4 for="unidad">Unidad</h4>
                                             <label>{{ $unidadSeleccionadaEnTabla }}</label>
                                         </div>
-                                        <label>El parametro por el que se hacen los calculos se basan en el proveedor
+                                        <label>El parámetro por el que se hacen los cálculos se basan en el proveedor
                                             {{ $provedorSeleccionadoDeLaTabla }}</label>
                                         <div class="form-group">
                                             <div class="row">
@@ -328,7 +328,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label for="moc">MOC (Minimo de venta a cliente)</label>
+                                                <label for="moc">MOC (Mínimo de venta a cliente)</label>
                                                 <input type="text" id="moc" class="form-control"
                                                     wire:model.defer="itemEspecificoEdit.moc" required oninput="validateNumberOnly(this)">
 
@@ -575,7 +575,8 @@
                         title: 'Item Actualizado',
                         text: 'El Item ha sido actualizado exitosamente.',
                         icon: 'success',
-                        confirmButtonText: 'OK'
+                        confirmButtonText: 'OK',
+                        allowOutsideClick: false // Deshabilitar el clic fuera para cerrar
                     }).then((result) => {
                         if (result.isConfirmed) {
                             // Redirigir a la ruta deseada

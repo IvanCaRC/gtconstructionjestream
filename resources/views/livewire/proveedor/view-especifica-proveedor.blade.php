@@ -1,12 +1,49 @@
 <div>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+                .btn-icon {
+            display: flex;
+            align-items: center;
+            background-color: transparent;
+            color: #6c757d;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 24px;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .btn-icon:hover {
+            color: #5a6268;
+        }
+
+        .btn-icon i {
+            margin-right: 5px;
+        }
+
+        .row.align-items-center {
+            display: flex;
+            align-items: center;
+        }
+
+        .ml-3 {
+            margin-left: 1rem;
+        }
+    </style>
     <div class="container my-5">
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h2>Detalle Proveedor</h2>
+                        <div class="row align-items-center">
+                            <button type="button" class="btn-icon" onclick="cancelar()">
+                                <i class="fas fa-arrow-left"></i>
+                            </button>
+                            <h2>Detalle Proveedor</h2>
+                        </div>
+                        
                     </div>
                     <div class="card-body d-flex">
                         <div class="pl-3">
@@ -178,6 +215,12 @@
                     });
                 }
             });
+        }
+    </script>
+    <script>
+        function cancelar() {
+            // Llamar al método update2 de Livewire
+            window.location.href = "{{ route('compras.proveedores.viewProveedores') }}";
         }
     </script>
 </div>

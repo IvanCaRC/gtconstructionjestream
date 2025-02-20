@@ -216,7 +216,7 @@
 
                                         </div>
                                         <button href="#" wire:click="montarModalProveedores()"
-                                            class="btn btn-secondary mt-3">Agregar provedor</button>
+                                            class="btn btn-secondary mt-3">Agregar proveedor</button>
                                     </div>
 
 
@@ -267,7 +267,7 @@
                                                 <label>{{ $unidadSeleccionadaEnTabla }}</label>
                                             </div>
                                         </div>
-                                        <label>El parametro por el que se hacen los calculos se basan en el proveedor
+                                        <label>El parámetro por el que se hacen los cálculos se basan en el proveedor
                                             {{ $provedorSeleccionadoDeLaTabla }}</label>
                                         <div class="form-group">
                                             <div class="row">
@@ -321,7 +321,7 @@
                                                 </div>
                                             </div>
                                             <div class="form-group">
-                                                <label for="moc">MOC (Minimo de venta a cliente)</label>
+                                                <label for="moc">MOC (Mínimo de venta a cliente)</label>
                                                 <input type="text" id="moc"
                                                     class="form-control @error('moc') is-invalid @enderror"
                                                     wire:model.defer="moc" oninput="validateNumberOnly(this)">
@@ -567,7 +567,8 @@
                         title: 'Item creado',
                         text: 'El Item ha sido creado exitosamente.',
                         icon: 'success',
-                        confirmButtonText: 'OK'
+                        confirmButtonText: 'OK',
+                        allowOutsideClick: false // Deshabilitar el clic fuera para cerrar
                     }).then((result) => {
                         if (result.isConfirmed) {
                             // Redirigir a la ruta deseada

@@ -352,7 +352,8 @@
                         title: 'Usuario actualizado',
                         text: 'El usuario ha sido actualizado exitosamente.',
                         icon: 'success',
-                        confirmButtonText: 'OK'
+                        confirmButtonText: 'OK',
+                        allowOutsideClick: false // Deshabilitar el clic fuera para cerrar
                     });
                 }
             }).catch(error => {
@@ -361,13 +362,24 @@
                     title: 'Error',
                     text: 'Hubo un problema al actualizar el usuario.',
                     icon: 'error',
-                    confirmButtonText: 'OK'
+                    confirmButtonText: 'OK',
+                    allowOutsideClick: false // Deshabilitar el clic fuera para cerrar
                 });
             });
         }
     </script>
 
+<script>
+    function validatePhoneInput(element) {
+        // Permitir solo números, espacios y el signo de +
+        element.value = element.value.replace(/[^0-9\s+]/g, '');
 
+        // Limitar la longitud a 16 caracteres
+        if (element.value.length > 20) {
+            element.value = element.value.substring(0, 20);
+        }
+    }
+</script>
 
 
 </div>

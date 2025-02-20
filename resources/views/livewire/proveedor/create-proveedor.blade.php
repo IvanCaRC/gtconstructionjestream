@@ -196,7 +196,8 @@
                         title: 'Proveedor creado',
                         text: 'El proveedor ha sido creado exitosamente.',
                         icon: 'success',
-                        confirmButtonText: 'OK'
+                        confirmButtonText: 'OK',
+                        allowOutsideClick: false // Deshabilitar el clic fuera para cerrar
                     }).then((result) => {
                         if (result.isConfirmed) {
                             // Enviar el formulario
@@ -222,10 +223,15 @@
             window.location.href = "{{ route('compras.proveedores.viewProveedores') }}";
         }
     </script>
-    <script>
+       <script>
         function validatePhoneInput(element) {
             // Permitir solo números, espacios y el signo de +
             element.value = element.value.replace(/[^0-9\s+]/g, '');
+    
+            // Limitar la longitud a 16 caracteres
+            if (element.value.length > 20) {
+                element.value = element.value.substring(0, 20);
+            }
         }
-    </script>
+    </script>   
 </div>

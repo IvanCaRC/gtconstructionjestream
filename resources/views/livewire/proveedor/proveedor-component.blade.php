@@ -52,7 +52,10 @@
                                                 <span class="badge badge-success">Actualizado</span>
                                             @else
                                                 <span class="badge badge-danger">Desactualizado</span>
+                                                <label for="">Última fecha de actualización:</label>
+                                                {{$proveedor->updated_at->format('d/m/Y') }}
                                             @endif
+                                            
                                         </td>
                                         <td class="align-middle">{{ $proveedor->nombre }}</td>
                                         {{-- <td class="align-middle">{{ $proveedor->descripcion }}</td> --}}

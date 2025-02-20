@@ -312,7 +312,8 @@
                         title: 'Proveedor actualizado',
                         text: 'El proveedor ha sido actualizado exitosamente.',
                         icon: 'success',
-                        confirmButtonText: 'OK'
+                        confirmButtonText: 'OK',
+                        allowOutsideClick: false // Deshabilitar el clic fuera para cerrar
                     }).then((result) => {
                         if (result.isConfirmed) {
                             // Enviar el formulario

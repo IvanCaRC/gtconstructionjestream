@@ -151,7 +151,8 @@
                         title: 'Usuario actualizado',
                         text: 'El usuario ha sido actualizado exitosamente.',
                         icon: 'success',
-                        confirmButtonText: 'OK'
+                        confirmButtonText: 'OK',
+                        allowOutsideClick: false // Deshabilitar el clic fuera para cerrar
                     });
                 }
             }).catch(error => {

@@ -218,7 +218,7 @@
                 </div>
                 <div class="form-group">
                     <label for="number">Teléfono</label>
-                    <input type="text" id="number" class="form-control" wire:model.defer="userEdit.number">
+                    <input type="text" id="number" class="form-control" wire:model.defer="userEdit.number" oninput="validatePhoneInput(this)">
                 </div>
                 @if ($userEdit['id'] != $currentUserId)
                     <div class="form-row">
@@ -286,7 +286,8 @@
                                 title: 'Usuario actualizado',
                                 text: 'El usuario ha sido actualizado exitosamente.',
                                 icon: 'success',
-                                confirmButtonText: 'OK'
+                                confirmButtonText: 'OK',
+                                allowOutsideClick: false // Deshabilitar el clic fuera para cerrar
                             });
                         }
                     }).catch(error => {
@@ -295,7 +296,8 @@
                             title: 'Error',
                             text: 'Hubo un problema al actualizar el usuario.',
                             icon: 'error',
-                            confirmButtonText: 'OK'
+                            confirmButtonText: 'OK',
+                            allowOutsideClick: false // Deshabilitar el clic fuera para cerrar
                         });
                     });
                 }
@@ -305,5 +307,16 @@
 
         </x-slot>
     </x-dialog-modal>
-
+    <script>
+        function validatePhoneInput(element) {
+            // Permitir solo números, espacios y el signo de +
+            element.value = element.value.replace(/[^0-9\s+]/g, '');
+    
+            // Limitar la longitud a 16 caracteres
+            if (element.value.length > 20) {
+                element.value = element.value.substring(0, 20);
+            }
+        }
+    </script>
+    
 </div>

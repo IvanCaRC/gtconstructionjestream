@@ -2,14 +2,57 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        .btn-icon {
+            display: flex;
+            align-items: center;
+            background-color: transparent;
+            color: #6c757d;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 24px;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .btn-icon:hover {
+            color: #5a6268;
+        }
+
+        .btn-icon i {
+            margin-right: 5px;
+        }
+
+        .row.align-items-center {
+            display: flex;
+            align-items: center;
+        }
+
+        .ml-3 {
+            margin-left: 1rem;
+        }
+    </style>
+
     <div>
         <div>
             <div>
                 <div class="card">
+                    <div class="card-header">
+                        <div class="row align-items-center">
+                            <button type="button" class="btn-icon" onclick="cancelar()">
+                                <i class="fas fa-arrow-left"></i>
+                            </button>
+                            <h2 class="ml-3">Detalle Item</h2>
+                        </div>
+                    </div>
                     <div class="card-body">
                         <div class="container">
+
                             <div class="row">
                                 <!-- Área de carga de la imagen -->
+
                                 <div class="col-md-4">
                                     <div class="form-group">
 
@@ -110,11 +153,22 @@
                                 <div class="col-md-1">
                                 </div>
                                 <div class="col-md-7">
+
                                     <div class="form-group">
                                         <h1 for="">{{ $item->nombre }}</h1>
+                                        @if ($itemEspecifico->estado)
+                                            <span class="badge badge-success">Actualizado</span>
+                                        @else
+                                            <span class="badge badge-danger">Desactualizado</span>
+                                            <p class="card-text text-muted">
+                                                Última actualización:
+                                                {{ $itemEspecifico->item->updated_at->format('d/m/Y') }}
+                                            </p>
+                                        @endif
                                     </div>
+                                    
                                     <div class="form-group">
-                                        <h3 for="">Descripcion</h3>
+                                        <h3 for="">Descripción</h3>
                                         <label for="">{{ $item->descripcion }} </label>
                                     </div>
 
@@ -264,18 +318,18 @@
                                             <label>{{ $itemEspecifico->unidad }}</label>
                                         </div>
                                         <div class="col-md-3 mb-3">
-                                            <label for="stock" class="mr-2">Stock Acutal del Producto</label>
+                                            <label for="stock" class="mr-2">Stock Actutal del Producto</label>
                                             <br>
                                             <label for="">{{ $itemEspecifico->stock }}</label>
                                         </div>
                                         <div class="col-md-3 mb-3">
-                                            <label for="moc" class="mr-2">MOC (Minimo de venta a cliente)</label>
+                                            <label for="moc" class="mr-2">MOC (Mínimo de venta a cliente)</label>
 
                                             <br>
                                             <label for="">{{ $itemEspecifico->moc }}</label>
                                         </div>
                                     </div>
-                                    <label>El parametro por el que se hacen los calculos se basan en el proveedor
+                                    <label>El parámetro por el que se hacen los cálculos se basan en el proveedor
                                         seleccionado</label>
                                     <div class="form-group">
                                         <div class="row">
@@ -316,8 +370,7 @@
                                             <a href="#" wire:click="editItem({{ $itemEspecifico->id }})"
                                                 class="d-block mb-3" wire:click="">Editar item</a>
 
-                                            <a href="#"
-                                                class=" text-danger d-block mb-3"
+                                            <a href="#" class=" text-danger d-block mb-3"
                                                 onclick="confirmDeletion({{ $itemEspecifico->id }}, '{{ $itemEspecifico->item->nombre }}'
                                                 )">Eliminar</a>
 
@@ -399,6 +452,12 @@
                     });
                 }
             })
+        }
+    </script>
+    <script>
+        function cancelar() {
+            // Llamar al método update2 de Livewire
+            window.location.href = "{{ route('compras.items.viewItems') }}";
         }
     </script>
 </div>
