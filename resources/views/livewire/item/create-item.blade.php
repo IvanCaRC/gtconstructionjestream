@@ -486,7 +486,6 @@
                                         <td>
                                             <button class="btn btn-secondary btn-custom"
                                                 wire:click="asignarValor({{ $proveedor->id }}, '{{ $proveedor->nombre }}')">Seleccionar</button>
-
                                         </td>
                                     </tr>
                                 @endforeach
@@ -552,8 +551,16 @@
         <x-slot name='footer'>
             <button class="btn btn-secondary mr-2 disabled:opacity-50" wire:click="cerrarModalProvedore"
                 wire:loading.attr="disabled">Cancelar</button>
-            <button class="btn btn-primary disabled:opacity-50" wire:loading.attr="disabled"
+
+                @if (!$seleccionProvedorModal)
+                <button class="btn btn-primary disabled:opacity-50" disabled="disabled"
                 wire:click="asignarProvedorArregloProvedor">Agregar Proveedor</button>
+                @else
+                <button class="btn btn-primary disabled:opacity-50" 
+                wire:click="asignarProvedorArregloProvedor">Agregar Proveedor</button>
+                @endif
+                
+            
         </x-slot>
     </x-dialog-modal>
 
