@@ -10,7 +10,8 @@
                     <!-- Nombre -->
                     <div class="form-group">
                         <label for="nombre">Nombre</label>
-                        <input type="text" id="nombre" class="form-control @error('nombre') is-invalid @enderror" wire:model.lazy="nombre" wire:blur="validateField('nombre')">
+                        <input type="text" id="nombre" class="form-control @error('nombre') is-invalid @enderror"
+                            wire:model.lazy="nombre" wire:blur="validateField('nombre')">
                         @error('nombre')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -19,7 +20,8 @@
                     <!-- Descripción -->
                     <div class="form-group">
                         <label for="descripcion">Descripción</label>
-                        <textarea id="descripcion" class="form-control @error('descripcion') is-invalid @enderror" wire:model.lazy="descripcion" wire:blur="validateField('descripcion')"></textarea>
+                        <textarea id="descripcion" class="form-control @error('descripcion') is-invalid @enderror" wire:model.lazy="descripcion"
+                            wire:blur="validateField('descripcion')"></textarea>
                         @error('descripcion')
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
