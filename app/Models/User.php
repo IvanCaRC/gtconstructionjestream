@@ -111,7 +111,7 @@ class User extends Authenticatable
         return [
             $prefix . 'userEdit.name.required' => 'Registrar un nombre de usuario es obligatorio.',
             $prefix . 'userEdit.first_last_name.required' => 'Registrar al menos un apellido es obligatorio.',
-            $prefix . 'userEdit.email.required' => 'Registrar un correo electronico es valido.',
+            $prefix . 'userEdit.email.required' => 'Registrar un correo electronico es obligatorio.',
             $prefix . 'userEdit.email.email' => 'La direccion de correo registrada no es valida.',
             $prefix . 'userEdit.email.unique' => 'Esta direccion de correo electronico ya se encuentra registrada.',
         ];

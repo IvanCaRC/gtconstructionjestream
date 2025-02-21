@@ -98,7 +98,7 @@
                         <label for="name">Nombre</label>
                         <input type="text" id="name"
                             class="form-control @error('userEdit.name') is-invalid @enderror"
-                            wire:model.defer="userEdit.name">
+                            wire:model.defer="userEdit.name" wire:blur="validateField('userEdit.name')">
                         @error('userEdit.name')
                             <span class="invalid-feedback">{{ $message }}</span>
                         @enderror
@@ -108,7 +108,7 @@
                         <label for="first_last_name">Primer Apellido</label>
                         <input type="text" id="first_last_name"
                             class="form-control @error('userEdit.first_last_name') is-invalid @enderror"
-                            wire:model.defer="userEdit.first_last_name">
+                            wire:model.defer="userEdit.first_last_name" wire:blur="validateField('userEdit.first_last_name')">
                         @error('userEdit.first_last_name')
                             <span class="invalid-feedback">{{ $message }}</span>
                         @enderror
@@ -123,7 +123,7 @@
                     <label for="email">Correo Electrónico</label>
                     <input type="email" id="email"
                         class="form-control @error('userEdit.email') is-invalid @enderror"
-                        wire:model.defer="userEdit.email">
+                        wire:model.defer="userEdit.email" wire:blur="validateField('userEdit.email')">
                     @error('userEdit.email')
                         <span class="invalid-feedback">{{ $message }}</span>
                     @enderror

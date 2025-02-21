@@ -141,12 +141,12 @@ class ShowUserLog extends Component
         $this->validateOnly($field);
     }
     //Mandar a llamar las reglas del modelo de manera local
-    protected function rulesUpdate2()
+    protected function rules()
     {
-        return User::rulesUdpdate2();
+        return User::rulesUpdate2('', $this->userEditId);
     }
 
-    protected function messagesUpdate2()
+    protected function messages()
     {
         return User::messagesUpdate2();
     }

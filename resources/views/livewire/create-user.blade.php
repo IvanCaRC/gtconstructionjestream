@@ -36,7 +36,6 @@
                         <input type="text" id="name"
                             class="form-control @error('name') required-field @enderror" wire:model.defer="name"
                             wire:blur="validateField('name')">
-
                         @error('name')
                             <span class="error-message">
                                 {{ $message }}
