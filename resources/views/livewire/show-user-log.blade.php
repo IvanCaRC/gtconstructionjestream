@@ -100,7 +100,7 @@
                             class="form-control @error('userEdit.name') is-invalid @enderror"
                             wire:model.defer="userEdit.name">
                         @error('userEdit.name')
-                            <span class="invalid-feedback">{{ 'Este campo es obligatorio' }}</span>
+                            <span class="invalid-feedback">{{ $message }}</span>
                         @enderror
                     </div>
 
@@ -110,7 +110,7 @@
                             class="form-control @error('userEdit.first_last_name') is-invalid @enderror"
                             wire:model.defer="userEdit.first_last_name">
                         @error('userEdit.first_last_name')
-                            <span class="invalid-feedback">{{ 'Este campo es obligatorio' }}</span>
+                            <span class="invalid-feedback">{{ $message }}</span>
                         @enderror
                     </div>
                     <div class="form-group col-md-4">

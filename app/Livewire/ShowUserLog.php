@@ -43,15 +43,6 @@ class ShowUserLog extends Component
         'password' => '',
     ];
 
-    protected function rules()
-    {
-        return [
-            'userEdit.name' => 'required',
-            'userEdit.first_last_name' => 'required',
-            'userEdit.email' => 'required|email|unique:users,email,' . $this->userEditId,
-        ];
-    }
-
     public function resetManual()
     {
         $this->reset('open2', 'current_password', 'new_password', 'confirm_password');
@@ -138,12 +129,33 @@ class ShowUserLog extends Component
         return view('livewire.show-user-log', ['user' => $this->user, 'roles' => $this->roles]);
     }
 
+    //Funcion de validacion en tiempo real
+    public function updated($propertyName)
+    {
+        //Implementar mensajes personalizados
+        $this->validateOnly($propertyName, User::rulesUpdate2(), User::messagesUpdate2());
+    }
 
+    public function validateField($field)
+    {
+        $this->validateOnly($field);
+    }
+    //Mandar a llamar las reglas del modelo de manera local
+    protected function rulesUpdate2()
+    {
+        return User::rulesUdpdate2();
+    }
+
+    protected function messagesUpdate2()
+    {
+        return User::messagesUpdate2();
+    }
 
     public function update2()
     {
         // Validar los datos del formulario primero
-        $this->validate($this->rules());
+        //Pasar el parametro de id para manejar validacion de correo unico exceptuando el correo actual del usuario
+        $this->validate(User::rulesUpdate2('', $this->userEditId), User::messagesUpdate2());
 
         $user = User::find($this->userEditId);
         $image = null; // Mantener la imagen actual por defecto
