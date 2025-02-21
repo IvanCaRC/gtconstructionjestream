@@ -348,7 +348,7 @@ class EditProveedor extends Component
                 'ciudad' => $direccion['ciudad'] ?? '',
                 'estado' => $direccion['estado'] ?? '',
                 'cp' => $direccion['cp'] ?? '',
-                'referencia' => $direccion['referencia'] ?? '',
+                'referencia' => $direccion['refernecia'] ?? '',
                 'Latitud' => $direccion['Latitud'] ?? '',
                 'Longitud' => $direccion['Longitud'] ?? '',
                 'created_at' => now(),

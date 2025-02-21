@@ -205,7 +205,7 @@
             <div class="col-md-2 mb-3">
                 <label>Referencia</label>
                 <input type="text" class="form-control"
-                    wire:model.defer="direccionesAsignadas.{{ $index }}.referencia">
+                    wire:model.defer="direccionesAsignadas.{{ $index }}.refernecia">
             </div>
             <div class="col-md-2 mb-3">
                 <label>Latitud</label>

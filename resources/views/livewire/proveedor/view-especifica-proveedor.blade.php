@@ -71,7 +71,7 @@
                             @if ($proveedor->direcciones && $proveedor->direcciones->count() > 0)
                                 @foreach ($proveedor->direcciones as $direccion)
                                     {{ $direccion->estado }}, {{ $direccion->ciudad }},
-                                    {{ $direccion->calle }}, {{ $direccion->numero }}<br>
+                                    {{ $direccion->calle }}, {{ $direccion->numero }}, {{ $direccion->referencia }}<br>
                                 @endforeach
                             @else
                                 N/A
