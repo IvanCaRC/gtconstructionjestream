@@ -253,6 +253,28 @@ class EditProveedor extends Component
         }
     }
 
+    //Funcion de validacion en tiempo real
+    public function updated($propertyName)
+    {
+        //Implementar mensajes personalizados
+        $this->validateOnly($propertyName, Proveedor::rulesUpdate('proveedorEdit.', $this->provedprEditId), Proveedor::messagesUpdate());
+    }
+
+    public function validateField($field)
+    {
+        $this->validateOnly($field);
+    }
+    //Mandar a llamar las reglas del modelo de manera local
+    protected function rules()
+    {
+        return Proveedor::rulesUpdate('proveedorEdit.', $this->provedprEditId);
+    }
+
+    protected function messages()
+    {
+        return Proveedor::messagesUpdate('proveedorEdit.');
+    }
+
     public function updateProveedor()
     {
         // Obtener datos actuales del proveedor
@@ -260,8 +282,8 @@ class EditProveedor extends Component
         //     public $facturacionDatosActual;
         // public $bancariosDatoActual;
         $this->validate(
-            Proveedor::updateRules('proveedorEdit.', $this->provedprEditId), 
-            Proveedor::updateMessages('proveedorEdit.')
+            Proveedor::rules('proveedorEdit.', $this->provedprEditId), 
+            Proveedor::messages('proveedorEdit.')
         );
         $this->validate(Telefono::rules(), Telefono::messages());
 

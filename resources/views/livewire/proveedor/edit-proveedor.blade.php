@@ -3,7 +3,7 @@
     <div class="form-group">
         <label for="nombre">Nombre</label>
         <input type="text" id="nombre" class="form-control @error('proveedorEdit.nombre') is-invalid @enderror"
-            wire:model.defer="proveedorEdit.nombre">
+            wire:model.defer="proveedorEdit.nombre" wire:blur="validateField('proveedorEdit.nombre')">
         @error('proveedorEdit.nombre')
             <span class="invalid-feedback">{{ $message }}</span>
         @enderror
@@ -20,7 +20,7 @@
             <label for="correo">Correo</label>
             <input type="email" id="correo"
                 class="form-control @error('proveedorEdit.correo') is-invalid @enderror"
-                wire:model.defer="proveedorEdit.correo">
+                wire:model.defer="proveedorEdit.correo" wire:blur="validateField('proveedorEdit.correo')">
             @error('proveedorEdit.correo')
                 <span class="invalid-feedback">{{ $message }}</span>
             @enderror
@@ -29,7 +29,7 @@
         <div class="col-md-6 mb-3">
             <label for="rfc">RFC</label>
             <input id="rfc" class="form-control @error('proveedorEdit.rfc') is-invalid @enderror"
-                wire:model.defer="proveedorEdit.rfc">
+                wire:model.defer="proveedorEdit.rfc" wire:blur="validateField('proveedorEdit.rfc')">
             @error('proveedorEdit.rfc')
                 <span class="invalid-feedback">{{ $message }}</span>
             @enderror
