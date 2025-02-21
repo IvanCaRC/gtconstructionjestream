@@ -2,7 +2,7 @@
     <div class="form-group">
         <label for="nombre">Nombre</label>
         <input type="text" id="nombre" class="form-control @error('nombre') is-invalid @enderror"
-            wire:model.defer="nombre">
+            wire:model.defer="nombre" wire:blur="validateField('nombre')">
         @error('nombre')
             <span class="invalid-feedback">{{ $message }}</span>
         @enderror
@@ -16,7 +16,7 @@
         <div class="col-md-6 mb-3">
             <label for="correo">Correo</label>
             <input type="email" id="correo" class="form-control @error('correo') is-invalid @enderror"
-                wire:model="correo">
+                wire:model="correo" wire:blur="validateField('correo')">
             @error('correo')
                 <span class="invalid-feedback">{{ $message }}</span>
             @enderror
@@ -24,7 +24,7 @@
 
         <div class="col-md-6 mb-3">
             <label for="rfc">RFC</label>
-            <input id="rfc" class="form-control @error('rfc') is-invalid @enderror" wire:model="rfc">
+            <input id="rfc" class="form-control @error('rfc') is-invalid @enderror" wire:model="rfc" wire:blur="validateField('rfc')">
             @error('rfc')
                 <span class="invalid-feedback">{{ $message }}</span>
             @enderror

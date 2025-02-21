@@ -95,6 +95,28 @@ class CreateProveedor extends Component
         return view('livewire.proveedor.create-proveedor');
     }
 
+    //Funcion de validacion en tiempo real
+    public function updated($propertyName)
+    {
+        //Implementar mensajes personalizados
+        $this->validateOnly($propertyName, Proveedor::rules(), Proveedor::messages());
+    }
+
+    public function validateField($field)
+    {
+        $this->validateOnly($field);
+    }
+    //Mandar a llamar las reglas del modelo de manera local
+    protected function rules()
+    {
+        return Proveedor::rules();
+    }
+
+    protected function messages()
+    {
+        return Proveedor::messages();
+    }
+
     public function save()
     {
         $this->validate(Proveedor::rules(), Proveedor::messages());
