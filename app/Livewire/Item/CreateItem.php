@@ -32,13 +32,14 @@ class CreateItem extends Component
     public $searchTerm = '';
     public $nuevasImagenes = [];
     public $moc;
+    public $allFieldsFilled = false; //Validar campos completados
 
     public function render()
     {
         return view('livewire.item.create-item');
     }
 
-    
+
 
     public function mount()
     {
@@ -47,6 +48,7 @@ class CreateItem extends Component
             ->get();
         $this->familiasSeleccionadas = []; // Inicializar como arreglo vacío
         $this->actualizarProveedores();
+        $this->checkFields(); //Actualizacion de parametro para verificar cambios en la variable
     }
 
     public function calcularSubfamilias($idFamiliaSeleccionada, $nivel)
@@ -98,7 +100,30 @@ class CreateItem extends Component
 
     public function cerrarModalProvedore()
     {
-        $this->reset(['searchTerm', 'seleccionProvedorModalNombre', 'seleccionProvedorModal', 'tiempoMinEntrega', 'tiempoMaxEntrega', 'precioCompra', 'unidadSeleccionada', 'openModalProveedores']);
+        $this->reset(['searchTerm', 'seleccionProvedorModalNombre', 'seleccionProvedorModal', 'tiempoMinEntrega', 'tiempoMaxEntrega', 'precioCompra', 'unidadSeleccionada', 'openModalProveedores','unidadPersonalizada']);
+    }
+
+    public function updated($propertyName)
+    {
+        $this->validateOnly($propertyName, ItemEspecificoProveedor::rules(), ItemEspecificoProveedor::messages());
+        $this->checkFields();
+    }
+
+    public function validateField($field)
+    {
+        $this->validateOnly($field);
+    }
+    //Parametros a validar para permitir agregar proveedor
+    public function checkFields()
+    {
+        if($this->unidadSeleccionada === 'Seleccione una unidad')
+        {
+            $this->validateField(false);
+        }
+        else
+        {
+            $this->allFieldsFilled = $this->tiempoMinEntrega && $this->tiempoMaxEntrega && $this->precioCompra && $this->unidadSeleccionada !== '' && $this->unidadPersonalizada !== '';
+        }
     }
 
     public function save()
@@ -113,11 +138,10 @@ class CreateItem extends Component
         ));
 
         //Validar que un proveedor se encuentra seleccionado para el item:
-        if ($this->provedorSeleccionadoDeLaTabla) 
-        {
+        if ($this->provedorSeleccionadoDeLaTabla) {
             $this->validate(ItemEspecifico::rulesProveedor(), ItemEspecifico::messagesProveedor());
         }
-        
+
         $this->validate(ItemEspecificoProveedor::rules(), ItemEspecificoProveedor::messages());
 
         $porcentajeVentaMinorista = (float) ($this->porcentaje_venta_minorista ?? 0);
@@ -288,7 +312,7 @@ class CreateItem extends Component
         $this->ProvedoresAsignados[] = $conexionArray;
 
         // Limpiar los campos del formulario
-        $this->reset(['searchTerm', 'seleccionProvedorModalNombre', 'seleccionProvedorModal', 'tiempoMinEntrega', 'tiempoMaxEntrega', 'precioCompra', 'unidadSeleccionada', 'openModalProveedores']);
+        $this->reset(['searchTerm', 'seleccionProvedorModalNombre', 'seleccionProvedorModal', 'tiempoMinEntrega', 'tiempoMaxEntrega', 'precioCompra', 'unidadSeleccionada', 'openModalProveedores','unidadPersonalizada']);
     }
 
 
@@ -378,6 +402,5 @@ class CreateItem extends Component
     {
         // Ejecutar ambos métodos
         $this->edcionDeTabalaProveedorUnidad($index);
-
     }
 }

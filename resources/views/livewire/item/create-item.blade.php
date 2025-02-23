@@ -85,10 +85,9 @@
                                     <div class="form-group">
                                         <label for="cantidad_piezas_mayoreo" class="mr-2">Cant. Piezas de
                                             Mayoreo</label>
-                                            <input id="pz_Mayoreo"
+                                        <input id="pz_Mayoreo"
                                             class="form-control @error('pz_Mayoreo') is-invalid @enderror"
-                                            wire:model.defer="pz_Mayoreo" required
-                                            oninput="validateNumberOnly(this)">
+                                            wire:model.defer="pz_Mayoreo" required oninput="validateNumberOnly(this)">
                                         @error('pz_Mayoreo')
                                             <span class="invalid-feedback">{{ $message }}</span>
                                         @enderror
@@ -299,7 +298,8 @@
                                                     <input step="0.01" id="porcentaje_venta_mayorista"
                                                         class="form-control @error('porcentaje_venta_mayorista') is-invalid @enderror"
                                                         wire:model="porcentaje_venta_mayorista"
-                                                        wire:keydown='calcularPrecios' required oninput="validatePercentage(this)">
+                                                        wire:keydown='calcularPrecios' required
+                                                        oninput="validatePercentage(this)">
                                                     @error('porcentaje_venta_mayorista')
                                                         <span class="invalid-feedback">{{ $message }}</span>
                                                     @enderror
@@ -311,7 +311,8 @@
                                                     <input step="0.01" id="porcentaje_venta_minorista"
                                                         class="form-control @error('porcentaje_venta_minorista') is-invalid @enderror"
                                                         wire:model="porcentaje_venta_minorista"
-                                                        wire:keydown='calcularPrecios' required oninput="validatePercentage(this)">
+                                                        wire:keydown='calcularPrecios' required
+                                                        oninput="validatePercentage(this)">
                                                     @error('porcentaje_venta_minorista')
                                                         <span class="invalid-feedback">{{ $message }}</span>
                                                     @enderror
@@ -320,14 +321,14 @@
                                                 <div class="col-md-2 mb-3">
                                                     <label for="precio_venta_mayorista" class="mr-2">Precio
                                                         Mayorista</label>
-                                                        <label>{{ Str::limit($precio_venta_mayorista ?? 'N/A', 8) }}</label>
+                                                    <label>{{ Str::limit($precio_venta_mayorista ?? 'N/A', 8) }}</label>
 
                                                 </div>
 
                                                 <div class="col-md-2 mb-3">
                                                     <label for="precio_venta_minorista" class="mr-2">Precio
                                                         Minorista</label>
-                                                        <label>{{ Str::limit($precio_venta_minorista ?? 'N/A', 8) }}</label>
+                                                    <label>{{ Str::limit($precio_venta_minorista ?? 'N/A', 8) }}</label>
 
                                                 </div>
                                             </div>
@@ -554,15 +555,17 @@
             <button class="btn btn-secondary mr-2 disabled:opacity-50" wire:click="cerrarModalProvedore"
                 wire:loading.attr="disabled">Cancelar</button>
 
-                @if (!$seleccionProvedorModal)
-                <button class="btn btn-primary disabled:opacity-50" disabled="disabled"
-                wire:click="asignarProvedorArregloProvedor">Agregar Proveedor</button>
-                @else
-                <button class="btn btn-primary disabled:opacity-50" 
-                wire:click="asignarProvedorArregloProvedor">Agregar Proveedor</button>
-                @endif
-                
-            
+            @if (!$seleccionProvedorModal)
+                <button class="btn btn-primary disabled:opacity-50"
+                    @if (!$allFieldsFilled) disabled="disabled" @endif
+                    wire:click="asignarProvedorArregloProvedor">Agregar Proveedor</button>
+            @else
+                <button class="btn btn-primary disabled:opacity-50"
+                    @if (!$allFieldsFilled) disabled="disabled" @endif
+                    wire:click="asignarProvedorArregloProvedor">Agregar Proveedor</button>
+            @endif
+
+
         </x-slot>
     </x-dialog-modal>
 
