@@ -30,6 +30,7 @@ class ItemEspecificoProveedor extends Model
         return $this->belongsTo(Proveedor::class); //Relacion con proveedores registrados en el sistema
     }
 
+    //Reglas especiales en caso de haber proveedor asignado
     public static function rules()
     {
         return [

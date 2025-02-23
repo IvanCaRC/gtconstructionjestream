@@ -81,6 +81,28 @@
                                             <span class="invalid-feedback">{{ $message }}</span>
                                         @enderror
                                     </div>
+                                    {{-- Div Adicional para cantidad piezas mayoreo --}}
+                                    <div class="form-group">
+                                        <label for="cantidad_piezas_mayoreo" class="mr-2">Cant. Piezas de
+                                            Mayoreo</label>
+                                            <input id="pz_Mayoreo"
+                                            class="form-control @error('pz_Mayoreo') is-invalid @enderror"
+                                            wire:model.defer="pz_Mayoreo" required
+                                            oninput="validateNumberOnly(this)">
+                                        @error('pz_Mayoreo')
+                                            <span class="invalid-feedback">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                    {{-- Div adicional para registrar el moc --}}
+                                    <div class="form-group">
+                                        <label for="moc">MOC (Mínimo de venta a cliente)</label>
+                                        <input type="text" id="moc"
+                                            class="form-control @error('moc') is-invalid @enderror"
+                                            wire:model.defer="moc" oninput="validateNumberOnly(this)">
+                                        @error('moc')
+                                            <span class="invalid-feedback">{{ $message }}</span>
+                                        @enderror
+                                    </div>
 
                                     @if ($errors->has('ProvedoresAsignados.*'))
                                         <tr>
@@ -272,17 +294,6 @@
                                         <div class="form-group">
                                             <div class="row">
                                                 <div class="col-md-2 mb-3">
-                                                    <label for="cantidad_piezas_mayoreo" class="mr-2">Cant. Piezas
-                                                        Mayoreo</label>
-                                                    <input id="pz_Mayoreo"
-                                                        class="form-control @error('pz_Mayoreo') is-invalid @enderror"
-                                                        wire:model.defer="pz_Mayoreo" required
-                                                        oninput="validateNumberOnly(this)">
-                                                    @error('pz_Mayoreo')
-                                                        <span class="invalid-feedback">{{ $message }}</span>
-                                                    @enderror
-                                                </div>
-                                                <div class="col-md-2 mb-3">
                                                     <label for="porcentaje_venta_mayorista" class="mr-2">% Venta
                                                         Mayorista</label>
                                                     <input step="0.01" id="porcentaje_venta_mayorista"
@@ -319,15 +330,6 @@
                                                         <label>{{ Str::limit($precio_venta_minorista ?? 'N/A', 8) }}</label>
 
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="moc">MOC (Mínimo de venta a cliente)</label>
-                                                <input type="text" id="moc"
-                                                    class="form-control @error('moc') is-invalid @enderror"
-                                                    wire:model.defer="moc" oninput="validateNumberOnly(this)">
-                                                @error('moc')
-                                                    <span class="invalid-feedback">{{ $message }}</span>
-                                                @enderror
                                             </div>
                                         </div>
                                     @endif

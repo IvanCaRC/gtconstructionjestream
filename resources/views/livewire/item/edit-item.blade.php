@@ -110,6 +110,28 @@
                                             <span class="invalid-feedback">{{ $message }}</span>
                                         @enderror
                                     </div>
+                                    {{-- Div para agregar cantidad de piezas para mayoreo --}}
+                                    <div class="form-group">
+                                        <label for="cantidad_piezas_mayoreo" class="mr-2">Cant. Piezas de
+                                            Mayoreo</label>
+                                        <input id="itemEspecificoEdit.cantidad_piezas_mayoreo"
+                                            class="form-control @error('itemEspecificoEdit.cantidad_piezas_mayoreo') is-invalid @enderror"
+                                            wire:model.defer="itemEspecificoEdit.cantidad_piezas_mayoreo" required
+                                            oninput="validateNumberOnly(this)">
+                                        @error('itemEspecificoEdit.cantidad_piezas_mayoreo')
+                                            <span class="invalid-feedback">{{ $message }}</span>
+                                        @enderror
+                                    </div>
+                                    {{-- Div para agregar moc --}}
+                                    <div class="form-group">
+                                        <label for="moc">MOC (Mínimo de venta a cliente)</label>
+                                        <input type="text" id="moc" class="form-control"
+                                                    wire:model.defer="itemEspecificoEdit.moc" required
+                                                    oninput="validateNumberOnly(this)">
+                                        @error('itemEspecificoEdit.moc')
+                                            <span class="invalid-feedback">{{ $message }}</span>
+                                        @enderror
+                                    </div>
 
                                     @if ($errors->has('ProvedoresAsignados.*'))
                                         <tr>
@@ -194,20 +216,24 @@
                                                                 </td>
                                                                 <td>{{ $conexionObjeto->proveedor_nombre }}</td>
 
-                                                                <td><input step="1" class="form-control @error('ProvedoresAsignados.' . $index . '.tiempo_minimo_entrega') is-invalid @enderror"
+                                                                <td><input step="1"
+                                                                        class="form-control @error('ProvedoresAsignados.' . $index . '.tiempo_minimo_entrega') is-invalid @enderror"
                                                                         wire:model.lazy="ProvedoresAsignados.{{ $index }}.tiempo_minimo_entrega"
                                                                         oninput="validateNumberOnly(this)">
                                                                 </td>
-                                                                <td><input step="1" class="form-control @error('ProvedoresAsignados.' . $index . '.tiempo_maximo_entrega') is-invalid @enderror"
+                                                                <td><input step="1"
+                                                                        class="form-control @error('ProvedoresAsignados.' . $index . '.tiempo_maximo_entrega') is-invalid @enderror"
                                                                         wire:model.lazy="ProvedoresAsignados.{{ $index }}.tiempo_maximo_entrega"
                                                                         oninput="validateNumberOnly(this)">
                                                                 </td>
-                                                                <td><input step="0.01" class="form-control @error('ProvedoresAsignados.' . $index . '.precio_compra') is-invalid @enderror"
+                                                                <td><input step="0.01"
+                                                                        class="form-control @error('ProvedoresAsignados.' . $index . '.precio_compra') is-invalid @enderror"
                                                                         wire:model.lazy="ProvedoresAsignados.{{ $index }}.precio_compra"
                                                                         wire:keydown='handleKeydown({{ $index }})'
                                                                         oninput="validatePrice(this)">
                                                                 </td>
-                                                                <td><input step="0.01" class="form-control @error('ProvedoresAsignados.' . $index . '.unidad') is-invalid @enderror"
+                                                                <td><input step="0.01"
+                                                                        class="form-control @error('ProvedoresAsignados.' . $index . '.unidad') is-invalid @enderror"
                                                                         wire:model.lazy="ProvedoresAsignados.{{ $index }}.unidad"
                                                                         wire:keydown='handleKeydownUnidad({{ $index }})'>
                                                                 </td>
@@ -258,7 +284,8 @@
                                         <div class="col-md-4 mb-3">
                                             <label for="stock" class="mr-2">Stock Actual del Producto</label>
                                             <input type="text" id="cantidad_piezas_mayoreo" class="form-control"
-                                                wire:model.defer="itemEspecificoEdit.stock" required oninput="validateNumberOnly(this)">
+                                                wire:model.defer="itemEspecificoEdit.stock" required
+                                                oninput="validateNumberOnly(this)">
 
                                         </div>
 
@@ -276,25 +303,14 @@
                                         <div class="form-group">
                                             <div class="row">
                                                 <div class="col-md-2 mb-3">
-                                                    <label for="cantidad_piezas_mayoreo" class="mr-2">Cant. Piezas
-                                                        Mayoreo</label>
-                                                    <input id="itemEspecificoEdit.cantidad_piezas_mayoreo"
-                                                        class="form-control @error('itemEspecificoEdit.cantidad_piezas_mayoreo') is-invalid @enderror"
-                                                        wire:model.defer="itemEspecificoEdit.cantidad_piezas_mayoreo"
-                                                        required oninput="validateNumberOnly(this)">
-                                                    @error('itemEspecificoEdit.cantidad_piezas_mayoreo')
-                                                        <span class="invalid-feedback">{{ $message }}</span>
-                                                    @enderror
-                                                </div>
-
-                                                <div class="col-md-2 mb-3">
                                                     <label for="porcentaje_venta_mayorista" class="mr-2">% Venta
                                                         Mayorista</label>
                                                     <input step="0.01" id="porcentaje_venta_mayorista"
-                                                        class="form-control @error('porcentaje_venta_mayorista') is-invalid @enderror" wire:model="porcentaje_venta_mayorista"
+                                                        class="form-control @error('porcentaje_venta_mayorista') is-invalid @enderror"
+                                                        wire:model="porcentaje_venta_mayorista"
                                                         wire:keydown='calcularPrecios' required
                                                         oninput="validatePercentage(this)">
-                                                        @error('porcentaje_venta_mayorista')
+                                                    @error('porcentaje_venta_mayorista')
                                                         <span class="invalid-feedback">{{ $message }}</span>
                                                     @enderror
                                                 </div>
@@ -302,11 +318,10 @@
                                                 <div class="col-md-2 mb-3">
                                                     <label for="porcentaje_venta_minorista" class="mr-2">% Venta
                                                         Minorista</label>
-                                                    <input step="0.01"
-                                                        id="porcentaje_venta_minorista"
+                                                    <input step="0.01" id="porcentaje_venta_minorista"
                                                         class="form-control @error('porcentaje_venta_minorista') is-invalid @enderror"
                                                         wire:model="porcentaje_venta_minorista"
-                                                        wire:keydown='calcularPrecios' required 
+                                                        wire:keydown='calcularPrecios' required
                                                         oninput="validatePercentage(this)">
                                                     @error('porcentaje_venta_minorista')
                                                         <span class="invalid-feedback">{{ $message }}</span>
@@ -326,12 +341,6 @@
                                                     <label
                                                         class="form-control">{{ $precio_venta_minorista ?? 'N/A' }}</label>
                                                 </div>
-                                            </div>
-                                            <div class="form-group">
-                                                <label for="moc">MOC (Mínimo de venta a cliente)</label>
-                                                <input type="text" id="moc" class="form-control"
-                                                    wire:model.defer="itemEspecificoEdit.moc" required oninput="validateNumberOnly(this)">
-
                                             </div>
                                         </div>
                                     @endif
@@ -515,8 +524,8 @@
 
                 <div class="form-group">
                     <label for="tiempoMinEntrega">Tiempo mínimo de entrega (días)</label>
-                    <input type="text" id="tiempoMinEntrega" wire:model="tiempoMinEntrega" wire:taper="number" class="form-control"
-                        min="0" placeholder="Ingrese los días mínimos" required
+                    <input type="text" id="tiempoMinEntrega" wire:model="tiempoMinEntrega" wire:taper="number"
+                        class="form-control" min="0" placeholder="Ingrese los días mínimos" required
                         oninput="validateNumberOnly(this)">
                 </div>
 

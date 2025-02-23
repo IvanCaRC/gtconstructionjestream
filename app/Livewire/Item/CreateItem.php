@@ -103,7 +103,7 @@ class CreateItem extends Component
 
     public function save()
     {
-
+        //Validaciones desde los modelos
         $this->validate(array_merge(
             Item::rules(),
             ItemEspecifico::rules()
@@ -111,8 +111,15 @@ class CreateItem extends Component
             Item::messages(),
             ItemEspecifico::messages()
         ));
-        $this->validate(ItemEspecificoProveedor::rules(), ItemEspecificoProveedor::messages());
+
+        //Validar que un proveedor se encuentra seleccionado para el item:
+        if ($this->provedorSeleccionadoDeLaTabla) 
+        {
+            $this->validate(ItemEspecifico::rulesProveedor(), ItemEspecifico::messagesProveedor());
+        }
         
+        $this->validate(ItemEspecificoProveedor::rules(), ItemEspecificoProveedor::messages());
+
         $porcentajeVentaMinorista = (float) ($this->porcentaje_venta_minorista ?? 0);
         $porcentajeVentaMayorista = (float) ($this->porcentaje_venta_mayorista ?? 0);
 

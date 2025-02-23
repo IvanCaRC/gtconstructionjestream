@@ -192,9 +192,13 @@ class EditItem extends Component
     {
         $itemActual = Item::findOrFail($this->item->id);
         $itemEspecificoActual = ItemEspecifico::findOrFail($this->itemEspecifico->id);
-
+        //Reglas de validacion desde los modelos
         $this->validate(Item::rulesUpdate(), Item::messagesUpdate());
         $this->validate(ItemEspecifico::rulesUpdate(), ItemEspecifico::messagesUpdate());
+        if ($this->provedorSeleccionadoDeLaTabla)
+        {
+            $this->validate(ItemEspecifico::rulesUpdateProveedor(), ItemEspecifico::messagesUpdateProveedor());
+        }
         $this->validate(ItemEspecificoProveedor::rulesUpdate(), ItemEspecificoProveedor::messagesUpdate());
 
         $porcentajeVentaMinorista = (float) ($this->porcentaje_venta_minorista ?? 0);
