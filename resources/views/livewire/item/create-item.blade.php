@@ -509,14 +509,14 @@
                     <label for="tiempoMinEntrega">Tiempo mínimo de entrega (días)</label>
                     <input type="text" id="tiempoMinEntrega" wire:model="tiempoMinEntrega" class="form-control"
                         min="0" placeholder="Ingrese los días mínimos" required
-                        oninput="validateNumberOnly(this)">
+                        wire:keydown='keydownparaboton' oninput="validateNumberOnly(this)">
                 </div>
 
                 <div class="form-group">
                     <label for="tiempoMaxEntrega">Tiempo máximo de entrega (días)</label>
                     <input type="text" id="tiempoMaxEntrega" wire:model="tiempoMaxEntrega" class="form-control"
                         min="0" placeholder="Ingrese los días máximos" required
-                        oninput="validateNumberOnly(this)">
+                        wire:keydown='keydownparaboton' oninput="validateNumberOnly(this)">
                 </div>
 
                 <div class="form-group">
@@ -524,7 +524,7 @@
 
                     <input type="text" id="precioCompra" wire:model="precioCompra" class="form-control"
                         min="0" step="0.01" placeholder="Ingrese el precio de compra" required
-                        oninput="validatePrice(this)">
+                        wire:keydown='keydownparaboton' oninput="validatePrice(this)">
 
                 </div>
 
@@ -546,7 +546,8 @@
                     <div class="form-group">
                         <label for="unidadPersonalizada">Especifique la unidad</label>
                         <input type="text" id="unidadPersonalizada" wire:model="unidadPersonalizada"
-                            class="form-control" placeholder="Ingrese el tipo de unidad">
+                            class="form-control" placeholder="Ingrese el tipo de unidad"
+                            wire:keydown='keydownparaboton'>
                     </div>
                 @endif
             @endif
@@ -556,13 +557,32 @@
                 wire:loading.attr="disabled">Cancelar</button>
 
             @if (!$seleccionProvedorModal)
-                <button class="btn btn-primary disabled:opacity-50"
-                    @if (!$allFieldsFilled) disabled="disabled" @endif
+                <button class="btn btn-primary disabled:opacity-50" disabled="disabled"
                     wire:click="asignarProvedorArregloProvedor">Agregar Proveedor</button>
             @else
-                <button class="btn btn-primary disabled:opacity-50"
-                    @if (!$allFieldsFilled) disabled="disabled" @endif
-                    wire:click="asignarProvedorArregloProvedor">Agregar Proveedor</button>
+                @if ($tiempoMinEntrega && $tiempoMaxEntrega && $precioCompra)
+                    @if ($unidadSeleccionada)
+                        @if ($unidadSeleccionada === 'otro')
+                            @if ($unidadPersonalizada)
+                                <button class="btn btn-primary disabled:opacity-50"
+                                    wire:click="asignarProvedorArregloProvedor">Agregar Proveedor</button>
+                            @else
+                                <button class="btn btn-primary disabled:opacity-50" disabled="disabled"
+                                    wire:click="asignarProvedorArregloProvedor">Agregar Proveedor</button>
+                            @endif
+                        @else
+                            <button class="btn btn-primary disabled:opacity-50"
+                                wire:click="asignarProvedorArregloProvedor">Agregar Proveedor</button>
+                        @endif
+                    @else
+                        <button class="btn btn-primary disabled:opacity-50" disabled="disabled"
+                            wire:click="asignarProvedorArregloProvedor">Agregar Proveedor</button>
+                    @endif
+                @else
+                    <button class="btn btn-primary disabled:opacity-50" disabled="disabled"
+                        wire:click="asignarProvedorArregloProvedor">Agregar Proveedor</button>
+                @endif
+
             @endif
 
 

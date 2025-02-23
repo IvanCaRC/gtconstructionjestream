@@ -263,6 +263,12 @@ class CreateItem extends Component
         $this->openModalProveedores = true;
     }
 
+    public function keydownparaboton()
+    {
+
+        
+    }
+
     public function actualizarProveedores()
     {
         if ($this->searchTerm) {
