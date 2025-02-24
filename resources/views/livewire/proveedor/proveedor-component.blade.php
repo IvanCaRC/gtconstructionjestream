@@ -39,6 +39,7 @@
                                     <th>Dirección(es)</th>
                                     <th>Familias</th>
                                     <th>Teléfonos</th>
+                                    <th>Última modificación</th>
                                     <th></th>
                                     <th></th>
                                     <th></th>
@@ -58,7 +59,6 @@
                                             
                                         </td>
                                         <td class="align-middle">{{ $proveedor->nombre }}</td>
-                                        {{-- <td class="align-middle">{{ $proveedor->descripcion }}</td> --}}
                                         <td class="align-middle d-none d-md-table-cell">{{ $proveedor->correo }}</td>
                                         <td class="align-middle d-none d-md-table-cell">{{ $proveedor->rfc }}</td>
                                         <td class="align-middle">
@@ -85,6 +85,7 @@
                                                 N/A
                                             @endif
                                         </td>
+                                        <td class="align-middle">{{ $proveedor->updated_at }}</td>
                                         <td>
                                             <button class="btn btn-info btn-custom"
                                                 wire:click="viewProveedor({{ $proveedor->id }})">
