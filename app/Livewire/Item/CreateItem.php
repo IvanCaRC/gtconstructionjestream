@@ -32,11 +32,14 @@ class CreateItem extends Component
     public $searchTerm = '';
     public $nuevasImagenes = [];
     public $moc;
+    public $allFieldsFilled = false; //Validar campos completados
 
     public function render()
     {
         return view('livewire.item.create-item');
     }
+
+
 
     public function mount()
     {
@@ -45,6 +48,7 @@ class CreateItem extends Component
             ->get();
         $this->familiasSeleccionadas = []; // Inicializar como arreglo vacío
         $this->actualizarProveedores();
+        $this->checkFields(); //Actualizacion de parametro para verificar cambios en la variable
     }
 
     public function calcularSubfamilias($idFamiliaSeleccionada, $nivel)
@@ -67,17 +71,11 @@ class CreateItem extends Component
         }
         if ($idFamiliaPadre) {
             $familia = Familia::find($idFamiliaPadre);
-            $this->familiasSeleccionadas[] = $familia;
+            if (!collect($this->familiasSeleccionadas)->contains('id', $familia->id)) {
+                $this->familiasSeleccionadas[] = $familia;
+            }
         }
     }
-
-    public function updatedFichaTecnicaPdf()
-    {
-        if ($this->ficha_Tecnica_pdf) {
-            $this->fileNamePdf = $this->ficha_Tecnica_pdf->getClientOriginalName();
-        }
-    }
-
     public function confirmFamilia()
     {
         $this->addFamilia();
@@ -87,6 +85,14 @@ class CreateItem extends Component
             ->where('estadoEliminacion', 0)
             ->get();
     }
+    public function updatedFichaTecnicaPdf()
+    {
+        if ($this->ficha_Tecnica_pdf) {
+            $this->fileNamePdf = $this->ficha_Tecnica_pdf->getClientOriginalName();
+        }
+    }
+
+    
 
     public function removeFamilia($index)
     {
@@ -96,12 +102,32 @@ class CreateItem extends Component
 
     public function cerrarModalProvedore()
     {
-        $this->reset(['searchTerm', 'seleccionProvedorModalNombre', 'seleccionProvedorModal', 'tiempoMinEntrega', 'tiempoMaxEntrega', 'precioCompra', 'unidadSeleccionada', 'openModalProveedores']);
+        $this->reset(['searchTerm', 'seleccionProvedorModalNombre', 'seleccionProvedorModal', 'tiempoMinEntrega', 'tiempoMaxEntrega', 'precioCompra', 'unidadSeleccionada', 'openModalProveedores', 'unidadPersonalizada']);
+    }
+
+    public function updated($propertyName)
+    {
+        $this->validateOnly($propertyName, ItemEspecificoProveedor::rules(), ItemEspecificoProveedor::messages());
+        $this->checkFields();
+    }
+
+    public function validateField($field)
+    {
+        $this->validateOnly($field);
+    }
+    //Parametros a validar para permitir agregar proveedor
+    public function checkFields()
+    {
+        if ($this->unidadSeleccionada === 'Seleccione una unidad') {
+            $this->validateField(false);
+        } else {
+            $this->allFieldsFilled = $this->tiempoMinEntrega && $this->tiempoMaxEntrega && $this->precioCompra && $this->unidadSeleccionada !== '' && $this->unidadPersonalizada !== '';
+        }
     }
 
     public function save()
     {
-
+        //Validaciones desde los modelos
         $this->validate(array_merge(
             Item::rules(),
             ItemEspecifico::rules()
@@ -109,8 +135,14 @@ class CreateItem extends Component
             Item::messages(),
             ItemEspecifico::messages()
         ));
+
+        //Validar que un proveedor se encuentra seleccionado para el item:
+        if ($this->provedorSeleccionadoDeLaTabla) {
+            $this->validate(ItemEspecifico::rulesProveedor(), ItemEspecifico::messagesProveedor());
+        }
+
         $this->validate(ItemEspecificoProveedor::rules(), ItemEspecificoProveedor::messages());
-        
+
         $porcentajeVentaMinorista = (float) ($this->porcentaje_venta_minorista ?? 0);
         $porcentajeVentaMayorista = (float) ($this->porcentaje_venta_mayorista ?? 0);
 
@@ -230,10 +262,17 @@ class CreateItem extends Component
         $this->openModalProveedores = true;
     }
 
+    public function keydownparaboton() {}
+    public $proveedoresAsignadosIds;
     public function actualizarProveedores()
     {
+        // Obtener los IDs de los proveedores ya asignados
+        $this->proveedoresAsignadosIds = collect($this->ProvedoresAsignados)->pluck('proveedor_id')->filter()->toArray();
+
+
         if ($this->searchTerm) {
             $this->proveedores = Proveedor::where('estado_eliminacion', 1)
+                ->whereNotIn('id',$this->proveedoresAsignadosIds) // Excluir los proveedores asignados
                 ->where(function ($query) {
                     $query->where('nombre', 'LIKE', "%{$this->searchTerm}%")
                         ->orWhere('rfc', 'LIKE', "%{$this->searchTerm}%");
@@ -243,6 +282,7 @@ class CreateItem extends Component
             $this->proveedores = [];
         }
     }
+    
 
 
     public function asignarValor($id, $name)
@@ -279,7 +319,7 @@ class CreateItem extends Component
         $this->ProvedoresAsignados[] = $conexionArray;
 
         // Limpiar los campos del formulario
-        $this->reset(['searchTerm', 'seleccionProvedorModalNombre', 'seleccionProvedorModal', 'tiempoMinEntrega', 'tiempoMaxEntrega', 'precioCompra', 'unidadSeleccionada', 'openModalProveedores']);
+        $this->reset(['searchTerm', 'seleccionProvedorModalNombre', 'seleccionProvedorModal', 'tiempoMinEntrega', 'tiempoMaxEntrega', 'precioCompra', 'unidadSeleccionada', 'openModalProveedores', 'unidadPersonalizada']);
     }
 
 
@@ -369,6 +409,5 @@ class CreateItem extends Component
     {
         // Ejecutar ambos métodos
         $this->edcionDeTabalaProveedorUnidad($index);
-
     }
 }

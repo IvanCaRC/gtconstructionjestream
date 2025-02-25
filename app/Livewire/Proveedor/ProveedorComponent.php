@@ -124,7 +124,7 @@ class ProveedorComponent extends Component
         $proveedor = Proveedor::find($idproveedor);
 
         if ($proveedor === null) {
-            abort(404, 'proveedor no encontrada');
+            abort(404, 'proveedor no encontrado');
         }
 
         return redirect()->route('compras.proveedores.viewProveedorEspecifico', ['idproveedor' => $idproveedor]);

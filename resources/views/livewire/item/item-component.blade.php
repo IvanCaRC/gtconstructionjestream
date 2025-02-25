@@ -8,14 +8,14 @@
                     <div class="text-left mb-3">
                         <button class="btn btn-custom" {{-- Cambiar cuando tenga el createItems --}}
                             onclick="window.location.href='{{ route('compras.items.createItems') }}'"
-                            style="background-color: #4c72de; color: white;">Registrar nuevo Material</button>
+                            style="background-color: #4c72de; color: white;">Registrar nuevo material</button>
                     </div>
 
                     <div class="table-responsive">
                         <div class="d-flex justify-content-between mb-3">
                             <!-- Input de búsqueda -->
                             <input type="text" class="form-control mr-2" id="searchInput" wire:model='searchTerm'
-                                wire:keydown='search' placeholder="Buscar item...">
+                                wire:keydown='search' placeholder="Buscar ítem...">
                         </div>
                         <div class="d-flex justify-content-between mb-3">
                             <!-- Input de búsqueda -->
@@ -52,12 +52,12 @@
                                             <th>Estado</th>
 
                                             <th>Nombre</th>
-                                            <th>Categoria</th>
-                                            <th>Precio de proveedor</th>
+                                            <th>Categoría</th>
+                                            <th>Precio del proveedor</th>
                                             <th>Precio minorista</th>
                                             <th>Precio mayorista</th>
                                             <th>Unidad de medida</th>
-                                            <th>Ultima modificación</th>
+                                            <th>Última modificación</th>
                                             <th></th>
                                             <th></th>
                                             <th></th>

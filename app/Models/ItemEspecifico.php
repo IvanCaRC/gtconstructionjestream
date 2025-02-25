@@ -53,8 +53,6 @@ class ItemEspecifico extends Model
             $prefix . 'marca' => 'required|string|max:255',
             $prefix . 'descripcion' => 'required',
             $prefix . 'pz_Mayoreo' => 'required|integer|min:1',
-            $prefix . 'porcentaje_venta_minorista' => 'required|numeric|min:0',
-            $prefix . 'porcentaje_venta_mayorista' => 'required|numeric|min:0',
             $prefix . 'precio_venta_minorista' => 'nullable|numeric|min:0',
             $prefix . 'precio_venta_mayorista' => 'nullable|numeric|min:0',
             $prefix . 'stock' => 'nullable|integer|min:0',
@@ -76,12 +74,6 @@ class ItemEspecifico extends Model
             $prefix . 'pz_Mayoreo.required' => 'Registra la cantidad de piezas de mayoreo.',
             $prefix . 'pz_Mayoreo.integer' => 'Registra la cantidad de piezas de mayoreo como un numero.',
             $prefix . 'pz_Mayoreo.min' => 'Ingrese un valor valido, (min 1).',
-            $prefix . 'porcentaje_venta_minorista.required' => 'Registra este porcentaje.',
-            $prefix . 'porcentaje_venta_minorista.numeric' => 'El porcentaje de venta minorista debe ser un número.',
-            $prefix . 'porcentaje_venta_minorista.min' => 'No puedes ingresar un porcentaje negativo.',
-            $prefix . 'porcentaje_venta_mayorista.required' => 'Registra este porcentaje.',
-            $prefix . 'porcentaje_venta_mayorista.numeric' => 'El porcentaje de venta mayorista debe ser un número.',
-            $prefix . 'porcentaje_venta_mayorista.min' => 'No puedes ingresar un porcentaje negativo',
             $prefix . 'precio_venta_minorista.numeric' => 'El precio de venta minorista debe ser un número.',
             $prefix . 'precio_venta_minorista.min' => 'El precio de venta minorista no puede ser negativo.',
             $prefix . 'precio_venta_mayorista.numeric' => 'El precio de venta mayorista debe ser un número.',
@@ -101,8 +93,6 @@ class ItemEspecifico extends Model
             'itemEspecificoEdit.marca' => 'required|string|max:255',
             'itemEspecificoEdit.descripcion' => 'required',
             'itemEspecificoEdit.cantidad_piezas_mayoreo' => 'required|integer|min:1',
-            'porcentaje_venta_minorista' => 'required|numeric|min:0',
-            'porcentaje_venta_mayorista' => 'required|numeric|min:0',
             'itemEspecificoEdit.precio_venta_minorista' => 'nullable|numeric|min:0',
             'itemEspecificoEdit.precio_venta_mayorista' => 'nullable|numeric|min:0',
             // 'itemEspecificoEdit.unidad' => 'required|string|max:50',
@@ -125,12 +115,6 @@ class ItemEspecifico extends Model
             'itemEspecificoEdit.cantidad_piezas_mayoreo.required' => 'Registra la cantidad de piezas de mayoreo.',
             'itemEspecificoEdit.cantidad_piezas_mayoreo.integer' => 'Registra un valor numerico.',
             'itemEspecificoEdit.cantidad_piezas_mayoreo.min' => 'Ingrese un valor valido, (min 1).',
-            'porcentaje_venta_minorista.required' => 'Registra este porcentaje.',
-            'porcentaje_venta_minorista.numeric' => 'El porcentaje de venta minorista debe ser un número.',
-            'porcentaje_venta_minorista.min' => 'No puedes ingresar un porcentaje negativo.',
-            'porcentaje_venta_mayorista.required' => 'Registra este porcentaje.',
-            'porcentaje_venta_mayorista.numeric' => 'El porcentaje de venta mayorista debe ser un número.',
-            'porcentaje_venta_mayorista.min' => 'No puedes ingresar un porcentaje negativo',
             'itemEspecificoEdit.precio_venta_minorista.numeric' => 'El precio de venta minorista debe ser un número.',
             'itemEspecificoEdit.precio_venta_minorista.min' => 'El precio de venta minorista no puede ser negativo.',
             'itemEspecificoEdit.precio_venta_mayorista.numeric' => 'El precio de venta mayorista debe ser un número.',
@@ -144,6 +128,53 @@ class ItemEspecifico extends Model
             'itemEspecificoEdit.moc.min' => 'No se permiten valores negativos.',
             'itemEspecificoEdit.ficha_Tecnica_pdf.mimes' => 'La ficha técnica debe ser un archivo PDF.',
             'itemEspecificoEdit.ficha_Tecnica_pdf.max' => 'La ficha técnica no puede exceder los 2048KB.',
+        ];
+    }
+
+    //Reglas especiales en caso de haber proveedor asignado
+    public static function rulesProveedor($prefix = '', $id = null)
+    {
+        return 
+        [
+            $prefix . 'porcentaje_venta_minorista' => 'required|numeric|min:0',
+            $prefix . 'porcentaje_venta_mayorista' => 'required|numeric|min:0', 
+        ];
+    }
+
+    public static function messagesProveedor($prefix = '')
+    {
+        return 
+        [
+            $prefix . 'porcentaje_venta_minorista.required' => 'Registra este porcentaje.',
+            $prefix . 'porcentaje_venta_minorista.numeric' => 'El porcentaje de venta minorista debe ser un número.',
+            $prefix . 'porcentaje_venta_minorista.min' => 'No puedes ingresar un porcentaje negativo.',
+            $prefix . 'porcentaje_venta_mayorista.required' => 'Registra este porcentaje.',
+            $prefix . 'porcentaje_venta_mayorista.numeric' => 'El porcentaje de venta mayorista debe ser un número.',
+            $prefix . 'porcentaje_venta_mayorista.min' => 'No puedes ingresar un porcentaje negativo',
+
+        ];
+    }
+
+    public static function rulesUpdateProveedor($prefix = '', $id = null)
+    {
+        return 
+        [
+            'porcentaje_venta_minorista' => 'required|numeric|min:0',
+            'porcentaje_venta_mayorista' => 'required|numeric|min:0',
+        ];
+    }
+
+    public static function messagesUpdateProveedor($prefix = '')
+    {
+        return 
+        [
+            'porcentaje_venta_minorista.required' => 'Registra este porcentaje.',
+            'porcentaje_venta_minorista.numeric' => 'El porcentaje de venta minorista debe ser un número.',
+            'porcentaje_venta_minorista.min' => 'No puedes ingresar un porcentaje negativo.',
+            'porcentaje_venta_mayorista.required' => 'Registra este porcentaje.',
+            'porcentaje_venta_mayorista.numeric' => 'El porcentaje de venta mayorista debe ser un número.',
+            'porcentaje_venta_mayorista.min' => 'No puedes ingresar un porcentaje negativo',
+
         ];
     }
 }

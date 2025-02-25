@@ -102,7 +102,7 @@ class EditItem extends Component
             $this->imagenesCargadas = null;
         } else {
             $this->imagenesCargadas = explode(',', $this->itemEspecifico->image);
-        }    
+        }
         $this->itemEspecificoEdit['marca'] = $this->itemEspecifico->marca;
         $this->cargarProvedoresParaEditar($idItem);
         $this->familiasSeleccionadas = ItemEspecificoHasFamilia::where('item_especifico_id', $idItem)
@@ -155,16 +155,18 @@ class EditItem extends Component
         }
         if ($idFamiliaPadre) {
             $familia = Familia::find($idFamiliaPadre);
-            $this->familiasSeleccionadas[] = $familia;
+            if (!collect($this->familiasSeleccionadas)->contains('id', $familia->id)) {
+                $this->familiasSeleccionadas[] = $familia;
+            }
         }
     }
 
     public function updatedFichaTecnicaPdf()
-{
-    if ($this->ficha_Tecnica_pdf) {
-        $this->fileNamePdf = $this->ficha_Tecnica_pdf->getClientOriginalName();
+    {
+        if ($this->ficha_Tecnica_pdf) {
+            $this->fileNamePdf = $this->ficha_Tecnica_pdf->getClientOriginalName();
+        }
     }
-}
 
 
     public function confirmFamilia()
@@ -192,9 +194,12 @@ class EditItem extends Component
     {
         $itemActual = Item::findOrFail($this->item->id);
         $itemEspecificoActual = ItemEspecifico::findOrFail($this->itemEspecifico->id);
-
+        //Reglas de validacion desde los modelos
         $this->validate(Item::rulesUpdate(), Item::messagesUpdate());
         $this->validate(ItemEspecifico::rulesUpdate(), ItemEspecifico::messagesUpdate());
+        if ($this->provedorSeleccionadoDeLaTabla) {
+            $this->validate(ItemEspecifico::rulesUpdateProveedor(), ItemEspecifico::messagesUpdateProveedor());
+        }
         $this->validate(ItemEspecificoProveedor::rulesUpdate(), ItemEspecificoProveedor::messagesUpdate());
 
         $porcentajeVentaMinorista = (float) ($this->porcentaje_venta_minorista ?? 0);
@@ -222,13 +227,13 @@ class EditItem extends Component
             }
         }
 
-        if(!$this->imagenesCargadas == null){
-            $areglosumado = array_merge($this->imagenesCargadas,$imagenes);
-        }else{
+        if (!$this->imagenesCargadas == null) {
+            $areglosumado = array_merge($this->imagenesCargadas, $imagenes);
+        } else {
             $areglosumado = array_merge($imagenes);
         }
-        
-        
+
+
 
         // Convertir el array combinado a una cadena delimitada por comas o null si está vacío
         $imagenesString = !empty($areglosumado) ? implode(',', $areglosumado) : null;
@@ -311,6 +316,8 @@ class EditItem extends Component
         $this->especificaciones[] = ['enunciado' => '', 'concepto' => ''];
     }
 
+    public function keydownparaboton() {}
+
     public function removeLineaTecnica($index)
     {
         unset($this->especificaciones[$index]);
@@ -354,11 +361,15 @@ class EditItem extends Component
 
         $this->openModalProveedores = true;
     }
-
+    public $proveedoresAsignadosIds;
     public function actualizarProveedores()
     {
+
+        $this->proveedoresAsignadosIds = collect($this->ProvedoresAsignados)->pluck('proveedor_id')->filter()->toArray();
+
         if ($this->searchTerm) {
-            $this->proveedores = Proveedor::where('estado', 1)
+            $this->proveedores = Proveedor::where('estado_eliminacion', 1)
+                ->whereNotIn('id', $this->proveedoresAsignadosIds) // Excluir los proveedores asignados
                 ->where(function ($query) {
                     $query->where('nombre', 'LIKE', "%{$this->searchTerm}%")
                         ->orWhere('rfc', 'LIKE', "%{$this->searchTerm}%");
@@ -504,6 +515,5 @@ class EditItem extends Component
     {
         // Ejecutar ambos métodos
         $this->edcionDeTabalaProveedorUnidad($index);
-
     }
 }

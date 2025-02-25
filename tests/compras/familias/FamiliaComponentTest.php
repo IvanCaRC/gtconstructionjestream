@@ -177,10 +177,6 @@ class FamiliaComponentTest extends TestCase
             ->assertSet('subfamilias', []); // Verificar que no hay subfamilias
     }
 
-
-    /** @test */
-   
-
     /** @test */
     public function obtenerFalsoSiNoEstaAsignado()
     {
@@ -207,32 +203,8 @@ class FamiliaComponentTest extends TestCase
         $result = $component->verificarAsignacion($familia->id);
         $this->assertFalse($result);
     }
-    public function verificarAsignacion($familiaId)
-    {
-        // Verificar si la familia está asignada en 'proveedor_has_familia' o 'item_especifico_has_familia'
-        $familia = Familia::find($familiaId);
 
-        // Verificar en la tabla proveedor_has_familia
-        $proveedorAsignado = DB::table('proveedor_has_familia')
-            ->where('familia_id', $familiaId)
-            ->exists();
 
-        // Verificar en la tabla item_especifico_has_familia
-        $itemAsignado = DB::table('item_especifico_has_familia')
-            ->where('familia_id', $familiaId)
-            ->exists();
-
-        // Verificar si alguna de las subfamilias está asignada
-        $subfamiliasAsignadas = $familia->subfamilias->contains(function ($subfamilia) {
-            return DB::table('proveedor_has_familia')->where('familia_id', $subfamilia->id)->exists() ||
-                DB::table('item_especifico_has_familia')->where('familia_id', $subfamilia->id)->exists();
-        });
-
-        // Si la familia o alguna subfamilia está asignada, retornar verdadero
-        return $proveedorAsignado || $itemAsignado || $subfamiliasAsignadas;
-    }
-
-    /** @test */
     /** @test */
     public function verificarAsignacionTrue()
     {

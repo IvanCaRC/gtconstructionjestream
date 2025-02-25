@@ -34,8 +34,8 @@
                     <div class="form-group col-md-4">
                         <label for="name">Nombre</label>
                         <input type="text" id="name"
-                            class="form-control @error('name') required-field @enderror" wire:model.defer="name">
-
+                            class="form-control @error('name') required-field @enderror" wire:model.defer="name"
+                            wire:blur="validateField('name')">
                         @error('name')
                             <span class="error-message">
                                 {{ $message }}
@@ -48,7 +48,7 @@
                         <label for="first_last_name">Primer Apellido</label>
                         <input type="text" id="first_last_name"
                             class="form-control @error('first_last_name') required-field @enderror"
-                            wire:model.defer="first_last_name">
+                            wire:model.defer="first_last_name" wire:blur="validateField('first_last_name')">
 
                         @error('first_last_name')
                             <span class="error-message">
@@ -66,7 +66,7 @@
                 <div class="form-group">
                     <label for="email">Correo Electrónico</label>
                     <input type="email" id="email" class="form-control @error('email') required-field @enderror"
-                        wire:model.defer="email">
+                        wire:model.defer="email" wire:blur="validateField('email')">
 
                     @error('email')
                         <span class="error-message">
@@ -77,7 +77,8 @@
                 </div>
                 <div class="form-group">
                     <label for="number">Teléfono</label>
-                    <input type="text" id="number" class="form-control" wire:model.defer="number">
+                    <input type="text" id="number" class="form-control" wire:model.defer="number"
+                        oninput="validatePhoneInput(this)">
                 </div>
                 <div class="form-row">
                     <div class="form-group col-md-6">
@@ -87,14 +88,16 @@
                             <option value="0">Inactivo</option>
                         </select>
                     </div>
-                    
-                    
+
+
                     <div class="form-group col-md-6">
                         <label for="departamento">Departamentos</label>
                         @foreach ($roles as $role)
                             <div class="form-check">
-                                <input class="form-check-input" type="checkbox" id="role{{ $role->id }}" wire:model.defer="selectedRoles" value="{{ $role->name }}">
-                                <label class="form-check-label" for="role{{ $role->id }}">{{ $role->name }}</label>
+                                <input class="form-check-input" type="checkbox" id="role{{ $role->id }}"
+                                    wire:model.defer="selectedRoles" value="{{ $role->name }}">
+                                <label class="form-check-label"
+                                    for="role{{ $role->id }}">{{ $role->name }}</label>
                             </div>
                         @endforeach
                         @error('selectedRoles')
@@ -105,7 +108,8 @@
                 <div class="form-group">
                     <label for="password">Contraseña</label>
                     <input type="text" id="password"
-                        class="form-control @error('password') required-field @enderror" wire:model.defer="password">
+                        class="form-control @error('password') required-field @enderror" wire:model.defer="password"
+                        wire:blur="validateField('password')">
 
                     @error('password')
                         <span class="error-message">
@@ -134,7 +138,8 @@
                         title: 'Usuario creado',
                         text: 'El usuario ha sido creado exitosamente.',
                         icon: 'success',
-                        confirmButtonText: 'OK'
+                        confirmButtonText: 'OK',
+                        allowOutsideClick: false // Deshabilitar el clic fuera para cerrar
                     });
                 }
             }).catch(error => {
@@ -143,7 +148,8 @@
                     title: 'Error',
                     text: 'Hubo un problema al crear el usuario.',
                     icon: 'error',
-                    confirmButtonText: 'OK'
+                    confirmButtonText: 'OK',
+                    allowOutsideClick: false // Deshabilitar el clic fuera para cerrar
                 });
             });
         }
@@ -186,17 +192,38 @@
         .required-field {
             border-color: red;
         }
+
         .form-check-input {
-            border-radius: 50%; /* Hace el borde circular */
-            outline: none; /* Elimina el contorno de enfoque */
+            border-radius: 50%;
+            /* Hace el borde circular */
+            outline: none;
+            /* Elimina el contorno de enfoque */
         }
+
         .form-check-input:checked {
-            border-color: transparent; /* Elimina el contorno al seleccionar */
-            box-shadow: none; /* Evita que se ilumine */
+            border-color: transparent;
+            /* Elimina el contorno al seleccionar */
+            box-shadow: none;
+            /* Evita que se ilumine */
         }
+
         .form-check-input:focus {
-            box-shadow: none; /* Evita que se ilumine al enfocarse */
+            box-shadow: none;
+            /* Evita que se ilumine al enfocarse */
         }
     </style>
 
+
+    <script>
+        function validatePhoneInput(element) {
+            // Permitir solo números, espacios y el signo de +
+            element.value = element.value.replace(/[^0-9\s+]/g, '');
+    
+            // Limitar la longitud a 16 caracteres
+            if (element.value.length > 20) {
+                element.value = element.value.substring(0, 20);
+            }
+        }
+    </script>
+    
 </div>

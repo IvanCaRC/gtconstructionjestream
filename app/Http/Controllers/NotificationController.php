@@ -21,11 +21,15 @@ class NotificationController extends Controller
 
         if ($notification) {
             $notification->markAsRead();
-            $notification->delete(); // Eliminar la notificación después de marcarla como leída
+            // $notification->delete(); // Eliminar la notificación después de marcarla como leída
         }
 
         return redirect($request->input('redirect_to'));
     }
+
+    public function getNotifications()
+    {
+        // Obtener hasta 5 notificaciones no leídas del usuario autenticado
+        return auth()->user()->unreadNotifications->take(5);
+    }
 }
-
-

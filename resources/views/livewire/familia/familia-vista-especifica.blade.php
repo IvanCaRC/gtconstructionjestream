@@ -16,7 +16,7 @@
                                     {{ $familiaPadre->nombre ?? 'Esta familia no tiene familia padre directa por lo que es una familia primaria' }}
                                 </h5>
                                 <h5 class="card-title mt-3">Nombre: {{ $familia->nombre ?? '' }}</h5>
-                                <h5 class="card-title mt-3">Descripcion: {{ $familia->descripcion ?? '' }}</h5>
+                                <h5 class="card-title mt-3">Descripción: {{ $familia->descripcion ?? '' }}</h5>
                                 <h5 class="card-title mt-3">Nivel de jerarquia al que pertenece:
                                     {{ $familia->nivel ?? '' }}</h5>
                             </div>

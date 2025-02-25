@@ -228,12 +228,12 @@ document.addEventListener("DOMContentLoaded", function () {
        <div class="col-md-2 mb-3">
     <label>Latitud</label>
     <input type="text" class="form-control" value="${entry.latlng ? entry.latlng.lat : ''}" 
-           id="latitud-${index}" oninput="updateCoordinates(${index})">
+           id="latitud-${index}" oninput="validateCoordinateValue(this); autoSaveAddress(${index})">
 </div>
 <div class="col-md-2 mb-3">
     <label>Longitud</label>
     <input type="text" class="form-control" value="${entry.latlng ? entry.latlng.lng : ''}" 
-           id="longitud-${index}" oninput="updateCoordinates(${index})">
+           id="longitud-${index}" oninput="validateCoordinateValue(this); autoSaveAddress(${index})">
 </div>
         <div class="col-md-2 mb-3 d-flex align-items-end">
             <button type="button" class="btn btn-danger w-100" onclick="removeAddress(${index})">Eliminar</button>

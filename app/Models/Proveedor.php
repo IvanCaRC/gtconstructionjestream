@@ -77,7 +77,7 @@ class Proveedor extends Model
         ];
     }
 
-    public static function updateRules($prefix = '', $id)
+    public static function rulesUpdate($prefix = '', $id)
 {
     return [
         $prefix . 'nombre' => 'required|string|max:255',
@@ -87,7 +87,7 @@ class Proveedor extends Model
     ];
 }
 
-public static function updateMessages($prefix = '')
+public static function messagesUpdate($prefix = '')
 {
     return [
         $prefix . 'nombre.required' => 'Registrar nombre del proveedor es obligatorio.',

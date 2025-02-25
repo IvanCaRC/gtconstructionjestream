@@ -10,7 +10,7 @@
                     <div class="text-left mb-3">
                         <button class="btn btn-custom"
                             onclick="window.location.href='{{ route('compras.proveedores.createProveedores') }}'"
-                            style="background-color: #4c72de; color: white;">Registrar nuevo Proveedor</button>
+                            style="background-color: #4c72de; color: white;">Registrar nuevo proveedor</button>
                     </div>
 
                     <div class="table-responsive">
@@ -36,9 +36,10 @@
                                     <th class="d-none d-md-table-cell" wire:click="" style="cursor: pointer;">
                                         RFC
                                     </th>
-                                    <th>Direccion(es)</th>
+                                    <th>Dirección(es)</th>
                                     <th>Familias</th>
-                                    <th>Telefonos</th>
+                                    <th>Teléfonos</th>
+                                    <th>Última modificación</th>
                                     <th></th>
                                     <th></th>
                                     <th></th>
@@ -52,10 +53,12 @@
                                                 <span class="badge badge-success">Actualizado</span>
                                             @else
                                                 <span class="badge badge-danger">Desactualizado</span>
+                                                <label for="">Última fecha de actualización:</label>
+                                                {{$proveedor->updated_at->format('d/m/Y') }}
                                             @endif
+                                            
                                         </td>
                                         <td class="align-middle">{{ $proveedor->nombre }}</td>
-                                        {{-- <td class="align-middle">{{ $proveedor->descripcion }}</td> --}}
                                         <td class="align-middle d-none d-md-table-cell">{{ $proveedor->correo }}</td>
                                         <td class="align-middle d-none d-md-table-cell">{{ $proveedor->rfc }}</td>
                                         <td class="align-middle">
@@ -82,6 +85,7 @@
                                                 N/A
                                             @endif
                                         </td>
+                                        <td class="align-middle">{{ $proveedor->updated_at }}</td>
                                         <td>
                                             <button class="btn btn-info btn-custom"
                                                 wire:click="viewProveedor({{ $proveedor->id }})">

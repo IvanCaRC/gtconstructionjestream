@@ -51,6 +51,10 @@ class ShowUsers extends Component
 
     public function updated($propertyName)
     {
+
+        //Implementar mensajes personalizados
+        $this->validateOnly($propertyName, User::rulesUdpdate(), User::messagesUpdate());
+
         if (in_array($propertyName, ['statusFiltroDeBusqueda', 'roleFiltroDeBusqueda'])) {
             $this->filter();  // Llama al método de filtro para restablecer la página y aplicar los filtros
         }
@@ -107,9 +111,24 @@ class ShowUsers extends Component
         $this->resetPage();
     }
 
+    public function validateField($field)
+    {
+        $this->validateOnly($field);
+    }
+    //Mandar a llamar las reglas del modelo de manera local
+    public function rules()
+    {
+        return User::rulesUdpdate('', $this->userEditId);
+    }
+
+    protected function messages()
+    {
+        return User::messagesUpdate();
+    }
+
     public function update()
     {
-        $this->validate(User::rules('userEdit.', $this->userEditId));
+        $this->validate($this->rules(), $this->messages());
         $user = User::find($this->userEditId);
         $image = null;
         if ($this->image) {

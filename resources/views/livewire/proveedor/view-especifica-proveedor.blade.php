@@ -1,18 +1,54 @@
 <div>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+                .btn-icon {
+            display: flex;
+            align-items: center;
+            background-color: transparent;
+            color: #6c757d;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 24px;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .btn-icon:hover {
+            color: #5a6268;
+        }
+
+        .btn-icon i {
+            margin-right: 5px;
+        }
+
+        .row.align-items-center {
+            display: flex;
+            align-items: center;
+        }
+
+        .ml-3 {
+            margin-left: 1rem;
+        }
+    </style>
     <div class="container my-5">
         <div class="row">
             <div class="col-md-12">
                 <div class="card">
                     <div class="card-header">
-                        <h2>Detalle Proveedor</h2>
+                        <div class="row align-items-center">
+                            <button type="button" class="btn-icon" onclick="cancelar()">
+                                <i class="fas fa-arrow-left"></i>
+                            </button>
+                            <h2>Detalle Proveedor</h2>
+                        </div>
+                        
                     </div>
                     <div class="card-body d-flex">
                         <div class="pl-3">
-                            <a href="#"
-                               
-                                class="d-block mb-3"  wire:click="editProveedor({{ $proveedor->id }})">Editar Proveedor</a>
+                            <a href="#" class="d-block mb-3"
+                                wire:click="editProveedor({{ $proveedor->id }})">Editar Proveedor</a>
                             <h5 class="card-title mt-4 role-description">Nombre: {{ $proveedor->nombre }}</h5>
                             <h5 class="card-title mt-3">Descripción: {{ $proveedor->descripcion ?? '' }}</h5>
                             <h5 class="card-title mt-3">Correo: {{ $proveedor->correo ?? '' }}</h5>
@@ -35,7 +71,7 @@
                             @if ($proveedor->direcciones && $proveedor->direcciones->count() > 0)
                                 @foreach ($proveedor->direcciones as $direccion)
                                     {{ $direccion->estado }}, {{ $direccion->ciudad }},
-                                    {{ $direccion->calle }}, {{ $direccion->numero }}<br>
+                                    {{ $direccion->calle }}, {{ $direccion->numero }}, {{ $direccion->referencia }}<br>
                                 @endforeach
                             @else
                                 N/A
@@ -49,18 +85,24 @@
                             </h5>
                             <h5 class="card-title mt-3">Archivo de Facturación PDF:</h5>
                             @if ($proveedor->archivo_facturacion_pdf)
-                                <iframe src="{{ asset('storage/' . $proveedor->archivo_facturacion_pdf) }}"
-                                    width="100%" height="600px"></iframe>
+                                <a href="{{ asset('storage/' . $proveedor->archivo_facturacion_pdf) }}" target="_blank"
+                                    class="btn btn-secondary">
+                                    Ver Archivo de Facturación
+                                </a>
                             @else
                                 <p>No hay archivo de facturación disponible.</p>
                             @endif
+
                             <h5 class="card-title mt-3">Datos bancarios:</h5>
                             @if ($proveedor->datos_bancarios_pdf)
-                                <iframe src="{{ asset('storage/' . $proveedor->datos_bancarios_pdf) }}" width="100%"
-                                    height="600px"></iframe>
+                                <a href="{{ asset('storage/' . $proveedor->datos_bancarios_pdf) }}" target="_blank"
+                                    class="btn btn-secondary">
+                                    Ver Archivo de Datos Bancarios
+                                </a>
                             @else
-                                <p>No hay archivo de bancario disponible.</p>
+                                <p>No hay archivo bancario disponible.</p>
                             @endif
+
                         </div>
                     </div>
                     <div class="card-footer text-right">
@@ -133,7 +175,7 @@
                 </div>
             </div>
         </div>
-        
+
     </div>
     <script>
         function confirmDeletion(proveedorId, proveedorNombre) {
@@ -173,6 +215,12 @@
                     });
                 }
             });
+        }
+    </script>
+    <script>
+        function cancelar() {
+            // Llamar al método update2 de Livewire
+            window.location.href = "{{ route('compras.proveedores.viewProveedores') }}";
         }
     </script>
 </div>

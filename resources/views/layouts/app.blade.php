@@ -174,13 +174,14 @@
                                 onmouseout="this.style.backgroundColor='@yield('activeBackgroundMateriales')';">
                                 Materiales
                             </a>
-                            <a class="collapse-item @yield('activeAforgot') text-white mb-2" 
-                            href="{{ route('mantenimiento.enconstruccion') }}"
+                            <a class="collapse-item @yield('activeAforgot') text-white mb-2"
+                                href="{{ route('mantenimiento.enconstruccion') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
                                 onmouseout="this.style.backgroundColor='';">
                                 Cotizaciones
                             </a>
-                            <a class="collapse-item @yield('activeAforgot') text-white mb-2" href="{{ route('mantenimiento.enconstruccion') }}"
+                            <a class="collapse-item @yield('activeAforgot') text-white mb-2"
+                                href="{{ route('mantenimiento.enconstruccion') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
                                 onmouseout="this.style.backgroundColor='';">
                                 Ordenes de Compra
@@ -205,13 +206,16 @@
                             <a class="collapse-item @yield('activeAlogin') text-white"href="{{ route('mantenimiento.enconstruccion') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
                                 onmouseout="this.style.backgroundColor='';">Gestion de proyectos</a>
-                            <a class="collapse-item @yield('activeAregister') text-white" href="{{ route('mantenimiento.enconstruccion') }}"
+                            <a class="collapse-item @yield('activeAregister') text-white"
+                                href="{{ route('mantenimiento.enconstruccion') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
                                 onmouseout="this.style.backgroundColor='';">Recepcion de llamadas</a>
-                            <a class="collapse-item @yield('activeAforgot') text-white" href="{{ route('mantenimiento.enconstruccion') }}"
+                            <a class="collapse-item @yield('activeAforgot') text-white"
+                                href="{{ route('mantenimiento.enconstruccion') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
                                 onmouseout="this.style.backgroundColor='';">Fichas tecnicas</a>
-                            <a class="collapse-item @yield('activeAforgot') text-white" href="{{ route('mantenimiento.enconstruccion') }}"
+                            <a class="collapse-item @yield('activeAforgot') text-white"
+                                href="{{ route('mantenimiento.enconstruccion') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
                                 onmouseout="this.style.backgroundColor='';">Recepcion de Cotizaciones</a>
                             <div class="collapse-divider"></div>
@@ -231,13 +235,16 @@
                     <div id="collapseFinanzas" class="collapse" aria-labelledby="headingPages"
                         data-parent="#accordionSidebar">
                         <div class="bg-primary-dark text-white py-2 collapse-inner rounded">
-                            <a class="collapse-item @yield('activeAlogin') text-white" href="{{ route('mantenimiento.enconstruccion') }}"
+                            <a class="collapse-item @yield('activeAlogin') text-white"
+                                href="{{ route('mantenimiento.enconstruccion') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
                                 onmouseout="this.style.backgroundColor='';">Control de Ingresos/Egresos</a>
-                            <a class="collapse-item @yield('activeAregister') text-white" href="{{ route('mantenimiento.enconstruccion') }}"
+                            <a class="collapse-item @yield('activeAregister') text-white"
+                                href="{{ route('mantenimiento.enconstruccion') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
                                 onmouseout="this.style.backgroundColor='';">Seguimiento Mensual</a>
-                            <a class="collapse-item @yield('activeAforgot') text-white" href="{{ route('mantenimiento.enconstruccion') }}"
+                            <a class="collapse-item @yield('activeAforgot') text-white"
+                                href="{{ route('mantenimiento.enconstruccion') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
                                 onmouseout="this.style.backgroundColor='';">Reportes</a>
                             <div class="collapse-divider"></div>
@@ -293,24 +300,26 @@
                                     Notificaciones
                                 </h6>
                                 @if (Auth::check())
-                                    @forelse (Auth::user()->unreadNotifications as $notification)
-                                        <a class="dropdown-item d-flex align-items-center"
-                                            href="{{ route('notifications.markAsRead', $notification->id) }}?redirect_to={{ urlencode($notification->data['url']) }}">
-                                            <div class="mr-3">
-                                                <div class="icon-circle bg-primary">
-                                                    <i class="fas fa-file-alt text-white"></i>
+                                    <div class="notification-list">
+                                        @forelse (Auth::user()->unreadNotifications as $notification)
+                                            <a class="dropdown-item d-flex align-items-center"
+                                                href="{{ route('notifications.markAsRead', $notification->id) }}?redirect_to={{ urlencode($notification->data['url']) }}">
+                                                <div class="mr-3">
+                                                    <div class="icon-circle bg-primary">
+                                                        <i class="fas fa-file-alt text-white"></i>
+                                                    </div>
                                                 </div>
-                                            </div>
-                                            <div>
-                                                <div class="small text-gray-500">
-                                                    {{ $notification->created_at->diffForHumans() }}</div>
-                                                <span
-                                                    class="font-weight-bold">{{ $notification->data['message'] }}</span>
-                                            </div>
-                                        </a>
-                                    @empty
-                                        <p class="dropdown-item">No hay notificaciones.</p>
-                                    @endforelse
+                                                <div>
+                                                    <div class="small text-gray-500">
+                                                        {{ $notification->created_at->diffForHumans() }}</div>
+                                                    <span
+                                                        class="font-weight-bold">{{ $notification->data['message'] }}</span>
+                                                </div>
+                                            </a>
+                                        @empty
+                                            <p class="dropdown-item">No hay notificaciones.</p>
+                                        @endforelse
+                                    </div>
                                 @else
                                     <p class="dropdown-item">No hay un usuario autenticado.</p>
                                 @endif
@@ -482,6 +491,14 @@
     </div>
 
 
+
+    <style>
+        .notification-list {
+            max-height: 300px;
+            /* Ajusta la altura máxima según tus necesidades */
+            overflow-y: auto;
+        }
+    </style>
 
 
     <!-- Bootstrap core JavaScript-->

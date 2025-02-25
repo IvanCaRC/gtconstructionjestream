@@ -31,7 +31,6 @@ class CreateItemTest extends TestCase
     public function puede_crear_un_item_con_familias_y_proveedores()
     {
         Storage::fake('public');
-
         $familia = Familia::create(['nombre' => 'Familia Test', 'estadoEliminacion' => 0]);
         $proveedor = Proveedor::create([
             'nombre' => 'Proveedor Test',
@@ -39,10 +38,8 @@ class CreateItemTest extends TestCase
             'rfc' => 'GARC840215HDF',
             'estado_eliminacion' => 1,
         ]);
-
         $fichaTecnica = UploadedFile::fake()->create('ficha_tecnica.pdf', 100);
         $imagen = UploadedFile::fake()->image('item.jpg');
-
         Livewire::test(CreateItem::class)
             ->set('nombre', 'Item Test')
             ->set('descripcion', 'Descripción del item de prueba')
@@ -71,16 +68,13 @@ class CreateItemTest extends TestCase
             ])
             ->call('save')
             ->assertHasNoErrors();
-
         $this->assertDatabaseHas('items', [
             'nombre' => 'Item Test',
             'descripcion' => 'Descripción del item de prueba',
         ]);
-
         $this->assertDatabaseHas('item_especifico_has_familia', [
             'familia_id' => $familia->id,
         ]);
-
         $this->assertDatabaseHas('item_especifico_proveedor', [
             'proveedor_id' => $proveedor->id,
             'tiempo_min_entrega' => 5,
@@ -88,7 +82,6 @@ class CreateItemTest extends TestCase
             'precio_compra' => '80.00', // Asegúrate de que el valor es una cadena
             'unidad' => 'caja',
         ]);
-
         Storage::disk('public')->assertExists('archivosFacturacionProveedores/' . $fichaTecnica->hashName());
         Storage::disk('public')->assertExists('imagenesItems/' . $imagen->hashName());
     }

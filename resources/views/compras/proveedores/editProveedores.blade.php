@@ -42,7 +42,34 @@
     integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
     crossorigin=""></script>
     <script src="{{ asset('js/editProveedor.js') }}"></script>
+    <script>
+        function validateCoordinateKey(event) {
+            const allowedKeys = ["Backspace", "Tab", "Delete", "ArrowLeft", "ArrowRight", "Home", "End"];
+            const char = event.key;
 
+            // Permitir teclas de control (borrar, tab, flechas, etc.)
+            if (allowedKeys.includes(char)) {
+                return true;
+            }
+
+            // Permitir solo números, punto, + y -
+            if (!/^[0-9.+-]$/.test(char)) {
+                event.preventDefault();
+                return false;
+            }
+
+            return true;
+        }
+
+        function validateCoordinateValue(input) {
+            // Eliminar cualquier carácter no permitido después de ingresarlo
+            input.value = input.value.replace(/[^0-9.+-]/g, '');
+            if (input.value.length > 13) {
+            input.value = input.value.substring(0, 17);
+        }
+        }
+
+    </script>
     
 
 @endsection

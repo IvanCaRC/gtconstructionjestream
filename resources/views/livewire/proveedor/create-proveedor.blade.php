@@ -2,7 +2,7 @@
     <div class="form-group">
         <label for="nombre">Nombre</label>
         <input type="text" id="nombre" class="form-control @error('nombre') is-invalid @enderror"
-            wire:model.defer="nombre">
+            wire:model.defer="nombre" wire:blur="validateField('nombre')">
         @error('nombre')
             <span class="invalid-feedback">{{ $message }}</span>
         @enderror
@@ -16,7 +16,7 @@
         <div class="col-md-6 mb-3">
             <label for="correo">Correo</label>
             <input type="email" id="correo" class="form-control @error('correo') is-invalid @enderror"
-                wire:model="correo">
+                wire:model="correo" wire:blur="validateField('correo')">
             @error('correo')
                 <span class="invalid-feedback">{{ $message }}</span>
             @enderror
@@ -24,7 +24,8 @@
 
         <div class="col-md-6 mb-3">
             <label for="rfc">RFC</label>
-            <input id="rfc" class="form-control @error('rfc') is-invalid @enderror" wire:model="rfc">
+            <input id="rfc" class="form-control @error('rfc') is-invalid @enderror" wire:model="rfc"
+                wire:blur="validateField('rfc')">
             @error('rfc')
                 <span class="invalid-feedback">{{ $message }}</span>
             @enderror
@@ -40,7 +41,10 @@
                     wire:model.defer="telefonos.{{ $index }}.nombre" placeholder="Nombre de contacto">
                 <input type="text"
                     class="form-control @error('telefonos.' . $index . '.numero') is-invalid @enderror"
-                    wire:model.defer="telefonos.{{ $index }}.numero" placeholder="Teléfono">
+                    wire:model.defer="telefonos.{{ $index }}.numero" placeholder="Teléfono" id="telefono"
+                    oninput="validatePhoneInput(this)">
+
+
                 @if ($errors->has('telefonos.' . $index . '.nombre') || $errors->has('telefonos.' . $index . '.numero'))
                     <div class="invalid-feedback">
                         @error('telefonos.' . $index . '.nombre')
@@ -193,7 +197,8 @@
                         title: 'Proveedor creado',
                         text: 'El proveedor ha sido creado exitosamente.',
                         icon: 'success',
-                        confirmButtonText: 'OK'
+                        confirmButtonText: 'OK',
+                        allowOutsideClick: false // Deshabilitar el clic fuera para cerrar
                     }).then((result) => {
                         if (result.isConfirmed) {
                             // Enviar el formulario
@@ -219,6 +224,15 @@
             window.location.href = "{{ route('compras.proveedores.viewProveedores') }}";
         }
     </script>
+    <script>
+        function validatePhoneInput(element) {
+            // Permitir solo números, espacios y el signo de +
+            element.value = element.value.replace(/[^0-9\s+]/g, '');
 
-
+            // Limitar la longitud a 16 caracteres
+            if (element.value.length > 20) {
+                element.value = element.value.substring(0, 20);
+            }
+        }
+    </script>
 </div>
