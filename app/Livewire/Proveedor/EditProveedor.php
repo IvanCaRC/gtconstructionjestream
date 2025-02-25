@@ -201,7 +201,11 @@ class EditProveedor extends Component
 
         if ($idFamiliaPadre) {
             $familia = Familia::find($idFamiliaPadre);
-            $this->familiasSeleccionadas[] = $familia;
+            if (!collect($this->familiasSeleccionadas)->contains('id', $familia->id)) {
+                $this->familiasSeleccionadas[] = $familia;
+                
+            }
+           
         }
     }
 

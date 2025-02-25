@@ -24,7 +24,8 @@
 
         <div class="col-md-6 mb-3">
             <label for="rfc">RFC</label>
-            <input id="rfc" class="form-control @error('rfc') is-invalid @enderror" wire:model="rfc" wire:blur="validateField('rfc')">
+            <input id="rfc" class="form-control @error('rfc') is-invalid @enderror" wire:model="rfc"
+                wire:blur="validateField('rfc')">
             @error('rfc')
                 <span class="invalid-feedback">{{ $message }}</span>
             @enderror
@@ -223,15 +224,15 @@
             window.location.href = "{{ route('compras.proveedores.viewProveedores') }}";
         }
     </script>
-       <script>
+    <script>
         function validatePhoneInput(element) {
             // Permitir solo números, espacios y el signo de +
             element.value = element.value.replace(/[^0-9\s+]/g, '');
-    
+
             // Limitar la longitud a 16 caracteres
             if (element.value.length > 20) {
                 element.value = element.value.substring(0, 20);
             }
         }
-    </script>   
+    </script>
 </div>

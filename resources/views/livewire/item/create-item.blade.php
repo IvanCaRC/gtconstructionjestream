@@ -50,6 +50,8 @@
                                             @endif
                                         </div>
                                     </div>
+
+
                                 </div>
 
 
@@ -72,6 +74,7 @@
                                             <span class="invalid-feedback">{{ $message }}</span>
                                         @enderror
                                     </div>
+
                                     <div class="form-group">
                                         <label for="marca">Marca</label>
                                         <input type="text" id="marca"
@@ -299,7 +302,8 @@
                                                         class="form-control @error('porcentaje_venta_mayorista') is-invalid @enderror"
                                                         wire:model="porcentaje_venta_mayorista"
                                                         wire:keydown='calcularPrecios' required
-                                                        oninput="validatePercentage(this)">
+                                                        oninput="validatePercentage(this)"
+                                                        onkeydown="limitInputLength(event)">
                                                     @error('porcentaje_venta_mayorista')
                                                         <span class="invalid-feedback">{{ $message }}</span>
                                                     @enderror
@@ -312,7 +316,11 @@
                                                         class="form-control @error('porcentaje_venta_minorista') is-invalid @enderror"
                                                         wire:model="porcentaje_venta_minorista"
                                                         wire:keydown='calcularPrecios' required
-                                                        oninput="validatePercentage(this)">
+                                                        oninput="validatePercentage(this)"
+                                                        onkeydown="limitInputLength(event)">
+
+
+
                                                     @error('porcentaje_venta_minorista')
                                                         <span class="invalid-feedback">{{ $message }}</span>
                                                     @enderror
@@ -654,6 +662,14 @@
             // Asegurarse de que solo haya un punto decimal
             if (element.value.split('.').length > 2) {
                 element.value = element.value.substring(0, element.value.lastIndexOf('.'));
+            }
+        }
+    </script>
+    <script>
+        function limitInputLength(event) {
+            var inputField = event.target;
+            if (inputField.value.length >= 3 && event.keyCode !== 8) {
+                event.preventDefault();
             }
         }
     </script>
