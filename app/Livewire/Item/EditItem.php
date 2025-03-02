@@ -190,6 +190,33 @@ class EditItem extends Component
         $this->reset(['searchTerm', 'seleccionProvedorModalNombre', 'seleccionProvedorModal', 'tiempoMinEntrega', 'tiempoMaxEntrega', 'precioCompra', 'unidadSeleccionada', 'openModalProveedores']);
     }
 
+    //Funcion de validacion en tiempo real
+    public function updated($propertyName)
+    {
+        //Implementar mensajes personalizados
+        $this->validateOnly($propertyName, Item::rulesUpdate(), Item::messagesUpdate());
+        $this->validateOnly($propertyName, ItemEspecifico::rulesUpdate(), ItemEspecifico::messagesUpdate());
+    }
+
+    public function validateField($field)
+    {
+        $this->validateOnly($field);
+    }
+
+    protected function rules()
+    {
+        return array_merge(Item::rulesUpdate(), ItemEspecifico::rulesUpdate());
+        // return Item::rules();
+        // return ItemEspecifico::rules();
+    }
+
+    protected function messages()
+    {
+        return array_merge(Item::messagesUpdate(), ItemEspecifico::messagesUpdate());
+        // return Item::messages();
+        // return ItemEspecifico::messages();
+    }
+
     public function save()
     {
         $itemActual = Item::findOrFail($this->item->id);

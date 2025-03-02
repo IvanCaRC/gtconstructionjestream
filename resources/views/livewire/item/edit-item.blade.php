@@ -88,7 +88,7 @@
                                         <label for="nombre">Nombre</label>
                                         <input type="text" id="nombre"
                                             class="form-control @error('itemEdit.nombre') is-invalid @enderror"
-                                            wire:model.defer="itemEdit.nombre" required>
+                                            wire:model.defer="itemEdit.nombre" required wire:blur="validateField('itemEdit.nombre')">
                                         @error('itemEdit.nombre')
                                             <span class="invalid-feedback">{{ $message }}</span>
                                         @enderror
@@ -96,7 +96,7 @@
                                     <div class="form-group">
                                         <label for="descripcion">Descripción</label>
                                         <textarea id="descripcion" class="form-control @error('itemEspecificoEdit.descripcion') is-invalid @enderror"
-                                            wire:model.defer="itemEspecificoEdit.descripcion"></textarea>
+                                            wire:model.defer="itemEspecificoEdit.descripcion" wire:blur="validateField('itemEspecificoEdit.descripcion')"></textarea>
                                         @error('itemEspecificoEdit.descripcion')
                                             <span class="invalid-feedback">{{ $message }}</span>
                                         @enderror
@@ -105,7 +105,7 @@
                                         <label for="marca">Marca</label>
                                         <input type="text" id="marca"
                                             class="form-control @error('itemEspecificoEdit.marca') is-invalid @enderror"
-                                            wire:model.defer="itemEspecificoEdit.marca" required>
+                                            wire:model.defer="itemEspecificoEdit.marca" required wire:blur="validateField('itemEspecificoEdit.marca')">
                                         @error('itemEspecificoEdit.marca')
                                             <span class="invalid-feedback">{{ $message }}</span>
                                         @enderror
@@ -117,7 +117,7 @@
                                         <input id="itemEspecificoEdit.cantidad_piezas_mayoreo"
                                             class="form-control @error('itemEspecificoEdit.cantidad_piezas_mayoreo') is-invalid @enderror"
                                             wire:model.defer="itemEspecificoEdit.cantidad_piezas_mayoreo" required
-                                            oninput="validateNumberOnly(this)">
+                                            oninput="validateNumberOnly(this)" wire:blur="validateField('itemEspecificoEdit.cantidad_piezas_mayoreo')">
                                         @error('itemEspecificoEdit.cantidad_piezas_mayoreo')
                                             <span class="invalid-feedback">{{ $message }}</span>
                                         @enderror
@@ -127,7 +127,7 @@
                                         <label for="moc">MOC (Mínimo de venta a cliente)</label>
                                         <input type="text" id="moc" class="form-control"
                                             wire:model.defer="itemEspecificoEdit.moc" required
-                                            oninput="validateNumberOnly(this)">
+                                            oninput="validateNumberOnly(this)" wire:blur="validateField('itemEspecificoEdit.moc')">
                                         @error('itemEspecificoEdit.moc')
                                             <span class="invalid-feedback">{{ $message }}</span>
                                         @enderror
