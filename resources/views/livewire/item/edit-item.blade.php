@@ -416,6 +416,16 @@
                                                 </div>
                                             </div>
                                         @endif
+                                        @if ($errors->has('itemEdit.nombre') || $errors->has('itemEspecificoEdit.descripcion') || $errors->has('itemEspecificoEdit.marca') || $errors->has('itemEspecificoEdit.cantidad_piezas_mayoreo') || $errors->has('ProvedoresAsignados.*'))
+                                            <tr>
+                                                <td colspan="6">
+                                                    <span class="invalid-feedback"
+                                                        style="display: block; color: red; font-weight: bold; text-align: center; padding: 10px; border: 2px solid red; border-radius: 5px; background-color: #f8d7da;">
+                                                        Debes requisitar todos los campos obligatorios en el formulario.
+                                                    </span>
+                                                </td>
+                                            </tr>
+                                        @endif
                                     </div>
                                     <button type="button" class="btn btn-secondary mt-3"
                                         onclick="cancelar()">Cancelar</button>

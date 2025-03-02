@@ -90,7 +90,8 @@
                                             Mayoreo</label>
                                         <input id="pz_Mayoreo"
                                             class="form-control @error('pz_Mayoreo') is-invalid @enderror"
-                                            wire:model.defer="pz_Mayoreo" required oninput="validateNumberOnly(this)" wire:blur="validateField('pz_Mayoreo')">
+                                            wire:model.defer="pz_Mayoreo" required oninput="validateNumberOnly(this)"
+                                            wire:blur="validateField('pz_Mayoreo')">
                                         @error('pz_Mayoreo')
                                             <span class="invalid-feedback">{{ $message }}</span>
                                         @enderror
@@ -409,6 +410,16 @@
                                                 <small class="form-text text-muted">Por favor, suba archivos en formato
                                                     PDF solamente.</small>
                                             </div>
+                                        @endif
+                                        @if ($errors->has('nombre') || $errors->has('descripcion') || $errors->has('marca') || $errors->has('pz_Mayoreo') || $errors->has('ProvedoresAsignados.*'))
+                                            <tr>
+                                                <td colspan="6">
+                                                    <span class="invalid-feedback"
+                                                        style="display: block; color: red; font-weight: bold; text-align: center; padding: 10px; border: 2px solid red; border-radius: 5px; background-color: #f8d7da;">
+                                                        Debes requisitar todos los campos obligatorios en el formulario.
+                                                    </span>
+                                                </td>
+                                            </tr>
                                         @endif
                                     </div>
                                     <button type="button" class="btn btn-secondary mt-3"
