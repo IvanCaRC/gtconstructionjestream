@@ -3,12 +3,14 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\adminController;
 use App\Http\Controllers\FamiliaController;
+use App\Http\Controllers\FichasTecnicas;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\MantenimientoController;
 use App\Http\Controllers\ProveedorController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\NotificationController;
-
+use App\Http\Controllers\RecpecioLlamadas;
+use App\Http\Controllers\VentasRecepcionCotisaciones;
 
 /*
 |--------------------------------------------------------------------------
@@ -39,8 +41,7 @@ Route::get('admin/dashboardAdmin', [adminController::class, 'index'])->middlewar
 Route::get('admin/users', [UserController::class, 'index'])->middleware('auth', 'nocache')->name('admin.users');
 
 Route::get('admin/userView/{iduser}', [UserController::class, 'verUsuario'])
-    ->middleware('auth', 'nocache')
-    ->name('admin.usersView');
+    ->middleware('auth', 'nocache')->name('admin.usersView');
 
 Route::get('admin/roles', [UserController::class, 'verRoles'])->middleware('auth', 'nocache')->name('admin.roles');
 
@@ -71,15 +72,23 @@ Route::get('compras/proveedores/viewProveedorEspecifico/{idproveedor}', [Proveed
     ->name('compras.proveedores.viewProveedorEspecifico');
 
 Route::get('compras/proveedores/editProveedores/{idproveedor}', [ProveedorController::class, 'editProveedor'])
-    ->middleware('auth', 'nocache')
-    ->name('compras.proveedores.editProveedores');
+    ->middleware('auth', 'nocache')->name('compras.proveedores.editProveedores');
 
 Route::get('compras/items/edicionItem/{idItem}', [ItemController::class, 'editItem'])->middleware('auth', 'nocache')->name('compras.items.edicionItem');
 
 Route::post('compras/proveedores', [ProveedorController::class, 'store'])->middleware('auth', 'nocache')->name('compras.proveedores.store');
 
 Route::get('compras/items/vistaEspecificaItem/{idItem}', [ItemController::class, 'ciewEspecItem'])->middleware('auth', 'nocache')->name('compras.items.vistaEspecificaItem');
-//Ruta para marcar leida la notificacion
+
 Route::get('/mark-as-read/{id}', [NotificationController::class, 'markAsRead'])->name('notifications.markAsRead');
 
 Route::get('mantenimiento/enconstruccion', [MantenimientoController::class, 'index'])->middleware('auth', 'nocache')->name('mantenimiento.enconstruccion');
+
+//Aqui inicia lo de ventas
+Route::get('ventas/clientes/recepcionLlamadas', [RecpecioLlamadas::class, 'index'])->middleware('auth', 'nocache')->name('ventas.clientes.recepcionLlamadas');
+
+Route::get('ventas/clientes/gestionClientes', [RecpecioLlamadas::class, 'vista'])->middleware('auth', 'nocache')->name('ventas.clientes.gestionClientes');
+
+Route::get('ventas/fichasTecnicas/fichasTecnicas', [FichasTecnicas::class, 'index'])->middleware('auth', 'nocache')->name('ventas.fichasTecnicas.fichasTecnicas');
+
+Route::get('ventas/recepcionCotizaciones/recepcionCotizacion', [VentasRecepcionCotisaciones::class, 'index'])->middleware('auth', 'nocache')->name('ventas.recepcionCotizaciones.recepcionCotizacion');

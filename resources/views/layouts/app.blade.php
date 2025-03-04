@@ -194,30 +194,45 @@
 
             @can('ventas.collapsed')
                 <!-- Nav Item - Pagina colapsada de departamentos-->
-                <li class="nav-item">
+                <li class="nav-item @yield('activedesplegableVentas')">
                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseVentas"
                         aria-expanded="true" aria-controls="collapseVentas">
                         <i class="fas fa-fw fa-building"></i>
                         <span>Ventas</span>
                     </a>
-                    <div id="collapseVentas" class="collapse" aria-labelledby="headingPages"
-                        data-parent="#accordionSidebar">
+                    <div id="collapseVentas" class="collapse @yield('activeCollapseVentas') container-flex2"
+                        aria-labelledby="headingPages" data-parent="#accordionSidebar">
                         <div class="bg-primary-dark text-white py-2 collapse-inner rounded">
-                            <a class="collapse-item @yield('activeAlogin') text-white"href="{{ route('mantenimiento.enconstruccion') }}"
+
+                            <a class="collapse-item @yield('activeGestionClientes') text-white @yield('activeFondoPermanenteGestionCLientes') mb-2"
+                                href="{{ route('ventas.clientes.gestionClientes') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
-                                onmouseout="this.style.backgroundColor='';">Gestion de proyectos</a>
-                            <a class="collapse-item @yield('activeAregister') text-white"
-                                href="{{ route('mantenimiento.enconstruccion') }}"
+                                onmouseout="this.style.backgroundColor='@yield('activeBackgroundGestionClientes')';">
+                                Gestion de clientes
+                            </a>
+
+                            <a class="collapse-item @yield('activeRecepcion') text-white @yield('activeFondoPermanenteRecepcion') mb-2"
+                                
+                                href="{{ route('ventas.clientes.recepcionLlamadas') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
-                                onmouseout="this.style.backgroundColor='';">Recepcion de llamadas</a>
-                            <a class="collapse-item @yield('activeAforgot') text-white"
-                                href="{{ route('mantenimiento.enconstruccion') }}"
+                                onmouseout="this.style.backgroundColor='@yield('activeBackgroundRecepcion')';">
+                                Recepcion de llamadas
+                            </a>
+
+                            <a class="collapse-item @yield('activeFichasTecnicas') text-white @yield('activeFondoPermanenteFichasTecnicas') mb-2"
+                                href="{{ route('ventas.fichasTecnicas.fichasTecnicas') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
-                                onmouseout="this.style.backgroundColor='';">Fichas tecnicas</a>
-                            <a class="collapse-item @yield('activeAforgot') text-white"
-                                href="{{ route('mantenimiento.enconstruccion') }}"
+                                onmouseout="this.style.backgroundColor='@yield('activeBackgroundFichasTecnicas')';">
+                                Fichas tecnicas
+                            </a>
+
+                            <a class="collapse-item @yield('activeRecepcionCotizacion') text-white @yield('activeFondoPermanenteRecepcionCotizacion') mb-2"
+                                href="{{ route('ventas.recepcionCotizaciones.recepcionCotizacion') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
-                                onmouseout="this.style.backgroundColor='';">Recepcion de Cotizaciones</a>
+                                onmouseout="this.style.backgroundColor='@yield('activeBackgroundRecepcionCotizacion')';">
+                                Recepcion    Cotizaciones
+                            </a>
+
                             <div class="collapse-divider"></div>
                         </div>
                     </div>
