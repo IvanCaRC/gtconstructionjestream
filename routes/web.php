@@ -87,6 +87,10 @@ Route::get('mantenimiento/enconstruccion', [MantenimientoController::class, 'ind
 //Aqui inicia lo de ventas
 Route::get('ventas/clientes/recepcionLlamadas', [RecpecioLlamadas::class, 'index'])->middleware('auth', 'nocache')->name('ventas.clientes.recepcionLlamadas');
 
+Route::post('ventas/clientes/recepcionLlamadas', [RecpecioLlamadas::class, 'store'])->middleware('auth', 'nocache')->name('ventas.clientes.recepcionLlamadas.store');
+
+
+
 Route::get('ventas/clientes/gestionClientes', [RecpecioLlamadas::class, 'vista'])->middleware('auth', 'nocache')->name('ventas.clientes.gestionClientes');
 
 Route::get('ventas/fichasTecnicas/fichasTecnicas', [FichasTecnicas::class, 'index'])->middleware('auth', 'nocache')->name('ventas.fichasTecnicas.fichasTecnicas');

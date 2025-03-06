@@ -57,7 +57,7 @@ class ProveedorController extends Controller
                     'Longitud' => $direccionData['latlng']['lng'] ?? null,
                     'proveedor_id' => $proveedor->id, // Asociar al proveedor recién creado
                 ]);
-//[{"address":{"calle":"Calle Progreso","numero":"Campo no recuperado","colonia":"Campo no recuperado","municipio":"Campo no recuperado","ciudad":"Oaxaca de Juárez","estado":"Oaxaca","cp":"71246","pais":"México","referencia":"SADASDDASDASDASDASD"},"latlng":{"lat":17.06359508266675,"lng":-96.74199721484987}}]
+
                 $direccion->save();
             }
 
