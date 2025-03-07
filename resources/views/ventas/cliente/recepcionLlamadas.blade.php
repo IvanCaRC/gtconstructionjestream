@@ -16,7 +16,7 @@
 
         <div class="card">
             <div class="card-header">
-                <h2>Recepcion de llamadas de un cliente</h2>
+                <h2>Recepcion de llamada de un cliente</h2>
             </div>
             <div class="card-body">
                 <form id="proveedor-form" action="{{ route('ventas.clientes.recepcionLlamadas.store') }}" method="POST">

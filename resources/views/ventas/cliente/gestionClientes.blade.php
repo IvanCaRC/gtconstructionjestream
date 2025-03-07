@@ -7,6 +7,6 @@
 @section('activeFondoPermanenteGestionCLientes', 'background-permanent')
 @section('contend')
 
-<h1>Esta es la vista de gestion de clietes</h1>
+@livewire('cliente.gestion-clientes')
 
 @endsection
