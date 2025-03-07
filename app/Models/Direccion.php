@@ -13,7 +13,7 @@ class Direccion extends Model
     protected $table = 'direcciones';
 
     protected $fillable = [
-        'proveedor_id','pais', 'calle', 'numero', 'colonia', 'municipio', 'ciudad', 'estado', 'cp', 'referencia', 'Latitud', 'Longitud'
+        'cliente_id','proveedor_id','pais', 'calle', 'numero', 'colonia', 'municipio', 'ciudad', 'estado', 'cp', 'referencia', 'Latitud', 'Longitud'
     ];
     public function cliente()
     {

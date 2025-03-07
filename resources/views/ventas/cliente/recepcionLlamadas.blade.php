@@ -19,10 +19,10 @@
                 <h2>Recepcion de llamadas de un cliente</h2>
             </div>
             <div class="card-body">
-                <form id="proveedor-form" action="{{ route('ventas.clientes.recepcionLlamadas.store') }}" method="POST">
+                <form id="proveedor-formee" action="{{ route('ventas.clientes.recepcionLlamadas.store') }}" method="POST">
                     @csrf
                     <input type="hidden" id="direcciones-input" name="direcciones">
-                    <input type="hidden" id="cliente-id-input" name="proveedor_id" value="">
+                    <input type="hidden" id="cliente-id-input" name="cliente_id" value="">
                     @livewire('cliente.recepcion-llamada')
                     <div class="form-group">
                         <label>Direcciones</label>
@@ -32,7 +32,8 @@
                         </div>
                     </div>@include('compras.proveedores.form')
                     <button class="btn btn-secondary mt-3" onclick="cancelar()">Cancelar</button>
-                    <button onclick="confirmSave()" class="btn btn-primary mt-3">Crear proveedor</button>
+                    <button type="submit" onclick="confirmSave()" class="btn btn-primary mt-3">Crear proveedor</button>
+                    
                 </form>
             </div>
         </div>

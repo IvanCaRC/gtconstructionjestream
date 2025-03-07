@@ -27,21 +27,23 @@ class RecpecioLlamadas extends Controller
         // Validar los datos de las direcciones y el ID del proveedor
 
         // Log para verificar los valores recibidos
-
+        
 
         // Decodificar las direcciones desde JSON
         $direcciones = json_decode($request->input('direcciones'), true);
         print_r($direcciones);
-
         // Obtener el proveedor con el ID recibido del formulario
         $cliente = Cliente::find($request->input('cliente_id'));
-
         // Iniciar una transacción de base de datos
         DB::beginTransaction();
 
+        
+
         try {
+            
             // Guardar cada dirección asociada al proveedor
             foreach ($direcciones as $direccionData) {
+                
                 $direccion = new Direccion([
                     'pais' => $direccionData['address']['pais'],
                     'cp' => $direccionData['address']['cp'],
@@ -63,7 +65,7 @@ class RecpecioLlamadas extends Controller
             // Commit de la transacción
             DB::commit();
 
-            return redirect()->route('compras.proveedores.viewProveedores')->with('success', 'Direcciones guardadas exitosamente.');
+            return redirect()->route('ventas.clientes.gestionClientes')->with('success', 'Direcciones guardadas exitosamente.');
         } catch (\Exception $e) {
             // Rollback en caso de error
             DB::rollBack();

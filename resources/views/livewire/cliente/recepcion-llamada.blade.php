@@ -45,7 +45,7 @@
                     <input type="text" class="form-control" wire:model.defer="cuentas.{{ $index }}.titular"
                         placeholder="Nombre del titular de la cuenta">
                     <input type="text" class="form-control" wire:model.defer="cuentas.{{ $index }}.numero"
-                        placeholder="Teléfono" id="telefono">
+                        placeholder="Cuenta" id="telefono">
                     @if ($index > 0)
                         <div class="input-group-append">
                             <button type="button" class="btn btn-danger ml-2"
@@ -63,7 +63,7 @@
                     <input type="text" class="form-control" wire:model.defer="claves.{{ $index }}.titular"
                         placeholder="Nombre del titular de la clave">
                     <input type="text" class="form-control" wire:model.defer="claves.{{ $index }}.numero"
-                        placeholder="Teléfono" id="telefono">
+                        placeholder="Clave" id="telefono">
                     @if ($index > 0)
                         <div class="input-group-append">
                             <button type="button" class="btn btn-danger ml-2"
@@ -99,7 +99,7 @@
                     }).then((result) => {
                         if (result.isConfirmed) {
                             // Enviar el formulario
-                            document.getElementById('proveedor-form').submit();
+                            document.getElementById('proveedor-formee').submit();
                         }
                     });
                 }
@@ -126,4 +126,10 @@
             }
         }
     </script>
+        <script>
+            function cancelar() {
+                // Llamar al método update2 de Livewire
+                window.location.href = "{{ route('ventas.clientes.gestionClientes') }}";
+            }
+        </script>
 </div>
