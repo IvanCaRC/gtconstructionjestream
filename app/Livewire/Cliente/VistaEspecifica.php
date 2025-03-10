@@ -12,6 +12,7 @@ class VistaEspecifica extends Component
     public $openModalCreacionProyecto = true;
     public $tipoDeProyectoSelecionado;
     public $archivoDeListaDeItems;
+    public $adicionales = [['estructura' => '', 'cantidad' => '']];
 
     public $clienteEspecifico;
     public $telefonos = [['nombre' => '', 'numero' => '']];
