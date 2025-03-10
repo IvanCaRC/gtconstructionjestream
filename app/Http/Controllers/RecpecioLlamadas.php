@@ -65,11 +65,19 @@ class RecpecioLlamadas extends Controller
             // Commit de la transacción
             DB::commit();
 
-            return redirect()->route('ventas.clientes.gestionClientes')->with('success', 'Direcciones guardadas exitosamente.');
+            return redirect()->route('ventas.clientes.vistaEspecificaCliente', ['idCliente' => $cliente->id])
+            ->with('success', 'Cliente creado exitosamente.');
+
+
         } catch (\Exception $e) {
             // Rollback en caso de error
             DB::rollBack();
             return redirect()->back()->with('error', 'Error al guardar las direcciones: ' . $e->getMessage());
         }
+    }
+
+    public function viewEspecCliente($idCliente)
+    {
+        return view('ventas.cliente.vistaEspecificaCliente', ['idCliente' => $idCliente]);
     }
 }

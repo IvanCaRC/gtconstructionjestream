@@ -100,6 +100,8 @@
                         if (result.isConfirmed) {
                             // Enviar el formulario
                             document.getElementById('proveedor-formee').submit();
+                            
+
                         }
                     });
                 }

@@ -89,6 +89,7 @@ Route::get('ventas/clientes/recepcionLlamadas', [RecpecioLlamadas::class, 'index
 
 Route::post('ventas/clientes/recepcionLlamadas', [RecpecioLlamadas::class, 'store'])->middleware('auth', 'nocache')->name('ventas.clientes.recepcionLlamadas.store');
 
+Route::get('ventas/clientes/vistaEspecificaCliente/{idCliente}', [RecpecioLlamadas::class, 'viewEspecCliente'])->middleware('auth', 'nocache')->name('ventas.clientes.vistaEspecificaCliente');
 
 
 Route::get('ventas/clientes/gestionClientes', [RecpecioLlamadas::class, 'vista'])->middleware('auth', 'nocache')->name('ventas.clientes.gestionClientes');

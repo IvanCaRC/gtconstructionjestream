@@ -36,18 +36,18 @@ class VistaEspecifica extends Component
             ->pluck('familia')
             ->toArray();
 
-            $especificaciones = json_decode($this->itemEspecifico->especificaciones, true);
-    
-            // Filtrar especificaciones vacías
-            $especificaciones = array_filter($especificaciones, function($especificacion) {
-                return !empty($especificacion['enunciado']) || !empty($especificacion['concepto']);
-            });
-        
-            if (!empty($especificaciones)) {
-                $this->especificaciones = $especificaciones;
-            } else {
-                $this->especificaciones = null;
-            }
+        $especificaciones = json_decode($this->itemEspecifico->especificaciones, true);
+
+        // Filtrar especificaciones vacías
+        $especificaciones = array_filter($especificaciones, function ($especificacion) {
+            return !empty($especificacion['enunciado']) || !empty($especificacion['concepto']);
+        });
+
+        if (!empty($especificaciones)) {
+            $this->especificaciones = $especificaciones;
+        } else {
+            $this->especificaciones = null;
+        }
         $this->ficha_Tecnica_pdf = $this->itemEspecifico->ficha_tecnica_pdf;
     }
 
@@ -78,7 +78,7 @@ class VistaEspecifica extends Component
         $ItemEspecifico->update(['estado_eliminacion' => false]);
         $this->dispatch('renderVistaProv');
     }
-    
+
     public function render()
     {
         return view('livewire.item.vista-especifica');
