@@ -16,10 +16,11 @@ class CreateClientesTable extends Migration
         Schema::create('clientes', function (Blueprint $table) {
             $table->id();
             $table->string('nombre');
-            $table->string('correo')->unique();
-            $table->string('rfc')->unique();
-            $table->string('cuenta');
-            $table->string('clave');
+            $table->string('correo')->unique()->nullable();;
+            $table->string('rfc')->unique()->nullable();;
+            $table->string('bancarios')->nullable();;
+            $table->integer('proyectos')->nullable();;
+            $table->integer('proyectos_activos')->nullable();;
             $table->string('telefono');
             $table->date('fecha');
             $table->unsignedBigInteger('user_id');

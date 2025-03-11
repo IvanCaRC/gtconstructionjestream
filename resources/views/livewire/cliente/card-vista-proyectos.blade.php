@@ -25,7 +25,7 @@
             <table class="table">
                 <thead>
                     <tr>
-
+                        <th>Estado</th>
                         <th class="d-none d-md-table-cell" wire:click="order('first_last_name')"
                             style="cursor: pointer;">
                             Nombre
@@ -39,7 +39,6 @@
                             Teléfono
 
                         </th>
-                        <th>Estado</th>
                         <th>Departamento</th>
                         <th></th>
                         <th></th>
@@ -62,12 +61,12 @@
 
             <div class="form-group">
                 <label for="nombre">Nombre</label>
-                <input type="text" id="nombre" class="form-control" wire:model.defer="nombre">
+                <input type="text" id="nombre" class="form-control" wire:model.defer="nombreProyecto">
             </div>
 
             <div class="form-group">
                 <label for="unidad">Tipo</label>
-                <select id="unidad" wire:model="tipoDeProyectoSelecionado " class="form-control" required
+                <select id="unidad" wire:model="tipoDeProyectoSelecionado" class="form-control" required
                     wire:change="asignarTipoDeProyecto($event.target.value)">
                     <option value="">Seleccione el tipo de proyecto</option>
                     <option value="1">Suministro</option>
@@ -106,11 +105,11 @@
                         @endif
                     </div>
                     <label for="nombre">Ingrese los items a cotizar</label>
-                    <textarea id="lista" class="form-control" wire:model.lazy="lista" rows="7"></textarea>
+                    <textarea id="lista" class="form-control" wire:model.lazy="listaACotizarTxt" rows="7"></textarea>
 
                     <label>Direcciones</label>
                     @if ($clienteEspecifico->direcciones->count() > 0)
-                        <select name="direccion_seleccionada" id="direccion-select" class="form-control">
+                        <select name="direccion_seleccionada" id="direccion-select" class="form-control" wire:model="direccionProyecto">
                             @foreach ($clienteEspecifico->direcciones as $direccion)
                                 <option value="{{ $direccion->id }}"
                                     title="{{ $direccion->estado }}, {{ $direccion->ciudad }}, {{ $direccion->colonia }}, {{ $direccion->calle }} #{{ $direccion->numero }}">
@@ -120,6 +119,7 @@
                             @endforeach
                         </select>
                         <small class="form-text text-muted">Por favor, elige una dericcion para el proyecto.</small>
+                        <small class="form-text text-muted">(Nota: Estas direcciones son recuperadas del cliente)</small>
                     @else
                         <p>No hay direcciones disponibles.</p>
                     @endif
@@ -130,29 +130,27 @@
                 <div class="form-group">
                     <div class="form-group"> <label for="archivosFacturacion">Fichas tecnicas o
                             atributos adicionales</label>
-                        @if (!$archivoDeListaDeItems)
+                        @if (!$archivoDeProyecto)
                             <div class="file-upload"
-                                onclick="document.getElementById('archivoDeListaDeItemsPdf').click();">
+                                onclick="document.getElementById('archivoDeProyecto').click();">
                                 <span class="file-upload-icon">&#x1F4C2;</span>
                                 <span class="file-upload-text">Buscar
                                     archivos<br>Arrastre y suelte archivos aquí</span>
-                                <input type="file" id="archivoDeListaDeItemsPdf" class="form-control-file"
-                                    wire:model="archivoDeListaDeItems" accept=".pdf">
+                                <input type="file" id="archivoDeProyecto" class="form-control-file"
+                                    wire:model="archivoDeProyecto" accept=".pdf">
                             </div>
                             <small class="form-text text-muted">Por favor, suba archivos en
                                 formato PDF solamente.</small>
                         @else
                             <div class="form-group">
                                 <div class="file-upload"
-                                    onclick="document.getElementById('archivoDeListaDeItemsPdfCar').click();">
+                                    onclick="document.getElementById('archivoDeProyectoCar').click();">
                                     <span class="file-upload-icon">&#x1F4C4;</span>
                                     <span class="file-upload-text">Archivo
                                         Cargado<br>{{ $fileNamePdf }}</span>
-                                    <input type="file" id="archivoDeListaDeItemsPdfCar" class="form-control-file"
-                                        wire:model="archivoDeListaDeItems" accept=".pdf">
+                                    <input type="file" id="archivoDeProyectoCar" class="form-control-file"
+                                        wire:model="archivoDeProyecto" accept=".pdf">
                                 </div>
-                                <small class="form-text text-muted">Por favor, suba archivos en formato
-                                    PDF solamente.</small>
                             </div>
                         @endif
                     </div>
@@ -169,55 +167,52 @@
                                     style="width: 70%; height: auto;">
                             </div>
                         </div>
-
-
-
-
                         <div class="row">
                             <div class="col-md-3">
-                                <label for="nombre">(A) Frente</label>
-                                <input type="text" id="nombre" class="form-control" wire:model.defer="nombre">
+                                <label for="frente">(A) Frente</label>
+                                <input type="text" id="frente" class="form-control" wire:model.defer="frente">
                             </div>
                             <div class="col-md-3">
-                                <label for="nombre">(B) Fondo</label>
-                                <input type="text" id="nombre" class="form-control" wire:model.defer="nombre">
+                                <label for="fondo">(B) Fondo</label>
+                                <input type="text" id="fondo" class="form-control" wire:model.defer="fondo">
                             </div>
                             <div class="col-md-3">
-                                <label for="nombre">(C) Altura techo</label>
-                                <input type="text" id="nombre" class="form-control" wire:model.defer="nombre">
+                                <label for="alturaTecho">(C) Altura techo</label>
+                                <input type="text" id="alturaTecho" class="form-control" wire:model.defer="alturaTecho">
                             </div>
                             <div class="col-md-3">
-                                <label for="nombre">Area total</label>
-                                <input type="text" id="nombre" class="form-control" wire:model.defer="nombre">
+                                <label for="areaTotal">Area total</label>
+                                <input type="text" id="areaTotal" class="form-control" wire:model.defer="areaTotal">
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-md-3">
-                                <label for="nombre">Altura de muros</label>
-                                <input type="text" id="nombre" class="form-control" wire:model.defer="nombre">
+                                <label for="alturaMuros">Altura de muros</label>
+                                <input type="text" id="alturaMuros" class="form-control" wire:model.defer="alturaMuros">
                             </div>
                             <div class="col-md-3">
-                                <label for="nombre">Canalón</label>
-                                <input type="text" id="nombre" class="form-control" wire:model.defer="nombre">
+                                <label for="canalon">Canalón</label>
+                                <input type="text" id="canalon" class="form-control" wire:model.defer="canalon">
                             </div>
                             <div class="col-md-3">
-                                <label for="nombre">Perimetral</label>
-                                <input type="text" id="nombre" class="form-control" wire:model.defer="nombre">
+                                <label for="perimetral">Perimetral</label>
+                                <input type="text" id="perimetral" class="form-control" wire:model.defer="perimetral">
                             </div>
                             <div class="col-md-3">
-                                <label for="nombre">Caballete</label>
-                                <input type="text" id="nombre" class="form-control" wire:model.defer="nombre">
+                                <label for="caballete">Caballete</label>
+                                <input type="text" id="caballete" class="form-control" wire:model.defer="caballete">
                             </div>
                         </div>
                     </div>
                     <br>
                     <div>
+                        <label>Elementos adicionales </label>
                         @foreach ($adicionales as $index => $adicional)
                             <div class="input-group">
 
                                 <div class="row">
                                     <div class="col-md-8">
-                                        <input type="text" class="form-control" placeholder="Estructura"
+                                        <input type="text" class="form-control" placeholder="Elemento"
                                             wire:model.defer="adicional.{{ $index }}.estructura">
                                     </div>
                                     <div class="col-md-3">
@@ -234,12 +229,6 @@
                                         @endif
                                     </div>
                                 </div>
-
-
-
-
-
-
                             </div>
                         @endforeach
                         <button type="button" class="btn btn-secondary mt-2" wire:click="addLineaTecnica">Agregar
@@ -258,6 +247,7 @@
                             @endforeach
                         </select>
                         <small class="form-text text-muted">Por favor, elige una dericcion para el proyecto.</small>
+                        <small class="form-text text-muted">(Nota: Estas direcciones son recuperadas del cliente)</small>
                     @else
                         <p>No hay direcciones disponibles.</p>
                     @endif
@@ -267,7 +257,7 @@
         </x-slot>
         <x-slot name='footer'>
             <button type="button" class="btn btn-secondary mr-2 disabled:opacity-50"
-                wire:click="$set('openModalProyectos',false)" wire:loading.attr="disabled">Cancelar</button>
+                wire:click="$set('openModalCreacionProyecto',false)" wire:loading.attr="disabled">Cancelar</button>
             <button type="button" class="btn btn-primary disabled:opacity-50" wire:loading.attr="disabled"
                 wire:click="">Agregar proyecto</button>
         </x-slot>

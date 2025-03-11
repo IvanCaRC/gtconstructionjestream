@@ -1,7 +1,7 @@
 <div class="container-fluid px-4 sm:px-6 lg:px-8 py-1">
-        <!-- Otros enlaces y estilos -->
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    
+    <!-- Otros enlaces y estilos -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
     <h1 class="pl-4">Proveedores registrados</h1>
     <div class="container-fluid px-4 sm:px-6 lg:px-8 py-1">
         <div class="flex h-screen gap-4 p-4">
@@ -29,7 +29,7 @@
                                     <th>Nombre</th>
                                     {{-- <th class="d-none d-md-table-cell" wire:click="" style="cursor: pointer;">
                     Descripcion
-                </th> --}}
+                  </th> --}}
                                     <th class="d-none d-md-table-cell" wire:click="" style="cursor: pointer;">
                                         Correo
                                     </th>
@@ -54,9 +54,9 @@
                                             @else
                                                 <span class="badge badge-danger">Desactualizado</span>
                                                 <label for="">Última fecha de actualización:</label>
-                                                {{$proveedor->updated_at->format('d/m/Y') }}
+                                                {{ $proveedor->updated_at->format('d/m/Y') }}
                                             @endif
-                                            
+
                                         </td>
                                         <td class="align-middle">{{ $proveedor->nombre }}</td>
                                         <td class="align-middle d-none d-md-table-cell">{{ $proveedor->correo }}</td>
@@ -170,13 +170,16 @@
                     <br>
                     <strong>Categorías</strong>
                     <ul>
-                        @foreach($familias as $familia)
-                            @include('livewire.familia.lista-categorias', ['familia' => $familia, 'nivel' => 0])
+                        @foreach ($familias as $familia)
+                            @include('livewire.familia.lista-categorias', [
+                                'familia' => $familia,
+                                'nivel' => 0,
+                            ])
                         @endforeach
                     </ul>
                 </div>
             </div>
-            
+
         </div>
 
     </div>

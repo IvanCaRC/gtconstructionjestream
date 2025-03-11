@@ -17,6 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('direccion_id')->nullable();;
             $table->string('nombre');
             $table->integer('tipo');
+            $table->integer('estado');
             $table->string('archivo')->nullable();
             $table->text('items_cotizar')->nullable();
             $table->text('datos_medidas')->nullable();
