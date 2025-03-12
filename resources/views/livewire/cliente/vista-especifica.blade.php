@@ -3,5 +3,7 @@
         @include('livewire.cliente.card-cliente')
         <div class="mb-4"></div>
         @include('livewire.cliente.card-vista-proyectos')
+        @include('livewire.cliente.modal-creacion-proyecto')
+
     
 </div>

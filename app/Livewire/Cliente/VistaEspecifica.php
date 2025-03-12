@@ -60,7 +60,7 @@ class VistaEspecifica extends Component
 
     public function cancelar()
     {
-        $this->reset('openModalCreacionProyecto','archivoSubido','tipoDeProyectoSelecionado','nombreProyecto', 'listaACotizarTxt','idDireccionParaProyecto');
+        $this->reset('openModalCreacionProyecto','archivoSubido','tipoDeProyectoSelecionado','nombreProyecto', 'listaACotizarTxt','idDireccionParaProyecto','datosGenrales','adicionales');
 
         $this->dispatch('refresh');
     }
@@ -82,8 +82,6 @@ class VistaEspecifica extends Component
         }
     }
 
-    //____________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
-
     public $archivoSubido;
     public $idDireccionParaProyecto;
     public $nombreProyecto;
@@ -102,15 +100,11 @@ class VistaEspecifica extends Component
         $this->adicionales = array_values($this->adicionales); // Reindexar el array
     }
 
-    //____________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
-    //Para suministro
+   //Para suministro
 
     public $listaACotizarTxt;
 
-    //____________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
-
-
-    public function save()
+   public function saveProyecto()
     {
         $clienteId = $this->clienteEspecifico->id;
         $archivoSubido = null;
@@ -126,6 +120,8 @@ class VistaEspecifica extends Component
                 'estado' => 1,
                 'archivo' => $archivoSubido,
                 'items_cotizar' => $this->listaACotizarTxt, 
+                'datos_medidas' => json_encode($this->datosGenrales), // Guardar como JSON
+                'datos_adicionales' => json_encode($this->adicionales), // Guardar como JSON
                 'fecha' => now(),
             ]);
         }
@@ -137,6 +133,7 @@ class VistaEspecifica extends Component
                 'tipo' => $this->tipoDeProyectoSelecionado, 
                 'estado' => 1,
                 'archivo' => $archivoSubido,
+                'items_cotizar' => $this->listaACotizarTxt, 
                 'datos_medidas' => json_encode($this->datosGenrales), // Guardar como JSON
                 'datos_adicionales' => json_encode($this->adicionales), // Guardar como JSON
                 'fecha' => now(),
@@ -145,9 +142,15 @@ class VistaEspecifica extends Component
         }
        
 
-        $this->reset('nombre', 'correo', 'rfc', 'bancarios', 'proyectos', 'telefonos', 'proyectosActivos');
+        $this->reset('openModalCreacionProyecto','archivoSubido','tipoDeProyectoSelecionado','nombreProyecto', 'listaACotizarTxt','idDireccionParaProyecto','datosGenrales','adicionales');
+
 
 
         return ['cliente_id' => $clienteId];
+    }
+
+    public function asignarDireccion($idDIreccion)
+    {
+        $this->idDireccionParaProyecto = $idDIreccion;
     }
 }
