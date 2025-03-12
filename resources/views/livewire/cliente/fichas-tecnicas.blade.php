@@ -1,15 +1,10 @@
 <div class="container-fluid px-4 sm:px-6 lg:px-8 py-1">
-    <h1 class="pl-4">Materiales en inventario</h1>
+    <h2 class="pl-4">Seleccione una lista para cotizar materiales</h2>
     <div class="container-fluid px-4 sm:px-6 lg:px-8 py-1">
         <div class="flex h-screen gap-4 p-4">
             <!-- Primera sección (85%) -->
             <div class="flex-1 bg-white p-4 rounded-lg border border-black" style="flex: 0 0 85%;">
                 <div class="card-body">
-                    <div class="text-left mb-3">
-                        <button class="btn btn-custom" {{-- Cambiar cuando tenga el createItems --}}
-                            onclick="window.location.href='{{ route('compras.items.createItems') }}'"
-                            style="background-color: #4c72de; color: white;">Registrar nuevo material</button>
-                    </div>
 
                     <div class="table-responsive">
                         <div class="d-flex justify-content-between mb-3">
@@ -50,15 +45,13 @@
                                     <thead>
                                         <tr>
                                             <th>Estado</th>
-
                                             <th>Nombre</th>
-                                            <th>Categoría</th>
-                                            <th>Precio del proveedor</th>
-                                            <th>Precio minorista</th>
-                                            <th>Precio mayorista</th>
-                                            <th>Unidad de medida</th>
+                                            <th>Familia</th>
+                                            <th>Marca</th>
+                                            <th>Unidad de venta</th>
+                                            <th>MOC (Minimo de Venta)</th>
+                                            <th>Unidades mayoristas</th>
                                             <th>Última modificación</th>
-                                            <th></th>
                                             <th></th>
                                             <th></th>
                                         </tr>
@@ -84,21 +77,19 @@
                                                 </td>
 
                                                 <td class="align-middle d-none d-md-table-cell">
-                                                    @foreach ($itemEspecifico->proveedores as $proveedor)
-                                                        {{ $proveedor->pivot->precio_compra }}
-                                                    @endforeach
-                                                </td>
-
-                                                <td class="align-middle d-none d-md-table-cell">
-                                                    {{ $itemEspecifico->precio_venta_minorista ?? 'N/A' }}
-                                                </td>
-
-                                                <td class="align-middle d-none d-md-table-cell">
-                                                    {{ $itemEspecifico->precio_venta_mayorista ?? 'N/A' }}
+                                                    {{ $itemEspecifico->marca ?? 'N/A' }}
                                                 </td>
 
                                                 <td class="align-middle d-none d-md-table-cell">
                                                     {{ $itemEspecifico->unidad ?? 'N/A' }}
+                                                </td>
+
+                                                <td class="align-middle d-none d-md-table-cell">
+                                                    {{ $itemEspecifico->MOC ?? 'N/A' }}
+                                                </td>
+
+                                                <td class="align-middle d-none d-md-table-cell">
+                                                    {{ $itemEspecifico->cantidad_piezas_mayoreo ?? 'N/A' }}
                                                 </td>
 
                                                 <td class="align-middle d-none d-md-table-cell">
@@ -113,17 +104,11 @@
                                                 </td>
 
                                                 <td>
-                                                    <button class="btn btn-primary btn-custom"
-                                                        wire:click="editItem({{ $itemEspecifico->id }})">
-                                                        <i class="fas fa-edit"></i>
+                                                    <button class="btn btn-success btn-custom"
+                                                        wire:click="addToCart({{ $itemEspecifico->id }})"
+                                                        title="Añadir a tu lista">
+                                                        <i class="fas fa-plus"></i>
                                                     </button>
-                                                </td>
-                                                <td>
-                                                    <button class="btn btn-danger btn-custom"
-                                                        onclick="confirmDeletion({{ $itemEspecifico->id }}, '{{ $itemEspecifico->item->nombre }}')">
-                                                        <i class="fas fa-trash-alt"></i>
-                                                    </button>
-
                                                 </td>
                                             </tr>
                                         @endforeach
@@ -177,41 +162,46 @@
                                                         <label>
                                                             <strong>Marca:</strong>
                                                             {{ $itemEspecifico->marca }}
-
                                                         </label>
                                                     </div>
 
-                                                    <!-- Precios -->
+                                                    <!-- Especificaciones del material -->
                                                     <p class="card-text">
+                                                        <strong>Unidad de venta:</strong>
+
+                                                        {{ $itemEspecifico->unidad ?? 'N/A' }} <br>
+                                                        <strong>MOC:</strong>
+
+                                                        {{ $itemEspecifico->MOC ?? 'N/A' }} <br>
+
+                                                        <strong>Cant. Pz Mayoreo:</strong>
+                                                        {{ $itemEspecifico->cantidad_piezas_mayoreo ?? 'N/A' }} <br>
+
                                                         <strong>Precio Minorista:</strong>
-                                                        <br>
-                                                        {{ $itemEspecifico->precio_venta_minorista ?? 'N/A' }} <br>
+                                                        ${{ $itemEspecifico->precio_venta_minorista ?? 'N/A' }} <br>
+
                                                         <strong>Precio Mayorista:</strong>
-                                                        <br>
-                                                        {{ $itemEspecifico->precio_venta_mayorista ?? 'N/A' }}
+                                                        ${{ $itemEspecifico->precio_venta_mayorista ?? 'N/A' }} <br>
                                                     </p>
-
-                                                    <!-- Stock -->
-                                                    <p class="card-text">
-                                                        <strong>Stock:</strong> {{ $itemEspecifico->stock ?? 'N/A' }}
-                                                    </p>
-
                                                     <!-- Fecha de Actualización -->
                                                     <p class="card-text text-muted">
                                                         Última actualización:
                                                         {{ $itemEspecifico->item->updated_at->format('d/m/Y') }}
                                                     </p>
+
                                                     <td>
-                                                        <button class="btn btn-primary btn-custom"
-                                                            wire:click="editItem({{ $itemEspecifico->id }})">
-                                                            <i class="fas fa-edit"></i>
+                                                        <button class="btn btn-success btn-custom"
+                                                            wire:click="addToCart({{ $itemEspecifico->id }})"
+                                                            title="Agrega este item a tu lista">
+                                                            <i class="fas fa-shopping-cart"> Añadir a la lista</i>
                                                         </button>
                                                     </td>
 
                                                     <td>
-                                                        <button class="btn btn-danger btn-custom"
-                                                            onclick="confirmDeletion({{ $itemEspecifico->id }}, '{{ $itemEspecifico->item->nombre }}')">
-                                                            <i class="fas fa-trash-alt"></i>
+                                                        <button class="btn btn-info btn-custom"
+                                                            wire:click="viewItem({{ $itemEspecifico->id }})"
+                                                            title="Observa a detalle">
+                                                            <i class="fas fa-eye"></i>
                                                         </button>
                                                     </td>
                                                 </div>
@@ -233,7 +223,6 @@
                             </div>
                         @endif
                     </div>
-
                 </div>
             </div>
             <!-- Segunda sección (15%) -->
@@ -246,7 +235,7 @@
                         <option value="0">Desactualizado</option>
                     </select>
                     <br>
-                    <strong>Categorías</strong>
+                    <strong>Categorías/Familias</strong>
                     <ul>
                         @foreach($familias as $familia)
                             @include('livewire.familia.lista-categorias', ['familia' => $familia, 'nivel' => 0])
@@ -256,31 +245,4 @@
             </div>
         </div>
     </div>
-
-    <script>
-        function confirmDeletion(itemEspecificoId, itemEspecificoNombre) {
-            Swal.fire({
-                title: `¿Estás seguro de que deseas eliminar  ${itemEspecificoNombre}?`,
-                text: "¡No podrás revertir esto!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#d33',
-                cancelButtonColor: '#3085d6',
-                confirmButtonText: 'Sí, eliminar',
-                cancelButtonText: 'Cancelar'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    @this.call('eliminar', itemEspecificoId);
-
-                    
-                    Swal.fire(
-                        'Eliminado!',
-                        `${itemEspecificoNombre} ha sido eliminado.`,
-                        'success'
-                        // window.location.href = "{{ route('compras.proveedores.viewProveedores') }}";
-                    )
-                }
-            })
-        }
-    </script>
 </div>

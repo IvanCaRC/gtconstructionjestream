@@ -7,6 +7,6 @@
 @section('activeFondoPermanenteFichasTecnicas', 'background-permanent')
 @section('contend')
 
-<h1>Esta es la vista de ficahs tecnicas</h1>
+@livewire('cliente.fichas-tecnicas')
 
 @endsection
