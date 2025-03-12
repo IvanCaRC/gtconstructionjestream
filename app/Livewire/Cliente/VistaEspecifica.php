@@ -3,19 +3,22 @@
 namespace App\Livewire\Cliente;
 
 use App\Models\Cliente;
+use App\Models\Proyecto;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use Livewire\Features\SupportFileUploads\WithFileUploads;
 
 class VistaEspecifica extends Component
 {
+    use WithFileUploads;
+
     protected $listeners = ['refresh' => 'render'];
-
-   
-
     public $clienteEspecifico;
     public $telefonos = [['nombre' => '', 'numero' => '']];
-    public $bancarios = [['banco' => '','titular' => '', 'cuenta' => '', 'clave' => '']];
+    public $bancarios = [['banco' => '', 'titular' => '', 'cuenta' => '', 'clave' => '']];
     public $proyectos;
     public $proyectosActivos;
+
 
     public function mount($idCliente)
     {
@@ -50,16 +53,14 @@ class VistaEspecifica extends Component
     }
 
     //____________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
-    
+
     public $openModalCreacionProyecto = false;
     public $tipoDeProyectoSelecionado;
-    
-    
-    
-    
+    public $fileNamePdf;
 
-    public function cancelar(){
-        $this->reset('openModalCreacionProyecto');
+    public function cancelar()
+    {
+        $this->reset('openModalCreacionProyecto','archivoSubido','tipoDeProyectoSelecionado','nombreProyecto', 'listaACotizarTxt','idDireccionParaProyecto');
 
         $this->dispatch('refresh');
     }
@@ -69,15 +70,84 @@ class VistaEspecifica extends Component
         $this->tipoDeProyectoSelecionado = $tipo;
     }
 
-    //____________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
-    //Para obra
-    public $archivoDeProyecto;
-    public $datosGenrales = [['frente' => '','fondo' => '','alturaTecho' => '','areaTotal' => '','alturaMuros' => '','canalon' => '','perimetral' => '', 'caballete' => '']]; 
-    public $adicionales = [['estructura' => '', 'cantidad' => '']];
-    //____________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
-    //Ppara suministro
-    public $archivoDeListaDeItems;
-    public $archivoDeListaDeItemsPdf;
-    
+    public function updatedArchivoSubido()
+    {
+        // Verificar si se ha seleccionado un archivo
+        if ($this->archivoSubido) {
+            // Obtener el nombre del archivo
+            $this->fileNamePdf = $this->archivoSubido->getClientOriginalName();
+        } else {
+            // Si no hay archivo, reiniciar el nombre
+            $this->fileNamePdf = '';
+        }
+    }
 
+    //____________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
+
+    public $archivoSubido;
+    public $idDireccionParaProyecto;
+    public $nombreProyecto;
+    //Para obra
+    public $datosGenrales = [['frente' => '', 'fondo' => '', 'alturaTecho' => '', 'areaTotal' => '', 'alturaMuros' => '', 'canalon' => '', 'perimetral' => '', 'caballete' => '']];
+    public $adicionales = [['estructura' => '', 'cantidad' => '']];
+
+    public function addAdicionales()
+    {
+        $this->adicionales[] = ['estructura' => '', 'cantidad' => ''];
+    }
+
+    public function removeAdicionales($index)
+    {
+        unset($this->adicionales[$index]);
+        $this->adicionales = array_values($this->adicionales); // Reindexar el array
+    }
+
+    //____________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
+    //Para suministro
+
+    public $listaACotizarTxt;
+
+    //____________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
+
+
+    public function save()
+    {
+        $clienteId = $this->clienteEspecifico->id;
+        $archivoSubido = null;
+        if ($this->archivoSubido) {
+            $archivoSubido = $this->archivoSubido->store('archivosFacturacionProveedores', 'public');
+        }
+        if($this->tipoDeProyectoSelecionado == 1){
+            $proyecto = Proyecto::create([
+                'cliente_id' => $clienteId,
+                'direccion_id' => $this->idDireccionParaProyecto,
+                'nombre' => $this->nombreProyecto,
+                'tipo' => $this->tipoDeProyectoSelecionado, 
+                'estado' => 1,
+                'archivo' => $archivoSubido,
+                'items_cotizar' => $this->listaACotizarTxt, 
+                'fecha' => now(),
+            ]);
+        }
+        else if ($this->tipoDeProyectoSelecionado == 0){
+            $proyecto = Proyecto::create([
+                'cliente_id' => $clienteId,
+                'direccion_id' => $this->idDireccionParaProyecto,
+                'nombre' => $this->nombreProyecto,
+                'tipo' => $this->tipoDeProyectoSelecionado, 
+                'estado' => 1,
+                'archivo' => $archivoSubido,
+                'datos_medidas' => json_encode($this->datosGenrales), // Guardar como JSON
+                'datos_adicionales' => json_encode($this->adicionales), // Guardar como JSON
+                'fecha' => now(),
+            ]);
+            
+        }
+       
+
+        $this->reset('nombre', 'correo', 'rfc', 'bancarios', 'proyectos', 'telefonos', 'proyectosActivos');
+
+
+        return ['cliente_id' => $clienteId];
+    }
 }

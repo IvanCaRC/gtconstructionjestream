@@ -78,14 +78,14 @@
                 <div class="form-group">
                     <div class="form-group"> <label for="archivosFacturacion">Fichas tecnicas o
                             atributos adicionales</label>
-                        @if (!$archivoDeListaDeItems)
+                        @if (!$archivoSubido)
                             <div class="file-upload"
                                 onclick="document.getElementById('archivoDeListaDeItemsPdf').click();">
                                 <span class="file-upload-icon">&#x1F4C2;</span>
                                 <span class="file-upload-text">Buscar
                                     archivos<br>Arrastre y suelte archivos aquí</span>
                                 <input type="file" id="archivoDeListaDeItemsPdf" class="form-control-file"
-                                    wire:model="archivoDeListaDeItems" accept=".pdf">
+                                    wire:model="archivoSubido" accept=".pdf">
                             </div>
                             <small class="form-text text-muted">Por favor, suba archivos en
                                 formato PDF solamente.</small>
@@ -97,7 +97,7 @@
                                     <span class="file-upload-text">Archivo
                                         Cargado<br>{{ $fileNamePdf }}</span>
                                     <input type="file" id="archivoDeListaDeItemsPdfCar" class="form-control-file"
-                                        wire:model="archivoDeListaDeItems" accept=".pdf">
+                                        wire:model="archivoSubido" accept=".pdf">
                                 </div>
                                 <small class="form-text text-muted">Por favor, suba archivos en formato
                                     PDF solamente.</small>
@@ -109,7 +109,7 @@
 
                     <label>Direcciones</label>
                     @if ($clienteEspecifico->direcciones->count() > 0)
-                        <select name="direccion_seleccionada" id="direccion-select" class="form-control" wire:model="direccionProyecto">
+                        <select name="direccion_seleccionada" id="direccion-select" class="form-control" wire:model="idDireccionParaProyecto">
                             @foreach ($clienteEspecifico->direcciones as $direccion)
                                 <option value="{{ $direccion->id }}"
                                     title="{{ $direccion->estado }}, {{ $direccion->ciudad }}, {{ $direccion->colonia }}, {{ $direccion->calle }} #{{ $direccion->numero }}">
@@ -130,14 +130,14 @@
                 <div class="form-group">
                     <div class="form-group"> <label for="archivosFacturacion">Fichas tecnicas o
                             atributos adicionales</label>
-                        @if (!$archivoDeProyecto)
+                        @if (!$archivoSubido)
                             <div class="file-upload"
                                 onclick="document.getElementById('archivoDeProyecto').click();">
                                 <span class="file-upload-icon">&#x1F4C2;</span>
                                 <span class="file-upload-text">Buscar
                                     archivos<br>Arrastre y suelte archivos aquí</span>
                                 <input type="file" id="archivoDeProyecto" class="form-control-file"
-                                    wire:model="archivoDeProyecto" accept=".pdf">
+                                    wire:model="archivoSubido" accept=".pdf">
                             </div>
                             <small class="form-text text-muted">Por favor, suba archivos en
                                 formato PDF solamente.</small>
@@ -149,7 +149,7 @@
                                     <span class="file-upload-text">Archivo
                                         Cargado<br>{{ $fileNamePdf }}</span>
                                     <input type="file" id="archivoDeProyectoCar" class="form-control-file"
-                                        wire:model="archivoDeProyecto" accept=".pdf">
+                                        wire:model="archivoSubido" accept=".pdf">
                                 </div>
                             </div>
                         @endif
@@ -208,7 +208,7 @@
                     <div>
                         <label>Elementos adicionales </label>
                         @foreach ($adicionales as $index => $adicional)
-                            <div class="input-group">
+                            <div class="input-group mb-2">
 
                                 <div class="row">
                                     <div class="col-md-8">
@@ -224,28 +224,28 @@
                                         @if ($index > 0)
                                             <div class="input-group-append">
                                                 <button type="button" class="btn btn-danger ml-2"
-                                                    wire:click="removeLineaTecnica({{ $index }})">Eliminar</button>
+                                                    wire:click="removeAdicionales({{ $index }})">Eliminar</button>
                                             </div>
                                         @endif
                                     </div>
                                 </div>
                             </div>
                         @endforeach
-                        <button type="button" class="btn btn-secondary mt-2" wire:click="addLineaTecnica">Agregar
+                        <button type="button" class="btn btn-secondary mt-2" wire:click="addAdicionales">Agregar
                             Línea</button>
                     </div>
                     <br>
                     <label>Direcciones</label>
                     @if ($clienteEspecifico->direcciones->count() > 0)
-                        <select name="direccion_seleccionada" id="direccion-select" class="form-control">
-                            @foreach ($clienteEspecifico->direcciones as $direccion)
-                                <option value="{{ $direccion->id }}"
-                                    title="{{ $direccion->estado }}, {{ $direccion->ciudad }}, {{ $direccion->colonia }}, {{ $direccion->calle }} #{{ $direccion->numero }}">
-                                    {{ $direccion->estado }}, {{ $direccion->ciudad }}, {{ $direccion->colonia }},
-                                    {{ $direccion->calle }} #{{ $direccion->numero }}
-                                </option>
-                            @endforeach
-                        </select>
+                    <select name="direccion_seleccionada" id="direccion-select" class="form-control" wire:model="idDireccionParaProyecto">
+                        @foreach ($clienteEspecifico->direcciones as $direccion)
+                            <option value="{{ $direccion->id }}"
+                                title="{{ $direccion->estado }}, {{ $direccion->ciudad }}, {{ $direccion->colonia }}, {{ $direccion->calle }} #{{ $direccion->numero }}">
+                                {{ $direccion->estado }}, {{ $direccion->ciudad }}, {{ $direccion->colonia }},
+                                {{ $direccion->calle }} #{{ $direccion->numero }}
+                            </option>
+                        @endforeach
+                    </select>
                         <small class="form-text text-muted">Por favor, elige una dericcion para el proyecto.</small>
                         <small class="form-text text-muted">(Nota: Estas direcciones son recuperadas del cliente)</small>
                     @else
@@ -257,7 +257,7 @@
         </x-slot>
         <x-slot name='footer'>
             <button type="button" class="btn btn-secondary mr-2 disabled:opacity-50"
-                wire:click="$set('openModalCreacionProyecto',false)" wire:loading.attr="disabled">Cancelar</button>
+                wire:click="cancelar" wire:loading.attr="disabled">Cancelar</button>
             <button type="button" class="btn btn-primary disabled:opacity-50" wire:loading.attr="disabled"
                 wire:click="">Agregar proyecto</button>
         </x-slot>
