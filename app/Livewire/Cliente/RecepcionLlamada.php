@@ -13,14 +13,13 @@ class RecepcionLlamada extends Component
 
     public $nombre, $correo, $rfc;
     public $telefonos = [['nombre' => '', 'numero' => '']];
-    public $cuentas = [['titular' => '', 'numero' => '']];
-    public $claves = [['titular' => '', 'numero' => '']];
+    public $bancarios = [['banco' => '','titular' => '', 'cuenta' => '', 'clave' => '']];
+    public $proyectos = 0;
+    public $proyectosActivos = 0;
     public function render()
     {
         return view('livewire.cliente.recepcion-llamada');
     }
-
-
 
     public function addTelefono()
     {
@@ -33,30 +32,15 @@ class RecepcionLlamada extends Component
         $this->telefonos = array_values($this->telefonos); // Reindexar el array
     }
 
-
-
-    public function addCuenta()
+    public function addBancarios()
     {
-        $this->cuentas[] = ['titular' => '', 'numero' => ''];
+        $this->bancarios[] = ['banco' => '','titular' => '', 'cuenta' => '', 'clave' => ''];
     }
 
-    public function removeCuenta($index)
+    public function removeBancarios($index)
     {
-        unset($this->cuentas[$index]);
-        $this->cuentas = array_values($this->cuentas); // Reindexar el array
-    }
-
-
-
-    public function addClave()
-    {
-        $this->claves[] = ['titular' => '', 'numero' => ''];
-    }
-
-    public function removeClave($index)
-    {
-        unset($this->claves[$index]);
-        $this->claves = array_values($this->claves); // Reindexar el array
+        unset($this->bancarios[$index]);
+        $this->bancarios = array_values($this->bancarios); // Reindexar el array
     }
 
     public function save()
@@ -70,8 +54,9 @@ class RecepcionLlamada extends Component
             'nombre' => $this->nombre,
             'correo' => $this->correo,
             'rfc' => $this->rfc,
-            'cuenta' => json_encode($this->cuentas), // Convertir a JSON
-            'clave' => json_encode($this->claves),   // Convertir a JSON
+            'bancarios' => json_encode($this->bancarios), // Convertir a JSON
+            'proyectos' => $this->proyectos,
+            'proyectos_activos' => $this->proyectosActivos,
             'telefono' => json_encode($this->telefonos), // Convertir a JSON
             'user_id' => $idUser,
             'fecha' => now(),
@@ -79,7 +64,7 @@ class RecepcionLlamada extends Component
 
 
 
-        $this->reset('nombre', 'correo', 'rfc', 'cuentas', 'claves', 'telefonos');
+        $this->reset('nombre', 'correo', 'rfc', 'bancarios', 'proyectos', 'telefonos', 'proyectosActivos');
 
 
         return ['cliente_id' => $cliente->id];

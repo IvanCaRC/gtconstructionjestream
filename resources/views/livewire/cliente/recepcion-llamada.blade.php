@@ -39,41 +39,29 @@
         </div>
 
         <div class="form-group">
-            <label>Cuentas</label>
-            @foreach ($cuentas as $index => $cuenta)
+            <label>CUentas Bancaria</label>
+            @foreach ($bancarios as $index => $bancario)
                 <div class="input-group mb-2">
-                    <input type="text" class="form-control" wire:model.defer="cuentas.{{ $index }}.titular"
-                        placeholder="Nombre del titular de la cuenta">
-                    <input type="text" class="form-control" wire:model.defer="cuentas.{{ $index }}.numero"
-                        placeholder="Cuenta" id="telefono">
+                    <input type="text" class="form-control" wire:model.defer="bancarios.{{ $index }}.banco"
+                        placeholder="Ingresa el nombre del banco">
+                    <input type="text" class="form-control" wire:model.defer="bancarios.{{ $index }}.titular"
+                        placeholder="Ingresa el titular de la cuenta" >
+                </div>
+                <div class="input-group mb-2">
+                    <input type="text" class="form-control" wire:model.defer="bancarios.{{ $index }}.cuenta"
+                        placeholder="Ingresa el numero de cuenta">
+                    <input type="text" class="form-control" wire:model.defer="bancarios.{{ $index }}.clave"
+                        placeholder="Ingresa la clave" >
                     @if ($index > 0)
                         <div class="input-group-append">
                             <button type="button" class="btn btn-danger ml-2"
-                                wire:click="removeCuenta({{ $index }})">Eliminar</button>
+                                wire:click="removeBancarios({{ $index }})">Eliminar</button>
                         </div>
                     @endif
                 </div>
             @endforeach
+            <button type="button" class="btn btn-secondary mt-2" wire:click="addBancarios">Agregar otra cuenta</button>
         </div>
-
-        <div class="form-group">
-            <label>Claves</label>
-            @foreach ($claves as $index => $clave)
-                <div class="input-group mb-2">
-                    <input type="text" class="form-control" wire:model.defer="claves.{{ $index }}.titular"
-                        placeholder="Nombre del titular de la clave">
-                    <input type="text" class="form-control" wire:model.defer="claves.{{ $index }}.numero"
-                        placeholder="Clave" id="telefono">
-                    @if ($index > 0)
-                        <div class="input-group-append">
-                            <button type="button" class="btn btn-danger ml-2"
-                                wire:click="removeClave({{ $index }})">Eliminar</button>
-                        </div>
-                    @endif
-                </div>
-            @endforeach
-        </div>
-
     </div>
 
     <script>
@@ -100,7 +88,7 @@
                         if (result.isConfirmed) {
                             // Enviar el formulario
                             document.getElementById('proveedor-formee').submit();
-                            
+
 
                         }
                     });
@@ -128,10 +116,10 @@
             }
         }
     </script>
-        <script>
-            function cancelar() {
-                // Llamar al método update2 de Livewire
-                window.location.href = "{{ route('ventas.clientes.gestionClientes') }}";
-            }
-        </script>
+    <script>
+        function cancelar() {
+            // Llamar al método update2 de Livewire
+            window.location.href = "{{ route('ventas.clientes.gestionClientes') }}";
+        }
+    </script>
 </div>

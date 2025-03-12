@@ -9,15 +9,13 @@ class VistaEspecifica extends Component
 {
     protected $listeners = ['refresh' => 'render'];
 
-    public $openModalCreacionProyecto = true;
-    public $tipoDeProyectoSelecionado;
-    public $archivoDeListaDeItems;
-    public $adicionales = [['estructura' => '', 'cantidad' => '']];
+   
 
     public $clienteEspecifico;
     public $telefonos = [['nombre' => '', 'numero' => '']];
-    public $cuentas = [['titular' => '', 'numero' => '']];
-    public $claves = [['titular' => '', 'numero' => '']];
+    public $bancarios = [['banco' => '','titular' => '', 'cuenta' => '', 'clave' => '']];
+    public $proyectos;
+    public $proyectosActivos;
 
     public function mount($idCliente)
     {
@@ -34,26 +32,15 @@ class VistaEspecifica extends Component
             $this->telefonos = null;
         }
 
-        $cuentas = json_decode($this->clienteEspecifico->cuenta, true);
-        $cuentas = array_filter($cuentas, function ($cuentas) {
-            return !empty($cuentas['titular']) || !empty($cuentas['numero']);
+        $bancarios = json_decode($this->clienteEspecifico->bancarios, true);
+        $bancarios = array_filter($bancarios, function ($bancarios) {
+            return !empty($bancarios['banco']) || !empty($bancarios['titular']) || !empty($bancarios['cuenta']) || !empty($bancarios['clave']);
         });
 
-        if (!empty($cuentas)) {
-            $this->cuentas = $cuentas;
+        if (!empty($bancarios)) {
+            $this->bancarios = $bancarios;
         } else {
-            $this->cuentas = null;
-        }
-
-        $claves = json_decode($this->clienteEspecifico->clave, true);
-        $claves = array_filter($claves, function ($claves) {
-            return !empty($claves['titular']) || !empty($claves['numero']);
-        });
-
-        if (!empty($claves)) {
-            $this->claves = $claves;
-        } else {
-            $this->claves = null;
+            $this->bancarios = null;
         }
     }
 
@@ -61,7 +48,16 @@ class VistaEspecifica extends Component
     {
         return view('livewire.cliente.vista-especifica');
     }
+
+    //____________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
     
+    public $openModalCreacionProyecto = false;
+    public $tipoDeProyectoSelecionado;
+    
+    
+    
+    
+
     public function cancelar(){
         $this->reset('openModalCreacionProyecto');
 
@@ -72,4 +68,16 @@ class VistaEspecifica extends Component
     {
         $this->tipoDeProyectoSelecionado = $tipo;
     }
+
+    //____________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
+    //Para obra
+    public $archivoDeProyecto;
+    public $datosGenrales = [['frente' => '','fondo' => '','alturaTecho' => '','areaTotal' => '','alturaMuros' => '','canalon' => '','perimetral' => '', 'caballete' => '']]; 
+    public $adicionales = [['estructura' => '', 'cantidad' => '']];
+    //____________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________________
+    //Ppara suministro
+    public $archivoDeListaDeItems;
+    public $archivoDeListaDeItemsPdf;
+    
+
 }
