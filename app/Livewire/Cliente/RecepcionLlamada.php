@@ -45,7 +45,8 @@ class RecepcionLlamada extends Component
 
     public function save()
     {
-
+        //Reglas de validacion
+        $this->validate(Cliente::rules(), Cliente::messages());
 
         $user = Auth::user();
         $idUser = $user->id;

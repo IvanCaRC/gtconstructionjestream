@@ -2,18 +2,29 @@
     <div>
         <div class="form-group">
             <label for="nombre">Nombre</label>
-            <input type="text" id="nombre" class="form-control" wire:model.defer="nombre">
+            <input type="text" id="nombre" class="form-control @error('nombre') is-invalid @enderror"
+                wire:model.defer="nombre" wire:blur="validateField('nombre')">
+            @error('nombre')
+                <span class="text-danger">{{ $message }}</span>
+            @enderror
         </div>
         <div class="row">
             <div class="col-md-6 mb-3">
                 <label for="correo">Correo</label>
-                <input type="email" id="correo" class="form-control" wire:model="correo">
+                <input type="email" id="correo" class="form-control @error('correo') is-invalid @enderror"
+                    wire:model="correo" wire:blur="validateField('correo')">
+                @error('correo')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
             </div>
 
             <div class="col-md-6 mb-3">
                 <label for="rfc">RFC</label>
-                <input id="rfc" class="form-control" wire:model="rfc">
-
+                <input id="rfc" class="form-control @error('rfc') is-invalid @enderror" 
+                wire:model="rfc" wire:blur="validateField('rfc')">
+                @error('rfc')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
             </div>
 
         </div>
@@ -39,19 +50,19 @@
         </div>
 
         <div class="form-group">
-            <label>CUentas Bancaria</label>
+            <label>Cuentas Bancaria</label>
             @foreach ($bancarios as $index => $bancario)
                 <div class="input-group mb-2">
                     <input type="text" class="form-control" wire:model.defer="bancarios.{{ $index }}.banco"
                         placeholder="Ingresa el nombre del banco">
                     <input type="text" class="form-control" wire:model.defer="bancarios.{{ $index }}.titular"
-                        placeholder="Ingresa el titular de la cuenta" >
+                        placeholder="Ingresa el titular de la cuenta">
                 </div>
                 <div class="input-group mb-2">
                     <input type="text" class="form-control" wire:model.defer="bancarios.{{ $index }}.cuenta"
                         placeholder="Ingresa el numero de cuenta">
                     <input type="text" class="form-control" wire:model.defer="bancarios.{{ $index }}.clave"
-                        placeholder="Ingresa la clave" >
+                        placeholder="Ingresa la clave">
                     @if ($index > 0)
                         <div class="input-group-append">
                             <button type="button" class="btn btn-danger ml-2"
