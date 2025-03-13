@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('proyecto', function (Blueprint $table) {
+        Schema::create('proyectos', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('cliente_id');
             $table->unsignedBigInteger('direccion_id')->nullable();;
@@ -22,6 +22,7 @@ return new class extends Migration
             $table->text('items_cotizar')->nullable();
             $table->text('datos_medidas')->nullable();
             $table->text('datos_adicionales')->nullable();
+            $table->date('fecha');
             $table->timestamps();
 
             $table->foreign('cliente_id')->references('id')->on('clientes')->onDelete('cascade');
@@ -34,6 +35,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('proyecto');
+        Schema::dropIfExists('proyectos');
     }
 };
