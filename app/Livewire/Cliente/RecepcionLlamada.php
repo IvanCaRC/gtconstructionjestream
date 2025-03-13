@@ -43,6 +43,29 @@ class RecepcionLlamada extends Component
         $this->bancarios = array_values($this->bancarios); // Reindexar el array
     }
 
+    //Funcion de validacion en tiempo real
+    public function updated($propertyName)
+    {
+        //Implementar mensajes personalizados
+        $this->validateOnly($propertyName, Cliente::rules(), Cliente::messages());
+    }
+
+    public function validateField($field)
+    {
+        $this->validateOnly($field);
+    }
+
+    //Mandar a llamar las reglas del modelo de manera local
+    protected function rules()
+    {
+        return Cliente::rules();
+    }
+
+    protected function messages()
+    {
+        return Cliente::messages();
+    }
+
     public function save()
     {
         //Reglas de validacion
