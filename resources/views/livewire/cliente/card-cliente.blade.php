@@ -8,12 +8,12 @@
                 </button>
                 <h3 class="ml-3">Datos de cliente</h3>
             </div>
-            <div class="col-md-7"></div>
+            <div class="col-md-6"></div>
             <div class="col-md-1">
-                <a href="#" class="text-danger" {{-- onclick="confirmDeletion({{ $proveedor->id }}, '{{ $proveedor->nombre }}')" --}}>Eliminar</a>
+                <button class="btn btn-danger" {{-- onclick="confirmDeletion({{ $proveedor->id }}, '{{ $proveedor->nombre }}')" --}}>Eliminar</button>
             </div>
-            <div class="col-md-1">
-                <a href="#" class="d-block" {{-- wire:click="editProveedor({{ $proveedor->id }})" --}}>Editar cliente</a>
+            <div class="col-md-2">
+                <button class="btn btn-primary" {{-- wire:click="editProveedor({{ $proveedor->id }})" --}}>Editar cliente</button>
             </div>
         </div>
 

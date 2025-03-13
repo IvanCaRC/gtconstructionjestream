@@ -16,9 +16,10 @@
 
         <div class="card">
             <div class="card-header">
-                <h2>Recepcion de llamada de un cliente</h2>
+                <h2>Formulario de recepcion de llamada</h2>
             </div>
             <div class="card-body">
+                <h3>Datos del cliente</h3>
                 <form id="proveedor-formee" action="{{ route('ventas.clientes.recepcionLlamadas.store') }}" method="POST">
                     @csrf
                     <input type="hidden" id="direcciones-input" name="direcciones">
