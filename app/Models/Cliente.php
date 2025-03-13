@@ -25,6 +25,12 @@ class Cliente extends Model
     ];
 
     // Definir relación con el modelo User
+
+    public function proyectos()
+    {
+        return $this->hasMany(Proyecto::class, 'cliente_id');
+    }
+    
     public function user()
     {
         return $this->belongsTo(User::class);

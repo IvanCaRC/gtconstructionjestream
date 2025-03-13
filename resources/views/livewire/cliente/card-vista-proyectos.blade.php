@@ -23,6 +23,7 @@
                     </select>
                 </div>
             </div>
+            @if ($proyectos && $proyectos->count() > 0)
             <table class="table">
                 <thead>
                     <tr>
@@ -31,11 +32,11 @@
                             Proceso
 
                         </th>
-                        <th >
+                        <th>
                             Nombre
 
                         </th>
-                        <th >
+                        <th>
                             Tipo
 
                         </th>
@@ -48,12 +49,41 @@
                     </tr>
                 </thead>
                 <tbody>
-
+                    
+                        @foreach ($proyectos as $proyecto)
+                            <tr>
+                                <td>
+                                    {!! $proyecto->estado == 1 ? '<span class="badge badge-success">Activo</span>' : 
+                                         ($proyecto->estado == 2 ? '<span class="badge badge-warning">Inactivo</span>' : 
+                                         ($proyecto->estado == 3 ? '<span class="badge badge-danger">Cancelado</span>' : 
+                                         '<span class="badge badge-secondary">Estado desconocido</span>')) !!}
+                                </td>
+                                <td>{{ $proyecto->proceso }}</td>
+                                <td>{{ $proyecto->nombre }}</td>
+                                <td>{{ $proyecto->tipo }}</td>
+                                <td></td>
+                                <td>{{ $proyecto->listas }}</td>
+                                <td>{{ $proyecto->cotisaciones }}</td>
+                                <td>{{ $proyecto->ordenes }}</td>
+                                <td>
+                                    <button class="btn btn-sm btn-primary">Editar</button>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-danger">Eliminar</button>
+                                </td>
+                            </tr>
+                        @endforeach
+                   
                 </tbody>
             </table>
+            @else
+            <tr>
+                <td colspan="10" class="text-center">No hay proyectos registrados para este cliente.</td>
+            </tr>
+        @endif
         </div>
 
     </div>
 
-    
+
 </div>

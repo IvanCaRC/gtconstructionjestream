@@ -14,9 +14,13 @@ return new class extends Migration
         Schema::create('proyectos', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('cliente_id');
-            $table->unsignedBigInteger('direccion_id')->nullable();;
+            $table->unsignedBigInteger('direccion_id')->nullable();
+            $table->integer('proceso');
             $table->string('nombre');
             $table->integer('preferencia')->nullable();;
+            $table->integer('listas');
+            $table->integer('cotisaciones');
+            $table->integer('ordenes');
             $table->integer('tipo');
             $table->integer('estado');
             $table->string('archivo')->nullable();

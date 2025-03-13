@@ -24,6 +24,8 @@ class VistaEspecifica extends Component
     {
         $this->clienteEspecifico = Cliente::findOrFail($idCliente);
 
+        
+
         $telefonos = json_decode($this->clienteEspecifico->telefono, true);
         $telefonos = array_filter($telefonos, function ($telefonos) {
             return !empty($telefonos['nombre']) || !empty($telefonos['numero']);
@@ -49,6 +51,7 @@ class VistaEspecifica extends Component
 
     public function render()
     {
+        $this->proyectos = Proyecto::where('cliente_id', $this->clienteEspecifico->id)->get();
         return view('livewire.cliente.vista-especifica');
     }
 
@@ -60,7 +63,7 @@ class VistaEspecifica extends Component
 
     public function cancelar()
     {
-        $this->reset('openModalCreacionProyecto','archivoSubido','tipoDeProyectoSelecionado','nombreProyecto', 'listaACotizarTxt','idDireccionParaProyecto','datosGenrales','adicionales');
+        $this->reset('openModalCreacionProyecto', 'archivoSubido', 'tipoDeProyectoSelecionado', 'nombreProyecto', 'listaACotizarTxt', 'idDireccionParaProyecto', 'datosGenrales', 'adicionales');
 
         $this->dispatch('refresh');
     }
@@ -101,55 +104,61 @@ class VistaEspecifica extends Component
         $this->adicionales = array_values($this->adicionales); // Reindexar el array
     }
 
-   //Para suministro
+    //Para suministro
 
     public $listaACotizarTxt;
 
-   public function saveProyecto()
+    public function saveProyecto()
     {
         $clienteId = $this->clienteEspecifico->id;
         $archivoSubido = null;
         if ($this->archivoSubido) {
             $archivoSubido = $this->archivoSubido->store('archivosFacturacionProveedores', 'public');
         }
-        if($this->tipoDeProyectoSelecionado == 1){
+        if ($this->tipoDeProyectoSelecionado == 1) {
             $proyecto = Proyecto::create([
                 'cliente_id' => $clienteId,
                 'direccion_id' => $this->idDireccionParaProyecto,
+                'proceso' => 0,
                 'nombre' => $this->nombreProyecto,
                 'preferencia' => $this->preferencia,
-                'tipo' => $this->tipoDeProyectoSelecionado, 
+                'listas' => 0,
+                'cotisaciones' => 0,
+                'ordenes' => 0,
+                'tipo' => $this->tipoDeProyectoSelecionado,
                 'estado' => 1,
                 'archivo' => $archivoSubido,
-                'items_cotizar' => $this->listaACotizarTxt, 
+                'items_cotizar' => $this->listaACotizarTxt,
+                'datos_medidas' => json_encode($this->datosGenrales), // Guardar como JSON
+                'datos_adicionales' => json_encode($this->adicionales), // Guardar como JSON
+                'fecha' => now(),
+            ]);
+        } else if ($this->tipoDeProyectoSelecionado == 0) {
+            $proyecto = Proyecto::create([
+                'cliente_id' => $clienteId,
+                'direccion_id' => $this->idDireccionParaProyecto,
+                'proceso' => 0,
+                'nombre' => $this->nombreProyecto,
+                'preferencia' => $this->preferencia,
+                'listas' => 0,
+                'cotisaciones' => 0,
+                'ordenes' => 0,
+                'tipo' => $this->tipoDeProyectoSelecionado,
+                'estado' => 1,
+                'archivo' => $archivoSubido,
+                'items_cotizar' => $this->listaACotizarTxt,
                 'datos_medidas' => json_encode($this->datosGenrales), // Guardar como JSON
                 'datos_adicionales' => json_encode($this->adicionales), // Guardar como JSON
                 'fecha' => now(),
             ]);
         }
-        else if ($this->tipoDeProyectoSelecionado == 0){
-            $proyecto = Proyecto::create([
-                'cliente_id' => $clienteId,
-                'direccion_id' => $this->idDireccionParaProyecto,
-                'nombre' => $this->nombreProyecto,
-                'preferencia' => $this->preferencia,
-                'tipo' => $this->tipoDeProyectoSelecionado, 
-                'estado' => 1,
-                'archivo' => $archivoSubido,
-                'items_cotizar' => $this->listaACotizarTxt, 
-                'datos_medidas' => json_encode($this->datosGenrales), // Guardar como JSON
-                'datos_adicionales' => json_encode($this->adicionales), // Guardar como JSON
-                'fecha' => now(),
-            ]);
-            
-        }
-       
-
-        $this->reset('openModalCreacionProyecto','archivoSubido','tipoDeProyectoSelecionado','nombreProyecto', 'listaACotizarTxt','idDireccionParaProyecto','datosGenrales','adicionales');
 
 
+        $this->reset('openModalCreacionProyecto', 'archivoSubido', 'tipoDeProyectoSelecionado', 'nombreProyecto', 'listaACotizarTxt', 'idDireccionParaProyecto', 'datosGenrales', 'adicionales');
 
-        return ['cliente_id' => $clienteId];
+        $this->dispatch('refresh');
+
+        return true;
     }
 
     public function asignarDireccion($idDIreccion)
