@@ -88,6 +88,7 @@ class VistaEspecifica extends Component
     //Para obra
     public $datosGenrales = [['frente' => '', 'fondo' => '', 'alturaTecho' => '', 'areaTotal' => '', 'alturaMuros' => '', 'canalon' => '', 'perimetral' => '', 'caballete' => '']];
     public $adicionales = [['estructura' => '', 'cantidad' => '']];
+    public $preferencia;
 
     public function addAdicionales()
     {
@@ -116,6 +117,7 @@ class VistaEspecifica extends Component
                 'cliente_id' => $clienteId,
                 'direccion_id' => $this->idDireccionParaProyecto,
                 'nombre' => $this->nombreProyecto,
+                'preferencia' => $this->preferencia,
                 'tipo' => $this->tipoDeProyectoSelecionado, 
                 'estado' => 1,
                 'archivo' => $archivoSubido,
@@ -130,6 +132,7 @@ class VistaEspecifica extends Component
                 'cliente_id' => $clienteId,
                 'direccion_id' => $this->idDireccionParaProyecto,
                 'nombre' => $this->nombreProyecto,
+                'preferencia' => $this->preferencia,
                 'tipo' => $this->tipoDeProyectoSelecionado, 
                 'estado' => 1,
                 'archivo' => $archivoSubido,
@@ -152,5 +155,10 @@ class VistaEspecifica extends Component
     public function asignarDireccion($idDIreccion)
     {
         $this->idDireccionParaProyecto = $idDIreccion;
+    }
+
+    public function asiganrPreferencia($preferencia)
+    {
+        $this->preferencia = $preferencia;
     }
 }

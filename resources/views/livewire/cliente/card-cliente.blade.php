@@ -2,18 +2,16 @@
     <div class="card-header">
         <div class="row align-items-center">
 
-            <div class="row col-md-3">
+            <div class="row col-md-10">
                 <button type="button" class="btn-icon">
                     <i class="fas fa-arrow-left"></i>
                 </button>
                 <h3 class="ml-3">Datos de cliente</h3>
             </div>
-            <div class="col-md-6"></div>
-            <div class="col-md-1">
-                <button class="btn btn-danger" {{-- onclick="confirmDeletion({{ $proveedor->id }}, '{{ $proveedor->nombre }}')" --}}>Eliminar</button>
-            </div>
+
             <div class="col-md-2">
-                <button class="btn btn-primary" {{-- wire:click="editProveedor({{ $proveedor->id }})" --}}>Editar cliente</button>
+                <a href="#" wire:click=""
+                    class="d-block mb-3" wire:click="">Editar cliente</a>
             </div>
         </div>
 

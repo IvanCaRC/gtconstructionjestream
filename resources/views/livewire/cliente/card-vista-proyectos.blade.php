@@ -16,9 +16,10 @@
                 </div>
                 <div class="col-md-2">
                     <select class="form-control mr-2">
-                        <option value="2">Todos los estados</option>
-                        <option value="1">Activo</option>
-                        <option value="0">Inactivo</option>
+                        <option value="3">Todos los estados</option>
+                        <option value="2">Activo</option>
+                        <option value="1">Inactivo</option>
+                        <option value="0">Cancelados</option>
                     </select>
                 </div>
             </div>
@@ -26,21 +27,22 @@
                 <thead>
                     <tr>
                         <th>Estado</th>
-                        <th class="d-none d-md-table-cell" wire:click="order('first_last_name')"
-                            style="cursor: pointer;">
+                        <th>
+                            Proceso
+
+                        </th>
+                        <th >
                             Nombre
 
                         </th>
-                        <th class="d-none d-md-table-cell" wire:click="order('email')" style="cursor: pointer;">
-                            Correo
+                        <th >
+                            Tipo
 
                         </th>
-                        <th class="d-none d-md-table-cell" wire:click="order('number')" style="cursor: pointer;">
-                            Teléfono
-
-                        </th>
-                        <th>Departamento</th>
-                        <th></th>
+                        <th>Direccion</th>
+                        <th>Listas</th>
+                        <th>Cotisaciones</th>
+                        <th>Ordenes</th>
                         <th></th>
                         <th></th>
                     </tr>

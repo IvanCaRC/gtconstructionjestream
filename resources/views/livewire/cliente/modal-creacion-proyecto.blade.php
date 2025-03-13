@@ -12,6 +12,17 @@
             </div>
 
             <div class="form-group">
+                <label for="unidad">Preferencia</label>
+                <select id="unidad" wire:model="preferencia" class="form-control" 
+                    wire:change="asiganrPreferencia($event.target.value)">
+                    <option value="">Ninguna</option>
+                    <option value="1">Tiempo de entrega</option>
+                    <option value="2">Precio</option>
+                </select>
+                <small class="form-text text-muted">La preferencia del producto facilitara la selección de intems en la cotisacion</small>
+            <div class="form-group">
+            </div>
+            
                 <label for="unidad">Tipo</label>
                 <select id="unidad" wire:model="tipoDeProyectoSelecionado" class="form-control" required
                     wire:change="asignarTipoDeProyecto($event.target.value)">
@@ -20,7 +31,6 @@
                     <option value="0">Obra</option>
                 </select>
             </div>
-
             @if ($tipoDeProyectoSelecionado === '1')
                 <div class="form-group">
                     <div class="form-group"> <label for="archivosFacturacion">Fichas tecnicas o

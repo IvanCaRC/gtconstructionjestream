@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('cliente_id');
             $table->unsignedBigInteger('direccion_id')->nullable();;
             $table->string('nombre');
+            $table->integer('preferencia')->nullable();;
             $table->integer('tipo');
             $table->integer('estado');
             $table->string('archivo')->nullable();

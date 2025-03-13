@@ -10,7 +10,7 @@ class Proyecto extends Model
     use HasFactory;
 
     protected $fillable = [
-        'cliente_id', 'direccion_id', 'nombre','tipo','estado','archivo', 'items_cotizar','datos_medidas','datos_adicionales','fecha'
+        'cliente_id', 'direccion_id', 'nombre','preferencia','tipo','estado','archivo', 'items_cotizar','datos_medidas','datos_adicionales','fecha'
     ];
 
 }
