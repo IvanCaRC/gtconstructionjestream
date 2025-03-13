@@ -118,4 +118,13 @@ class FichasTecnicas extends Component
     {
         $this->resetPage();  // Asegura que la paginación se restablezca
     }
+
+    public function toggleDesplegable($idfamilia)
+    {
+        if (isset($this->desplegables[$idfamilia])) {
+            $this->desplegables[$idfamilia] = !$this->desplegables[$idfamilia];
+        } else {
+            $this->desplegables[$idfamilia] = true;
+        }
+    }
 }

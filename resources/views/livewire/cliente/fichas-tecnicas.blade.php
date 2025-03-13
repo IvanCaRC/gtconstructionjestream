@@ -1,5 +1,10 @@
 <div class="container-fluid px-4 sm:px-6 lg:px-8 py-1">
-    <h2 class="pl-4">Seleccione una lista para cotizar materiales</h2>
+    <div style="display: flex; align-items: center; justify-content: space-between;">
+        <h2 class="pl-4">Seleccione una lista para cotizar materiales</h2>
+        <button style="background-color: transparent; border: none; cursor: pointer; margin-right: 40px;">
+            <i class="fas fa-shopping-cart" style="font-size: 32px;"></i>
+        </button>
+    </div>
     <div class="container-fluid px-4 sm:px-6 lg:px-8 py-1">
         <div class="flex h-screen gap-4 p-4">
             <!-- Primera sección (85%) -->
@@ -237,8 +242,11 @@
                     <br>
                     <strong>Categorías/Familias</strong>
                     <ul>
-                        @foreach($familias as $familia)
-                            @include('livewire.familia.lista-categorias', ['familia' => $familia, 'nivel' => 0])
+                        @foreach ($familias as $familia)
+                            @include('livewire.familia.lista-categorias', [
+                                'familia' => $familia,
+                                'nivel' => 0,
+                            ])
                         @endforeach
                     </ul>
                 </div>
