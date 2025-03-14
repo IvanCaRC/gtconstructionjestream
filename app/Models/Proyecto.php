@@ -17,4 +17,9 @@ class Proyecto extends Model
         return $this->belongsTo(Cliente::class, 'cliente_id');
     }
 
+    public function direccion()
+    {
+        return $this->belongsTo(Direccion::class, 'direccion_id');
+    }
+
 }

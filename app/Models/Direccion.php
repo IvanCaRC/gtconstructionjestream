@@ -24,4 +24,8 @@ class Direccion extends Model
     {
         return $this->belongsTo(Proveedor::class, 'proveedor_id');
     }
+    public function proyectos()
+    {
+        return $this->hasMany(Proyecto::class, 'direccion_id');
+    }
 }

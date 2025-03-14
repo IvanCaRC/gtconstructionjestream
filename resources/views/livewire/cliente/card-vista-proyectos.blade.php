@@ -7,19 +7,38 @@
                     wire:click="$set('openModalCreacionProyecto', true)">Agregar proyecto</button>
             </div>
             <div class="row mb-3">
-                <div class="col-md-10">
+                <div class="col-md-6">
                     <!-- Input de búsqueda -->
-                    <input type="text" class="form-control mr-2" id="searchInput" placeholder="Buscar proyecto...">
+                    <input type="text" class="form-control mr-2" id="searchInput" placeholder="Buscar proyecto..." wire:model='searchTerm' wire:keydown='search'>
 
                     <!-- Filtro de Estado -->
 
                 </div>
                 <div class="col-md-2">
-                    <select class="form-control mr-2">
-                        <option value="3">Todos los estados</option>
-                        <option value="2">Activo</option>
+                    <select class="form-control mr-2" wire:model="statusFiltro" wire:change="search">
+                        <option value="0">Todos los estados</option>
+                        <option value="1">Activo</option>
+                        <option value="2">Inactivo</option>
+                        <option value="3">Cancelados</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <select class="form-control mr-2" wire:model="statusProcesos" wire:change="search">
+                        <option value="6">Todos los prcoesos</option>
+                        <option value="0">Activo</option>
                         <option value="1">Inactivo</option>
-                        <option value="0">Cancelados</option>
+                        <option value="2">Cancelados</option>
+                        <option value="3">Activo</option>
+                        <option value="4">Inactivo</option>
+                        <option value="5">Cancelados</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <select class="form-control mr-2" wire:model="statusTipos" wire:change="search">
+                        <option value="3">Todos los tipos</option>
+                        <option value="2">Cancelados</option>
+                        <option value="1">Activo</option>
+                        <option value="0">Inactivo</option>
                     </select>
                 </div>
             </div>
@@ -27,59 +46,87 @@
             <table class="table">
                 <thead>
                     <tr>
+                        <th>Fecha</th>
                         <th>Estado</th>
-                        <th>
-                            Proceso
-
-                        </th>
-                        <th>
-                            Nombre
-
-                        </th>
-                        <th>
-                            Tipo
-
-                        </th>
-                        <th>Direccion</th>
+                        <th>Proceso</th>
+                        <th>Nombre</th>
+                        <th>Tipo</th>
+                        <th>Dirección</th>
                         <th>Listas</th>
-                        <th>Cotisaciones</th>
-                        <th>Ordenes</th>
+                        <th>Cotizaciones</th>
+                        <th>Órdenes</th>
                         <th></th>
                         <th></th>
                     </tr>
                 </thead>
                 <tbody>
-                    
-                        @foreach ($proyectos as $proyecto)
-                            <tr>
-                                <td>
-                                    {!! $proyecto->estado == 1 ? '<span class="badge badge-success">Activo</span>' : 
-                                         ($proyecto->estado == 2 ? '<span class="badge badge-warning">Inactivo</span>' : 
-                                         ($proyecto->estado == 3 ? '<span class="badge badge-danger">Cancelado</span>' : 
-                                         '<span class="badge badge-secondary">Estado desconocido</span>')) !!}
-                                </td>
-                                <td>{{ $proyecto->proceso }}</td>
-                                <td>{{ $proyecto->nombre }}</td>
-                                <td>{{ $proyecto->tipo }}</td>
-                                <td></td>
-                                <td>{{ $proyecto->listas }}</td>
-                                <td>{{ $proyecto->cotisaciones }}</td>
-                                <td>{{ $proyecto->ordenes }}</td>
-                                <td>
-                                    <button class="btn btn-sm btn-primary">Editar</button>
-                                </td>
-                                <td>
-                                    <button class="btn btn-sm btn-danger">Eliminar</button>
-                                </td>
-                            </tr>
-                        @endforeach
-                   
+                    @foreach ($proyectos as $proyecto)
+                        <tr>
+                            <td>
+                                {{ $proyecto->fecha }}
+                            </td>
+                            <td>
+                                {!! $proyecto->estado == 1
+                                    ? '<span class="badge badge-success">Activo</span>'
+                                    : ($proyecto->estado == 2
+                                        ? '<span class="badge badge-warning">Inactivo</span>'
+                                        : ($proyecto->estado == 3
+                                            ? '<span class="badge badge-danger">Cancelado</span>'
+                                            : '<span class="badge badge-secondary">Estado desconocido</span>')) !!}
+                            </td>
+                            <td>
+                                {!! $proyecto->proceso == 0
+                                    ? '<span class="badge badge-secondary">Creando lista a cotizar</span>'
+                                    : ($proyecto->proceso == 1
+                                        ? '<span class="badge badge-secondary">Creando cotización</span>'
+                                        : ($proyecto->proceso == 2
+                                            ? '<span class="badge badge-secondary">Cotizado</span>'
+                                            : ($proyecto->proceso == 3
+                                                ? '<span class="badge badge-secondary">En proceso de venta</span>'
+                                                : ($proyecto->proceso == 4
+                                                    ? '<span class="badge badge-secondary">Venta terminada</span>'
+                                                    : ($proyecto->proceso == 5
+                                                        ? '<span class="badge badge-secondary">Cancelada</span>'
+                                                        : '<span class="badge badge-secondary">Estado desconocido</span>'))))) !!}
+                            </td>
+                            <td>{{ $proyecto->nombre }}</td>
+                            <td>
+                                {!! $proyecto->tipo == 0
+                                    ? '<span class="badge badge-secondary">Obra</span>'
+                                    : ($proyecto->tipo == 1
+                                        ? '<span class="badge badge-secondary">Suministro</span>'
+                                        : '<span class="badge badge-secondary">Estado desconocido</span>') !!}
+                            </td>
+                            <td>
+                                @if ($proyecto->direccion)
+                                    {{ $proyecto->direccion->calle }}, {{ $proyecto->direccion->numero }}, {{ $proyecto->direccion->colonia }}, {{ $proyecto->direccion->ciudad }}, {{ $proyecto->direccion->estado }}, {{ $proyecto->direccion->pais }}, C.P. {{ $proyecto->direccion->cp }}
+                                @else
+                                    Sin dirección
+                                @endif
+                            </td>
+                            <td>{{ $proyecto->listas }}</td>
+                            <td>{{ $proyecto->cotisaciones }}</td>
+                            <td>{{ $proyecto->ordenes }}</td>
+                            <td>
+                                <button class="btn btn-info btn-custom">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </td>
+                            <td>
+                                <button class="btn btn-primary btn-custom">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
-            @else
-            <tr>
-                <td colspan="10" class="text-center">No hay proyectos registrados para este cliente.</td>
-            </tr>
+            {{ $proyectos->links() }}
+
+        @else
+            <div >
+                No hay proyectos registrados para este cliente.
+            </div>
         @endif
         </div>
 

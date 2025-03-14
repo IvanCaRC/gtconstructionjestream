@@ -31,7 +31,7 @@ class GestionClientes extends Component
         $query = Cliente::query();
 
         // Si el usuario no es administrador, filtrar por su ID
-        if (!Auth::user()->hasRole('Administrador')) {
+        if (!Auth::user()->hasRole('Administrador')) {  
             $query->where('user_id', Auth::id());
         }
 
