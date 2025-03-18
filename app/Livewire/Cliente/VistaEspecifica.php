@@ -141,6 +141,7 @@ class VistaEspecifica extends Component
 
         $this->reset('openModalCreacionProyecto', 'archivoSubido', 'tipoDeProyectoSelecionado', 'nombreProyecto', 'listaACotizarTxt', 'idDireccionParaProyecto', 'datosGenrales', 'adicionales');
         $this->dispatch('refresh');
+        return redirect()->route('ventas.clientes.vistaEspecProyecto', ['idProyecto' => $proyecto->id]);
     }
 
     public function asignarDireccion($idDIreccion)
@@ -151,5 +152,16 @@ class VistaEspecifica extends Component
     public function asiganrPreferencia($preferencia)
     {
         $this->preferencia = $preferencia;
+    }
+
+    public function viewProyecto($idProyecto)
+    {
+        $proyecto = Proyecto::find($idProyecto);
+
+        if ($proyecto === null) {
+            abort(404, 'proyecto no encontrado');
+        }
+
+        return redirect()->route('ventas.clientes.vistaEspecProyecto', ['idProyecto' => $idProyecto]);
     }
 }

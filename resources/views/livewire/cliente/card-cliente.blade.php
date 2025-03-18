@@ -1,47 +1,25 @@
 <div class="card">
-    <div class="card-header">
-        <div class="row align-items-center">
-
-            <div class="row col-md-10">
-                <button type="button" class="btn-icon">
-                    <i class="fas fa-arrow-left"></i>
-                </button>
-                <h3 class="ml-3">Datos de cliente</h3>
-            </div>
-
-            <div class="col-md-2">
-                <a href="#" wire:click=""
-                    class="d-block mb-3" wire:click="">Editar cliente</a>
-            </div>
-        </div>
-
-    </div>
     <div class="card-body">
-        <div>
-            <h2>{{ $clienteEspecifico->nombre }}</h2>
+        <div class="row">
+            <div class="col-md-11">
+                <h2>Nombre: {{ $clienteEspecifico->nombre }}</h2>
+            </div>
+            <div class="col-md-1">
+                <a href="#" wire:click="" class="d-block mb-3" wire:click="">Editar cliente</a>
+            </div>
         </div>
+
         <div class="row">
             <div class="col-md-2 ">
-                <h4>Datos generales</h4>
+                <h4>RFC</h4>
                 <div>
-                    <Span>Correo: </Span>
-                    <label>{{ $clienteEspecifico->correo }}</label>
-                </div>
-                <div>
-                    <Span>RFC: </Span>
                     <label>{{ $clienteEspecifico->rfc }}</label>
                 </div>
+            </div>
+            <div class="col-md-2 ">
+                <h4>Correo</h4>
                 <div>
-                    <Span>Proyectos: </Span>
-                    <label>{{ $clienteEspecifico->proyectos }}</label>
-                </div>
-                <div>
-                    <div>
-                        <span>Proyectos activos: </span>
-                        <label style="color: {{ $clienteEspecifico->proyectos_activos > 0 ? 'green' : '' }};">
-                            {{ $clienteEspecifico->proyectos_activos }}
-                        </label>
-                    </div>
+                    <label>{{ $clienteEspecifico->correo }}</label>
                 </div>
             </div>
             <div class="col-md-2 ">
@@ -57,6 +35,43 @@
                             </label>
                         </div>
                     @endforeach
+                @endif
+            </div>
+            <div class="col-md-2 ">
+                <h4>Proyectos</h4>
+                <div>
+                    <div>
+                        <label>{{ $clienteEspecifico->proyectos }}</label>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2 ">
+                <h4>Proyectos activos</h4>
+                <div>
+                    <div>
+                        <div>
+                            <label style="color: {{ $clienteEspecifico->proyectos_activos > 0 ? 'green' : '' }};">
+                                {{ $clienteEspecifico->proyectos_activos }}
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <br>
+        </div>
+        <div class="row">
+            
+            <div class="col-md-5 ">
+                <h4>Direcciones</h4>
+                @if ($clienteEspecifico->direcciones->count() > 0)
+                    @foreach ($clienteEspecifico->direcciones as $direccion)
+                    {{ $direccion->estado }}, {{ $direccion->ciudad }},
+                    {{ $direccion->calle }}, {{ $direccion->numero }}, {{ $direccion->referencia }}<br>
+                    @endforeach
+                @else
+                    N/A
                 @endif
             </div>
             <div class="col-md-5 ">
@@ -92,16 +107,7 @@
                     </table>
                 @endif
             </div>
-            <div class="col-md-3 ">
-                <h4>Direcciones</h4>
-                @if ($clienteEspecifico->direcciones->count() > 0)
-                    @foreach ($clienteEspecifico->direcciones as $direccion)
-                        {{ $direccion->estado }}, {{ $direccion->ciudad }}...<br>
-                    @endforeach
-                @else
-                    N/A
-                @endif
-            </div>
         </div>
+
     </div>
 </div>

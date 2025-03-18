@@ -11,6 +11,7 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\RecpecioLlamadas;
 use App\Http\Controllers\VentasRecepcionCotisaciones;
+use App\Http\Controllers\PdfController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,6 +23,9 @@ use App\Http\Controllers\VentasRecepcionCotisaciones;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+
+Route::get('/proyecto/{id}/pdf', [PdfController::class, 'generarPdf'])->name('proyecto.pdf');
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -90,6 +94,8 @@ Route::get('ventas/clientes/recepcionLlamadas', [RecpecioLlamadas::class, 'index
 Route::post('ventas/clientes/recepcionLlamadas', [RecpecioLlamadas::class, 'store'])->middleware('auth', 'nocache')->name('ventas.clientes.recepcionLlamadas.store');
 
 Route::get('ventas/clientes/vistaEspecificaCliente/{idCliente}', [RecpecioLlamadas::class, 'viewEspecCliente'])->middleware('auth', 'nocache')->name('ventas.clientes.vistaEspecificaCliente');
+
+Route::get('ventas/clientes/vistaEspecProyecto/{idProyecto}', [RecpecioLlamadas::class, 'vistaEspecProyecto'])->middleware('auth', 'nocache')->name('ventas.clientes.vistaEspecProyecto');
 
 
 Route::get('ventas/clientes/gestionClientes', [RecpecioLlamadas::class, 'vista'])->middleware('auth', 'nocache')->name('ventas.clientes.gestionClientes');
