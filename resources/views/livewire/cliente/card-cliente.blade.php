@@ -24,7 +24,7 @@
             </div>
             <div class="col-md-2 ">
                 @if ($telefonos)
-                    <h4>Telefonos</h4>
+                    <h4 style="font-weight: bold;">Telefonos</h4>
                     @foreach ($telefonos as $index => $telefono)
                         <div>
                             <label class="enunciado-label">
@@ -75,7 +75,7 @@
                 @endif
             </div>
             <div class="col-md-5 ">
-                <h4>Cuentas Bancarias</h4>
+                <h4 style="font-weight: bold;">Cuentas bancarias</h4>
                 @if ($bancarios)
                     <table class="table">
                         <thead>
