@@ -15,6 +15,8 @@ use Illuminate\Support\Facades\Auth;
 class VistaEspecificaProyecto extends Component
 {
     public $proyecto;
+    public $searchTerm = '';
+    public $statusFiltro = 0; // Filtro de estado
     public $clienteEspecifico;
     public $listaPreliminar;
     public $telefonos = [['nombre' => '', 'numero' => '']];
@@ -57,20 +59,42 @@ class VistaEspecificaProyecto extends Component
 
     public function render()
     {
+        $listas = ListasCotizar::where('proyecto_id', $this->proyecto->id)
+            ->when($this->searchTerm, function ($query) {
+                $query->where(function ($q) {
+                    $q->where('nombre', 'like', '%' . $this->searchTerm . '%')
+                        ->orWhere('estado', 'like', '%' . $this->searchTerm . '%');
+                });
+            })
+            ->when($this->statusFiltro != 0, function ($query) {
+                $query->where('estado', $this->statusFiltro);
+            })
+            ->orderBy('created_at', 'desc')
+            ->paginate(10); // Usar paginate() con el trait WithPagination
+
+        // Pasar los proyectos a la vista
+
         return view('livewire.cliente.vista-especifica-proyecto', [
             'pdfUrl' => route('proyecto.pdf', ['id' => $this->proyecto->id]),
-        ]);
+        ], ['listas' => $listas]);
     }
 
     public function saveListaNueva()
     {
         $proyecto  = $this->proyecto->id;
+        $listasEnEstado1 = ListasCotizar::where('proyecto_id', $proyecto)
+            ->where('estado', 1)
+            ->get();
+
+        foreach ($listasEnEstado1 as $lista) {
+            $lista->update(['estado' => 2]);
+        }
+
+        $proyectoLista  = $this->proyecto->listas;
         $user = Auth::user();
         $idUser = $user->id;
 
-        $resultado = $this->proyecto->nombre . strval($proyecto);
-        
-        
+        $resultado = 'numero ' . strval($proyectoLista + 1);
 
 
         $listaACotizar = ListasCotizar::create([
@@ -79,7 +103,10 @@ class VistaEspecificaProyecto extends Component
             'nombre' => $resultado,
             'estado' => 1,
         ]);
-        
+
+        $this->proyecto->increment('listas'); // Incrementa el campo "proyectos" en 1
+
+
         $this->dispatch('refresh');
         // return redirect()->route('ventas.clientes.vistaEspecProyecto', ['idProyecto' => $proyecto->id]);
         return true;

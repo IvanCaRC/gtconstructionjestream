@@ -1,10 +1,30 @@
-<div class="container-fluid px-4 sm:px-6 lg:px-8 py-1">
-    <div style="display: flex; align-items: center; justify-content: space-between;">
-        <h2 class="pl-4">Seleccione una lista para cotizar materiales</h2>
-        <button style="background-color: transparent; border: none; cursor: pointer; margin-right: 40px;">
-            <i class="fas fa-shopping-cart" style="font-size: 32px;"></i>
-        </button>
-    </div>
+<div>
+    <div class="row bg-white py-4  shadow">
+        
+        @if ($listadeUsuarioActiva == null)
+        <div class="col-md-11"> 
+            <h3 class="px-3">
+                No hay una lista activa. Activa o crea una para realizar la lista.
+            </h3>
+        </div>
+            
+        @else
+        <div class="col-md-11 ">
+            <h3 class="px-3">
+                Lista activa de cliente "<span class="fw-bold text-primary ">{{$nombreCliente}}</span>", 
+                del proyecto "<span class="fw-bold text-primary ">{{$nombreProyecto}}</span>", 
+                y lista "<span class="fw-bold text-primary " >{{ $listadeUsuarioActiva }}</span>".
+            </h3>
+        </div>
+        @endif
+        <div class="col-md-1">
+            <button class="btn btn-light border-0 shadow-sm " style="width: 50px; height: 50px;">
+                <i class="fas fa-shopping-cart text-primary" style="font-size: 24px;"></i>
+            </button>
+        </div>
+    </div>  
+
+
     <div class="container-fluid px-4 sm:px-6 lg:px-8 py-1">
         <div class="flex h-screen gap-4 p-4">
             <!-- Primera sección (85%) -->

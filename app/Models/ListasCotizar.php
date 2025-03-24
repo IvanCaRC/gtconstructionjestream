@@ -16,4 +16,15 @@ class ListasCotizar extends Model
         'items_cotizar',
         'items_cotizar_temporales',
     ];
+
+
+
+
+    // Relación con Proyecto
+    public function proyecto()
+    {
+        return $this->belongsTo(Proyecto::class, 'proyecto_id');
+    }
+
+
 }

@@ -6,10 +6,12 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Familia;
 use App\Models\ItemEspecifico;
+use App\Models\ListasCotizar;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class FichasTecnicas extends Component
 {
-
     use WithPagination;
     public $searchTerm = '';
     public $sort = 'id';
@@ -18,18 +20,59 @@ class FichasTecnicas extends Component
     public $statusFiltroDeBusqueda;
     public $familiasSeleccionadas = [];
     public $desplegables = [];
+    public $listadeUsuarioActiva;
+    public $usuarioActual;
+
+    public $nombreProyecto;
+    public $nombreCliente;
+
+
+    public function mount()
+    {
+        // Obtener el usuario actual
+        $this->usuarioActual = Auth::user();
+
+        // Consultar el primer registro con estado 0 para el usuario actual
+        $registro = ListasCotizar::where('usuario_id', $this->usuarioActual->id) // Verificar usuario actual
+            ->where('estado', 1) // Estado igual a 0
+            ->first(); // Obtener el primer registro (o null si no hay)
+
+        
+        
+
+
+        if ($registro) {
+            // Recuperamos el proyecto relacionado
+            // Si se encuentra el registro, guardar el nombre; si no, asignar null
+            $this->listadeUsuarioActiva = $registro->nombre;
+            $proyecto = $registro->proyecto; // Relación proyecto
+            $cliente = $proyecto->cliente; // Relación cliente
     
+            // Asignamos los valores
+            $this->nombreProyecto = $proyecto->nombre ?? 'Sin nombre';
+            $this->nombreCliente = $cliente->nombre ?? 'Sin cliente';
+        } else {
+            // Si no existe el registro
+            $this->listadeUsuarioActiva = null;
+            $this->nombreProyecto = null;
+            $this->nombreCliente = null;
+        }
+        
+    }
+
+
+
     public function seleccionarFamilia($familiaId)
     {
         $familia = Familia::with('subfamiliasRecursivas')->find($familiaId);
-    
+
         if (!$familia) {
             return;
         }
-    
+
         // Obtener todos los IDs de la familia y sus subfamilias
         $idsFamilia = $this->obtenerTodosLosIds($familia);
-    
+
         if (in_array($familiaId, $this->familiasSeleccionadas)) {
             // Si ya estaba seleccionada, eliminar todas las familias relacionadas
             $this->familiasSeleccionadas = array_diff($this->familiasSeleccionadas, $idsFamilia);
@@ -37,7 +80,7 @@ class FichasTecnicas extends Component
             // Agregar todas las familias relacionadas
             $this->familiasSeleccionadas = array_merge($this->familiasSeleccionadas, $idsFamilia);
         }
-    
+
         // Eliminar duplicados
         $this->familiasSeleccionadas = array_unique($this->familiasSeleccionadas);
     }
@@ -48,11 +91,11 @@ class FichasTecnicas extends Component
     private function obtenerTodosLosIds($familia)
     {
         $ids = [$familia->id];
-    
+
         foreach ($familia->subfamiliasRecursivas as $subfamilia) {
             $ids = array_merge($ids, $this->obtenerTodosLosIds($subfamilia));
         }
-    
+
         return $ids;
     }
 
@@ -85,26 +128,26 @@ class FichasTecnicas extends Component
             ->where('estado_eliminacion', 1)
             ->with(['item', 'familias', 'proveedores']);
 
-            if ($this->searchTerm) {
-                $query->where(function ($q) {
-                    $q->where('estado', 'LIKE', "%{$this->searchTerm}%")
-                        ->orWhere('precio_venta_minorista', 'LIKE', "%{$this->searchTerm}%")
-                        ->orWhere('precio_venta_mayorista', 'LIKE', "%{$this->searchTerm}%")
-                        ->orWhere('unidad', 'LIKE', "%{$this->searchTerm}%")
-                        ->orWhereHas('item', function ($query) {
-                            $query->where('nombre', 'LIKE', "%{$this->searchTerm}%");
-                        });
-                });
-            }
-            if (!empty($this->familiasSeleccionadas)) {
-                $query->whereHas('familias', function ($q) {
-                    $q->whereIn('familia_id', $this->familiasSeleccionadas);
-                });
-            }
-    
-            if ($this->statusFiltroDeBusqueda !== "2" && $this->statusFiltroDeBusqueda !== null) {
-                $query->where('estado', $this->statusFiltroDeBusqueda);
-            }
+        if ($this->searchTerm) {
+            $query->where(function ($q) {
+                $q->where('estado', 'LIKE', "%{$this->searchTerm}%")
+                    ->orWhere('precio_venta_minorista', 'LIKE', "%{$this->searchTerm}%")
+                    ->orWhere('precio_venta_mayorista', 'LIKE', "%{$this->searchTerm}%")
+                    ->orWhere('unidad', 'LIKE', "%{$this->searchTerm}%")
+                    ->orWhereHas('item', function ($query) {
+                        $query->where('nombre', 'LIKE', "%{$this->searchTerm}%");
+                    });
+            });
+        }
+        if (!empty($this->familiasSeleccionadas)) {
+            $query->whereHas('familias', function ($q) {
+                $q->whereIn('familia_id', $this->familiasSeleccionadas);
+            });
+        }
+
+        if ($this->statusFiltroDeBusqueda !== "2" && $this->statusFiltroDeBusqueda !== null) {
+            $query->where('estado', $this->statusFiltroDeBusqueda);
+        }
 
         $itemEspecificos = $query->paginate(35);
 

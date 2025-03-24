@@ -24,7 +24,7 @@ class ItemEspecificoSeeder extends Seeder
             'precio_venta_minorista' => 100.00,
             'precio_venta_mayorista' => 80.00,
             'unidad' => 'Piezas',
-            'especificaciones' => 'Especificaciones del Item A',
+            'especificaciones' => '[{"enunciado":"Concepto 1","concepto":"Descripci\u00f3n 1"}]',
             'ficha_tecnica_pdf' => null,
             'estado' => true,
         ]);
