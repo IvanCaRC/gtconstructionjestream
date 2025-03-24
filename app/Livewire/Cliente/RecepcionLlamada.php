@@ -13,9 +13,23 @@ class RecepcionLlamada extends Component
 
     public $nombre, $correo, $rfc;
     public $telefonos = [['nombre' => '', 'numero' => '']];
-    public $bancarios = [['banco' => '','titular' => '', 'cuenta' => '', 'clave' => '']];
+    public $bancarios = [['banco' => '', 'titular' => '', 'cuenta' => '', 'clave' => '']];
     public $proyectos = 0;
     public $proyectosActivos = 0;
+    public $rfcDuplicado = false;
+    public $clienteDuplicadoId = null;
+
+    public function verificarClienteDuplicado()
+    {
+        $cliente = Cliente::where('rfc', $this->rfc)->first();
+
+        if ($cliente) {
+            $this->clienteDuplicadoId = $cliente->id;
+        } else {
+            $this->clienteDuplicadoId = null; // Reiniciar si no hay duplicado
+        }
+    }
+
     public function render()
     {
         return view('livewire.cliente.recepcion-llamada');
@@ -34,7 +48,7 @@ class RecepcionLlamada extends Component
 
     public function addBancarios()
     {
-        $this->bancarios[] = ['banco' => '','titular' => '', 'cuenta' => '', 'clave' => ''];
+        $this->bancarios[] = ['banco' => '', 'titular' => '', 'cuenta' => '', 'clave' => ''];
     }
 
     public function removeBancarios($index)
@@ -52,7 +66,27 @@ class RecepcionLlamada extends Component
 
     public function validateField($field)
     {
-        $this->validateOnly($field);
+        try {
+            $this->validateOnly($field, Cliente::rules());
+
+            // Si no hay errores, restablecemos
+            if ($field === 'rfc') {
+                $this->rfcDuplicado = false;
+                $this->clienteDuplicadoId = null;
+            }
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            if ($field === 'rfc' && isset($e->validator->failed()['rfc']['Unique'])) {
+                $this->rfcDuplicado = true;
+                $this->verificarClienteDuplicado(); // Recuperar ID del cliente duplicado
+            }
+            throw $e;
+        }
+    }
+
+    public function viewCliente($id)
+    {
+        // Redirigir a la vista del cliente específico
+        return redirect()->route('ventas.clientes.vistaEspecificaCliente', ['idCliente' => $id]);
     }
 
     //Mandar a llamar las reglas del modelo de manera local

@@ -22,10 +22,19 @@
                 <label for="rfc">RFC</label>
                 <input id="rfc" class="form-control @error('rfc') is-invalid @enderror" 
                 wire:model="rfc" wire:blur="validateField('rfc')">
+            
                 @error('rfc')
                     <span class="text-danger">{{ $message }}</span>
                 @enderror
-            </div>
+            
+                @if ($rfcDuplicado && $clienteDuplicadoId)
+                    <button type="button" class="btn btn-sm btn-outline-info mt-2 d-flex align-items-center gap-1" 
+                        wire:click="viewCliente({{ $clienteDuplicadoId }})">
+                        <i class="bi bi-eye"></i>
+                        Ver registro
+                    </button>
+                @endif
+            </div>                                 
 
         </div>
 
@@ -108,7 +117,7 @@
                 // Manejar error si es necesario
                 Swal.fire({
                     title: 'Error',
-                    text: 'Hubo un problema al crear el clinete, verifica tu formulario.',
+                    text: 'Hubo un problema al crear el cliente, verifica tu formulario.',
                     icon: 'error',
                     confirmButtonText: 'OK'
                 });
@@ -132,5 +141,8 @@
             // Llamar al método update2 de Livewire
             window.location.href = "{{ route('ventas.clientes.gestionClientes') }}";
         }
+    </script>
+    <script>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
     </script>
 </div>
