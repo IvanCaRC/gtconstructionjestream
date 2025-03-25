@@ -97,13 +97,16 @@ Route::get('ventas/clientes/vistaEspecificaCliente/{idCliente}', [RecpecioLlamad
 
 Route::get('ventas/clientes/vistaEspecProyecto/{idProyecto}', [RecpecioLlamadas::class, 'vistaEspecProyecto'])->middleware('auth', 'nocache')->name('ventas.clientes.vistaEspecProyecto');
 
+Route::get('ventas/clientes/vistaEspecificaListaCotizar/{idLista}', [RecpecioLlamadas::class, 'vistaEspecificaListaCotizar'])->middleware('auth', 'nocache')->name('ventas.clientes.vistaEspecificaListaCotizar');
 
 Route::get('ventas/clientes/gestionClientes', [RecpecioLlamadas::class, 'vista'])->middleware('auth', 'nocache')->name('ventas.clientes.gestionClientes');
 
 Route::get('ventas/fichasTecnicas/fichasTecnicas', [FichasTecnicas::class, 'index'])->middleware('auth', 'nocache')->name('ventas.fichasTecnicas.fichasTecnicas');
-Route::get('compras/fichasTecnicas/vistaEspecificaItem/{idItem}', [ItemController::class, 'ciewEspecItem'])->middleware('auth', 'nocache')->name('compras.items.vistaEspecificaItem');
+
+Route::get('ventas/fichasTecnicas/vistaEspecificaItem/{idItem}', [FichasTecnicas::class, 'viewEspecItem'])->middleware('auth', 'nocache')->name('ventas.fichasTecnicas.fichaEspecificaItem');
 
 
 Route::get('ventas/recepcionCotizaciones/recepcionCotizacion', [VentasRecepcionCotisaciones::class, 'index'])->middleware('auth', 'nocache')->name('ventas.recepcionCotizaciones.recepcionCotizacion');
+
 
 

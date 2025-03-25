@@ -25,7 +25,7 @@ class FichasTecnicas extends Component
 
     public $nombreProyecto;
     public $nombreCliente;
-
+    public $idLista;
 
     public function mount()
     {
@@ -44,6 +44,7 @@ class FichasTecnicas extends Component
         if ($registro) {
             // Recuperamos el proyecto relacionado
             // Si se encuentra el registro, guardar el nombre; si no, asignar null
+            $this->idLista = $registro->id;
             $this->listadeUsuarioActiva = $registro->nombre;
             $proyecto = $registro->proyecto; // Relación proyecto
             $cliente = $proyecto->cliente; // Relación cliente
@@ -111,7 +112,8 @@ class FichasTecnicas extends Component
         if ($item === null) {
             abort(404, 'item no encontrada');
         }
-        return redirect()->route('compras.items.vistaEspecificaItem', ['idItem' => $idItem]);
+        return redirect()->route('ventas.fichasTecnicas.fichaEspecificaItem', ['idItem' => $idItem]);
+        
     }
 
     public function render()
@@ -169,5 +171,10 @@ class FichasTecnicas extends Component
         } else {
             $this->desplegables[$idfamilia] = true;
         }
+    }
+
+    public function verLista($idLista)
+    {
+        return redirect()->route('ventas.clientes.vistaEspecificaListaCotizar', ['idLista' => $idLista]);
     }
 }

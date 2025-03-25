@@ -85,4 +85,9 @@ class RecpecioLlamadas extends Controller
     {
         return view('ventas.cliente.vistaEspecProyecto', ['idProyecto' => $idProyecto]);
     }
+
+    public function vistaEspecificaListaCotizar($idLista)
+    {
+        return view('ventas.cliente.vistaEspecificaListaCotizar', ['idLista' => $idLista]);
+    }
 }

@@ -12,4 +12,10 @@ class FichasTecnicas extends Controller
         // Retornar la vista de la lista de proveedores
         return view('ventas.fichasTecnicas.fichasTecnicas');
     }
+
+    public function viewEspecItem($idItem)
+    {
+        // Retornar la vista de la lista de proveedores
+        return view('ventas.fichasTecnicas.fichaEspecificaItem', ['idItem' => $idItem]);
+    }
 }
