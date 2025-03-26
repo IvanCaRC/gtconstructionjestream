@@ -221,7 +221,7 @@
 
                                                     <td>
                                                         <button class="btn btn-success btn-custom"
-                                                            wire:click="addToCart({{ $itemEspecifico->id }})"
+                                                        wire:click="agregarItemLista({{ $itemEspecifico->id }})"
                                                             title="Agrega este item a tu lista">
                                                             <i class="fas fa-shopping-cart"> Añadir a la lista</i>
                                                         </button>
