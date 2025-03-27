@@ -71,4 +71,15 @@ class GestionClientes extends Component
 
         return redirect()->route('ventas.clientes.vistaEspecificaCliente', ['idCliente' => $idCliente]);
     }
+
+    public function editCliente($clienteId)
+    {
+        $cliente = Cliente::find($clienteId);
+
+        if ($cliente === null) {
+            abort(404, 'proveedor no encontrada');
+        }
+
+        return redirect()->route('ventas.cliente.EditCliente', ['idcliente' => $clienteId]);
+    }
 }

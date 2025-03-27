@@ -46,7 +46,7 @@
                                         </td>
                                         <td>
                                             <button class="btn btn-primary btn-custom"
-                                                ><i
+                                                wire:click="editCliente({{ $cliente->id }})"><i
                                                     class="fas fa-edit"></i></button>
                                         </td>
                                     </tr>

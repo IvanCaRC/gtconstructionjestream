@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\adminController;
+use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\FamiliaController;
 use App\Http\Controllers\FichasTecnicas;
 use App\Http\Controllers\ItemController;
@@ -108,5 +109,6 @@ Route::get('ventas/fichasTecnicas/vistaEspecificaItem/{idItem}', [FichasTecnicas
 
 Route::get('ventas/recepcionCotizaciones/recepcionCotizacion', [VentasRecepcionCotisaciones::class, 'index'])->middleware('auth', 'nocache')->name('ventas.recepcionCotizaciones.recepcionCotizacion');
 
-
+Route::get('ventas/clientes/EditCliente/{idcliente}', [ClienteController::class, 'editCliente'])
+    ->middleware('auth', 'nocache')->name('ventas.cliente.EditCliente');
 
