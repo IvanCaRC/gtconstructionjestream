@@ -23,6 +23,8 @@ class FichasTecnicas extends Component
     public $listadeUsuarioActiva;
     public $usuarioActual;
 
+
+
     public $nombreProyecto;
     public $nombreCliente;
     public $idLista;
@@ -37,8 +39,8 @@ class FichasTecnicas extends Component
             ->where('estado', 1) // Estado igual a 0
             ->first(); // Obtener el primer registro (o null si no hay)
 
-        
-        
+
+
 
 
         if ($registro) {
@@ -48,7 +50,7 @@ class FichasTecnicas extends Component
             $this->listadeUsuarioActiva = $registro->nombre;
             $proyecto = $registro->proyecto; // Relación proyecto
             $cliente = $proyecto->cliente; // Relación cliente
-    
+
             // Asignamos los valores
             $this->nombreProyecto = $proyecto->nombre ?? 'Sin nombre';
             $this->nombreCliente = $cliente->nombre ?? 'Sin cliente';
@@ -58,7 +60,6 @@ class FichasTecnicas extends Component
             $this->nombreProyecto = null;
             $this->nombreCliente = null;
         }
-        
     }
 
 
@@ -85,6 +86,44 @@ class FichasTecnicas extends Component
         // Eliminar duplicados
         $this->familiasSeleccionadas = array_unique($this->familiasSeleccionadas);
     }
+
+    public $itemsLista = [];
+
+    public function agregarItemLista($idItem)
+    {
+        // Buscar la lista existente (asegúrate de tener el ID de la lista almacenado
+        $lista = ListasCotizar::find($this->idLista);
+
+        if (!$lista) {
+            session()->flash('error', 'No se encontró la lista de cotización.');
+            return;
+        }
+
+        // Decodificar los items ya guardados
+        $items = json_decode($lista->items_cotizar, true) ?? [];
+
+        // Buscar si el item ya está en la lista
+        $itemKey = array_search($idItem, array_column($items, 'id'));
+
+        if ($itemKey !== false) {
+            // Si el item ya existe, aumentar la cantidad
+            $items[$itemKey]['cantidad'] += 1;
+        } else {
+            // Si el item no existe, agregarlo con cantidad inicial 1
+            $items[] = [
+                'id' => $idItem,
+                'cantidad' => 1
+            ];
+        }
+
+        // Guardar la lista actualizada en la base de datos
+        $lista->update([
+            'items_cotizar' => json_encode($items)
+        ]);
+
+        session()->flash('success', 'Item agregado a la lista de cotización.');
+    }
+
 
     /**
      * Función recursiva para obtener todos los IDs de una familia y sus subfamilias
@@ -113,7 +152,6 @@ class FichasTecnicas extends Component
             abort(404, 'item no encontrada');
         }
         return redirect()->route('ventas.fichasTecnicas.fichaEspecificaItem', ['idItem' => $idItem]);
-        
     }
 
     public function render()
