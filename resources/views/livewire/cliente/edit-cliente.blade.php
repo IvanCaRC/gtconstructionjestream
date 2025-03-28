@@ -1,7 +1,6 @@
 <div>
     <div>
         <div class="form-group">
-            <h1>Edicion de registro</h1>
             <label for="nombre">Nombre</label>
             <input type="text" id="nombre" class="form-control @error('nombre') is-invalid @enderror"
                 wire:model.defer="nombre" wire:blur="validateField('nombre')">
@@ -39,9 +38,9 @@
 
         </div>
 
-        {{-- <div class="form-group">
+        <div class="form-group">
             <label>Teléfonos</label>
-            @foreach ($telefonos as $index => $telefono)
+            {{-- @foreach ($telefonos as $index => $telefono)
                 <div class="input-group mb-2">
                     <input type="text" class="form-control" wire:model.defer="telefonos.{{ $index }}.nombre"
                         placeholder="Nombre de contacto">
@@ -54,14 +53,14 @@
                         </div>
                     @endif
                 </div>
-            @endforeach
+            @endforeach --}}
             <button type="button" class="btn btn-secondary mt-2" wire:click="addTelefono">Agregar otro
                 teléfono</button>
-        </div> --}}
+        </div>
 
-        {{-- <div class="form-group">
+        <div class="form-group">
             <label>Cuentas Bancaria</label>
-            @foreach ($bancarios as $index => $bancario)
+            {{-- @foreach ($bancarios as $index => $bancario)
                 <div class="input-group mb-2">
                     <input type="text" class="form-control" wire:model.defer="bancarios.{{ $index }}.banco"
                         placeholder="Ingresa el nombre del banco">
@@ -80,12 +79,12 @@
                         </div>
                     @endif
                 </div>
-            @endforeach
+            @endforeach --}}
             <button type="button" class="btn btn-secondary mt-2" wire:click="addBancarios">Agregar otra cuenta</button>
-        </div> --}}
+        </div>
     </div>
 
-    {{-- <script>
+    <script>
         function confirmSave() {
             @this.call('save').then(response => {
                 if (response.cliente_id) {
@@ -124,7 +123,7 @@
                 });
             });
         }
-    </script> --}}
+    </script>
 
     <script>
         function validatePhoneInput(element) {

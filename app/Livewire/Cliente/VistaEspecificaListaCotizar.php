@@ -31,13 +31,13 @@ class VistaEspecificaListaCotizar extends Component
         $itemsData = json_decode($lista->items_cotizar, true) ?? [];
 
         $itemIds = array_column($itemsData, 'id'); // Extraer solo los IDs
-        $items = Item::whereIn('id', $itemIds)->get();
+        $items = ItemEspecifico::whereIn('id', $itemIds)->get();
 
         // Asociamos los items con su cantidad
         $this->itemsDeLaLista = $items->map(function ($item) use ($itemsData) {
             $itemData = collect($itemsData)->firstWhere('id', $item->id);
             $item->cantidad = $itemData['cantidad'];
-            return $item;
+            return $item; 
         });
 
         $this->idListaActual = $idLista;

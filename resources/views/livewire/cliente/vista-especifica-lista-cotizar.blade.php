@@ -41,6 +41,14 @@
                 </div>
                 <div class="card-body">
                     @if ($itemsDeLaLista->count() > 0)
+                        {{-- <div class="row">
+                        <divc lass="col-md-9">
+
+                        </div class="col-md-9">
+                        <div>
+
+                        </div>
+                    </div> --}}
                         <table class="table">
                             <thead>
                                 <tr>
@@ -74,6 +82,21 @@
                                             </div>
                                         </td>
                                         <td class="align-middle d-none d-md-table-cell">
+                                            <h4>
+                                                {{ $itemEspecifico->item->nombre }}
+                                            </h4>
+                                            <label for="">
+                                                {{ $itemEspecifico->item->descripcion }}
+                                            </label>
+                                            <br>
+                                            <label for="">
+                                                Unidad: {{ $itemEspecifico->unidad }}
+                                            </label>
+                                            <br>
+                                            <input type="text">
+                                            {{ $itemEspecifico->cantidad }}
+                                            </input>
+
 
                                         </td>
                                     </tr>
@@ -88,7 +111,6 @@
 
 
                     @foreach ($itemsDeLaLista as $item)
-                        <li>{{ $item->nombre }} - {{ $item->precio }} - Cantidad: {{ $item->cantidad }}</li>
                     @endforeach
                 </div>
             </div>

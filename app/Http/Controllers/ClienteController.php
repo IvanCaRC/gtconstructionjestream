@@ -13,6 +13,6 @@ class ClienteController extends Controller
 
     public function editCliente($idcliente)
     {
-        return view('livewire.cliente.edit-cliente', ['idcliente' => $idcliente]);
+        return view('ventas.cliente.edit-cliente', ['idcliente' => $idcliente]);
     }
 }
