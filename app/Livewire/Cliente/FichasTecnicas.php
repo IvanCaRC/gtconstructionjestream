@@ -23,11 +23,11 @@ class FichasTecnicas extends Component
     public $listadeUsuarioActiva;
     public $usuarioActual;
 
-
-
     public $nombreProyecto;
     public $nombreCliente;
     public $idLista;
+
+    public $itemsEnLista = [];
 
     public function mount()
     {
@@ -38,10 +38,6 @@ class FichasTecnicas extends Component
         $registro = ListasCotizar::where('usuario_id', $this->usuarioActual->id) // Verificar usuario actual
             ->where('estado', 1) // Estado igual a 0
             ->first(); // Obtener el primer registro (o null si no hay)
-
-
-
-
 
         if ($registro) {
             // Recuperamos el proyecto relacionado
@@ -54,6 +50,10 @@ class FichasTecnicas extends Component
             // Asignamos los valores
             $this->nombreProyecto = $proyecto->nombre ?? 'Sin nombre';
             $this->nombreCliente = $cliente->nombre ?? 'Sin cliente';
+
+            // Obtener los IDs de los items en la lista
+            $itemsData = json_decode($registro->items_cotizar, true) ?? [];
+            $this->itemsEnLista = array_column($itemsData, 'id');
         } else {
             // Si no existe el registro
             $this->listadeUsuarioActiva = null;
@@ -61,7 +61,6 @@ class FichasTecnicas extends Component
             $this->nombreCliente = null;
         }
     }
-
 
 
     public function seleccionarFamilia($familiaId)
@@ -120,6 +119,8 @@ class FichasTecnicas extends Component
         $lista->update([
             'items_cotizar' => json_encode($items)
         ]);
+
+        $this->itemsEnLista = array_column($items, 'id');
 
         session()->flash('success', 'Item agregado a la lista de cotización.');
     }

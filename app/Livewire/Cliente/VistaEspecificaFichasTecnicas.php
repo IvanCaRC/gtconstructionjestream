@@ -27,6 +27,24 @@ class VistaEspecificaFichasTecnicas extends Component
     public $nombreCliente;
     public $idLista;
 
+    public $cantidad = 1;
+
+
+    public function incrementarCantidad()
+    {
+        if ($this->cantidad < 99) {
+            $this->cantidad++;
+        }
+    }
+
+    // Disminuye la cantidad (mínimo 1)
+    public function decrementarCantidad()
+    {
+        if ($this->cantidad > 1) {
+            $this->cantidad--;
+        }
+    }
+
     public function mount($idItem)
     {
         $this->usuarioActual = Auth::user();
@@ -47,6 +65,8 @@ class VistaEspecificaFichasTecnicas extends Component
             // Asignamos los valores
             $this->nombreProyecto = $proyecto->nombre ?? 'Sin nombre';
             $this->nombreCliente = $cliente->nombre ?? 'Sin cliente';
+            $itemsData = json_decode($registro->items_cotizar, true) ?? [];
+            $this->itemsEnLista = array_column($itemsData, 'id');
         } else {
             // Si no existe el registro
             $this->listadeUsuarioActiva = null;
@@ -120,5 +140,44 @@ class VistaEspecificaFichasTecnicas extends Component
     public function verLista($idLista)
     {
         return redirect()->route('ventas.clientes.vistaEspecificaListaCotizar', ['idLista' => $idLista]);
+    }
+
+    public $itemsEnLista = [];
+
+    public function agregarItemLista($idItem)
+    {
+        // Buscar la lista existente (asegúrate de tener el ID de la lista almacenado
+        $lista = ListasCotizar::find($this->idLista);
+
+        if (!$lista) {
+            session()->flash('error', 'No se encontró la lista de cotización.');
+            return;
+        }
+
+        // Decodificar los items ya guardados
+        $items = json_decode($lista->items_cotizar, true) ?? [];
+
+        // Buscar si el item ya está en la lista
+        $itemKey = array_search($idItem, array_column($items, 'id'));
+
+        if ($itemKey !== false) {
+            // Si el item ya existe, aumentar la cantidad
+              $items[$itemKey]['cantidad'] += $this->cantidad;
+        } else {
+            // Si el item no existe, agregarlo con cantidad inicial 1
+            $items[] = [
+                'id' => $idItem,
+                'cantidad' => $this->cantidad
+            ];
+        }
+
+        // Guardar la lista actualizada en la base de datos
+        $lista->update([
+            'items_cotizar' => json_encode($items)
+        ]);
+
+        $this->itemsEnLista = array_column($items, 'id');
+
+        session()->flash('success', 'Item agregado a la lista de cotización.');
     }
 }

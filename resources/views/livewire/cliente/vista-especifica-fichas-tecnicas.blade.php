@@ -27,7 +27,8 @@
             <a href="#" class="d-block">Desactivar</a>
         </div>
         <div class="col-md-1">
-            <button class="btn btn-light border-0 shadow-sm " style="width: 50px; height: 50px;"  wire:click="verLista({{$idLista}})">
+            <button class="btn btn-light border-0 shadow-sm " style="width: 50px; height: 50px;"
+                wire:click="verLista({{ $idLista }})">
                 <i class="fas fa-shopping-cart text-primary" style="font-size: 24px;"></i>
             </button>
         </div>
@@ -81,13 +82,38 @@
                                                 </div>
                                             @endif
                                             <br>
-                                            <div>
-                                                <button class="btn btn-success btn-custom"
-                                                    wire:click="addToCart({{ $itemEspecifico->id }})"
-                                                    title="Agrega este item a tu lista">
-                                                    <i class="fas fa-shopping-cart"> Añadir a la lista</i>
+
+
+                                            @if (in_array($itemEspecifico->id, $itemsEnLista))
+                                                <button class="btn btn-warning btn-custom"
+                                                    wire:click="verLista({{ $idLista }})"
+                                                    title="Este item ya está en tu lista">
+                                                    <i class="fas fa-shopping-cart"></i> Ver en carrito
                                                 </button>
-                                            </div>
+                                            @else
+                                                <div class="d-flex justify-content-center align-items-center mt-2">
+                                                    <!-- Botón de menos -->
+                                                    <button class="btn btn-danger btn-sm me-2"
+                                                        wire:click="decrementarCantidad">-</button>
+
+                                                    <!-- Input de cantidad -->
+                                                    <input type="number" min="1"
+                                                        class="form-control text-center" style="width: 60px;"
+                                                        wire:model="cantidad">
+
+                                                    <!-- Botón de más -->
+                                                    <button class="btn btn-success btn-sm ms-2"
+                                                        wire:click="incrementarCantidad">+</button>
+                                                </div>
+                                                <br>
+                                                <div>
+                                                    <button class="btn btn-success btn-custom"
+                                                        wire:click="agregarItemLista({{ $itemEspecifico->id }})"
+                                                        title="Agrega este item a tu lista">
+                                                        <i class="fas fa-shopping-cart"></i> Añadir a la lista
+                                                    </button>
+                                                </div>
+                                            @endif
                                         </div>
                                     </div>
 

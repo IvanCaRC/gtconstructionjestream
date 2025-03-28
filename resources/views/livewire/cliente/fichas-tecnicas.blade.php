@@ -219,12 +219,21 @@
                                                         {{ $itemEspecifico->item->updated_at->format('d/m/Y') }}
                                                     </p>
 
+
                                                     <td>
-                                                        <button class="btn btn-success btn-custom"
-                                                        wire:click="agregarItemLista({{ $itemEspecifico->id }})"
-                                                            title="Agrega este item a tu lista">
-                                                            <i class="fas fa-shopping-cart"> Añadir a la lista</i>
-                                                        </button>
+                                                        @if(in_array($itemEspecifico->id, $itemsEnLista))
+                                                            <button class="btn btn-warning btn-custom"
+                                                                wire:click="verLista({{ $idLista }})"
+                                                                title="Este item ya está en tu lista">
+                                                                <i class="fas fa-shopping-cart"></i> Ver en carrito
+                                                            </button>
+                                                        @else
+                                                            <button class="btn btn-success btn-custom"
+                                                                wire:click="agregarItemLista({{ $itemEspecifico->id }})"
+                                                                title="Agrega este item a tu lista">
+                                                                <i class="fas fa-shopping-cart"></i> Añadir a la lista
+                                                            </button>
+                                                        @endif
                                                     </td>
 
                                                     <td>
