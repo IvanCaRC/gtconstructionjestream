@@ -7,6 +7,7 @@
 @section('activeFondoPermanenteFichasTecnicas', 'background-permanent')
 @section('contend')
 
+@livewire('cliente.vista-de-lista')
 @livewire('cliente.fichas-tecnicas')
 
 @endsection

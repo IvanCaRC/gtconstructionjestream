@@ -7,8 +7,8 @@
         <x-slot name='content'>
 
             <div class="form-group">
-                <label for="nombre">Nombre</label>
-                <input type="text" id="nombre" class="form-control" wire:model.defer="nombreProyecto">
+                    <label for="nombre">Nombre</label>
+                    <input type="text" id="nombre" class="form-control" wire:model.defer="nombreProyecto">
             </div>
 
             <div class="form-group">

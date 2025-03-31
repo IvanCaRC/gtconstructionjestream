@@ -51,26 +51,6 @@ class VistaEspecificaListaCotizar extends Component
         });
 
         $this->idListaActual = $idLista;
-        
-        $this->usuarioActual = Auth::user();
-
-        $registro = ListasCotizar::where('usuario_id', $this->usuarioActual->id)
-            ->where('estado', 1)
-            ->first();
-
-        if ($registro) {
-            $this->idLista = $registro->id;
-            $this->listadeUsuarioActiva = $registro->nombre;
-            $proyecto = $registro->proyecto;
-            $cliente = $proyecto->cliente;
-
-            $this->nombreProyecto = $proyecto->nombre ?? 'Sin nombre';
-            $this->nombreCliente = $cliente->nombre ?? 'Sin cliente';
-        } else {
-            $this->listadeUsuarioActiva = null;
-            $this->nombreProyecto = null;
-            $this->nombreCliente = null;
-        }
     }
 
 
@@ -140,5 +120,44 @@ class VistaEspecificaListaCotizar extends Component
 
         // Refrescar la lista en la vista
         $this->mount($this->idListaActual);
+    }
+
+    public function eliminarItemLista($idItem)
+    {
+        $lista = ListasCotizar::find($this->idListaActual);
+
+        if (!$lista) return;
+
+        // Obtener los items de la lista
+        $items = json_decode($lista->items_cotizar, true) ?? [];
+
+        // Filtrar los items para eliminar el que coincida con $idItem
+        $items = array_filter($items, fn($item) => $item['id'] != $idItem);
+
+        // Guardar los cambios en la base de datos
+        $lista->update(['items_cotizar' => json_encode(array_values($items))]);
+
+        // Refrescar la lista en la vista
+        $this->mount($this->idListaActual);
+
+        session()->flash('success', 'Item eliminado correctamente.');
+    }
+
+    public function viewItem($idItem)
+    {
+        $item = ItemEspecifico::find($idItem);
+
+        if ($item === null) {
+            abort(404, 'item no encontrada');
+        }
+        return redirect()->route('ventas.fichasTecnicas.fichaEspecificaItem', ['idItem' => $idItem]);
+    }
+
+    public $openModalItemPersonalisado = false;
+
+    public function cancelar()
+    {
+        $this->reset('openModalItemPersonalisado');
+        $this->dispatch('refresh');
     }
 }

@@ -5,6 +5,7 @@
 @section('activeFichasTecnicas', 'active')
 @section('activeFondoPermanenteFichasTecnicas', 'background-permanent')
 @section('contend')
+@livewire('cliente.vista-de-lista')
 @livewire('cliente.vista-especifica-lista-cotizar', ['idLista' => $idLista])
 
 @endsection

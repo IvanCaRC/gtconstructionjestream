@@ -13,6 +13,13 @@ use Illuminate\Support\Facades\DB;
 class FichasTecnicas extends Component
 {
     use WithPagination;
+
+
+    protected $listeners = [
+        'mountFichasTecnicas' => 'mount',
+        'renderFichasTecnicas' => 'render',
+    ];
+
     public $searchTerm = '';
     public $sort = 'id';
     public $direction = 'desc';
@@ -43,19 +50,23 @@ class FichasTecnicas extends Component
             // Recuperamos el proyecto relacionado
             // Si se encuentra el registro, guardar el nombre; si no, asignar null
             $this->idLista = $registro->id;
-            $this->listadeUsuarioActiva = $registro->nombre;
-            $proyecto = $registro->proyecto; // Relación proyecto
-            $cliente = $proyecto->cliente; // Relación cliente
+            $this->listadeUsuarioActiva = $registro->nombre ?? 'Sin nombre';
+            $proyecto = $registro->proyecto ?? 'Sin proyecto';
+            $cliente = $proyecto->cliente ?? 'Sin cliente    ';
 
             // Asignamos los valores
             $this->nombreProyecto = $proyecto->nombre ?? 'Sin nombre';
-            $this->nombreCliente = $cliente->nombre ?? 'Sin cliente';
+            if ($this->nombreProyecto !== 'Sin nombre') {
+                $this->nombreCliente = $cliente->nombre ?? 'Sin cliente';
+            }
+
 
             // Obtener los IDs de los items en la lista
             $itemsData = json_decode($registro->items_cotizar, true) ?? [];
             $this->itemsEnLista = array_column($itemsData, 'id');
         } else {
             // Si no existe el registro
+            $this->idLista = null;
             $this->listadeUsuarioActiva = null;
             $this->nombreProyecto = null;
             $this->nombreCliente = null;
@@ -91,38 +102,84 @@ class FichasTecnicas extends Component
     public function agregarItemLista($idItem)
     {
         // Buscar la lista existente (asegúrate de tener el ID de la lista almacenado
-        $lista = ListasCotizar::find($this->idLista);
 
-        if (!$lista) {
-            session()->flash('error', 'No se encontró la lista de cotización.');
-            return;
-        }
+        if ($this->idLista !== null) {
+            $lista = ListasCotizar::find($this->idLista);
 
-        // Decodificar los items ya guardados
-        $items = json_decode($lista->items_cotizar, true) ?? [];
+            if (!$lista) {
+                session()->flash('error', 'No se encontró la lista de cotización.');
+                return;
+            }
 
-        // Buscar si el item ya está en la lista
-        $itemKey = array_search($idItem, array_column($items, 'id'));
+            // Decodificar los items ya guardados
+            $items = json_decode($lista->items_cotizar, true) ?? [];
 
-        if ($itemKey !== false) {
-            // Si el item ya existe, aumentar la cantidad
-            $items[$itemKey]['cantidad'] += 1;
+            // Buscar si el item ya está en la lista
+            $itemKey = array_search($idItem, array_column($items, 'id'));
+
+            if ($itemKey !== false) {
+                // Si el item ya existe, aumentar la cantidad
+                $items[$itemKey]['cantidad'] += 1;
+            } else {
+                // Si el item no existe, agregarlo con cantidad inicial 1
+                $items[] = [
+                    'id' => $idItem,
+                    'cantidad' => 1
+                ];
+            }
+
+            // Guardar la lista actualizada en la base de datos
+            $lista->update([
+                'items_cotizar' => json_encode($items)
+            ]);
+
+            $this->itemsEnLista = array_column($items, 'id');
+            return redirect()->route('ventas.clientes.vistaEspecificaListaCotizar', ['idLista' => $lista->id]);
         } else {
-            // Si el item no existe, agregarlo con cantidad inicial 1
-            $items[] = [
-                'id' => $idItem,
-                'cantidad' => 1
-            ];
+            $usuario  = $this->usuarioActual->id;
+            $listasEnEstado1 = ListasCotizar::where('usuario_id', $usuario)
+                ->where('estado', 1)
+                ->get();
+
+            foreach ($listasEnEstado1 as $lista) {
+                $lista->update(['estado' => 2]);
+            }
+
+            $user = Auth::user();
+            $idUser = $user->id;
+
+            $listaACotizar = ListasCotizar::create([
+                'usuario_id' => $idUser,
+                'estado' => 1,
+            ]);
+            $this->idLista = $listaACotizar->id;
+            //
+            $items = json_decode($listaACotizar->items_cotizar, true) ?? [];
+
+            // Buscar si el item ya está en la lista
+            $itemKey = array_search($idItem, array_column($items, 'id'));
+
+            if ($itemKey !== false) {
+                // Si el item ya existe, aumentar la cantidad
+                $items[$itemKey]['cantidad'] += 1;
+            } else {
+                // Si el item no existe, agregarlo con cantidad inicial 1
+                $items[] = [
+                    'id' => $idItem,
+                    'cantidad' => 1
+                ];
+            }
+
+            // Guardar la lista actualizada en la base de datos
+            $listaACotizar->update([
+                'items_cotizar' => json_encode($items)
+            ]);
+
+            $this->itemsEnLista = array_column($items, 'id');
+            //
+
+            return redirect()->route('ventas.clientes.vistaEspecificaListaCotizar', ['idLista' => $listaACotizar->id]);
         }
-
-        // Guardar la lista actualizada en la base de datos
-        $lista->update([
-            'items_cotizar' => json_encode($items)
-        ]);
-
-        $this->itemsEnLista = array_column($items, 'id');
-
-        session()->flash('success', 'Item agregado a la lista de cotización.');
     }
 
 

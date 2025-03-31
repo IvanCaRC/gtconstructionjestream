@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('proyecto_id')->nullable();
             $table->unsignedBigInteger('usuario_id');
-            $table->string('nombre');
+            $table->string('nombre')->nullable();
             $table->integer('estado');
             $table->text('items_cotizar')->nullable();
             $table->text('items_cotizar_temporales')->nullable();

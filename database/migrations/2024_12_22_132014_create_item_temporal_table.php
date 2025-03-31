@@ -16,6 +16,7 @@ class CreateItemTemporalTable extends Migration
         Schema::create('item_temporal', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('item_id');
+            $table->string('unidad')->nullable();
             $table->timestamps();
 
             // Definir clave foránea

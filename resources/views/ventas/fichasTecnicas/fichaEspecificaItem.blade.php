@@ -209,5 +209,63 @@
             color: white !important;
         }
     </style>
-    @livewire('cliente.vista-especifica-fichas-tecnicas', ['idItem' => $idItem])
+    @livewire('cliente.vista-de-lista')
+
+    <div class="container-fluid px-4 sm:px-6 lg:px-8 py-4">
+        <div class="card">
+            <div class="card-header">
+                <div class="row align-items-center">
+                    <button type="button" class="btn-icon" onclick="cancelar()">
+                        <i class="fas fa-arrow-left"></i>
+                    </button>
+                    <h2 class="ml-3">Detalle Item</h2>
+                </div>
+            </div>
+            <div class="card-body">
+                @livewire('cliente.vista-especifica-fichas-tecnicas', ['idItem' => $itemEspecifico->id])
+                <div class="row">
+                    <div class="col-md-2 mb-3">
+            
+                    </div>
+                    <div class="col-md-2 mb-3">
+                        <div id="pdf-container"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const pdfUrl = "{{ asset('storage/' . $itemEspecifico->ficha_tecnica_pdf) }}";
+
+            pdfjsLib.getDocument(pdfUrl).promise.then(pdf => {
+                let container = document.getElementById("pdf-container");
+                container.innerHTML = ""; // Limpiar el contenedor
+
+                for (let i = 1; i <= pdf.numPages; i++) {
+                    pdf.getPage(i).then(page => {
+                        let canvas = document.createElement("canvas");
+                        let context = canvas.getContext("2d");
+                        container.appendChild(canvas);
+
+                        let viewport = page.getViewport({
+                            scale: 1.5
+                        });
+                        canvas.width = viewport.width;
+                        canvas.height = viewport.height;
+
+                        let renderContext = {
+                            canvasContext: context,
+                            viewport: viewport
+                        };
+                        page.render(renderContext);
+                    });
+                }
+            });
+        });
+    </script>
 @endsection
