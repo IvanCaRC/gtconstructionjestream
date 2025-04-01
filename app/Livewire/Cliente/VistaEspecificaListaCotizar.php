@@ -67,7 +67,7 @@ class VistaEspecificaListaCotizar extends Component
             // Guardamos la cantidad en el array de cantidades
             $this->cantidades[$itemTemporal->id] = $itemDataTemporal['cantidad'];
 
-            return $item;
+            return $itemTemporal;
         });
 
         $this->idListaActual = $idLista;
