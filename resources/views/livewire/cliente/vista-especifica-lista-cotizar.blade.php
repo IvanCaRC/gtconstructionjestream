@@ -94,6 +94,9 @@
                         </div>
                     @endif
                 </div>
+                <div>
+                    
+                </div>
 
             </div>
             <!-- Segunda sección (15%) -->
