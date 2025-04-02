@@ -8,7 +8,7 @@
                         <h3>Items de la lista</h3>
                     </div>
                     <div class="col-md-3">
-                        <button class="btn btn-secondary "  wire:click="$set('openModalItemPersonalisado', true)">
+                        <button class="btn btn-secondary " wire:click="$set('openModalItemPersonalisado', true)">
                             Agregar item personalisado
                         </button>
                     </div>
@@ -93,15 +93,75 @@
                             <p>No hay items en la lista</p>
                         </div>
                     @endif
+                    @if (count($itemsTemporalesDeLaLista) > 0)
+                        <h4>Item Personalizados solicitados</h4>
+                        @foreach ($itemsTemporalesDeLaLista as $itemEspecifico)
+                            <div>
+                                <hr>
+                            </div>
+
+                            <div class="row">
+
+
+
+
+                                <div class="col-md-9">
+                                    <h4>{{ $itemEspecifico->item->nombre }}</h4>
+                                    <label>{{ $itemEspecifico->item->descripcion }}</label>
+                                    <br>
+                                    <label>Unidad: {{ $itemEspecifico->unidad }}</label>
+                                    <br>
+
+                                    <div class="row">
+                                        <div class="col-md-2">
+                                            <div class="d-flex align-items-center">
+                                                <!-- Botón de menos -->
+                                                <button class="btn btn-danger btn-sm me-2"
+                                                    wire:click="actualizarCantidadTemporal({{ $itemEspecifico->id }}, -1)">-</button>
+
+                                                <!-- Input de cantidad -->
+                                                <input type="number" min="0" class="form-control text-center"
+                                                    style="width: 60px;"
+                                                    wire:model.defer="cantidades.{{ $itemEspecifico->id }}"
+                                                    wire:change="actualizarCantidadTemporal({{ $itemEspecifico->id }}, 0)">
+
+
+                                                <!-- Botón de más -->
+                                                <button class="btn btn-success btn-sm ms-2"
+                                                    wire:click="actualizarCantidadTemporal({{ $itemEspecifico->id }}, 1)">+</button>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <a href="#" class="d-block text-danger"
+                                                wire:click.prevent="eliminarItemTempoLista({{ $itemEspecifico->id }})">
+                                                Eliminar
+                                            </a>
+
+                                        </div>
+
+
+                                    </div>
+                                </div>
+                            </div>
+                        @endforeach
+                    @else
+                        <div class='px-6 py-2'>
+                            <p>No hay items temporales en la lista</p>
+                        </div>
+                    @endif
                 </div>
                 <div>
-                    
+
                 </div>
 
             </div>
             <!-- Segunda sección (15%) -->
             <div class="bg-white rounded-lg border border-black p-4" style="flex: 0 0 20%;">
                 <div class="card-body">
+                    <h4>Resumen</h4>
+                    <hr>
+                    <label for="">Items: cantidad de items</label>
+                    <label for="">Items Personalisados: cantidad de item personalisados. </label>
                 </div>
             </div>
         </div>

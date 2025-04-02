@@ -70,7 +70,7 @@ class VistaEspecificaListaCotizar extends Component
             return $itemTemporal;
         });
 
-        $this->idListaActual = $idLista;
+
     }
 
 
@@ -142,6 +142,45 @@ class VistaEspecificaListaCotizar extends Component
         $this->mount($this->idListaActual);
     }
 
+    public function actualizarCantidadTemporal($idItem, $cambio)
+    {
+        $lista = ListasCotizar::find($this->idListaActual);
+
+        if (!$lista) return;
+
+        $items = json_decode($lista->items_cotizar_temporales, true) ?? [];
+
+        // Buscar el item en la lista
+        foreach ($items as $key => &$item) {
+            if ($item['id'] == $idItem) {
+                if ($cambio === 0) {
+                    // Si cambio es 0, significa que se escribió manualmente en el input
+                    $nuevaCantidad = $this->cantidades[$idItem] ?? 1;
+                } else {
+                    // Si se presionó + o -, se suma/resta
+                    $nuevaCantidad = $item['cantidad'] + $cambio;
+                }
+
+                if ($nuevaCantidad <= 0) {
+                    // Si la cantidad llega a 0, eliminar el item de la lista
+                    unset($items[$key]);
+                } else {
+                    // Si no, actualizar la cantidad
+                    $item['cantidad'] = $nuevaCantidad;
+                }
+            }
+        }
+
+        // Reindexar el array para evitar problemas con las claves eliminadas
+        $items = array_values($items);
+
+        // Guardar los cambios
+        $lista->update(['items_cotizar_temporales' => json_encode($items)]);
+
+        // Refrescar la lista en la vista
+        $this->mount($this->idListaActual);
+    }
+
     public function eliminarItemLista($idItem)
     {
         $lista = ListasCotizar::find($this->idListaActual);
@@ -156,6 +195,27 @@ class VistaEspecificaListaCotizar extends Component
 
         // Guardar los cambios en la base de datos
         $lista->update(['items_cotizar' => json_encode(array_values($items))]);
+
+        // Refrescar la lista en la vista
+        $this->mount($this->idListaActual);
+
+        session()->flash('success', 'Item eliminado correctamente.');
+    }
+
+    public function eliminarItemTempoLista($idItem)
+    {
+        $lista = ListasCotizar::find($this->idListaActual);
+
+        if (!$lista) return;
+
+        // Obtener los items de la lista
+        $items = json_decode($lista->items_cotizar_temporales, true) ?? [];
+
+        // Filtrar los items para eliminar el que coincida con $idItem
+        $items = array_filter($items, fn($item) => $item['id'] != $idItem);
+
+        // Guardar los cambios en la base de datos
+        $lista->update(['items_cotizar_temporales' => json_encode(array_values($items))]);
 
         // Refrescar la lista en la vista
         $this->mount($this->idListaActual);
@@ -213,7 +273,7 @@ class VistaEspecificaListaCotizar extends Component
         $this->agregarItemTmLista($itemTemporal->id, $this->cantidadItem);
 
         // Resetear los campos
-        $this->reset(['nombreItem', 'descripcionItem', 'unidadItem', 'cantidadItem']);
+        $this->reset(['openModalItemPersonalisado','nombreItem', 'descripcionItem', 'unidadItem', 'cantidadItem']);
 
         // Cerrar el modal
         $this->dispatch('close-modal-item-personalizado');
