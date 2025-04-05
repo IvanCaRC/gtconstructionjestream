@@ -101,10 +101,6 @@
                             </div>
 
                             <div class="row">
-
-
-
-
                                 <div class="col-md-9">
                                     <h4>{{ $itemEspecifico->item->nombre }}</h4>
                                     <label>{{ $itemEspecifico->item->descripcion }}</label>
@@ -160,11 +156,64 @@
                 <div class="card-body">
                     <h4>Resumen</h4>
                     <hr>
-                    <label for="">Items: cantidad de items</label>
-                    <label for="">Items Personalisados: cantidad de item personalisados. </label>
+                    <label for="">Items: {{ $cantidadItemsDiferentes }}</label>
+
+                    <label for="">Items Personalisados: {{ $cantidadItemsTemporaesDiferentes }}. </label>
+                    <br>
+                    <label for="">Total:
+                        {{ $cantidadItemsDiferentes + $cantidadItemsTemporaesDiferentes }}</label>
+                </div>
+                <div>
+                    @if ($listadeUsuarioActiva == null)
+                        <div class="col-md-12">
+                            <h4 class="px-5">
+                                Error
+                            </h4>
+                        </div>
+                    @else
+                        @if ($nombreCliente == 'Sin cliente')
+                            <div>
+                                <button class="btn btn-primary" wire:click="abrirModalAsignarLista">
+                                    Agregar lista aproyecto
+                                </button>
+
+                            </div>
+                            <div class="py-3">
+                                <button class="btn btn-danger" wire:click="desactivarLista({{ $idListaActual }})">
+                                    Desactivar
+                                </button>
+                            </div>
+                        @else
+                            <div class="card-body">
+
+                                <label>
+                                    Preferencia:
+                                    {{ $preferenciaProeycto == 1 ? 'Tiempo de entrega' : ($preferenciaProeycto == 2 ? 'Precio' : 'Sin preferencia') }}
+                                </label>
+                                <div>
+                                    <div class="py-3">
+                                        <button class="btn btn-primary" wire:click="enviarListaCotizar({{ $idProyectoActual }})">
+                                            <label for="">Enviar a cotisacion</label>
+                                        </button>
+
+                                    </div>
+                                    <div class="py-3">
+                                        <button class="btn btn-danger"
+                                            wire:click="desactivarLista({{ $idListaActual }})">
+                                            Desactivar
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        @endif
+
+
+                    @endif
+
                 </div>
             </div>
         </div>
     </div>
     @include('livewire.cliente.modalItemPersonalisado.modalItemPersonalisado')
+    @include('livewire.cliente.modalEleccionLista.modalEleccionCLieteProyectoLista')
 </div>

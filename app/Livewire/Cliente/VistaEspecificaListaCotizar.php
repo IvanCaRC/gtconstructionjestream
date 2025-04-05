@@ -11,6 +11,7 @@ use App\Models\ItemEspecificoHasFamilia;
 use App\Models\ItemEspecificoProveedor;
 use App\Models\ItemTemporal;
 use App\Models\ListasCotizar;
+use App\Models\Proyecto;
 use Illuminate\Support\Facades\Auth;
 
 class VistaEspecificaListaCotizar extends Component
@@ -19,6 +20,7 @@ class VistaEspecificaListaCotizar extends Component
     public $usuarioActual;
     public $nombreProyecto;
     public $nombreCliente;
+    public $preferenciaProeycto;
     public $idLista;
     public $idListaActual;
     public $itemsDeLaLista = [];
@@ -26,6 +28,9 @@ class VistaEspecificaListaCotizar extends Component
 
     public $cantidades = [];
 
+    public $cantidadItemsDiferentes = 0;
+
+    public $cantidadItemsTemporaesDiferentes = 0;
 
     public function mount($idLista)
     {
@@ -53,7 +58,7 @@ class VistaEspecificaListaCotizar extends Component
         });
 
         $this->idListaActual = $idLista;
-
+        $this->cantidadItemsDiferentes = count($itemsData);
         /////
 
         $itemsDataTemporales = json_decode($lista->items_cotizar_temporales, true) ?? [];
@@ -70,7 +75,73 @@ class VistaEspecificaListaCotizar extends Component
             return $itemTemporal;
         });
 
+        $this->actualizarCantidadItemsTemporalesDiferentes();
 
+        if ($lista) {
+            // Recuperamos el proyecto relacionado
+            // Si se encuentra el registro, guardar el nombre; si no, asignar  null
+
+            $this->listadeUsuarioActiva = $lista->nombre ?? 'Sin nombre';
+            $proyecto = $lista->proyecto ?? 'Sin proyecto';
+            $cliente = $lista->cliente ?? 'Sin cliente    ';
+            $idProyecto = $lista->proyecto_id ?? 'Sin proyecto';
+            // Asignamos los valores
+            $this->nombreProyecto = $proyecto->nombre ?? 'Sin nombre';
+            $this->preferenciaProeycto = $proyecto->preferencia ?? 'Sin preferencia';
+            $this->idProyectoActual = $idProyecto;
+            $this->nombreCliente = $cliente->nombre ?? 'Sin cliente';
+
+            // Obtener los IDs de los items en la lista
+            $itemsData = json_decode($lista->items_cotizar, true) ?? [];
+        } else {
+            // Si no existe el registro
+            $this->idLista = null;
+            $this->listadeUsuarioActiva = null;
+            $this->nombreProyecto = null;
+            $this->nombreCliente = null;
+        }
+    }
+    public $idProyectoActual;
+
+    public function desactivarLista($idLista)
+    {
+        $lista = ListasCotizar::find($idLista);
+
+        $lista->update([
+            'estado' => 2
+        ]);
+
+        return redirect()->route('ventas.fichasTecnicas.fichasTecnicas');
+    }
+
+    public function actualizarCantidadItemsDiferentes()
+    {
+        $lista = ListasCotizar::find($this->idListaActual);
+
+        if (!$lista) {
+            $this->cantidadItemsDiferentes = 0;
+            return;
+        }
+
+        $items = json_decode($lista->items_cotizar, true) ?? [];
+
+        // Contar los ítems únicos en la lista
+        $this->cantidadItemsDiferentes = count($items);
+    }
+
+    public function actualizarCantidadItemsTemporalesDiferentes()
+    {
+        $lista = ListasCotizar::find($this->idListaActual);
+
+        if (!$lista) {
+            $this->cantidadItemsDiferentes = 0;
+            return;
+        }
+
+        $items = json_decode($lista->items_cotizar_temporales, true) ?? [];
+
+        // Contar los ítems únicos en la lista
+        $this->cantidadItemsTemporaesDiferentes = count($items);
     }
 
 
@@ -273,7 +344,7 @@ class VistaEspecificaListaCotizar extends Component
         $this->agregarItemTmLista($itemTemporal->id, $this->cantidadItem);
 
         // Resetear los campos
-        $this->reset(['openModalItemPersonalisado','nombreItem', 'descripcionItem', 'unidadItem', 'cantidadItem']);
+        $this->reset(['openModalItemPersonalisado', 'nombreItem', 'descripcionItem', 'unidadItem', 'cantidadItem']);
 
         // Cerrar el modal
         $this->dispatch('close-modal-item-personalizado');
@@ -304,5 +375,111 @@ class VistaEspecificaListaCotizar extends Component
 
         // Refrescar la vista para mostrar el nuevo item
         $this->mount($this->idListaActual);
+    }
+
+    public $openModalAsignarLista = false;
+
+    public function cancelarAsignacion()
+    {
+        $this->reset('openModalAsignarLista');
+        $this->dispatch('refresh');
+    }
+
+    public $proyectosAsignables = [];
+    public $searchTearmProyecto = '';
+
+    public function obtenerProyectos()
+    {
+        // Obtener los clientes del usuario actual
+        $clientes = \App\Models\Cliente::where('user_id', auth()->id())->pluck('id');
+
+        // Obtener los proyectos de esos clientes con estado 1
+
+
+        if ($this->searchTearmProyecto) {
+            $this->proyectosAsignables = \App\Models\Proyecto::whereIn('cliente_id', $clientes)
+                ->where('estado', 1)
+                ->where(function ($query) {
+                    $query->where('nombre', 'LIKE', "%{$this->searchTearmProyecto}%");
+                })
+
+                ->get();
+        } else {
+            $this->proyectosAsignables = [];
+        }
+    }
+
+    public function abrirModalAsignarLista()
+    {
+        $this->obtenerProyectos();
+        $this->openModalAsignarLista = true;
+    }
+
+    public function seleccionarProyecto($proyectoId)
+    {
+        // Buscar la lista actual
+        $lista = ListasCotizar::find($this->idListaActual);
+
+        if (!$lista) {
+            session()->flash('error', 'No se encontró la lista.');
+            return;
+        }
+
+        // Obtener el proyecto seleccionado
+        $proyecto = Proyecto::find($proyectoId);
+
+        if (!$proyecto) {
+            session()->flash('error', 'No se encontró el proyecto.');
+            return;
+        }
+
+        // Generar el nombre de la nueva lista basándose en el número de listas del proyecto
+        $nuevoNombreLista = 'Número ' . ($proyecto->listas + 1);
+
+        // Actualizar la lista
+        $lista->update([
+            'proyecto_id' => $proyectoId,
+            'nombre' => $nuevoNombreLista,
+        ]);
+
+        $proyecto->update([
+            'listas' => $proyecto->listas + 1,
+
+        ]);
+
+        // Mensaje de éxito
+        session()->flash('success', 'Lista asignada correctamente al proyecto.');
+
+        // Cerrar el modal
+        $this->openModalAsignarLista = false;
+
+
+        return redirect()->route('ventas.clientes.vistaEspecificaListaCotizar', ['idLista' => $this->idListaActual]);
+    }
+
+    public function enviarListaCotizar($proyectoId)
+    {
+        // Buscar la lista actual
+        $lista = ListasCotizar::find($this->idListaActual);
+
+        if (!$lista) {
+            session()->flash('error', 'No se encontró la lista.');
+            return;
+        }
+
+        // Obtener el proyecto seleccionado
+
+
+        // Actualizar la lista
+        $lista->update([
+            'estado' => 3,
+        ]);
+
+
+        // Mensaje de éxito
+        session()->flash('success', 'Lista fue enviada correctamente a la cotisacion.');
+
+        // Cerrar el modal
+        return redirect()->route('ventas.clientes.vistaEspecProyecto', ['idProyecto' => $proyectoId]);
     }
 }
