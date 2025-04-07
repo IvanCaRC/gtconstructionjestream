@@ -99,7 +99,7 @@
 
                     // Mostrar la alerta después de la creación si todo es correcto
                     Swal.fire({
-                        title: 'cliente creado',
+                        title: 'cliente registrado',
                         text: 'El cliente ha sido creado exitosamente.',
                         icon: 'success',
                         confirmButtonText: 'OK',

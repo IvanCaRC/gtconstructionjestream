@@ -34,8 +34,7 @@
                         </div>
                     </div>@include('compras.proveedores.form')
                     <button class="btn btn-secondary mt-3" onclick="cancelar()">Cancelar</button>
-                    <button type="submit" onclick="confirmSave()" class="btn btn-primary mt-3">Crear proveedor</button>
-                    
+                    <button type="submit" onclick="confirmSave()" class="btn btn-primary mt-3">Registrar cliente</button>
                 </form>
             </div>
         </div>

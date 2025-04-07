@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Rules\ValidaRFC; // Regla de validacion personalizada
+use SebastianBergmann\Type\NullType;
 
 class Cliente extends Model
 {
@@ -30,7 +31,7 @@ class Cliente extends Model
     {
         return $this->hasMany(Proyecto::class, 'cliente_id');
     }
-    
+
     public function user()
     {
         return $this->belongsTo(User::class);
@@ -43,7 +44,7 @@ class Cliente extends Model
     }
 
     //Reglas de validacion
-    public static function rules($prefix = '', $id = null)
+    public static function rules($prefix = '', $id)
     {
         return [
             $prefix . 'nombre' => 'required|string|max:255',
@@ -77,6 +78,37 @@ class Cliente extends Model
             $prefix . 'telefono.required' => 'El campo teléfono es obligatorio.',
             $prefix . 'telefono.numeric' => 'El campo teléfono debe ser un número.',
             $prefix . 'telefono.regex' => 'El campo teléfono debe tener exactamente 12 dígitos.',
+        ];
+    }
+
+    public static function rulesUpdate($prefix = '', $id)
+    {
+        return [
+            $prefix . 'clienteEdit.nombre' => 'required|string|max:255',
+            $prefix . 'clienteEdit.correo' => 'required|email|unique:clientes,correo,' . $id,
+            $prefix . 'clienteEdit.rfc' => ['required', 'string', 'unique:clientes,rfc,' . $id, new ValidaRfc],
+        ];
+    }
+
+    public static function messagesUpdate($prefix = '')
+    {
+        return [
+            $prefix . 'clienteEdit.nombre.required' => 'Para actualizar los datos del cliente es requerido un nombre.',
+            $prefix . 'clienteEdit.nombre.string' => 'El nombre de cliente no es valido.',
+            $prefix . 'clienteEdit.nombre.max' => 'Este es un nombre demasiado largo.',
+
+            $prefix . 'clienteEdit.correo.required' => 'Registrar un correo electronico es obligatorio.',
+            $prefix . 'clienteEdit.correo.email' => 'La direccion de correo registrada no es valida.',
+            $prefix . 'clienteEdit.correo.unique' => 'Este correo ya esta registrado en un cliente actual.',
+
+            $prefix . 'clienteEdit.rfc.required' => 'Registrar el RFC es obligatorio.',
+            $prefix . 'clienteEdit.rfc.string' => 'El campo RFC debe ser una cadena de texto.',
+            $prefix . 'clienteEdit.rfc.unique' => 'Este RFC ya se encuentra registrado con un cliente actual.',
+            $prefix . 'clienteEdit.rfc.valid' => 'El RFC registrado no es valido.',
+
+            $prefix . 'clienteEdit.telefono.required' => 'El campo teléfono es obligatorio.',
+            $prefix . 'clienteEdit.telefono.numeric' => 'El campo teléfono debe ser un número.',
+            $prefix . 'clienteEdit.telefono.regex' => 'El campo teléfono debe tener exactamente 12 dígitos.',
         ];
     }
 }
