@@ -70,7 +70,7 @@
 
                                 @if ($lista->estado == 1)
                                     <button class="btn btn-danger btn-sm" title="Desactivar">
-                                        <i class="fas fa-times"></i>
+                                        <i class="fas fa-times"></i> hola
                                     </button>
                                 @elseif ($lista->estado == 2)
                                     <button class="btn btn-success btn-sm" title="Activar" wire:click="({{$lista->id}})">

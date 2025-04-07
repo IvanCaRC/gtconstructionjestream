@@ -183,7 +183,7 @@
                                     Desactivar
                                 </button>
                             </div>
-                        @else
+                        @else 
                             <div class="card-body">
 
                                 <label>
@@ -193,7 +193,7 @@
                                 <div>
                                     <div class="py-3">
                                         <button class="btn btn-primary" wire:click="enviarListaCotizar({{ $idProyectoActual }})">
-                                            <label for="">Enviar a cotisacion</label>
+                                          Enviar a cotisacion 
                                         </button>
 
                                     </div>

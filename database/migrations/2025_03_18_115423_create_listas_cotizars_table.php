@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('proyecto_id')->nullable();
             $table->unsignedBigInteger('usuario_id');
+            $table->unsignedBigInteger('id_usuario_compras')->nullable();
             $table->string('nombre')->nullable();
             $table->integer('estado');
             $table->text('items_cotizar')->nullable();
@@ -23,6 +24,7 @@ return new class extends Migration
 
             $table->foreign('proyecto_id')->references('id')->on('proyectos')->onDelete('cascade');
             $table->foreign('usuario_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('id_usuario_compras')->references('id')->on('users')->onDelete('set null');
         });
     }
 
