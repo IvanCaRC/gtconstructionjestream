@@ -111,4 +111,104 @@ class VistaEspecificaProyecto extends Component
         // return redirect()->route('ventas.clientes.vistaEspecProyecto', ['idProyecto' => $proyecto->id]);
         return true;
     }
+
+    public function activar($idLista)
+    {
+        // Buscar la lista actual
+        $lista = ListasCotizar::find($idLista);
+
+        if (!$lista) {
+            session()->flash('error', 'No se encontró la lista.');
+            return;
+        }
+
+        // Obtener el proyecto seleccionado
+
+
+        // Actualizar la lista
+        $lista->update([
+            'estado' => 1,
+        ]);
+
+        $this->dispatch('refresh');
+        return true;
+    }
+
+    public function Dsactivar($proyectoId)
+    {
+        // Buscar la lista actual
+        $lista = ListasCotizar::find($this->idListaActual);
+
+        if (!$lista) {
+            session()->flash('error', 'No se encontró la lista.');
+            return;
+        }
+
+        // Obtener el proyecto seleccionado
+
+
+        // Actualizar la lista
+        $lista->update([
+            'estado' => 3,
+        ]);
+
+
+        // Mensaje de éxito
+        session()->flash('success', 'Lista fue enviada correctamente a la cotisacion.');
+
+        // Cerrar el modal
+        return redirect()->route('ventas.clientes.vistaEspecProyecto', ['idProyecto' => $proyectoId]);
+    }
+
+    public function cancelar($proyectoId)
+    {
+        // Buscar la lista actual
+        $lista = ListasCotizar::find($this->idListaActual);
+
+        if (!$lista) {
+            session()->flash('error', 'No se encontró la lista.');
+            return;
+        }
+
+        // Obtener el proyecto seleccionado
+
+
+        // Actualizar la lista
+        $lista->update([
+            'estado' => 3,
+        ]);
+
+
+        // Mensaje de éxito
+        session()->flash('success', 'Lista fue enviada correctamente a la cotisacion.');
+
+        // Cerrar el modal
+        return redirect()->route('ventas.clientes.vistaEspecProyecto', ['idProyecto' => $proyectoId]);
+    }
+
+    public function editar($proyectoId)
+    {
+        // Buscar la lista actual
+        $lista = ListasCotizar::find($this->idListaActual);
+
+        if (!$lista) {
+            session()->flash('error', 'No se encontró la lista.');
+            return;
+        }
+
+        // Obtener el proyecto seleccionado
+
+
+        // Actualizar la lista
+        $lista->update([
+            'estado' => 3,
+        ]);
+
+
+        // Mensaje de éxito
+        session()->flash('success', 'Lista fue enviada correctamente a la cotisacion.');
+
+        // Cerrar el modal
+        return redirect()->route('ventas.clientes.vistaEspecProyecto', ['idProyecto' => $proyectoId]);
+    }
 }

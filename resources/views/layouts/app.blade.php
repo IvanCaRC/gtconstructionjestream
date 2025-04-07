@@ -174,11 +174,35 @@
                                 onmouseout="this.style.backgroundColor='@yield('activeBackgroundMateriales')';">
                                 Materiales
                             </a>
+
+                            <div class="collapse-divider"></div>
+                        </div>
+                    </div>
+                </li>
+            @endcan
+
+            @can('compras.collapsed')
+                <!-- Nav Item - Página colapsada de Cotizaciones -->
+                <li class="nav-item @yield('activedesplegablecotizaciones')">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCotizaciones"
+                        aria-expanded="false" aria-controls="collapseCotizaciones">
+                        <i class="fas fa-fw fa-file-invoice"></i>
+                        <span>Cotizaciones</span>
+                    </a>
+                    <div id="collapseCotizaciones" class="collapse @yield('activeCollapseCotizaciones') container-flex2"
+                        aria-labelledby="headingCotizaciones" data-parent="#accordionSidebar">
+                        <div class="bg-primary-dark text-white py-2 collapse-inner rounded">
+                            <a class="collapse-item @yield('activeCortisaciones') text-white @yield('activeFondoPermanentecotisaciones') mb-2"
+                                href="{{ route('compras.cotisaciones.verCotisaciones') }}"
+                                onmouseover="this.style.backgroundColor='#003366';"
+                                onmouseout="this.style.backgroundColor='';">
+                                Cotizaciones
+                            </a>
                             <a class="collapse-item @yield('activeAforgot') text-white mb-2"
                                 href="{{ route('mantenimiento.enconstruccion') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
                                 onmouseout="this.style.backgroundColor='';">
-                                Cotizaciones
+                                Mis cotizaciones
                             </a>
                             <a class="collapse-item @yield('activeAforgot') text-white mb-2"
                                 href="{{ route('mantenimiento.enconstruccion') }}"
@@ -191,6 +215,7 @@
                     </div>
                 </li>
             @endcan
+
 
             @can('ventas.collapsed')
                 <!-- Nav Item - Pagina colapsada de departamentos-->
@@ -212,7 +237,6 @@
                             </a>
 
                             <a class="collapse-item @yield('activeRecepcion') text-white @yield('activeFondoPermanenteRecepcion') mb-2"
-                                
                                 href="{{ route('ventas.clientes.recepcionLlamadas') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
                                 onmouseout="this.style.backgroundColor='@yield('activeBackgroundRecepcion')';">
@@ -230,7 +254,7 @@
                                 href="{{ route('ventas.recepcionCotizaciones.recepcionCotizacion') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
                                 onmouseout="this.style.backgroundColor='@yield('activeBackgroundRecepcionCotizacion')';">
-                                Recepcion    Cotizaciones
+                                Recepcion Cotizaciones
                             </a>
 
                             <div class="collapse-divider"></div>

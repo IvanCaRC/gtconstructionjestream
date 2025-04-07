@@ -33,39 +33,55 @@
                         @foreach ($listas as $lista)
                             </tr>
                             <td>
-                                {!! $lista->estado == 1
-                                    ? '<span class="badge badge-success">Activo</span>'
-                                    : ($lista->estado == 2
-                                        ? '<span class="badge badge-secondary">Inactivo</span>'
-                                        : ($lista->estado == 3
-                                            ? '<span class="badge badge-warning">Cotizando</span>'
-                                            : ($lista->estado == 4
-                                                ? '<span class="badge badge-primary">Cotizando</span>'
-                                                : ($lista->estado == 5
-                                                    ? '<span class="badge badge-danger">Cancelado</span>'
-                                                    : '<span class="badge badge-secondary">Estado desconocido</span>')))) !!}
+                                {{-- Badge de estado --}}
+                                {{$lista->id}}
+                                @php
+                                    $estados = [
+                                        1 => ['label' => 'Activo', 'class' => 'badge-success'],
+                                        2 => ['label' => 'Inactivo', 'class' => 'badge-secondary'],
+                                        3 => ['label' => 'Cotizando', 'class' => 'badge-warning'],
+                                        4 => ['label' => 'Cotizado', 'class' => 'badge-primary'],
+                                        5 => ['label' => 'Cancelado', 'class' => 'badge-danger'],
+                                    ];
+
+                                    $estado = $estados[$lista->estado] ?? [
+                                        'label' => 'Desconocido',
+                                        'class' => 'badge-secondary',
+                                    ];
+                                @endphp
+
+                                <span class="badge {{ $estado['class'] }}">{{ $estado['label'] }}</span>
                                 {{ $lista->nombre }}
-                                @if ($lista->estado == 1)
-                                    <button class="btn btn-info btn-custom">
-                                        <i class="fas fa-eye"></i>
+                            </td>
+
+                            <td>
+                                {{-- Botones de acción --}}
+                                <button class="btn btn-info btn-sm mr-1" title="Ver">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+
+                                @if ($lista->estado == 1 || $lista->estado == 2)
+                                    <button class="btn btn-primary btn-sm mr-1" title="Editar">
+                                        <i class="fas fa-edit"></i>
                                     </button>
-                                    <button class="btn btn-primary btn-custom"><i class="fas fa-edit"></i></button>
-                                    <button class="btn btn-danger">
-                                        Desactivar
+                                @endif
+
+
+
+                                @if ($lista->estado == 1)
+                                    <button class="btn btn-danger btn-sm" title="Desactivar">
+                                        <i class="fas fa-times"></i> hola
                                     </button>
                                 @elseif ($lista->estado == 2)
-                                    <button class="btn btn-info btn-custom">
-                                        <i class="fas fa-eye"></i>
+                                    <button class="btn btn-success btn-sm" title="Activar" wire:click="({{$lista->id}})">
+                                        <i class="">Activar</i>
                                     </button>
-                                    <button class="btn btn-primary btn-custom"><i class="fas fa-edit"></i></button>
-                                    <button class="btn btn-success">
-                                        Activar
+                                @endif
+
+                                @if ($lista->estado != 5)
+                                    <button class="btn btn-danger btn-sm mr-1" title="Editar">
+                                        <i class="">Cancelar</i>
                                     </button>
-                                @else
-                                    <button class="btn btn-info btn-custom">
-                                        <i class="fas fa-eye"></i>
-                                    </button>
-                                    <button class="btn btn-primary btn-custom"><i class="fas fa-edit"></i></button>
                                 @endif
                             </td>
                             <td>

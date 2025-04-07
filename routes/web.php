@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\adminController;
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\Cotisaciones;
 use App\Http\Controllers\FamiliaController;
 use App\Http\Controllers\FichasTecnicas;
 use App\Http\Controllers\ItemController;
@@ -56,7 +57,6 @@ Route::get('compras/familias/viewFamilias', [FamiliaController::class, 'index'])
 
 Route::get('compras/familias/createFamilias', [FamiliaController::class, 'crearUsuario'])->middleware('auth', 'nocache')->name('compras.familias.createFamilias');
 
-Route::get('compras/items/viewItems', [ItemController::class, 'index'])->middleware('auth', 'nocache')->name('compras.items.viewItems');
 
 Route::get('compras/items/createItems', [ItemController::class, 'crearItem'])->middleware('auth', 'nocache')->name('compras.items.createItems');
 
@@ -110,3 +110,7 @@ Route::get('ventas/recepcionCotizaciones/recepcionCotizacion', [VentasRecepcionC
 
 Route::get('ventas/clientes/EditCliente/{idcliente}', [ClienteController::class, 'editCliente'])
     ->middleware('auth', 'nocache')->name('ventas.cliente.EditCliente');
+
+Route::get('compras/items/viewItems', [ItemController::class, 'index'])->middleware('auth', 'nocache')->name('compras.items.viewItems');
+
+Route::get('compras/cotisaciones/verCotisaciones', [Cotisaciones::class, 'index'])->middleware('auth', 'nocache')->name('compras.cotisaciones.verCotisaciones');
