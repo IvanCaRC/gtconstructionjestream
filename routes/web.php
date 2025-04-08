@@ -114,3 +114,8 @@ Route::get('ventas/clientes/EditCliente/{idcliente}', [ClienteController::class,
 Route::get('compras/items/viewItems', [ItemController::class, 'index'])->middleware('auth', 'nocache')->name('compras.items.viewItems');
 
 Route::get('compras/cotisaciones/verCotisaciones', [Cotisaciones::class, 'index'])->middleware('auth', 'nocache')->name('compras.cotisaciones.verCotisaciones');
+
+Route::get('compras/cotisaciones/verMisCotisaciones', [Cotisaciones::class, 'verMisCotisaciones'])->middleware('auth', 'nocache')->name('compras.cotisaciones.verMisCotisaciones');
+
+
+

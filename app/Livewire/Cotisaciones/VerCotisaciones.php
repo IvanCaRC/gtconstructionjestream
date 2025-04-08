@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Cotisaciones;
 
+use App\Models\Cotizacion;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\ListasCotizar;
@@ -61,16 +62,27 @@ class VerCotisaciones extends Component
     {
         // Obtener la lista de cotización por su ID
         $lista = ListasCotizar::findOrFail($id);
-    
+        $usuarioVentas = $lista->usuario_id;
         // Asignar el ID del usuario autenticado al campo id_usuario_compras
         $lista->id_usuario_compras = Auth::id();
-    
+
         // Guardar los cambios en la base de datos
         $lista->save();
-    
+
+        // Buscar la lista a cotizar
+
+        // Crear la cotización basada en la lista a cotizar
+        $cotizacion = Cotizacion::create([
+            'lista_cotizar_id' => $lista->id,
+            'proyecto_id' => $lista->proyecto_id,
+            'usuario_id' => $usuarioVentas,
+            'id_usuario_compras' => Auth::id(),
+            'nombre' => $lista->nombre,
+            'estado' => 0, // Estado inicial de la cotización
+        ]);
+
         // Emitir un evento o redirigir según sea necesario
         // Por ejemplo, para actualizar otra parte de la interfaz:
         // $this->emit('listaSeleccionada', $lista->id);
     }
-    
 }
