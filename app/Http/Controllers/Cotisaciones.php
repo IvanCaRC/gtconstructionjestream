@@ -12,4 +12,11 @@ class Cotisaciones extends Controller
         // Retornar la vista de la lista de proveedores
         return view('compras/cotisaciones/verCotisaciones');
     }
+
+    public function verMisCotisaciones()
+    {
+        // Retornar la vista de la lista de proveedores
+        return view('compras/cotisaciones/verMisCotisaciones');
+
+    }
 }

@@ -198,8 +198,8 @@
                                 onmouseout="this.style.backgroundColor='';">
                                 Cotizaciones
                             </a>
-                            <a class="collapse-item @yield('activeAforgot') text-white mb-2"
-                                href="{{ route('mantenimiento.enconstruccion') }}"
+                            <a class="collapse-item @yield('activeMisCortisaciones') text-white @yield('activeFondoPermanenteMiscotisaciones') mb-2"
+                                href="{{ route('compras.cotisaciones.verMisCotisaciones') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
                                 onmouseout="this.style.backgroundColor='';">
                                 Mis cotizaciones
