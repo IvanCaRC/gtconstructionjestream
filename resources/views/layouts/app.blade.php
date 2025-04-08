@@ -204,6 +204,14 @@
                                 onmouseout="this.style.backgroundColor='';">
                                 Mis cotizaciones
                             </a>
+
+                            <a class="collapse-item @yield('activeItemsCotizar') text-white @yield('activeFondoPermanenteItemsCotizar') mb-2"
+                                 href="{{ route('compras.catalogoCotisacion.catalogoItem') }}"
+                                onmouseover="this.style.backgroundColor='#003366';"
+                                onmouseout="this.style.backgroundColor='@yield('activeBackgroundItemsCOtizar')';">
+                                Items para cotizar
+                            </a>
+
                             <a class="collapse-item @yield('activeAforgot') text-white mb-2"
                                 href="{{ route('mantenimiento.enconstruccion') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
@@ -250,6 +258,8 @@
                                 Fichas tecnicas
                             </a>
 
+
+
                             <a class="collapse-item @yield('activeRecepcionCotizacion') text-white @yield('activeFondoPermanenteRecepcionCotizacion') mb-2"
                                 href="{{ route('ventas.recepcionCotizaciones.recepcionCotizacion') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
@@ -286,6 +296,7 @@
                                 href="{{ route('mantenimiento.enconstruccion') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
                                 onmouseout="this.style.backgroundColor='';">Reportes</a>
+
                             <div class="collapse-divider"></div>
                         </div>
                     </div>

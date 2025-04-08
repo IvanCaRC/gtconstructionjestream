@@ -7,6 +7,7 @@ use App\Http\Controllers\Cotisaciones;
 use App\Http\Controllers\FamiliaController;
 use App\Http\Controllers\FichasTecnicas;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\ItemCotizar;
 use App\Http\Controllers\MantenimientoController;
 use App\Http\Controllers\ProveedorController;
 use App\Http\Controllers\UserController;
@@ -116,6 +117,12 @@ Route::get('compras/items/viewItems', [ItemController::class, 'index'])->middlew
 Route::get('compras/cotisaciones/verCotisaciones', [Cotisaciones::class, 'index'])->middleware('auth', 'nocache')->name('compras.cotisaciones.verCotisaciones');
 
 Route::get('compras/cotisaciones/verMisCotisaciones', [Cotisaciones::class, 'verMisCotisaciones'])->middleware('auth', 'nocache')->name('compras.cotisaciones.verMisCotisaciones');
+
+Route::get('compras/catalogoCotisacion/catalogoItem', [ItemCotizar::class, 'index'])->middleware('auth', 'nocache')->name('compras.catalogoCotisacion.catalogoItem');
+
+
+
+
 
 
 
