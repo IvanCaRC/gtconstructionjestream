@@ -44,7 +44,7 @@ class Cliente extends Model
     }
 
     //Reglas de validacion
-    public static function rules($prefix = '', $id)
+    public static function rules($prefix = '', $id = null)
     {
         return [
             $prefix . 'nombre' => 'required|string|max:255',
