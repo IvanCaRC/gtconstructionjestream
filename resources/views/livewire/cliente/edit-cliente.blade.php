@@ -89,13 +89,13 @@
             @this.call('updateCliente').then(response => {
                 if (response.cliente_id) {
                     // Guardar el ID del cliente recién creado en un campo oculto
-                    document.getElementById('cliente-id-input').value = response.cliente_id;
+                    // document.getElementById('cliente-id-input').value = response.cliente_id;
 
                     // Convertir las direcciones a formato JSON
-                    const directionsJSON = JSON.stringify(savedAddresses);
+                    // const directionsJSON = JSON.stringify(savedAddresses);
 
                     // Asignar el valor al campo oculto
-                    document.getElementById('direcciones-input').value = directionsJSON;
+                    // document.getElementById('direcciones-input').value = directionsJSON;
 
                     // Mostrar la alerta después de la creación si todo es correcto
                     Swal.fire({
