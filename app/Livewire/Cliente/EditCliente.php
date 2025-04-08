@@ -58,6 +58,8 @@ class EditCliente extends Component
         return view('livewire.cliente.edit-cliente');
     }
 
+    //Funciones para validacion en tiempo real
+
     public function updateCliente()
     {
         // Obtener datos actuales del proveedor
@@ -77,7 +79,7 @@ class EditCliente extends Component
         ]);
 
         // Feedback al usuario
-        session()->flash('message', 'Proveedor actualizado exitosamente.');
+        // session()->flash('message', 'Proveedor actualizado exitosamente.');
         return ['cliente_id' => $clienteActual->id];
     }
 }

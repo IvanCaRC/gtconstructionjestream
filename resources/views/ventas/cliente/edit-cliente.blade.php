@@ -7,7 +7,7 @@
 @section('activeFondoPermanenteGestionCLientes', 'background-permanent')
 @section('contend')
 
-
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <div class="container-fluid mb-6 px-4 sm:px-6 lg:px-8 py-6">
 
