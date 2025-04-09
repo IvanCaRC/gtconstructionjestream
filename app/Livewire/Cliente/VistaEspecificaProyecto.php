@@ -79,6 +79,16 @@ class VistaEspecificaProyecto extends Component
         ], ['listas' => $listas]);
     }
 
+    public function editCliente($idCliente)
+    {
+        return redirect()->route('ventas.cliente.EditCliente', ['idcliente' => $idCliente]);
+    }
+
+    public function regresarGestionClientes()
+    {
+        return redirect()->route('ventas.clientes.gestionClientes');
+    }
+
     public function saveListaNueva()
     {
         $proyecto  = $this->proyecto->id;

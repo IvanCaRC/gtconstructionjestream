@@ -32,7 +32,7 @@
     </style>
     <div class="ml-3">
         <div class="row align-items-center">
-            <button type="button" class="btn-icon" onclick="cancelar()">
+            <button type="button" class="btn-icon" wire:click="regresarGestionClientes">
                 <i class="fas fa-arrow-left"></i>
             </button>
             <h2 class="ml-3">Detalles de cliente</h2>

@@ -5,7 +5,8 @@
                 <h2>Nombre: {{ $clienteEspecifico->nombre }}</h2>
             </div>
             <div class="col-md-1">
-                <a href="#" wire:click="editCliente({{ $clienteEspecifico->id }})" class="d-block mb-3">Editar cliente</a>
+                <a href="#" wire:click="editCliente({{ $clienteEspecifico->id }})" class="d-block mb-3">Editar
+                    cliente</a>
             </div>
         </div>
 
@@ -62,13 +63,13 @@
             <br>
         </div>
         <div class="row">
-            
+
             <div class="col-md-5 ">
                 <h4>Direcciones</h4>
                 @if ($clienteEspecifico->direcciones->count() > 0)
                     @foreach ($clienteEspecifico->direcciones as $direccion)
-                    {{ $direccion->estado }}, {{ $direccion->ciudad }},
-                    {{ $direccion->calle }}, {{ $direccion->numero }}, {{ $direccion->referencia }}<br>
+                        {{ $direccion->estado }}, {{ $direccion->ciudad }},
+                        {{ $direccion->calle }}, {{ $direccion->numero }}, {{ $direccion->referencia }}<br>
                     @endforeach
                 @else
                     N/A

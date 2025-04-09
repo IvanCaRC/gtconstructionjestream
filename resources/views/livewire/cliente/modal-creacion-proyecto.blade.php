@@ -19,7 +19,7 @@
                     <option value="1">Tiempo de entrega</option>
                     <option value="2">Precio</option>
                 </select>
-                <small class="form-text text-muted">La preferencia del producto facilitara la selección de intems en la cotisacion</small>
+                <small class="form-text text-muted">La preferencia del producto facilitara la selección de items en la cotizacion</small>
             <div class="form-group">
             </div>
             
@@ -80,7 +80,7 @@
                             @endforeach
                         </select>
                         <small class="form-text text-muted">Por favor, elige una dericcion para el proyecto.</small>
-                        <small class="form-text text-muted">(Nota: Estas direcciones son recuperadas del
+                        <small class="form-text text-muted">(Nota: Estas direcciones son recuperadas del registro del
                             cliente)</small>
                     @else
                         <p>No hay direcciones disponibles.</p>

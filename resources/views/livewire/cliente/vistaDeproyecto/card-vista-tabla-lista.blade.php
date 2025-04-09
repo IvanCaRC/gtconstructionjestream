@@ -1,14 +1,14 @@
 <div>
-    <h3 class="ml-3">Listas del proyecto</h3>
+    <h3 class="ml-3">Listas a cotizar del proyecto</h3>
     <div class="card">
         <div class="card-body">
             <div class="text-left mb-3">
                 <button class="btn btn-custom" style="background-color: #4c72de; color: white;"
-                    wire:click="saveListaNueva">Agregar proyecto</button>
+                    wire:click="saveListaNueva">Registrar lista</button>
             </div>
             <div class="row m   b-3">
                 <div class="col-md-10">
-                    <input type="text" class="form-control mr-2" id="searchInput" placeholder="Buscar proyecto...">
+                    <input type="text" class="form-control mr-2" id="searchInput" placeholder="Buscar lista...">
                 </div>
                 <div class="col-md-2">
                     <select class="form-control mr-2">
@@ -24,7 +24,7 @@
                     <thead>
                         <tr>
                             <th>Listas a cotizar</th>
-                            <th>Cotisaciones</th>
+                            <th>Cotizaciones</th>
                             <th>Ordenes de venta</th>
 
                         </tr>
@@ -90,16 +90,16 @@
                                         Mandar a cotizar
                                     </button>
                                 @elseif ($lista->estado == 2)
-                                    <label for="">Preguntar si tiene una cotisacion vinculada, si es asi deve
+                                    <label for="">Preguntar si tiene una cotizacion vinculada, si es asi debe
                                         poder verse, si no es asi debe decir que se necesita activar para mandar a
-                                        cotisacion</label>
+                                        cotizacion</label>
                                 @elseif ($lista->estado == 3)
                                     <label for="">Cotizando...</label>
                                 @elseif ($lista->estado == 4)
-                                    <label for="">Mostrar cotisacion y opciones</label>
+                                    <label for="">Mostrar cotizacion y opciones</label>
                                 @elseif ($lista->estado == 5)
-                                    <label for="">Preguntar si tiene una acotisacion y mostratla cancelada. si
-                                        no la tiene simplemente poner cancelado</label>
+                                    <label for="">Preguntar si tiene una cotizacion y mostrarla cancelada. Si
+                                        no la tiene simplemente marcar como cancelada.</label>
                                 @endif
                             </td>
                             <td>
@@ -111,7 +111,7 @@
                 </table>
             @else
                 <div>
-                    No hay proyectos registrados para este cliente.
+                    No hay listas registradas en este proyecto.
                 </div>
             @endif
         </div>

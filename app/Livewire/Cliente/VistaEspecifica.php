@@ -98,6 +98,11 @@ class VistaEspecifica extends Component
         return redirect()->route('ventas.cliente.EditCliente', ['idcliente' => $idCliente]);
     }
 
+    public function regresarGestionClientes()
+    {
+        return redirect()->route('ventas.clientes.gestionClientes');
+    }
+
     public function asignarTipoDeProyecto($tipo)
     {
         $this->tipoDeProyectoSelecionado = $tipo;
