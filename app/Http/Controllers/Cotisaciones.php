@@ -19,4 +19,11 @@ class Cotisaciones extends Controller
         return view('compras/cotisaciones/verMisCotisaciones');
 
     }
+
+    public function verCarritoCotisaciones($idCotisacion)
+    {
+        // Retornar la vista de la lista de proveedores
+        return view('compras/cotisaciones/verCarritoCotisaciones', ['idCotisacion' => $idCotisacion]);
+ 
+    }
 }

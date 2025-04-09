@@ -120,9 +120,4 @@ Route::get('compras/cotisaciones/verMisCotisaciones', [Cotisaciones::class, 'ver
 
 Route::get('compras/catalogoCotisacion/catalogoItem', [ItemCotizar::class, 'index'])->middleware('auth', 'nocache')->name('compras.catalogoCotisacion.catalogoItem');
 
-
-
-
-
-
-
+Route::get('compras/cotisaciones/verCarritoCotisaciones/{idCotisacion}', [Cotisaciones::class, 'verCarritoCotisaciones'])->middleware('auth', 'nocache')->name('compras.cotisaciones.verCarritoCotisaciones');

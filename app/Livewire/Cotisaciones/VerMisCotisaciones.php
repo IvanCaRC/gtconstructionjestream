@@ -87,8 +87,10 @@ class VerMisCotisaciones extends Component
     }
     public function verDetalles($id)
     {
-        // Lógica para ver detalles de la cotización con el ID proporcionado
+        // Redirigir a la ruta especificada con el ID de la cotización
+        return redirect()->route('compras.cotisaciones.verCarritoCotisaciones', ['idCotisacion' => $id]);
     }
+    
 
     public function activar($id)
     {

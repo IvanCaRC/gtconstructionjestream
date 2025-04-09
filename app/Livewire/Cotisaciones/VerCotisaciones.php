@@ -63,14 +63,27 @@ class VerCotisaciones extends Component
         // Obtener la lista de cotización por su ID
         $lista = ListasCotizar::findOrFail($id);
         $usuarioVentas = $lista->usuario_id;
+    
         // Asignar el ID del usuario autenticado al campo id_usuario_compras
         $lista->id_usuario_compras = Auth::id();
-
+    
+        // Transformar y añadir el campo 'estado' en 'items_cotizar'
+        $itemsCotizar = json_decode($lista->items_cotizar, true);
+        foreach ($itemsCotizar as &$item) {
+            $item['estado'] = 0; // Estado por defecto
+        }
+        $lista->items_cotizar = json_encode($itemsCotizar);
+    
+        // Transformar y añadir el campo 'estado' en 'items_cotizar_temporales'
+        $itemsCotizarTemporales = json_decode($lista->items_cotizar_temporales, true);
+        foreach ($itemsCotizarTemporales as &$itemTemp) {
+            $itemTemp['estado'] = 0; // Estado por defecto
+        }
+        $lista->items_cotizar_temporales = json_encode($itemsCotizarTemporales);
+    
         // Guardar los cambios en la base de datos
         $lista->save();
-
-        // Buscar la lista a cotizar
-
+    
         // Crear la cotización basada en la lista a cotizar
         $cotizacion = Cotizacion::create([
             'lista_cotizar_id' => $lista->id,
@@ -80,9 +93,9 @@ class VerCotisaciones extends Component
             'nombre' => $lista->nombre,
             'estado' => 0, // Estado inicial de la cotización
         ]);
-
+    
         // Emitir un evento o redirigir según sea necesario
-        // Por ejemplo, para actualizar otra parte de la interfaz:
         // $this->emit('listaSeleccionada', $lista->id);
     }
+    
 }

@@ -2,6 +2,7 @@
 
 namespace App\Livewire\ItemsCotizar;
 
+use App\Models\Cotizacion;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\Familia;
@@ -41,7 +42,7 @@ class Catalogo extends Component
         $this->usuarioActual = Auth::user();
 
         // Consultar el primer registro con estado 0 para el usuario actual
-        $registro = ListasCotizar::where('usuario_id', $this->usuarioActual->id) // Verificar usuario actual
+        $registro = Cotizacion::where('id_usuario_compras', $this->usuarioActual->id) // Verificar usuario actual
             ->where('estado', 1) // Estado igual a 0
             ->first(); // Obtener el primer registro (o null si no hay)
 
@@ -55,10 +56,8 @@ class Catalogo extends Component
 
             // Asignamos los valores
             $this->nombreProyecto = $proyecto->nombre ?? 'Sin nombre';
-            if ($this->nombreProyecto !== 'Sin nombre') {
-                $this->nombreCliente = $cliente->nombre ?? 'Sin cliente';
-            }
 
+            $this->nombreCliente = $cliente->nombre ?? 'Sin cliente';
 
             // Obtener los IDs de los items en la lista
             $itemsData = json_decode($registro->items_cotizar, true) ?? [];
@@ -248,7 +247,7 @@ class Catalogo extends Component
 
         $itemEspecificos = $query->paginate(35);
 
-        return view('livewire.cliente.fichas-tecnicas', [
+        return view('livewire.items-cotizar.catalogo', [
             'itemEspecificos' => $itemEspecificos,
             'familias' => $familias, // Agregar familias a la vista
         ]);
