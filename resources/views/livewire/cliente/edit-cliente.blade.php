@@ -3,7 +3,7 @@
         <div class="form-group">
             <label for="nombre">Nombre</label>
             <input type="text" id="nombre" class="form-control @error('clienteEdit.nombre') is-invalid @enderror"
-                wire:model.defer="clienteEdit.nombre">
+                wire:model.defer="clienteEdit.nombre" wire:blur="validateField('clienteEdit.nombre')">
             @error('clienteEdit.nombre')
                 <span class="invalid-feedback">{{ $message }}</span>
             @enderror
@@ -13,7 +13,7 @@
                 <label for="correo">Correo</label>
                 <input type="email" id="correo"
                     class="form-control @error('clienteEdit.correo') is-invalid @enderror"
-                    wire:model="clienteEdit.correo">
+                    wire:model="clienteEdit.correo" wire:blur="validateField('clienteEdit.correo')">
                 @error('clienteEdit.correo')
                     <span class="invalid-feedback">{{ $message }}</span>
                 @enderror
@@ -22,7 +22,7 @@
             <div class="col-md-6 mb-3">
                 <label for="rfc">RFC</label>
                 <input id="rfc" class="form-control @error('clienteEdit.rfc') is-invalid @enderror"
-                    wire:model="clienteEdit.rfc">
+                    wire:model="clienteEdit.rfc" wire:blur="validateField('clienteEdit.rfc')">
                 @error('clienteEdit.rfc')
                     <span class="invalid-feedback">{{ $message }}</span>
                 @enderror
@@ -106,10 +106,7 @@
                         allowOutsideClick: false // Deshabilitar el clic fuera para cerrar
                     }).then((result) => {
                         if (result.isConfirmed) {
-                            // Enviar el formulario
-                            document.getElementById('proveedor-formee').submit();
-
-
+                            window.location.href = "{{ route('ventas.clientes.gestionClientes') }}";
                         }
                     });
                 }

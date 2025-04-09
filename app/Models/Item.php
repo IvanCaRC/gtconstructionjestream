@@ -33,7 +33,7 @@ class Item extends Model
     public static function messages($prefix = '')
     {
         return [
-            $prefix . 'nombre.required' => 'Registrar el nombre es obligatorio.',
+            $prefix . 'nombre.required' => 'Registrar el nombre del item es obligatorio.',
             $prefix . 'nombre.string' => 'El nombre debe ser un texto.',
             $prefix . 'nombre.max' => 'El nombre no puede tener más de 255 caracteres.',
             $prefix . 'descripcion.string' => 'La descripción debe ser una cadena de texto.',

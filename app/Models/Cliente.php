@@ -62,9 +62,9 @@ class Cliente extends Model
     public static function messages($prefix = '')
     {
         return [
-            $prefix . 'nombre.required' => 'Registrar un nombre para el cliente es obligatorio.',
+            $prefix . 'nombre.required' => 'Para registrar un cliente es obligatorio el nombre.',
             $prefix . 'nombre.string' => 'El nombre de cliente no es valido.',
-            $prefix . 'nombre.max' => 'Este es un nombre demasiado largo.',
+            $prefix . 'nombre.max' => 'Este nombre es demasiado largo.',
 
             $prefix . 'correo.required' => 'Registrar un correo electronico es obligatorio.',
             $prefix . 'correo.email' => 'La direccion de correo registrada no es valida.',
@@ -95,7 +95,7 @@ class Cliente extends Model
         return [
             $prefix . 'clienteEdit.nombre.required' => 'Para actualizar los datos del cliente es requerido un nombre.',
             $prefix . 'clienteEdit.nombre.string' => 'El nombre de cliente no es valido.',
-            $prefix . 'clienteEdit.nombre.max' => 'Este es un nombre demasiado largo.',
+            $prefix . 'clienteEdit.nombre.max' => 'Este nombre es demasiado largo.',
 
             $prefix . 'clienteEdit.correo.required' => 'Registrar un correo electronico es obligatorio.',
             $prefix . 'clienteEdit.correo.email' => 'La direccion de correo registrada no es valida.',

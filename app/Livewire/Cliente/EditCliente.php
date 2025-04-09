@@ -59,6 +59,27 @@ class EditCliente extends Component
     }
 
     //Funciones para validacion en tiempo real
+    public function updated($propertyName)
+    {
+        //Implementar mensajes personalizados
+        $this->validateOnly($propertyName, Cliente::rulesUpdate('', $this->idDecliente), Cliente::messagesUpdate());
+    }
+
+    public function validateField($field)
+    {
+        $this->validateOnly($field);
+    }
+
+    //Mandar a llamar las reglas del modelo de manera local
+    protected function rules()
+    {
+        return Cliente::rulesUpdate('', $this->idDecliente);
+    }
+    //Llamar los mensajes personalizados de manera local
+    protected function messages()
+    {
+        return Cliente::messagesUpdate('');
+    }
 
     public function updateCliente()
     {

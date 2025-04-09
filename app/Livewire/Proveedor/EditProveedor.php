@@ -268,12 +268,13 @@ class EditProveedor extends Component
     {
         $this->validateOnly($field);
     }
+
     //Mandar a llamar las reglas del modelo de manera local
     protected function rules()
     {
         return Proveedor::rulesUpdate('proveedorEdit.', $this->provedprEditId);
     }
-
+    //Llamar los mensajes personalizados de manera local
     protected function messages()
     {
         return Proveedor::messagesUpdate('proveedorEdit.');
