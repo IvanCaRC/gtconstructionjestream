@@ -61,8 +61,8 @@ class VistaEspecifica extends Component
             ->when($this->searchTerm, function ($query) {
                 $query->where(function ($q) {
                     $q->where('nombre', 'like', '%' . $this->searchTerm . '%')
-                      ->orWhere('tipo', 'like', '%' . $this->searchTerm . '%')
-                      ->orWhere('estado', 'like', '%' . $this->searchTerm . '%');
+                        ->orWhere('tipo', 'like', '%' . $this->searchTerm . '%')
+                        ->orWhere('estado', 'like', '%' . $this->searchTerm . '%');
                 });
             })
             ->when($this->statusFiltro != 0, function ($query) {
@@ -76,7 +76,7 @@ class VistaEspecifica extends Component
             })
             ->orderBy('created_at', 'desc')
             ->paginate(10); // Usar paginate() con el trait WithPagination
-    
+
         // Pasar los proyectos a la vista
         return view('livewire.cliente.vista-especifica', [
             'proyectos' => $proyectos,
@@ -91,6 +91,11 @@ class VistaEspecifica extends Component
     {
         $this->reset('openModalCreacionProyecto', 'archivoSubido', 'tipoDeProyectoSelecionado', 'nombreProyecto', 'listaACotizarTxt', 'idDireccionParaProyecto', 'datosGenrales', 'adicionales');
         $this->dispatch('refresh');
+    }
+
+    public function editCliente($idCliente)
+    {
+        return redirect()->route('ventas.cliente.EditCliente', ['idcliente' => $idCliente]);
     }
 
     public function asignarTipoDeProyecto($tipo)

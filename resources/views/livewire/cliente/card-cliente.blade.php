@@ -5,7 +5,7 @@
                 <h2>Nombre: {{ $clienteEspecifico->nombre }}</h2>
             </div>
             <div class="col-md-1">
-                <a href="#" wire:click="" class="d-block mb-3" wire:click="">Editar cliente</a>
+                <a href="#" wire:click="editCliente({{ $clienteEspecifico->id }})" class="d-block mb-3">Editar cliente</a>
             </div>
         </div>
 

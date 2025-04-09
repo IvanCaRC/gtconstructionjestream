@@ -4,7 +4,7 @@
         <div class="card-body">
             <div class="text-left mb-3">
                 <button class="btn btn-custom" style="background-color: #4c72de; color: white;"
-                    wire:click="$set('openModalCreacionProyecto', true)">Agregar proyecto</button>
+                    wire:click="$set('openModalCreacionProyecto', true)">Registrar nuevo proyecto</button>
             </div>
             <div class="row mb-3">
                 <div class="col-md-6">
