@@ -1,5 +1,5 @@
 <div class="container-fluid px-4 sm:px-6 lg:px-8 py-3">
-    <h2 class="ml-3">Listas posibles a cotizar</h2>
+    <h2 class="ml-3">Listas por cotizar</h2>
     <div class="card">
         <div class="card-body">
             <div class="row mb-3">
@@ -52,7 +52,7 @@
                 </div>
             @else
                 <div>
-                    No hay listas para poder cotisar.
+                    Actualmente no hay listas por cotizar.
                 </div>
             @endif
             <!-- Enlace de paginación -->

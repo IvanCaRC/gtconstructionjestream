@@ -7,7 +7,7 @@
                         Resumen
                     </div>
                     <div class="col-md-6">
-                        <button>crear cotisacion</button>
+                        <button>Crear cotizacion</button>
 
                     </div>
                 </div>

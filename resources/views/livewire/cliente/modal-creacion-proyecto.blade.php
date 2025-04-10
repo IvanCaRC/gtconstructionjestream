@@ -7,29 +7,40 @@
         <x-slot name='content'>
 
             <div class="form-group">
-                    <label for="nombre">Nombre</label>
-                    <input type="text" id="nombre" class="form-control" wire:model.defer="nombreProyecto">
+                <label for="nombre">Nombre</label>
+                <input type="text" id="nombre" class="form-control @error('nombreProyecto') is-invalid @enderror"
+                    wire:model.defer="nombreProyecto">
+
+                @error('nombreProyecto')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
             </div>
 
             <div class="form-group">
                 <label for="unidad">Preferencia</label>
-                <select id="unidad" wire:model="preferencia" class="form-control" 
+                <select id="unidad" wire:model="preferencia" class="form-control"
                     wire:change="asiganrPreferencia($event.target.value)">
                     <option value="">Ninguna</option>
                     <option value="1">Tiempo de entrega</option>
                     <option value="2">Precio</option>
                 </select>
-                <small class="form-text text-muted">La preferencia del producto facilitara la selección de items en la cotizacion</small>
-            <div class="form-group">
-            </div>
-            
+                <small class="form-text text-muted">La preferencia del producto facilitara la selección de items en la
+                    cotizacion</small>
+                <div class="form-group">
+                </div>
+
                 <label for="unidad">Tipo</label>
-                <select id="unidad" wire:model="tipoDeProyectoSelecionado" class="form-control" required
+                <select id="unidad" wire:model="tipoDeProyectoSelecionado"
+                    class="form-control @error('tipoDeProyectoSelecionado') is-invalid @enderror"
                     wire:change="asignarTipoDeProyecto($event.target.value)">
                     <option value="">Seleccione el tipo de proyecto</option>
                     <option value="1">Suministro</option>
                     <option value="0">Obra</option>
                 </select>
+
+                @error('tipoDeProyectoSelecionado')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
             </div>
             @if ($tipoDeProyectoSelecionado === '1')
                 <div class="form-group">

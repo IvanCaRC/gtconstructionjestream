@@ -126,6 +126,9 @@ class VistaEspecifica extends Component
 
     public function saveProyecto()
     {
+        //Reglas de validacion
+        $this->validate(Proyecto::rules(), Proyecto::messages());
+
         $clienteId = $this->clienteEspecifico->id;
         $archivoSubido = $this->archivoSubido ? $this->archivoSubido->store('archivosFacturacionProveedores', 'public') : null;
 
