@@ -209,6 +209,8 @@
             color: white !important;
         }
     </style>
+
+    
     @livewire('cliente.vista-de-lista')
 
     <div class="container-fluid px-4 sm:px-6 lg:px-8 py-4">
@@ -234,7 +236,6 @@
             </div>
         </div>
     </div>
-
 
     
 

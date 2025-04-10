@@ -106,7 +106,7 @@ Route::get('ventas/clientes/gestionClientes', [RecpecioLlamadas::class, 'vista']
 Route::get('ventas/fichasTecnicas/fichasTecnicas', [FichasTecnicas::class, 'index'])->middleware('auth', 'nocache')->name('ventas.fichasTecnicas.fichasTecnicas');
 
 Route::get('ventas/fichasTecnicas/vistaEspecificaItem/{idItem}', [FichasTecnicas::class, 'viewEspecItem'])->middleware('auth', 'nocache')->name('ventas.fichasTecnicas.fichaEspecificaItem');
-
+                                                                                                                            
 Route::get('ventas/recepcionCotizaciones/recepcionCotizacion', [VentasRecepcionCotisaciones::class, 'index'])->middleware('auth', 'nocache')->name('ventas.recepcionCotizaciones.recepcionCotizacion');
 
 Route::get('ventas/clientes/EditCliente/{idcliente}', [ClienteController::class, 'editCliente'])

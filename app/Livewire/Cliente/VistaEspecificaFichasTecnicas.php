@@ -53,9 +53,10 @@ class VistaEspecificaFichasTecnicas extends Component
         $this->nombreCliente = null;
         $this->itemsEnLista = [];
     }
-
+    public $variableRecibidal;
     public function mount($idItem)
     {
+        $this->variableRecibidal = $idItem;
         // Obtener el usuario autenticado
         $this->usuarioActual = Auth::user();
 

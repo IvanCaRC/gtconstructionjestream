@@ -77,30 +77,64 @@ class VistaEspecificaListaCotizar extends Component
 
         $this->actualizarCantidadItemsTemporalesDiferentes();
 
+        // if ($lista) {
+        //     // Recuperamos el proyecto relacionado
+        //     // Si se encuentra el registro, guardar el nombre; si no, asignar  null
+
+        //     $this->listadeUsuarioActiva = $lista->nombre ?? 'Sin nombre';
+        //     $proyecto = $lista->proyecto ?? 'Sin proyecto';
+        //     $cliente = $lista->cliente ?? 'Sin cliente    ';
+        //     $idProyecto = $lista->proyecto_id ?? 'Sin proyecto';
+        //     // Asignamos los valores
+        //     $this->nombreProyecto = $proyecto->nombre ?? 'Sin nombre';
+        //     $this->preferenciaProeycto = $proyecto->preferencia ?? 'Sin preferencia';
+        //     $this->idProyectoActual = $idProyecto;
+        //     $this->nombreCliente = $cliente->nombre ?? 'Sin cliente';
+
+        //     // Obtener los IDs de los items en la lista
+        //     $itemsData = json_decode($lista->items_cotizar, true) ?? [];
+        // } else {
+        //     // Si no existe el registro
+        //     $this->idLista = null;
+        //     $this->listadeUsuarioActiva = null;
+        //     $this->nombreProyecto = null;
+        //     $this->nombreCliente = null;
+        // }
+
+
+
         if ($lista) {
-            // Recuperamos el proyecto relacionado
-            // Si se encuentra el registro, guardar el nombre; si no, asignar  null
+            // Si existe la lista activa, obtener sus detalles
 
             $this->listadeUsuarioActiva = $lista->nombre ?? 'Sin nombre';
             $proyecto = $lista->proyecto ?? 'Sin proyecto';
             $cliente = $lista->cliente ?? 'Sin cliente    ';
             $idProyecto = $lista->proyecto_id ?? 'Sin proyecto';
-            // Asignamos los valores
+
             $this->nombreProyecto = $proyecto->nombre ?? 'Sin nombre';
             $this->preferenciaProeycto = $proyecto->preferencia ?? 'Sin preferencia';
             $this->idProyectoActual = $idProyecto;
+            // Obtener el cliente relacionado con el proyecto
+
             $this->nombreCliente = $cliente->nombre ?? 'Sin cliente';
 
             // Obtener los IDs de los items en la lista
             $itemsData = json_decode($lista->items_cotizar, true) ?? [];
         } else {
-            // Si no existe el registro
-            $this->idLista = null;
-            $this->listadeUsuarioActiva = null;
-            $this->nombreProyecto = null;
-            $this->nombreCliente = null;
+            // Si no se encuentra la lista, establecer las propiedades en null
+            $this->establecerPropiedadesNulas();
         }
     }
+
+    private function establecerPropiedadesNulas()
+    {
+        $this->idLista = null;
+        $this->listadeUsuarioActiva = null;
+        $this->nombreProyecto = null;
+        $this->nombreCliente = null;
+    }
+
+
     public $idProyectoActual;
 
     public function desactivarLista($idLista)
