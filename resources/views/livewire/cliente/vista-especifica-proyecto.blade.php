@@ -44,5 +44,5 @@
     </div>
     @include('livewire.cliente.vistaDeproyecto.card-vista-proyecto-esp')
     <br>
-    {{-- @include('livewire.cliente.vistaDeproyecto.card-vista-tabla-lista') --}}
+    @include('livewire.cliente.vistaDeproyecto.card-vista-tabla-lista')
 </div>

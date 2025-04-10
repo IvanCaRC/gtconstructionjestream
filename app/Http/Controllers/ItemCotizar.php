@@ -12,4 +12,11 @@ class ItemCotizar extends Controller
         return view('compras.catalogoCotisacion.catalogoItems');
     }
 
-}
+    public function vistaEspecificaDeCotisacion($idItem)
+    {
+        // Retornar la vista de la lista de proveedores
+        return view('compras.catalogoCotisacion.catalogoItems', ['idItem' => $idItem]);
+
+    }
+
+} 

@@ -107,13 +107,16 @@ class VistaEspecificaProyecto extends Component
         $resultado = 'numero ' . strval($proyectoLista + 1);
 
 
+
         $listaACotizar = ListasCotizar::create([
             'proyecto_id' => $proyecto,
             'usuario_id' => $idUser,
             'nombre' => $resultado,
             'estado' => 1,
         ]);
-
+        
+        Auth::user()->update(['lista' => $listaACotizar->id]);
+        
         $this->proyecto->increment('listas'); // Incrementa el campo "proyectos" en 1
 
 

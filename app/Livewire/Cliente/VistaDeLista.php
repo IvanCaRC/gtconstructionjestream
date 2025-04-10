@@ -37,39 +37,53 @@ class VistaDeLista extends Component
     public $idLista;
 
     public $itemsEnLista = [];
+   
+
     public function mount()
     {
-        // Obtener el usuario actual
+        // Obtener el usuario autenticado
         $this->usuarioActual = Auth::user();
 
-        // Consultar el primer registro con estado 0 para el usuario actual
-        $registro = ListasCotizar::where('usuario_id', $this->usuarioActual->id) // Verificar usuario actual
-            ->where('estado', 1) // Estado igual a 0
-            ->first(); // Obtener el primer registro (o null si no hay)
+        // Verificar si el usuario tiene una lista activa asignada
+        if ($this->usuarioActual->lista) {
+            // Obtener el ID de la lista activa
+            $listaId = $this->usuarioActual->lista;
 
-        if ($registro) {
-            // Recuperamos el proyecto relacionado
-            // Si se encuentra el registro, guardar el nombre; si no, asignar null
-            $this->idLista = $registro->id;
-            $this->listadeUsuarioActiva = $registro->nombre ?? 'Sin nombre';
-            $proyecto = $registro->proyecto ?? 'Sin proyecto';
-            $cliente = $proyecto->cliente ?? 'Sin cliente    ';
+            // Buscar la lista activa usando el ID obtenido
+            $listaActiva = ListasCotizar::find($listaId);
 
-            // Asignamos los valores
-            $this->nombreProyecto = $proyecto->nombre ?? 'Sin nombre';
+            if ($listaActiva) {
+                // Si existe la lista activa, obtener sus detalles
+                $this->idLista = $listaActiva->id;
+                $this->listadeUsuarioActiva = $listaActiva->nombre ?? 'Sin nombre';
+                $proyecto = $listaActiva->proyecto ?? 'Sin proyecto';
+                $cliente = $proyecto->cliente ?? 'Sin cliente    ';
+                $this->nombreProyecto = $proyecto->nombre ?? 'Sin nombre';
 
-            $this->nombreCliente = $cliente->nombre ?? 'Sin cliente';
+                // Obtener el cliente relacionado con el proyecto
+               
+                $this->nombreCliente = $cliente->nombre ?? 'Sin cliente';
 
-            // Obtener los IDs de los items en la lista
-            $itemsData = json_decode($registro->items_cotizar, true) ?? [];
-            $this->itemsEnLista = array_column($itemsData, 'id');
+                // Obtener los IDs de los items en la lista
+                $itemsData = json_decode($listaActiva->items_cotizar, true) ?? [];
+                $this->itemsEnLista = array_column($itemsData, 'id');
+            } else {
+                // Si no se encuentra la lista, establecer las propiedades en null
+                $this->establecerPropiedadesNulas();
+            }
         } else {
-            // Si no existe el registro
-            $this->idLista = null;
-            $this->listadeUsuarioActiva = null;
-            $this->nombreProyecto = null;
-            $this->nombreCliente = null;
+            // Si el usuario no tiene una lista asignada, establecer las propiedades en null
+            $this->establecerPropiedadesNulas();
         }
+    }
+
+    private function establecerPropiedadesNulas()
+    {
+        $this->idLista = null;
+        $this->listadeUsuarioActiva = null;
+        $this->nombreProyecto = null;
+        $this->nombreCliente = null;
+        $this->itemsEnLista = [];
     }
 
     public function verLista($idLista)
@@ -90,7 +104,7 @@ class VistaDeLista extends Component
         $lista->update([
             'estado' => 2
         ]);
-
+        Auth::user()->update(['lista' => null]);
         return redirect()->route('ventas.fichasTecnicas.fichasTecnicas');
     }
 }
