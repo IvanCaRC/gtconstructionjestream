@@ -3,7 +3,7 @@
         <div class="form-group">
             {{-- Seleccionar usuario para cargar el cliente --}}
             @if (Auth::user()->hasRole('Administrador'))
-                <div class="form-group">
+                <div class="form-group" style="max-width: 400px;">
                     <label for="usuariosVentas">Usuario asignado para este cliente:</label>
                     <select wire:model="selectedUser" id="usuariosVentas"
                         class="form-control @error('selectedUser') is-invalid @enderror">
@@ -20,6 +20,7 @@
                     @enderror
                 </div>
             @endif
+            <h3>Datos del cliente</h3>
             <label for="nombre">Nombre</label>
             <input type="text" id="nombre" class="form-control @error('nombre') is-invalid @enderror"
                 wire:model.defer="nombre" wire:blur="validateField('nombre')">
