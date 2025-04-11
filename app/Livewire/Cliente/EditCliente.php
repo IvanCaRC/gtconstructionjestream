@@ -4,6 +4,7 @@ namespace App\Livewire\Cliente;
 
 use App\Models\Cliente;
 use Livewire\Component;
+use App\Models\User;
 
 class EditCliente extends Component
 {
@@ -25,6 +26,8 @@ class EditCliente extends Component
         'proyectos_activos' => '', //Total de proyectos activos del cliente
         'user_id' => '', //Usuario asociado al cliente
     ];
+    public $selectedUser;
+    public $userRole; //Variable local para poder usar roles del sistema
 
     public function mount($idcliente)
     {
@@ -35,6 +38,12 @@ class EditCliente extends Component
         $this->clienteEdit['nombre'] = $this->clienteActual->nombre;
         $this->clienteEdit['correo'] = $this->clienteActual->correo;
         $this->clienteEdit['rfc'] = $this->clienteActual->rfc;
+
+        //Resguardar el usuario asignado actualmente al cliente
+        $this->selectedUser = $this->clienteActual->user_id;
+
+        // Obtener el rol del usuario desde la sesion en lugar del metodo Auth:user()
+        $this->userRole = session('user_role');
 
         // Cargar los teléfonos del cliente en el formato correcto
         $telefonosGuardados = json_decode($this->clienteActual->telefono, true);
@@ -51,6 +60,13 @@ class EditCliente extends Component
         }
 
         $this->idDecliente = $idcliente;
+    }
+
+    public function getUsuariosVentas()
+    {
+        return User::whereHas('roles', function ($query) {
+            $query->whereIn('name', ['Ventas', 'Administrador']);
+        })->select('id', 'name', 'first_last_name', 'second_last_name')->get();
     }
 
     public function render()
@@ -82,25 +98,26 @@ class EditCliente extends Component
     }
 
     public function updateCliente()
-    {
-        // Obtener datos actuales del proveedor
-        $clienteActual = Cliente::findOrFail($this->idDecliente);
+{
+    // Obtener datos actuales del cliente
+    $clienteActual = Cliente::findOrFail($this->idDecliente);
 
-        //Validaciones de actualizacion
-        $this->validate(
-            Cliente::rulesUpdate('', $this->idDecliente), 
-            Cliente::messagesUpdate('')
-        );
+    // Validaciones de actualización
+    $this->validate([
+        'selectedUser' => 'required|exists:users,id', // Asegura que el usuario asignado sea válido
+    ] + Cliente::rulesUpdate('', $this->idDecliente), Cliente::messagesUpdate(''));
 
-        // Actualizar campos básicos
-        $clienteActual->update([
-            'nombre' => $this->clienteEdit['nombre'],
-            'correo' => $this->clienteEdit['correo'],
-            'rfc' => $this->clienteEdit['rfc'],
-        ]);
+    // Determinar qué ID de usuario asignar
+    $idUser = $this->selectedUser;
 
-        // Feedback al usuario
-        // session()->flash('message', 'Proveedor actualizado exitosamente.');
-        return ['cliente_id' => $clienteActual->id];
-    }
+    // Actualizar los datos del cliente, incluyendo el usuario asignado
+    $clienteActual->update([
+        'nombre' => $this->clienteEdit['nombre'],
+        'correo' => $this->clienteEdit['correo'],
+        'rfc' => $this->clienteEdit['rfc'],
+        'user_id' => $idUser, // Se actualiza el usuario asignado correctamente
+    ]);
+
+    return ['cliente_id' => $clienteActual->id];
+}
 }

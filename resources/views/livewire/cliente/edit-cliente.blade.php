@@ -1,6 +1,27 @@
 <div>
     <div>
         <div class="form-group">
+            {{-- Implementar edicion de usuario asignado al cliente --}}
+            @if (Auth::user()->hasRole('Administrador'))
+                <div class="form-group">
+                    <label for="usuariosVentas">Actualizar usuario asignado para este cliente:</label>
+                    <select wire:model="selectedUser" id="usuariosVentas"
+                        class="form-control @error('selectedUser') is-invalid @enderror">
+                        <option value="">-- Selecciona un usuario --</option>
+                        @foreach ($this->getUsuariosVentas() as $usuario)
+                            <option value="{{ $usuario['id'] }}" {{ $selectedUser == $usuario['id'] ? 'selected' : '' }}>
+                                {{ $usuario['name'] }} {{ $usuario['first_last_name'] }}
+                                {{ $usuario['second_last_name'] }}
+                            </option>
+                        @endforeach
+                    </select>
+
+                    {{-- Mensaje de error si no se selecciona un usuario --}}
+                    @error('selectedUser')
+                        <span class="text-danger">Asegúrate de asignar un usuario a tu cliente.</span>
+                    @enderror
+                </div>
+            @endif
             <label for="nombre">Nombre</label>
             <input type="text" id="nombre" class="form-control @error('clienteEdit.nombre') is-invalid @enderror"
                 wire:model.defer="clienteEdit.nombre" wire:blur="validateField('clienteEdit.nombre')">
