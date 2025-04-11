@@ -6,6 +6,7 @@ use App\Models\Cliente;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
+use Spatie\Permission\Models\Role;
 use Livewire\Features\SupportFileUploads\WithFileUploads;
 
 class RecepcionLlamada extends Component
@@ -18,6 +19,7 @@ class RecepcionLlamada extends Component
     public $proyectosActivos = 0;
     public $rfcDuplicado = false;
     public $clienteDuplicadoId = null;
+    public $selectedUser;
 
     public function verificarClienteDuplicado()
     {
@@ -28,6 +30,23 @@ class RecepcionLlamada extends Component
         } else {
             $this->clienteDuplicadoId = null; // Reiniciar si no hay duplicado
         }
+    }
+
+    public function getUsuariosVentas()
+    {
+        $usuariosVentas = User::whereHas('roles', function ($query) {
+            $query->where('name', 'Ventas');
+        })->select('id', 'name', 'first_last_name', 'second_last_name')->get(); // Asegúrate de incluir 'id'
+
+        // Agregar el usuario autenticado a la lista
+        $usuariosVentas->push([
+            'id' => Auth::user()->id, // Agrega el ID del usuario autenticado
+            'name' => Auth::user()->name,
+            'first_last_name' => Auth::user()->first_last_name,
+            'second_last_name' => Auth::user()->second_last_name
+        ]);
+
+        return $usuariosVentas;
     }
 
     public function render()
@@ -103,10 +122,14 @@ class RecepcionLlamada extends Component
     public function save()
     {
         //Reglas de validacion
-        $this->validate(Cliente::rules(), Cliente::messages());
-
+        $this->validate([
+            'selectedUser' => 'required|exists:users,id', // Se valida que el usuario seleccionado exista
+        ] + Cliente::rules(), Cliente::messages());
+        // $this->validate(Cliente::rules(), Cliente::messages());
+        //Obtener el usuario autenticado
         $user = Auth::user();
-        $idUser = $user->id;
+        //Determinar el id de usuario a asignar en funcion de su rol
+        $idUser = $user->hasRole('Administrador') ? $this->selectedUser : $user->id;
 
         $cliente = Cliente::create([
             'nombre' => $this->nombre,

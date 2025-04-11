@@ -1,6 +1,26 @@
 <div>
     <div>
         <div class="form-group">
+            {{-- Seleccionar usuario para cargar el cliente --}}
+            @if (Auth::user()->hasRole('Administrador'))
+                <div class="form-group">
+                    <label for="usuariosVentas">Usuario asignado para este cliente:</label>
+                    <select wire:model="selectedUser" wire:blur="validateField('selectedUser')" id="usuariosVentas"
+                        class="form-control @error('selectedUser') is-invalid @enderror">
+                        <option value="">-- Selecciona un usuario --</option>
+                        @foreach ($this->getUsuariosVentas() as $usuario)
+                            <option value="{{ $usuario['id'] }}">
+                                {{ $usuario['name'] }} {{ $usuario['first_last_name'] }}
+                                {{ $usuario['second_last_name'] }}
+                            </option>
+                        @endforeach
+                    </select>
+                    {{-- Muestra el mensaje de error si el usuario no selecciona un usuario --}}
+                    @error('selectedUser')
+                        <span class="text-danger">Asegúrate de asignar un usuario a tu cliente.</span>
+                    @enderror
+                </div>
+            @endif
             <label for="nombre">Nombre</label>
             <input type="text" id="nombre" class="form-control @error('nombre') is-invalid @enderror"
                 wire:model.defer="nombre" wire:blur="validateField('nombre')">
@@ -20,21 +40,21 @@
 
             <div class="col-md-6 mb-3">
                 <label for="rfc">RFC</label>
-                <input id="rfc" class="form-control @error('rfc') is-invalid @enderror" 
-                wire:model="rfc" wire:blur="validateField('rfc')">
-            
+                <input id="rfc" class="form-control @error('rfc') is-invalid @enderror" wire:model="rfc"
+                    wire:blur="validateField('rfc')">
+
                 @error('rfc')
                     <span class="text-danger">{{ $message }}</span>
                 @enderror
-            
+
                 @if ($rfcDuplicado && $clienteDuplicadoId)
-                    <button type="button" class="btn btn-sm btn-outline-info mt-2 d-flex align-items-center gap-1" 
+                    <button type="button" class="btn btn-sm btn-outline-info mt-2 d-flex align-items-center gap-1"
                         wire:click="viewCliente({{ $clienteDuplicadoId }})">
                         <i class="bi bi-eye"></i>
                         Ver registro
                     </button>
                 @endif
-            </div>                                 
+            </div>
 
         </div>
 
@@ -99,7 +119,7 @@
 
                     // Mostrar la alerta después de la creación si todo es correcto
                     Swal.fire({
-                        title: 'cliente registrado',
+                        title: 'Cliente registrado',
                         text: 'El cliente ha sido creado exitosamente.',
                         icon: 'success',
                         confirmButtonText: 'OK',
@@ -143,6 +163,7 @@
         }
     </script>
     <script>
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet">
+        < link href = "https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css"
+        rel = "stylesheet" >
     </script>
 </div>

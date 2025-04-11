@@ -26,13 +26,13 @@
                     <input type="hidden" id="direcciones-input" name="direcciones">
                     <input type="hidden" id="cliente-id-input" name="cliente_id" value="">
                     @livewire('cliente.recepcion-llamada')
-                    {{-- <div class="form-group">
+                    <div class="form-group">
                         <label>Direcciones</label>
                         <div class="input-group mb-2" id="address-list">
                             <!-- Aquí se mostrarán las direcciones guardadas -->
                             <p>No hay direcciones guardadas.</p>
                         </div>
-                    </div>@include('compras.proveedores.form') --}}
+                    </div>@include('compras.proveedores.form')
                     <button class="btn btn-secondary mt-3" onclick="cancelar()">Cancelar</button>
                     <button type="submit" onclick="confirmSave()" class="btn btn-primary mt-3">Registrar cliente</button>
                 </form>
