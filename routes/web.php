@@ -122,5 +122,5 @@ Route::get('compras/catalogoCotisacion/catalogoItem', [ItemCotizar::class, 'inde
 
 Route::get('compras/cotisaciones/verCarritoCotisaciones/{idCotisacion}', [Cotisaciones::class, 'verCarritoCotisaciones'])->middleware('auth', 'nocache')->name('compras.cotisaciones.verCarritoCotisaciones');
 
-Route::get('compras/catalogoCotisacion/vistaEspecificaItemCotizar/{idCotisacion}', [Cotisaciones::class, 'verCarritoCotisaciones'])->middleware('auth', 'nocache')->name('compras.cotisaciones.verCarritoCotisaciones');
+Route::get('compras/catalogoCotisacion/vistaEspecificaItemCotizar/{idItem}', [ItemCotizar::class, 'vistaEspecificaDeCotisacion'])->middleware('auth', 'nocache')->name('compras.catalogoCotisacion.vistaEspecificaItemCotizar');
 

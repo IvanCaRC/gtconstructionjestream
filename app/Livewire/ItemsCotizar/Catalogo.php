@@ -207,7 +207,7 @@ class Catalogo extends Component
         if ($item === null) {
             abort(404, 'item no encontrada');
         }
-        return redirect()->route('ventas.fichasTecnicas.fichaEspecificaItem', ['idItem' => $idItem]);
+        return redirect()->route('compras.catalogoCotisacion.vistaEspecificaItemCotizar', ['idItem' => $idItem]);
     }
 
     public function render()

@@ -77,7 +77,7 @@ class VistaEspecificaFichasTecnicas extends Component
                 $this->nombreProyecto = $proyecto->nombre ?? 'Sin nombre';
 
                 // Obtener el cliente relacionado con el proyecto
-               
+
                 $this->nombreCliente = $cliente->nombre ?? 'Sin cliente';
 
                 // Obtener los IDs de los items en la lista
@@ -150,10 +150,7 @@ class VistaEspecificaFichasTecnicas extends Component
         $ItemEspecifico->update(['estado_eliminacion' => false]);
         $this->dispatch('renderVistaProv');
     }
-    public function render()
-    {
-        return view('livewire.cliente.vista-especifica-fichas-tecnicas');
-    }
+
 
     public function verLista($idLista)
     {
@@ -242,5 +239,10 @@ class VistaEspecificaFichasTecnicas extends Component
 
             return redirect()->route('ventas.clientes.vistaEspecificaListaCotizar', ['idLista' => $listaACotizar->id]);
         }
+    }
+
+    public function render()
+    {
+        return view('livewire.cliente.vista-especifica-fichas-tecnicas');
     }
 }

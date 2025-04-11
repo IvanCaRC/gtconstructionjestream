@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ItemEspecifico;
 use Illuminate\Http\Request;
 
 class ItemCotizar extends Controller
@@ -14,8 +15,10 @@ class ItemCotizar extends Controller
 
     public function vistaEspecificaDeCotisacion($idItem)
     {
+
+        $itemEspecifico = ItemEspecifico::findOrFail($idItem);
         // Retornar la vista de la lista de proveedores
-        return view('compras.catalogoCotisacion.catalogoItems', ['idItem' => $idItem]);
+        return view('compras/catalogoCotisacion/vistaEspecificaItemCotizar', compact('itemEspecifico'));
 
     }
 
