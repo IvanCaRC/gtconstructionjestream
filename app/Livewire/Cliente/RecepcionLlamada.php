@@ -19,6 +19,7 @@ class RecepcionLlamada extends Component
     public $proyectosActivos = 0;
     public $rfcDuplicado = false;
     public $clienteDuplicadoId = null;
+    public $clienteUsuarioId = null;
     public $selectedUser;
 
     public function verificarClienteDuplicado()
@@ -27,8 +28,10 @@ class RecepcionLlamada extends Component
 
         if ($cliente) {
             $this->clienteDuplicadoId = $cliente->id;
+            $this->clienteUsuarioId = $cliente->user_id; // 🔹 Guardamos el propietario del cliente
         } else {
-            $this->clienteDuplicadoId = null; // Reiniciar si no hay duplicado
+            $this->clienteDuplicadoId = null;
+            $this->clienteUsuarioId = null; // Reiniciamos el valor si no hay duplicado
         }
     }
 
@@ -110,8 +113,13 @@ class RecepcionLlamada extends Component
 
     public function viewCliente($id)
     {
-        // Redirigir a la vista del cliente específico
-        return redirect()->route('ventas.clientes.vistaEspecificaCliente', ['idCliente' => $id]);
+        $cliente = Cliente::find($id);
+
+        if ($cliente && $cliente->user_id === Auth::id()) {
+            return redirect()->route('ventas.clientes.vistaEspecificaCliente', ['idCliente' => $id]);
+        } else {
+            $this->dispatch('mostrarAlertaSeguridad'); // 🔹 Dispara evento para mostrar la alerta en la vista
+        }
     }
 
     //Mandar a llamar las reglas del modelo de manera local

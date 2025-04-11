@@ -47,11 +47,20 @@
                 @enderror
 
                 @if ($rfcDuplicado && $clienteDuplicadoId)
-                    <button type="button" class="btn btn-sm btn-outline-info mt-2 d-flex align-items-center gap-1"
-                        wire:click="viewCliente({{ $clienteDuplicadoId }})">
-                        <i class="bi bi-eye"></i>
-                        Ver registro
-                    </button>
+                    @if ($clienteUsuarioId === auth()->id())
+                        <button type="button" class="btn btn-sm btn-outline-info mt-2 d-flex align-items-center gap-1"
+                            wire:click="viewCliente({{ $clienteDuplicadoId }})">
+                            <i class="bi bi-eye"></i>
+                            Ver registro
+                        </button>
+                    @else
+                        <button type="button"
+                            class="btn btn-sm btn-outline-warning mt-2 d-flex align-items-center gap-1"
+                            onclick="showSecurityAlert()">
+                            <i class="bi bi-exclamation-triangle"></i>
+                            Registro no concedido
+                        </button>
+                    @endif
                 @endif
             </div>
 
@@ -159,6 +168,17 @@
         function cancelar() {
             // Llamar al método update2 de Livewire
             window.location.href = "{{ route('ventas.clientes.gestionClientes') }}";
+        }
+    </script>
+    <script>
+        function showSecurityAlert() {
+            Swal.fire({
+                title: 'Acceso restringido',
+                html: 'Este registro ya existe en el sistema y pertenece a otro usuario.<br><br><strong>Consúltalo con tu administrador.</strong>',
+                icon: 'warning',
+                confirmButtonText: 'Entendido',
+                allowOutsideClick: false
+            });
         }
     </script>
     <script>
