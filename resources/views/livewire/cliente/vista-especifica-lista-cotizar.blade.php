@@ -9,7 +9,7 @@
                     </div>
                     <div class="col-md-3">
                         <button class="btn btn-secondary " wire:click="$set('openModalItemPersonalisado', true)">
-                            Agregar item personalisado
+                            Agregar item personalizado
                         </button>
                     </div>
                 </div>

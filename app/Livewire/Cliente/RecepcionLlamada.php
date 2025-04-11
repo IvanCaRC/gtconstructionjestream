@@ -32,6 +32,12 @@ class RecepcionLlamada extends Component
         }
     }
 
+    public function mount()
+    {
+        // Asigna el usuario autenticado por defecto
+        $this->selectedUser = Auth::user()->id;
+    }
+
     public function getUsuariosVentas()
     {
         $usuariosVentas = User::whereHas('roles', function ($query) {

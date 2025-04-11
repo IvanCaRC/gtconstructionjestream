@@ -5,11 +5,10 @@
             @if (Auth::user()->hasRole('Administrador'))
                 <div class="form-group">
                     <label for="usuariosVentas">Usuario asignado para este cliente:</label>
-                    <select wire:model="selectedUser" wire:blur="validateField('selectedUser')" id="usuariosVentas"
+                    <select wire:model="selectedUser" id="usuariosVentas"
                         class="form-control @error('selectedUser') is-invalid @enderror">
-                        <option value="">-- Selecciona un usuario --</option>
                         @foreach ($this->getUsuariosVentas() as $usuario)
-                            <option value="{{ $usuario['id'] }}">
+                            <option value="{{ $usuario['id'] }}" {{ $selectedUser == $usuario['id'] ? 'selected' : '' }}>
                                 {{ $usuario['name'] }} {{ $usuario['first_last_name'] }}
                                 {{ $usuario['second_last_name'] }}
                             </option>
