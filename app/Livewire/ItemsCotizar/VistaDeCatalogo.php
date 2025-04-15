@@ -38,6 +38,8 @@ class VistaDeCatalogo extends Component
     public $idLista;
 
     public $itemsEnLista = [];
+
+    
     public function mount()
     {
         // Obtener el usuario actual
@@ -70,12 +72,14 @@ class VistaDeCatalogo extends Component
             $this->listadeUsuarioActiva = null;
             $this->nombreProyecto = null;
             $this->nombreCliente = null;
-        }
+        } 
     }
 
     public function verLista($idLista)
     {
-        return redirect()->route('ventas.clientes.vistaEspecificaListaCotizar', ['idLista' => $idLista]);
+
+        return redirect()->route('compras.cotisaciones.verCarritoCotisaciones', ['idCotisacion' => $idLista]);
+    
     }
 
 
@@ -85,6 +89,7 @@ class VistaDeCatalogo extends Component
         return view('livewire.items-cotizar.vista-de-catalogo');
 
     }
+    
 
     public function desactivarLista($idLista)
     {

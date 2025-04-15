@@ -5,6 +5,7 @@ namespace App\Livewire\ItemsCotizar;
 use Livewire\Component;
 
 use App\CustomClases\ConexionProveedorItemTemporal;
+use App\Models\Cotizacion;
 use App\Models\Item;
 use App\Models\ItemEspecifico;
 use App\Models\ItemEspecificoHasFamilia;
@@ -19,6 +20,20 @@ class VistaEspecificaItem extends Component
     public $familiasSeleccionadas = [''];
     public $ProvedoresAsignados = [];
     public $especificaciones = [['enunciado' => '', 'concepto' => '']];
+
+    public $proveedorSeleccionadoId = null;
+    public $precioMinimoSeleccionado = null;
+    public $precioMaximoSeleccionado = null;
+
+    public $tipoCotisacion = null;
+
+    public $nombreProyecto;
+    public $nombreCliente;
+    public $idLista;
+    public $usuarioActual;
+    public $listadeUsuarioActiva;
+
+    public $itemsEnLista = [];
 
     public function mount($idItem)
     {
@@ -50,6 +65,38 @@ class VistaEspecificaItem extends Component
         } else {
             $this->especificaciones = null;
         }
+
+        // Obtener el usuario actual
+        $this->usuarioActual = Auth::user();
+
+        // Consultar el primer registro con estado 0 para el usuario actual
+        $registro = Cotizacion::where('id_usuario_compras', $this->usuarioActual->id) // Verificar usuario actual
+            ->where('estado', 1) // Estado igual a 0
+            ->first(); // Obtener el primer registro (o null si no hay)
+
+        if ($registro) {
+            // Recuperamos el proyecto relacionado
+            // Si se encuentra el registro, guardar el nombre; si no, asignar null
+            $this->idLista = $registro->id;
+            $this->listadeUsuarioActiva = $registro->nombre ?? 'Sin nombre';
+            $proyecto = $registro->proyecto ?? 'Sin proyecto';
+            $cliente = $proyecto->cliente ?? 'Sin cliente    ';
+
+            // Asignamos los valores
+            $this->nombreProyecto = $proyecto->nombre ?? 'Sin nombre';
+
+            $this->nombreCliente = $cliente->nombre ?? 'Sin cliente';
+
+            // Obtener los IDs de los items en la lista
+            $itemsData = json_decode($registro->items_cotizar, true) ?? [];
+            $this->itemsEnLista = array_column($itemsData, 'id');
+        } else {
+            // Si no existe el registro
+            $this->idLista = null;
+            $this->listadeUsuarioActiva = null;
+            $this->nombreProyecto = null;
+            $this->nombreCliente = null;
+        }
     }
 
     public function cargarProvedoresParaEditar($idItem)
@@ -71,7 +118,27 @@ class VistaEspecificaItem extends Component
         }
     }
 
+    public function seleccionarProveedor($id)
+    {
+        if ($this->proveedorSeleccionadoId === $id) {
+            // Si el mismo proveedor está seleccionado, desmarcarlo
+            $this->proveedorSeleccionadoId = null;
+        } else {
+            // Seleccionar un nuevo proveedor
+            $this->proveedorSeleccionadoId = $id;
+        }
+    }
 
+    public function cambiarProveedor()
+    {
+        // Seleccionar un nuevo proveedor
+        $this->tipoCotisacion = 1;
+    }
+
+    public function cambiarStock()
+    {
+        $this->tipoCotisacion = 2;
+    }
 
 
     public function render()

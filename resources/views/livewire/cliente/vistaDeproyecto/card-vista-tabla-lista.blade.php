@@ -1,4 +1,60 @@
 <div>
+    <style>
+        .switch-toggle {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+        }
+
+        .switch-toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            inset: 0;
+            background-color: #d9534f;
+            /* rojo por defecto */
+            transition: .4s;
+            border-radius: 30px;
+        }
+
+        .slider::before {
+            position: absolute;
+            content: "";
+            height: 24px;
+            width: 24px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked+.slider {
+            background-color: #5cb85c;
+            /* verde cuando está activo */
+        }
+
+        input:checked+.slider::before {
+            transform: translateX(30px);
+        }
+
+        table {
+
+            width: 100%;
+        }
+
+        .columna-estatica {
+            width: 260px;
+            /* o el valor que tú quieras */
+
+        }
+    </style>
     <h3 class="ml-3">Listas a cotizar del proyecto</h3>
     <div class="card">
         <div class="card-body">
@@ -24,6 +80,7 @@
                     <thead>
                         <tr>
                             <th>Listas a cotizar</th>
+                            <th></th>
                             <th>Cotizaciones</th>
                             <th>Ordenes de venta</th>
 
@@ -34,7 +91,7 @@
                             </tr>
                             <td>
                                 {{-- Badge de estado --}}
-                                {{$lista->id}}
+                                {{-- {{ $lista->id }} --}}
                                 @php
                                     $estados = [
                                         1 => ['label' => 'Activo', 'class' => 'badge-success'],
@@ -54,36 +111,34 @@
                                 {{ $lista->nombre }}
                             </td>
 
-                            <td>
+                            <td class="columna-estatica">
                                 {{-- Botones de acción --}}
+                                {{ $lista->estado }}
+                                @if ($lista->estado != 5)
+                                    <button class="btn btn-danger btn-sm" title="Cancelar">Cancelar</button>
+                                @endif
+
+
                                 <button class="btn btn-info btn-sm mr-1" title="Ver">
                                     <i class="fas fa-eye"></i>
                                 </button>
 
-                                @if ($lista->estado == 1 || $lista->estado == 2)
+                                @if (!in_array($lista->estado, [3, 4, 5]))
                                     <button class="btn btn-primary btn-sm mr-1" title="Editar">
                                         <i class="fas fa-edit"></i>
                                     </button>
                                 @endif
 
 
-
-                                @if ($lista->estado == 1)
-                                    <button class="btn btn-danger btn-sm" title="Desactivar">
-                                        <i class="fas fa-times"></i> hola
-                                    </button>
-                                @elseif ($lista->estado == 2)
-                                    <button class="btn btn-success btn-sm" title="Activar" wire:click="({{$lista->id}})">
-                                        <i class="">Activar</i>
-                                    </button>
-                                @endif
-
-                                @if ($lista->estado != 5)
-                                    <button class="btn btn-danger btn-sm mr-1" title="Editar">
-                                        <i class="">Cancelar</i>
-                                    </button>
+                                @if ($lista->estado == 1 || $lista->estado == 2)
+                                    <label class="switch-toggle">
+                                        <input type="checkbox" wire:click="toggleEstado({{ $lista->id }})"
+                                            {{ $lista->estado == 1 ? 'checked' : '' }}>
+                                        <span class="slider"></span>
+                                    </label>
                                 @endif
                             </td>
+
                             <td>
                                 @if ($lista->estado == 1)
                                     <button class="btn btn-custom" style="background-color: #4c72de; color: white;">

@@ -21,7 +21,7 @@
                 <div class="col-md-10">
                     <h4 class="px-3">
                       
-                        Lista "<span class="fw-bold text-primary ">{{ $listadeUsuarioActiva }}</span>" activa.
+                        Cotizacion "<span class="fw-bold text-primary ">{{ $listadeUsuarioActiva }}</span>" activa.
                     </h4>
                 </div>
                 <div class="col-md-1">

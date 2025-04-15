@@ -78,6 +78,13 @@ class VistaEspecificaProyecto extends Component
             'pdfUrl' => route('proyecto.pdf', ['id' => $this->proyecto->id]),
         ], ['listas' => $listas]);
     }
+    public function toggleEstado($id)
+    {
+        $lista = ListasCotizar::find($id);
+        $lista->estado = $lista->estado == 1 ? 2 : 1;
+        $lista->save();
+    }
+
 
     public function editCliente($idCliente)
     {
@@ -114,9 +121,9 @@ class VistaEspecificaProyecto extends Component
             'nombre' => $resultado,
             'estado' => 1,
         ]);
-        
+
         Auth::user()->update(['lista' => $listaACotizar->id]);
-        
+
         $this->proyecto->increment('listas'); // Incrementa el campo "proyectos" en 1
 
 
