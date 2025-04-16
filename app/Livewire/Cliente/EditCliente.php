@@ -73,6 +73,28 @@ class EditCliente extends Component
     {
         return view('livewire.cliente.edit-cliente');
     }
+    //Inputs de telefono
+    public function addTelefono()
+    {
+        $this->telefonos[] = ['nombre' => '', 'numero' => ''];
+    }
+
+    public function removeTelefono($index)
+    {
+        unset($this->telefonos[$index]);
+        $this->telefonos = array_values($this->telefonos); // Reindexar el array
+    }
+    //Inputs de datos bancarios
+    public function addBancarios()
+    {
+        $this->bancarios[] = ['banco' => '', 'titular' => '', 'cuenta' => '', 'clave' => ''];
+    }
+
+    public function removeBancarios($index)
+    {
+        unset($this->bancarios[$index]);
+        $this->bancarios = array_values($this->bancarios); // Reindexar el array
+    }
 
     //Funciones para validacion en tiempo real
     public function updated($propertyName)
@@ -115,6 +137,8 @@ class EditCliente extends Component
         'nombre' => $this->clienteEdit['nombre'],
         'correo' => $this->clienteEdit['correo'],
         'rfc' => $this->clienteEdit['rfc'],
+        'bancarios' => json_encode($this->bancarios), // Convertir a JSON
+        'telefono' => json_encode($this->telefonos), // Convertir a JSON
         'user_id' => $idUser, // Se actualiza el usuario asignado correctamente
     ]);
 
