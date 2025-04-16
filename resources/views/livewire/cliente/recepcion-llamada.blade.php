@@ -105,6 +105,7 @@
                         <input type="text"
                             class="form-control @error("bancarios.{$index}.titular") is-invalid @enderror"
                             wire:model.defer="bancarios.{{ $index }}.titular"
+                            wire:blur="validateField('bancarios.{{ $index }}.titular')"
                             placeholder="Ingresa el titular de la cuenta">
                         @error("bancarios.{$index}.titular")
                             <span class="text-danger">{{ $message }}</span>
@@ -117,6 +118,7 @@
                         <input type="text"
                             class="form-control @error("bancarios.{$index}.cuenta") is-invalid @enderror"
                             wire:model.defer="bancarios.{{ $index }}.cuenta"
+                            wire:blur="validateField('bancarios.{{ $index }}.cuenta')"
                             placeholder="Ingresa el número de cuenta">
                         @error("bancarios.{$index}.cuenta")
                             <span class="text-danger">{{ $message }}</span>
@@ -126,7 +128,9 @@
                     <div class="d-flex flex-column w-50">
                         <input type="text"
                             class="form-control @error("bancarios.{$index}.clave") is-invalid @enderror"
-                            wire:model.defer="bancarios.{{ $index }}.clave" placeholder="Ingresa la clave">
+                            wire:model.defer="bancarios.{{ $index }}.clave"
+                            wire:blur="validateField('bancarios.{{ $index }}.clave')"
+                            placeholder="Ingresa la clave">
                         @error("bancarios.{$index}.clave")
                             <span class="text-danger">{{ $message }}</span>
                         @enderror

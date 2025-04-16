@@ -56,12 +56,6 @@ class Cliente extends Model
             $prefix . 'bancarios.*.titular' => [new ValidaNombreBancario],
             $prefix . 'bancarios.*.cuenta' => [new ValidaCuentaBancaria],
             $prefix . 'bancarios.*.clave' => [new ValidaClaveBancaria],
-            // $prefix . 'bancarios' => 'nullable|string|max:255',
-            // $prefix . 'proyectos' => 'nullable|integer|min:0',
-            // $prefix . 'proyectos_activos' => 'nullable|integer|min:0',
-            // $prefix . 'telefono' => ['required', 'numeric', 'regex:/^\d{12}$/'], // Teléfono válido con 12 dígitos
-            // $prefix . 'fecha' => 'required|date',
-            // $prefix . 'user_id' => 'required|exists:users,id',
         ];
     }
 
@@ -97,6 +91,9 @@ class Cliente extends Model
             $prefix . 'clienteEdit.nombre' => 'required|string|max:255',
             $prefix . 'clienteEdit.correo' => 'required|email|unique:clientes,correo,' . $id,
             $prefix . 'clienteEdit.rfc' => ['required', 'string', 'unique:clientes,rfc,' . $id, new ValidaRfc],
+            $prefix . 'bancarios.*.titular' => [new ValidaNombreBancario],
+            $prefix . 'bancarios.*.cuenta' => [new ValidaCuentaBancaria],
+            $prefix . 'bancarios.*.clave' => [new ValidaClaveBancaria],
         ];
     }
 
@@ -119,6 +116,10 @@ class Cliente extends Model
             $prefix . 'clienteEdit.telefono.required' => 'El campo teléfono es obligatorio.',
             $prefix . 'clienteEdit.telefono.numeric' => 'El campo teléfono debe ser un número.',
             $prefix . 'clienteEdit.telefono.regex' => 'El campo teléfono debe tener exactamente 12 dígitos.',
+
+            $prefix . 'bancarios.*.titular.valid' => 'Asegurate de introducir correctamente el nombre del titular', 
+            $prefix . 'bancarios.*.cuenta.valid' => 'El numero de cuenta registrado no es valido.',
+            $prefix . 'bancarios.*.clave.valid' => 'La clave registrada no es valida.',
         ];
     }
 }
