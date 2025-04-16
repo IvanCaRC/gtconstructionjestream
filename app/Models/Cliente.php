@@ -5,6 +5,9 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Rules\ValidaRFC; // Regla de validacion personalizada
+use App\Rules\ValidaClaveBancaria; // Regla de validacion personalizada
+use App\Rules\ValidaCuentaBancaria; // Regla de validacion personalizada
+use App\Rules\ValidaNombreBancario; // Regla de validacion personalizada
 use SebastianBergmann\Type\NullType;
 
 class Cliente extends Model
@@ -50,6 +53,9 @@ class Cliente extends Model
             $prefix . 'nombre' => 'required|string|max:255',
             $prefix . 'correo' => 'required|email|unique:clientes,correo,' . $id,
             $prefix . 'rfc' => ['required', 'string', 'unique:clientes,rfc,' . $id, new ValidaRfc],
+            $prefix . 'bancarios.*.titular' => [new ValidaNombreBancario],
+            $prefix . 'bancarios.*.cuenta' => [new ValidaCuentaBancaria],
+            $prefix . 'bancarios.*.clave' => [new ValidaClaveBancaria],
             // $prefix . 'bancarios' => 'nullable|string|max:255',
             // $prefix . 'proyectos' => 'nullable|integer|min:0',
             // $prefix . 'proyectos_activos' => 'nullable|integer|min:0',
@@ -78,6 +84,10 @@ class Cliente extends Model
             $prefix . 'telefono.required' => 'El campo teléfono es obligatorio.',
             $prefix . 'telefono.numeric' => 'El campo teléfono debe ser un número.',
             $prefix . 'telefono.regex' => 'El campo teléfono debe tener exactamente 12 dígitos.',
+   
+            $prefix . 'bancarios.*.titular.valid' => 'Asegurate de introducir correctamente el nombre del titular', 
+            $prefix . 'bancarios.*.cuenta.valid' => 'El numero de cuenta registrado no es valido.',
+            $prefix . 'bancarios.*.clave.valid' => 'La clave registrada no es valida.',
         ];
     }
 
