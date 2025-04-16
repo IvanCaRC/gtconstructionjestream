@@ -32,17 +32,15 @@ class VistaEspecificaFichasTecnicas extends Component
 
     public function incrementarCantidad()
     {
-        if ($this->cantidad < 99) {
-            $this->cantidad++;
-        }
+
+        $this->cantidad++;
     }
 
     // Disminuye la cantidad (mínimo 1)
     public function decrementarCantidad()
     {
-        if ($this->cantidad > 1) {
-            $this->cantidad--;
-        }
+
+        $this->cantidad--;
     }
 
     private function establecerPropiedadesNulas()
@@ -182,7 +180,7 @@ class VistaEspecificaFichasTecnicas extends Component
                 // Si el item no existe, agregarlo con cantidad inicial 1
                 $items[] = [
                     'id' => $idItem,
-                    'cantidad' => 1
+                    'cantidad' =>   $this->cantidad,
                 ];
             }
 
@@ -195,20 +193,14 @@ class VistaEspecificaFichasTecnicas extends Component
             return redirect()->route('ventas.clientes.vistaEspecificaListaCotizar', ['idLista' => $lista->id]);
         } else {
             $usuario  = $this->usuarioActual->id;
-            $listasEnEstado1 = ListasCotizar::where('usuario_id', $usuario)
-                ->where('estado', 1)
-                ->get();
 
-            foreach ($listasEnEstado1 as $lista) {
-                $lista->update(['estado' => 2]);
-            }
 
             $user = Auth::user();
             $idUser = $user->id;
 
             $listaACotizar = ListasCotizar::create([
                 'usuario_id' => $idUser,
-                'estado' => 1,
+                'estado' =>   $this->cantidad,
             ]);
             $this->idLista = $listaACotizar->id;
             Auth::user()->update(['lista' => $listaACotizar->id]);

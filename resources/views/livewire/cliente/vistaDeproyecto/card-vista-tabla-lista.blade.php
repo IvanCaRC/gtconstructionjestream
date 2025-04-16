@@ -54,6 +54,18 @@
             /* o el valor que tú quieras */
 
         }
+
+        .columna-estatica-numero1 {
+            width: 140px;
+            /* o el valor que tú quieras */
+
+        }
+
+        .columna-estatica-estado {
+            width: 90px;
+            /* o el valor que tú quieras */
+
+        }
     </style>
     <h3 class="ml-3">Listas a cotizar del proyecto</h3>
     <div class="card">
@@ -70,8 +82,9 @@
                     <select class="form-control mr-2">
                         <option value="0">Todos los estados</option>
                         <option value="1">Activo</option>
-                        <option value="2">Inactivo</option>
-                        <option value="3">Cancelados</option>
+                        <option value="2">Cotizando</option>
+                        <option value="3">Cotizado</option>
+                        <option value="4">Cancelado</option>
                     </select>
                 </div>
             </div>
@@ -79,6 +92,7 @@
                 <table class="table">
                     <thead>
                         <tr>
+                            <th>Estado</th>
                             <th>Listas a cotizar</th>
                             <th></th>
                             <th>Cotizaciones</th>
@@ -89,16 +103,13 @@
                     <tbody>
                         @foreach ($listas as $lista)
                             </tr>
-                            <td>
-                                {{-- Badge de estado --}}
-                                {{-- {{ $lista->id }} --}}
+                            <td class="text-center columna-estatica-estado">
                                 @php
                                     $estados = [
                                         1 => ['label' => 'Activo', 'class' => 'badge-success'],
-                                        2 => ['label' => 'Inactivo', 'class' => 'badge-secondary'],
-                                        3 => ['label' => 'Cotizando', 'class' => 'badge-warning'],
-                                        4 => ['label' => 'Cotizado', 'class' => 'badge-primary'],
-                                        5 => ['label' => 'Cancelado', 'class' => 'badge-danger'],
+                                        2 => ['label' => 'Cotizando', 'class' => 'badge-warning'],
+                                        3 => ['label' => 'Cotizado', 'class' => 'badge-primary'],
+                                        4 => ['label' => 'Cancelado', 'class' => 'badge-danger'],
                                     ];
 
                                     $estado = $estados[$lista->estado] ?? [
@@ -108,34 +119,29 @@
                                 @endphp
 
                                 <span class="badge {{ $estado['class'] }}">{{ $estado['label'] }}</span>
+                            </td>
+                            <td class="columna-estatica-numero1 text-center align-middle">
+                                {{-- {{ $lista->id }} --}}
                                 {{ $lista->nombre }}
                             </td>
 
                             <td class="columna-estatica">
-                                {{-- Botones de acción --}}
-                                {{ $lista->estado }}
-                                @if ($lista->estado != 5)
-                                    <button class="btn btn-danger btn-sm" title="Cancelar">Cancelar</button>
-                                @endif
 
-
-                                <button class="btn btn-info btn-sm mr-1" title="Ver">
-                                    <i class="fas fa-eye"></i>
-                                </button>
-
-                                @if (!in_array($lista->estado, [3, 4, 5]))
-                                    <button class="btn btn-primary btn-sm mr-1" title="Editar">
-                                        <i class="fas fa-edit"></i>
+                                @if ($lista->estado != 4)
+                                    <button class="btn btn-danger btn-sm" title="Cancelar"
+                                        wire:click="cancelar({{ $lista->id }})">
+                                        Cancelar
                                     </button>
                                 @endif
 
+                                <button class="btn btn-info btn-sm mr-1" title="Ver" wire:click="ver">
+                                    <i class="fas fa-eye"></i>
+                                </button>
 
-                                @if ($lista->estado == 1 || $lista->estado == 2)
-                                    <label class="switch-toggle">
-                                        <input type="checkbox" wire:click="toggleEstado({{ $lista->id }})"
-                                            {{ $lista->estado == 1 ? 'checked' : '' }}>
-                                        <span class="slider"></span>
-                                    </label>
+                                @if ($lista->estado == 1)
+                                    <button class="btn btn-primary btn-sm mr-1" title="Editar" wire:click="editarlista({{ $lista->id }})">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
                                 @endif
                             </td>
 
@@ -145,9 +151,7 @@
                                         Mandar a cotizar
                                     </button>
                                 @elseif ($lista->estado == 2)
-                                    <label for="">Preguntar si tiene una cotizacion vinculada, si es asi debe
-                                        poder verse, si no es asi debe decir que se necesita activar para mandar a
-                                        cotizacion</label>
+                                    <label for="">Cotizaciones...</label>
                                 @elseif ($lista->estado == 3)
                                     <label for="">Cotizando...</label>
                                 @elseif ($lista->estado == 4)

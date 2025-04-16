@@ -53,7 +53,7 @@
                                     <br>
 
                                     <div class="row">
-                                        <div class="col-md-2">
+                                        <div class="col-md-3">
                                             <div class="d-flex align-items-center">
                                                 <!-- Botón de menos -->
                                                 <button class="btn btn-danger btn-sm me-2"
@@ -61,7 +61,7 @@
 
                                                 <!-- Input de cantidad -->
                                                 <input type="number" min="0" class="form-control text-center"
-                                                    style="width: 60px;"
+                                                    style="width: 100px;"
                                                     wire:model.defer="cantidades.{{ $itemEspecifico->id }}"
                                                     wire:change="actualizarCantidad({{ $itemEspecifico->id }}, 0)">
 

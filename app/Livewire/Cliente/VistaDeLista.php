@@ -99,11 +99,7 @@ class VistaDeLista extends Component
 
     public function desactivarLista($idLista)
     {
-        $lista = ListasCotizar::find($idLista);
 
-        $lista->update([
-            'estado' => 2
-        ]);
         Auth::user()->update(['lista' => null]);
         return redirect()->route('ventas.fichasTecnicas.fichasTecnicas');
     }

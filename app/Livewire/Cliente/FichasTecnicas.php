@@ -148,13 +148,7 @@ class FichasTecnicas extends Component
             return redirect()->route('ventas.clientes.vistaEspecificaListaCotizar', ['idLista' => $lista->id]);
         } else {
             $usuario  = $this->usuarioActual->id;
-            $listasEnEstado1 = ListasCotizar::where('usuario_id', $usuario)
-                ->where('estado', 1)
-                ->get();
-
-            foreach ($listasEnEstado1 as $lista) {
-                $lista->update(['estado' => 2]);
-            }
+           
 
             $user = Auth::user();
             $idUser = $user->id;

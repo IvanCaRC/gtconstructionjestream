@@ -78,13 +78,29 @@ class VistaEspecificaProyecto extends Component
             'pdfUrl' => route('proyecto.pdf', ['id' => $this->proyecto->id]),
         ], ['listas' => $listas]);
     }
+
     public function toggleEstado($id)
     {
         $lista = ListasCotizar::find($id);
-        $lista->estado = $lista->estado == 1 ? 2 : 1;
+
+        if (!$lista) return;
+
+        // Si la lista está inactiva, la activamos y desactivamos todas las demás del usuario
+        if ($lista->estado != 1) {
+            // Desactivar todas las demás listas del mismo usuario
+            ListasCotizar::where('usuario_id', $lista->user_id)
+                ->where('id', '!=', $lista->id)
+                ->update(['estado' => 2]);
+
+            // Activar la lista actual
+            $lista->estado = 1;
+        } else {
+            // Si ya está activa, la desactivamos
+            $lista->estado = 2;
+        }
+
         $lista->save();
     }
-
 
     public function editCliente($idCliente)
     {
@@ -99,13 +115,6 @@ class VistaEspecificaProyecto extends Component
     public function saveListaNueva()
     {
         $proyecto  = $this->proyecto->id;
-        $listasEnEstado1 = ListasCotizar::where('proyecto_id', $proyecto)
-            ->where('estado', 1)
-            ->get();
-
-        foreach ($listasEnEstado1 as $lista) {
-            $lista->update(['estado' => 2]);
-        }
 
         $proyectoLista  = $this->proyecto->listas;
         $user = Auth::user();
@@ -129,106 +138,42 @@ class VistaEspecificaProyecto extends Component
 
         $this->dispatch('refresh');
         // return redirect()->route('ventas.clientes.vistaEspecProyecto', ['idProyecto' => $proyecto->id]);
-        return true;
+        return redirect()->route('ventas.clientes.vistaEspecificaListaCotizar', ['idLista' => $listaACotizar->id]);
     }
 
-    public function activar($idLista)
+    public function cancelar($id)
+    {
+        $lista = ListasCotizar::find($id);
+    
+        if ($lista) {
+            $lista->estado = 4; // Estado 5 = Cancelado
+            $lista->save();
+    
+            session()->flash('message', 'La lista ha sido cancelada correctamente.');
+        } else {
+            session()->flash('error', 'La lista no fue encontrada.');
+        }
+    }    
+
+    public function editarlista($id)
     {
         // Buscar la lista actual
-        $lista = ListasCotizar::find($idLista);
+        $lista = ListasCotizar::find($id);
 
-        if (!$lista) {
-            session()->flash('error', 'No se encontró la lista.');
-            return;
+        if ($lista) {
+            $lista->estado = 1; // Estado 5 = Cancelado
+            $lista->save();
+            Auth::user()->update(['lista' => $lista->id]);
+    
+            session()->flash('message', 'La lista ha sido cancelada correctamente.');
+        } else {
+            session()->flash('error', 'La lista no fue encontrada.');
         }
 
-        // Obtener el proyecto seleccionado
 
-
-        // Actualizar la lista
-        $lista->update([
-            'estado' => 1,
-        ]);
-
-        $this->dispatch('refresh');
-        return true;
-    }
-
-    public function Dsactivar($proyectoId)
-    {
-        // Buscar la lista actual
-        $lista = ListasCotizar::find($this->idListaActual);
-
-        if (!$lista) {
-            session()->flash('error', 'No se encontró la lista.');
-            return;
-        }
-
-        // Obtener el proyecto seleccionado
-
-
-        // Actualizar la lista
-        $lista->update([
-            'estado' => 3,
-        ]);
-
-
-        // Mensaje de éxito
-        session()->flash('success', 'Lista fue enviada correctamente a la cotisacion.');
 
         // Cerrar el modal
-        return redirect()->route('ventas.clientes.vistaEspecProyecto', ['idProyecto' => $proyectoId]);
-    }
+        return redirect()->route('ventas.clientes.vistaEspecificaListaCotizar', ['idLista' => $lista->id]);
 
-    public function cancelar($proyectoId)
-    {
-        // Buscar la lista actual
-        $lista = ListasCotizar::find($this->idListaActual);
-
-        if (!$lista) {
-            session()->flash('error', 'No se encontró la lista.');
-            return;
-        }
-
-        // Obtener el proyecto seleccionado
-
-
-        // Actualizar la lista
-        $lista->update([
-            'estado' => 3,
-        ]);
-
-
-        // Mensaje de éxito
-        session()->flash('success', 'Lista fue enviada correctamente a la cotisacion.');
-
-        // Cerrar el modal
-        return redirect()->route('ventas.clientes.vistaEspecProyecto', ['idProyecto' => $proyectoId]);
-    }
-
-    public function editar($proyectoId)
-    {
-        // Buscar la lista actual
-        $lista = ListasCotizar::find($this->idListaActual);
-
-        if (!$lista) {
-            session()->flash('error', 'No se encontró la lista.');
-            return;
-        }
-
-        // Obtener el proyecto seleccionado
-
-
-        // Actualizar la lista
-        $lista->update([
-            'estado' => 3,
-        ]);
-
-
-        // Mensaje de éxito
-        session()->flash('success', 'Lista fue enviada correctamente a la cotisacion.');
-
-        // Cerrar el modal
-        return redirect()->route('ventas.clientes.vistaEspecProyecto', ['idProyecto' => $proyectoId]);
     }
 }
