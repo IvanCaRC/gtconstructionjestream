@@ -19,13 +19,14 @@
         <div class="card-body">
             <h3>Datos del cliente</h3>
             @livewire('cliente.edit-cliente',['idcliente' => $idcliente])
-            <div class="form-group">
+            {{-- <div class="form-group">
                 <label>Direcciones</label>
                 <div class="input-group mb-2" id="address-list">
                     <!-- Aquí se mostrarán las direcciones guardadas -->
                     <p>No hay direcciones guardadas.</p>
                 </div>
-            </div>@include('compras.proveedores.form')
+            </div> --}}
+            @include('compras.proveedores.form')
             <button class="btn btn-secondary mt-3" onclick="cancelar()">Cancelar</button>
             <button type="submit" onclick="confirmUpdate()" class="btn btn-primary mt-3">Actualizar cliente</button>
         </div>

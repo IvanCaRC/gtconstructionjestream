@@ -4,7 +4,7 @@
             {{-- Implementar edicion de usuario asignado al cliente --}}
             @if (Auth::user()->hasRole('Administrador'))
                 <div class="form-group">
-                    <label for="usuariosVentas">Actualizar usuario asignado para este cliente:</label>
+                    <label for="usuariosVentas">Usuario asignado al cliente:</label>
                     <select wire:model="selectedUser" id="usuariosVentas"
                         class="form-control @error('selectedUser') is-invalid @enderror">
                         <option value="">-- Selecciona un usuario --</option>
@@ -138,6 +138,72 @@
             @endforeach
             <button type="button" class="btn btn-secondary mt-2" wire:click="addBancarios">Agregar otra cuenta</button>
         </div>
+
+        <label>Direcciones</label>
+    @foreach ($direccionesAsignadas as $index => $direccion)
+        <div class="row align-items-end">
+            <div class="col-md-2 mb-3">
+                <label>Calle</label>
+                <input type="text" class="form-control"
+                    wire:model.defer="direccionesAsignadas.{{ $index }}.calle">
+            </div>
+            <div class="col-md-2 mb-3">
+                <label>Número</label>
+                <input type="text" class="form-control"
+                    wire:model.defer="direccionesAsignadas.{{ $index }}.numero">
+            </div>
+            <div class="col-md-2 mb-3">
+                <label>Colonia</label>
+                <input type="text" class="form-control"
+                    wire:model.defer="direccionesAsignadas.{{ $index }}.colonia">
+            </div>
+            <div class="col-md-2 mb-3">
+                <label>Municipio</label>
+                <input type="text" class="form-control"
+                    wire:model.defer="direccionesAsignadas.{{ $index }}.municipio">
+            </div>
+            <div class="col-md-2 mb-3">
+                <label>Ciudad</label>
+                <input type="text" class="form-control"
+                    wire:model.defer="direccionesAsignadas.{{ $index }}.ciudad">
+            </div>
+            <div class="col-md-2 mb-3">
+                <label>Estado</label>
+                <input type="text" class="form-control"
+                    wire:model.defer="direccionesAsignadas.{{ $index }}.estado">
+            </div>
+            <div class="col-md-2 mb-3">
+                <label>Código Postal</label>
+                <input type="text" class="form-control"
+                    wire:model.defer="direccionesAsignadas.{{ $index }}.cp">
+            </div>
+            <div class="col-md-2 mb-3">
+                <label>País</label>
+                <input type="text" class="form-control"
+                    wire:model.defer="direccionesAsignadas.{{ $index }}.pais">
+            </div>
+            <div class="col-md-2 mb-3">
+                <label>Referencia</label>
+                <input type="text" class="form-control"
+                    wire:model.defer="direccionesAsignadas.{{ $index }}.refernecia">
+            </div>
+            <div class="col-md-2 mb-3">
+                <label>Latitud</label>
+                <input type="text" class="form-control"
+                    wire:model.defer="direccionesAsignadas.{{ $index }}.Latitud" oninput="validateCoordinateValue(this)">
+            </div>
+            <div class="col-md-2 mb-3">
+                <label>Longitud</label>
+                <input type="text" class="form-control"
+                    wire:model.defer="direccionesAsignadas.{{ $index }}.Longitud" oninput="validateCoordinateValue(this)">
+            </div>
+            <div class="col-md-2 mb-3 d-flex align-items-end">
+                <button type="button" class="btn btn-danger w-100"
+                    wire:click="removeDireccion({{ $index }})">Eliminar</button>
+            </div>
+        </div>
+    @endforeach
+
     </div>
 
     <script>

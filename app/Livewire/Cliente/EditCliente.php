@@ -2,6 +2,9 @@
 
 namespace App\Livewire\Cliente;
 
+use App\CustomClases\ConexionClienteDireccion;
+use Illuminate\Support\Facades\DB;
+use App\Models\Direccion;
 use App\Models\Cliente;
 use Livewire\Component;
 use App\Models\User;
@@ -26,8 +29,34 @@ class EditCliente extends Component
         'proyectos_activos' => '', //Total de proyectos activos del cliente
         'user_id' => '', //Usuario asociado al cliente
     ];
+    public $direccionesAsignadas = [];
     public $selectedUser;
     public $userRole; //Variable local para poder usar roles del sistema
+
+    public function cargarDireccionesParaEditar($idcliente)
+    {
+        $direcciones = Direccion::where('cliente_id', $idcliente)->get();
+
+
+        foreach ($direcciones as $direccion) {
+            $conexion = new ConexionClienteDireccion(
+                $direccion->cliente_id,
+                $direccion->pais,
+                $direccion->cp,
+                $direccion->estado,
+                $direccion->ciudad,
+                $direccion->municipio,
+                $direccion->colonia,
+                $direccion->calle,
+                $direccion->numero,
+                $direccion->referencia,
+                $direccion->Latitud,
+                $direccion->Longitud
+            );
+
+            $this->direccionesAsignadas[] = (array) $conexion; // Convertir el objeto a un array y agregarlo al arreglo
+        }
+    }
 
     public function mount($idcliente)
     {
@@ -58,6 +87,8 @@ class EditCliente extends Component
         if (!empty($bancariosGuardados)) {
             $this->bancarios = $bancariosGuardados;
         }
+        //Cargar los datos de la direccion actualmente registrada.
+        $this->cargarDireccionesParaEditar($idcliente);
 
         $this->idDecliente = $idcliente;
     }
@@ -94,6 +125,12 @@ class EditCliente extends Component
     {
         unset($this->bancarios[$index]);
         $this->bancarios = array_values($this->bancarios); // Reindexar el array
+    }
+    //Inputs de direcciones
+    public function removeDireccion($index)
+    {
+        unset($this->direccionesAsignadas[$index]);
+        $this->direccionesAsignadas = array_values($this->direccionesAsignadas); // Reindexar el array
     }
 
     //Funciones para validacion en tiempo real
@@ -141,6 +178,33 @@ class EditCliente extends Component
         'telefono' => json_encode($this->telefonos), // Convertir a JSON
         'user_id' => $idUser, // Se actualiza el usuario asignado correctamente
     ]);
+
+    // Iterar sobre las direcciones asignadas y guardarlas en la base de datos
+    foreach ($this->direccionesAsignadas as $direccion) {
+        // Asegurarnos de que el arreglo contiene los datos necesarios
+        
+            // Insertar la nueva dirección
+            DB::table('direcciones')->insert(
+                [
+            'cliente_id' => $direccion['cliente_id'] ?? '',
+            'calle' => $direccion['calle'] ?? '',
+            'pais' => $direccion['pais'] ?? '',
+            'numero' => $direccion['numero'] ?? '',
+            'colonia' => $direccion['colonia'] ?? '',
+            'municipio' => $direccion['municipio'] ?? '',
+            'ciudad' => $direccion['ciudad'] ?? '',
+            'estado' => $direccion['estado'] ?? '',
+            'cp' => $direccion['cp'] ?? '',
+            'referencia' => $direccion['refernecia'] ?? '',
+            'Latitud' => $direccion['Latitud'] ?? '',
+            'Longitud' => $direccion['Longitud'] ?? '',
+            'created_at' => now(),
+            'updated_at' => now(),
+        
+                ]
+            );
+        
+    }
 
     return ['cliente_id' => $clienteActual->id];
 }
