@@ -48,7 +48,7 @@
                 @enderror
 
                 @if ($rfcDuplicado && $clienteDuplicadoId)
-                    @if ($clienteUsuarioId === auth()->id())
+                    @if ($clienteUsuarioId === auth()->id() || auth()->user()->hasRole('Administrador'))
                         <button type="button" class="btn btn-sm btn-outline-info mt-2 d-flex align-items-center gap-1"
                             wire:click="viewCliente({{ $clienteDuplicadoId }})">
                             <i class="bi bi-eye"></i>

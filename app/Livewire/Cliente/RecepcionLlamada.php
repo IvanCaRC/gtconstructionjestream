@@ -115,7 +115,7 @@ class RecepcionLlamada extends Component
     {
         $cliente = Cliente::find($id);
 
-        if ($cliente && $cliente->user_id === Auth::id()) {
+        if ($cliente && ($cliente->user_id === Auth::id() || Auth::user()->hasRole('Administrador'))) {
             return redirect()->route('ventas.clientes.vistaEspecificaCliente', ['idCliente' => $id]);
         } else {
             $this->dispatch('mostrarAlertaSeguridad'); // 🔹 Dispara evento para mostrar la alerta en la vista
