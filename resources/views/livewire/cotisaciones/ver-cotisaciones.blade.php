@@ -59,5 +59,6 @@
 
         </div>
     </div>
+    @include('livewire.cotisaciones.modalSeleccionUsuario')
 
 </div>
