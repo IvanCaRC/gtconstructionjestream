@@ -102,6 +102,12 @@ class VistaEspecificaProyecto extends Component
         $lista->save();
     }
 
+    public function editarProyecto()
+    {
+        // Lógica para editar el proyecto
+        dd('Método editarProyecto ejecutado correctamente');
+    }
+
     public function editCliente($idCliente)
     {
         return redirect()->route('ventas.cliente.EditCliente', ['idcliente' => $idCliente]);
@@ -144,16 +150,16 @@ class VistaEspecificaProyecto extends Component
     public function cancelar($id)
     {
         $lista = ListasCotizar::find($id);
-    
+
         if ($lista) {
             $lista->estado = 4; // Estado 5 = Cancelado
             $lista->save();
-    
+
             session()->flash('message', 'La lista ha sido cancelada correctamente.');
         } else {
             session()->flash('error', 'La lista no fue encontrada.');
         }
-    }    
+    }
 
     public function editarlista($id)
     {
@@ -164,16 +170,13 @@ class VistaEspecificaProyecto extends Component
             $lista->estado = 1; // Estado 5 = Cancelado
             $lista->save();
             Auth::user()->update(['lista' => $lista->id]);
-    
+
             session()->flash('message', 'La lista ha sido cancelada correctamente.');
         } else {
             session()->flash('error', 'La lista no fue encontrada.');
         }
 
-
-
         // Cerrar el modal
         return redirect()->route('ventas.clientes.vistaEspecificaListaCotizar', ['idLista' => $lista->id]);
-
     }
 }

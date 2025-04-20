@@ -11,7 +11,9 @@
                     <h3>Nombre: {{ $proyecto->nombre }}</h3>
                 </div>
                 <div class="col-md-1">
-                    <a href="#" wire:click="" class="d-block mb-3" wire:click="">Editar proyecto</a>
+                    <button class="btn btn-primary d-block mb-3" wire:click="editarProyecto">
+                        Editar proyecto
+                    </button>
                 </div>
             </div>
 
@@ -83,7 +85,7 @@
                     </div>
                 </div>
                 <div class="col-md-2 ">
-                    <h5>Cotisaciones</h5>
+                    <h5>Cotizaciones</h5>
                     <div>
                         {{ $proyecto->cotisaciones }}
                     </div>
@@ -135,75 +137,82 @@
                                     <p>No hay archivo.</p>
                                 @endif
                             </div>
-                            <div class="col-md-3 ">
+                            <div class="col-md-3">
                                 <h5>Datos adicionales</h5>
-                                @foreach ($adicionales as $index => $adicionale)
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            {{ $adicionale['estructura'] }}
+                                @if (!empty($adicionales) && is_array($adicionales))
+                                    @foreach ($adicionales as $index => $adicionale)
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                {{ $adicionale['estructura'] ?? 'N/A' }}
+                                            </div>
+                                            <div class="col-md-6">
+                                                {{ $adicionale['cantidad'] ?? 'N/A' }}
+                                            </div>
                                         </div>
-                                        <div class="col-md-6">
-                                            {{ $adicionale['cantidad'] }}
-                                        </div>
-                                    </div>
-                                @endforeach
+                                    @endforeach
+                                @else
+                                    <p>No hay datos adicionales registrados.</p>
+                                @endif
                             </div>
                             <div class="col-md-6">
-                                @foreach ($datosGenrales as $index => $datosGenrale)
-                                    <div class="row">
-
-                                        <div class="col-md-3">
-                                            <h5>(A)Frente</h5>
-                                            <div>
-                                                {{ $datosGenrale['frente'] }}
+                                @if (!empty($datosGenrales) && is_array($datosGenrales))
+                                    @foreach ($datosGenrales as $index => $datosGenrale)
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <h5>(A)Frente</h5>
+                                                <div>
+                                                    {{ !empty($datosGenrale['frente']) ? $datosGenrale['frente'] : '-' }}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <h5>(B)Fondo</h5>
+                                                <div>
+                                                    {{ !empty($datosGenrale['fondo']) ? $datosGenrale['fondo'] : '-' }}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <h5>(C)Altura Techo</h5>
+                                                <div>
+                                                    {{ !empty($datosGenrale['alturaTecho']) ? $datosGenrale['alturaTecho'] : '-' }}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <h5>Área total</h5>
+                                                <div>
+                                                    {{ !empty($datosGenrale['areaTotal']) ? $datosGenrale['areaTotal'] : '-' }}
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
-                                            <h5>(B)Fondo</h5>
-                                            <div>
-                                                {{ $datosGenrale['fondo'] }}
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <h5>Área de muros</h5>
+                                                <div>
+                                                    {{ !empty($datosGenrale['alturaMuros']) ? $datosGenrale['alturaMuros'] : '-' }}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <h5>Canalón</h5>
+                                                <div>
+                                                    {{ !empty($datosGenrale['canalon']) ? $datosGenrale['canalon'] : '-' }}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <h5>Perimetral</h5>
+                                                <div>
+                                                    {{ !empty($datosGenrale['perimetral']) ? $datosGenrale['perimetral'] : '-' }}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <h5>Caballete</h5>
+                                                <div>
+                                                    {{ !empty($datosGenrale['caballete']) ? $datosGenrale['caballete'] : '-' }}
+                                                </div>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
-                                            <h5>(C)Altura Techo</h5>
-                                            <div>
-                                                {{ $datosGenrale['alturaTecho'] }}
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <h5>Area total</h5>
-                                            <div>
-                                                {{ $datosGenrale['areaTotal'] }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md-3">
-                                            <h5>Area de muros</h5>
-                                            <div>
-                                                {{ $datosGenrale['alturaMuros'] }}
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <h5>Canalon</h5>
-                                            <div>
-                                                {{ $datosGenrale['canalon'] }}
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <h5>Perimetral</h5>
-                                            <div>
-                                                {{ $datosGenrale['perimetral'] }}
-                                            </div>
-                                        </div>
-                                        <div class="col-md-3">
-                                            <h5>Caballete</h5>
-                                            <div>
-                                                {{ $datosGenrale['caballete'] }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                @endforeach
+                                    @endforeach
+                                @else
+                                    <p>No hay datos generales disponibles.</p>
+                                @endif
                             </div>
                         </div>
                     @endif
