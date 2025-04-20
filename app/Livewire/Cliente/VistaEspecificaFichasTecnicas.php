@@ -181,6 +181,7 @@ class VistaEspecificaFichasTecnicas extends Component
                 $items[] = [
                     'id' => $idItem,
                     'cantidad' =>   $this->cantidad,
+                    'estado' => 0,
                 ];
             }
 
@@ -200,7 +201,8 @@ class VistaEspecificaFichasTecnicas extends Component
 
             $listaACotizar = ListasCotizar::create([
                 'usuario_id' => $idUser,
-                'estado' =>   $this->cantidad,
+                'cantidad' =>   $this->cantidad,
+                'estado' => 0,
             ]);
             $this->idLista = $listaACotizar->id;
             Auth::user()->update(['lista' => $listaACotizar->id]);
@@ -217,7 +219,8 @@ class VistaEspecificaFichasTecnicas extends Component
                 // Si el item no existe, agregarlo con cantidad inicial 1
                 $items[] = [
                     'id' => $idItem,
-                    'cantidad' => 1
+                    'cantidad' =>   $this->cantidad,
+                    'estado' => 0,
                 ];
             }
 

@@ -32,22 +32,33 @@ class VerMisCotisaciones extends Component
     public function render()
     {
 
-        $usuarioId = Auth::id();
 
-        // Obtener las listas a cotizar con estado igual a 3
-        $query = Cotizacion::where('id_usuario_compras', $usuarioId)
-            ->with('proyecto')
-            ->orderBy('created_at', 'desc')
-            ->when($this->estado, function ($q) {
-                $q->where('estado', $this->estado);
-            });
+        if (Auth::user()->hasRole('Administrador')) {
+            $query = Cotizacion::with('proyecto')
+                ->orderBy('created_at', 'desc')
+                ->when($this->estado, function ($q) {
+                    $q->where('estado', $this->estado);
+                });
+        } else {
+            $usuarioId = Auth::id();
 
-        // Resto del código...
+            // Obtener las listas a cotizar con estado igual a 3
+            $query = Cotizacion::where('id_usuario_compras', $usuarioId)
+                ->with('proyecto')
+                ->orderBy('created_at', 'desc')
+                ->when($this->estado, function ($q) {
+                    $q->where('estado', $this->estado);
+                });
+
+            // Resto del código...
 
 
-        // Aplicar búsqueda por nombre o fecha de creación
+            // Aplicar búsqueda por nombre o fecha de creación
+
+        }
+
         if (!empty($this->searchTerm)) {
-            $query->where(function ($q) {
+            $query->where(function ($q) { 
                 $q->where('nombre', 'like', '%' . $this->searchTerm . '%')
                     ->orWhereDate('created_at', 'like', '%' . $this->searchTerm . '%');
             });
@@ -90,7 +101,7 @@ class VerMisCotisaciones extends Component
         // Redirigir a la ruta especificada con el ID de la cotización
         return redirect()->route('compras.cotisaciones.verCarritoCotisaciones', ['idCotisacion' => $id]);
     }
-    
+
 
     public function activar($id)
     {
