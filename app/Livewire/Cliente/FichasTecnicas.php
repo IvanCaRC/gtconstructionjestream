@@ -130,12 +130,13 @@ class FichasTecnicas extends Component
 
             if ($itemKey !== false) {
                 // Si el item ya existe, aumentar la cantidad
-                $items[$itemKey]['cantidad'] += 1;
+                $items[$itemKey]['cantidad'] += 1; 
             } else {
                 // Si el item no existe, agregarlo con cantidad inicial 1
                 $items[] = [
                     'id' => $idItem,
-                    'cantidad' => 1
+                    'cantidad' => 1,
+                    'estado' => 0,
                 ];
             }
 
@@ -156,6 +157,7 @@ class FichasTecnicas extends Component
             $listaACotizar = ListasCotizar::create([
                 'usuario_id' => $idUser,
                 'estado' => 1,
+                'estado' => 0,
             ]);
 
             Auth::user()->update(['lista' => $listaACotizar->id]);
@@ -174,7 +176,8 @@ class FichasTecnicas extends Component
                 // Si el item no existe, agregarlo con cantidad inicial 1
                 $items[] = [
                     'id' => $idItem,
-                    'cantidad' => 1
+                    'cantidad' => 1,
+                    'estado' => 0,
                 ];
             }
 

@@ -149,6 +149,8 @@ class VerCotisaciones extends Component
             'estado' => 0, // Estado inicial de la cotización
         ]);
         $this->cancelarAsignacion();
+        return redirect()->route('compras.cotisaciones.verMisCotisaciones');
+
         // Emitir un evento o redirigir según sea necesario
         // $this->emit('listaSeleccionada', $lista->id);
     }
