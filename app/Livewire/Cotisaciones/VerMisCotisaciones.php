@@ -58,7 +58,7 @@ class VerMisCotisaciones extends Component
         }
 
         if (!empty($this->searchTerm)) {
-            $query->where(function ($q) { 
+            $query->where(function ($q) {
                 $q->where('nombre', 'like', '%' . $this->searchTerm . '%')
                     ->orWhereDate('created_at', 'like', '%' . $this->searchTerm . '%');
             });
@@ -81,25 +81,18 @@ class VerMisCotisaciones extends Component
     }
 
 
-    public function seleccionar($id)
-    {
-        // Obtener la lista de cotización por su ID
-        $lista = ListasCotizar::findOrFail($id);
-
-        // Asignar el ID del usuario autenticado al campo id_usuario_compras
-        $lista->id_usuario_compras = Auth::id();
-
-        // Guardar los cambios en la base de datos
-        $lista->save();
-
-        // Emitir un evento o redirigir según sea necesario
-        // Por ejemplo, para actualizar otra parte de la interfaz:
-        // $this->emit('listaSeleccionada', $lista->id);
-    }
     public function verDetalles($id)
     {
         // Redirigir a la ruta especificada con el ID de la cotización
         return redirect()->route('compras.cotisaciones.verCarritoCotisaciones', ['idCotisacion' => $id]);
+    }
+
+    public function editarlista($id)
+    {
+        $cotizacion = Cotizacion::find($id);
+        if ($cotizacion) {
+            Auth::user()->update(['cotizaciones' => $id]);
+        }
     }
 
 
@@ -125,8 +118,11 @@ class VerMisCotisaciones extends Component
     {
         $cotizacion = Cotizacion::find($id);
         if ($cotizacion) {
-            $cotizacion->estado = 3; // Estado "Cancelada"
+            $cotizacion->estado = 2; // Estado "Cancelada"
             $cotizacion->save();
+            if (Auth::user()->cotizaciones == $id) {
+                Auth::user()->update(['cotizaciones' => null]);
+            }
         }
     }
 }

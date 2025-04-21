@@ -73,7 +73,7 @@ class VerCotisaciones extends Component
 
             // $this->obtenerUsuarios();
         } else {
-            $this->seleccionarususarioactual($id,Auth::id());
+            $this->seleccionarususarioactual(Auth::id());
         }
     }
 
@@ -119,22 +119,10 @@ class VerCotisaciones extends Component
         $lista->id_usuario_compras = $idUsuario;
 
         // Transformar y añadir el campo 'estado' en 'items_cotizar'
-        $itemsCotizar = json_decode($lista->items_cotizar, true);
-        if ($itemsCotizar) {
-            foreach ($itemsCotizar as &$item) {
-                $item['estado'] = 0; // Estado por defecto
-            }
-        }
-        $lista->items_cotizar = json_encode($itemsCotizar);
+        
 
         // Transformar y añadir el campo 'estado' en 'items_cotizar_temporales'
-        $itemsCotizarTemporales = json_decode($lista->items_cotizar_temporales, true);
-        if ($itemsCotizarTemporales) {
-            foreach ($itemsCotizarTemporales as &$itemTemp) {
-                $itemTemp['estado'] = 0; // Estado por defecto
-            }
-        }
-        $lista->items_cotizar_temporales = json_encode($itemsCotizarTemporales);
+        
 
         // Guardar los cambios en la base de datos
         $lista->save();

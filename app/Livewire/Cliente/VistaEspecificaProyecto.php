@@ -154,7 +154,9 @@ class VistaEspecificaProyecto extends Component
         if ($lista) {
             $lista->estado = 4; // Estado 5 = Cancelado
             $lista->save();
-
+            if (Auth::user()->lista == $id) {
+                Auth::user()->update(['lista' => null]);
+            }
             session()->flash('message', 'La lista ha sido cancelada correctamente.');
         } else {
             session()->flash('error', 'La lista no fue encontrada.');

@@ -372,7 +372,7 @@ class VistaEspecificaListaCotizar extends Component
         if ($itemKey !== false) {
             $items[$itemKey]['cantidad'] += $cantidad;
         } else {
-            $items[] = ['id' => $idItem, 'cantidad' => $cantidad];
+            $items[] = ['id' => $idItem, 'cantidad' => $cantidad, 'estado' => 0];
         }
 
         $lista->update(['items_cotizar_temporales' => json_encode($items)]);
