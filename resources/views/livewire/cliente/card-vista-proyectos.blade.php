@@ -118,7 +118,8 @@
                                     </button>
                                 </td>
                                 <td>
-                                    <button class="btn btn-primary btn-custom">
+                                    <button class="btn btn-primary btn-custom"
+                                        wire:click="cargarDatosProyecto({{ $proyecto->id }})">
                                         <i class="fas fa-edit"></i>
                                     </button>
                                 </td>
@@ -135,6 +136,4 @@
         </div>
 
     </div>
-
-
 </div>

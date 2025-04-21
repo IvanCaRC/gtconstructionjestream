@@ -25,6 +25,8 @@ class VistaEspecifica extends Component
     public $bancarios = [['banco' => '', 'titular' => '', 'cuenta' => '', 'clave' => '']];
 
     public $openModalCreacionProyecto = false;
+    public $openModalActualizarProyecto = false;
+    public $idProyectoActual;
     public $tipoDeProyectoSelecionado;
     public $fileNamePdf;
     public $archivoSubido;
@@ -90,7 +92,36 @@ class VistaEspecifica extends Component
     public function cancelar()
     {
         $this->reset('openModalCreacionProyecto', 'archivoSubido', 'tipoDeProyectoSelecionado', 'nombreProyecto', 'listaACotizarTxt', 'idDireccionParaProyecto', 'datosGenrales', 'adicionales');
+        $this->resetValidation();
         $this->dispatch('refresh');
+    }
+    //Cargar los datos del proyecto a editar
+    public function cargarDatosProyecto($idProyecto)
+    {
+        $this->idProyectoActual = $idProyecto; // Ahora la propiedad tiene el ID correcto
+
+        $proyecto = Proyecto::find($idProyecto);
+
+        if (!$proyecto) {
+            abort(404, 'Proyecto no encontrado');
+        }
+
+        $this->nombreProyecto = $proyecto->nombre;
+        $this->preferencia = $proyecto->preferencia;
+        $this->tipoDeProyectoSelecionado = $proyecto->tipo;
+        $this->idDireccionParaProyecto = $proyecto->direccion_id;
+        $this->listaACotizarTxt = $proyecto->items_cotizar;
+        $this->datosGenrales = json_decode($proyecto->datos_medidas, true) ?: [['frente' => '', 'fondo' => '', 'alturaTecho' => '', 'areaTotal' => '', 'alturaMuros' => '', 'canalon' => '', 'perimetral' => '', 'caballete' => '']];
+        $this->adicionales = json_decode($proyecto->datos_adicionales, true) ?: [['estructura' => '', 'cantidad' => '']];
+
+        $this->openModalActualizarProyecto = true;
+    }
+
+    public function cancelarUpdate()
+    {
+        $this->reset('openModalActualizarProyecto', 'archivoSubido', 'tipoDeProyectoSelecionado', 'nombreProyecto', 'listaACotizarTxt', 'idDireccionParaProyecto', 'datosGenrales', 'adicionales');
+        $this->resetValidation();
+        $this->openModalActualizarProyecto = false;
     }
 
     public function editCliente($idCliente)
@@ -154,7 +185,42 @@ class VistaEspecifica extends Component
 
         $this->reset('openModalCreacionProyecto', 'archivoSubido', 'tipoDeProyectoSelecionado', 'nombreProyecto', 'listaACotizarTxt', 'idDireccionParaProyecto', 'datosGenrales', 'adicionales');
         $this->dispatch('refresh');
+        $this->resetValidation();
         return redirect()->route('ventas.clientes.vistaEspecProyecto', ['idProyecto' => $proyecto->id]);
+    }
+
+    public function actualizarProyecto()
+    {
+        // Validamos los datos antes de actualizar
+        $this->validate(Proyecto::rules(), Proyecto::messages());
+
+        // Obtener el proyecto por su ID
+        $proyecto = Proyecto::find($this->idProyectoActual);
+
+        if (!$proyecto) {
+            abort(404, 'Proyecto no encontrado');
+        }
+
+        // Si hay un nuevo archivo, almacenarlo
+        $archivoSubido = $this->archivoSubido ? $this->archivoSubido->store('archivosFacturacionProveedores', 'public') : $proyecto->archivo;
+
+        // Actualizar los datos del proyecto
+        $proyecto->update([
+            'direccion_id' => $this->idDireccionParaProyecto,
+            'nombre' => $this->nombreProyecto,
+            'preferencia' => $this->preferencia,
+            'tipo' => $this->tipoDeProyectoSelecionado,
+            'archivo' => $archivoSubido,
+            'items_cotizar' => $this->listaACotizarTxt,
+            'datos_medidas' => json_encode($this->datosGenrales),
+            'datos_adicionales' => json_encode($this->adicionales),
+            'fecha' => now(),
+        ]);
+
+        // Resetear variables y cerrar el modal
+        $this->reset('openModalActualizarProyecto', 'archivoSubido', 'nombreProyecto', 'listaACotizarTxt', 'idDireccionParaProyecto', 'datosGenrales', 'adicionales');
+        $this->dispatch('refresh');
+        $this->resetValidation();
     }
 
     public function asignarDireccion($idDIreccion)
