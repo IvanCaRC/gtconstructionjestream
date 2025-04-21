@@ -11,7 +11,7 @@
                     <h3>Nombre: {{ $proyecto->nombre }}</h3>
                 </div>
                 <div class="col-md-1">
-                    <button class="btn btn-primary d-block mb-3" wire:click="editarProyecto">
+                    <button class="btn btn-primary d-block mb-3" wire:click="editarProyecto({{ $proyecto->id }})">
                         Editar proyecto
                     </button>
                 </div>

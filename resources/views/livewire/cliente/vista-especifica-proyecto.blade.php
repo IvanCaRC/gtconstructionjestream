@@ -45,4 +45,6 @@
     @include('livewire.cliente.vistaDeproyecto.card-vista-proyecto-esp')
     <br>
     @include('livewire.cliente.vistaDeproyecto.card-vista-tabla-lista')
+    <br>
+    @include('livewire.cliente.modal-actualizacion-proyecto')
 </div>

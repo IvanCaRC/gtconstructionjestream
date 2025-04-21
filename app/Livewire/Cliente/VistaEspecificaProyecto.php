@@ -14,6 +14,8 @@ use Illuminate\Support\Facades\Auth;
 
 class VistaEspecificaProyecto extends Component
 {
+    protected $listeners = ['refresh' => 'render'];
+    
     public $proyecto;
     public $searchTerm = '';
     public $statusFiltro = 0; // Filtro de estado
@@ -23,6 +25,15 @@ class VistaEspecificaProyecto extends Component
     public $bancarios = [['banco' => '', 'titular' => '', 'cuenta' => '', 'clave' => '']];
     public $datosGenrales = [['frente' => '', 'fondo' => '', 'alturaTecho' => '', 'areaTotal' => '', 'alturaMuros' => '', 'canalon' => '', 'perimetral' => '', 'caballete' => '']];
     public $adicionales = [['estructura' => '', 'cantidad' => '']];
+    public $openModalActualizarProyecto = false;
+    public $idProyectoActual;
+    public $nombreProyecto;
+    public $preferencia;
+    public $tipoDeProyectoSelecionado;
+    public $idDireccionParaProyecto;
+    public $listaACotizarTxt;
+    public $archivoSubido;
+
 
     public function mount($idProyecto)
     {
@@ -102,10 +113,85 @@ class VistaEspecificaProyecto extends Component
         $lista->save();
     }
 
-    public function editarProyecto()
+    public function editarProyecto($idProyecto)
     {
-        // Lógica para editar el proyecto
-        dd('Método editarProyecto ejecutado correctamente');
+        $this->idProyectoActual = $idProyecto; // Ahora la propiedad tiene el ID correcto
+
+        $proyecto = Proyecto::find($idProyecto);
+
+        if (!$proyecto) {
+            abort(404, 'Proyecto no encontrado');
+        }
+
+        $this->nombreProyecto = $proyecto->nombre;
+        $this->preferencia = $proyecto->preferencia;
+        $this->tipoDeProyectoSelecionado = $proyecto->tipo;
+        $this->idDireccionParaProyecto = $proyecto->direccion_id;
+        $this->listaACotizarTxt = $proyecto->items_cotizar;
+        $this->datosGenrales = json_decode($proyecto->datos_medidas, true) ?: [['frente' => '', 'fondo' => '', 'alturaTecho' => '', 'areaTotal' => '', 'alturaMuros' => '', 'canalon' => '', 'perimetral' => '', 'caballete' => '']];
+        $this->adicionales = json_decode($proyecto->datos_adicionales, true) ?: [['estructura' => '', 'cantidad' => '']];
+
+        $this->openModalActualizarProyecto = true;
+        // dd($this->openModalActualizarProyecto);
+    }
+
+    //Metodos de actualizacion de proyecto
+    public function asignarTipoDeProyecto($tipo)
+    {
+        $this->tipoDeProyectoSelecionado = $tipo;
+    }
+
+    public function asignarDireccion($idDIreccion)
+    {
+        $this->idDireccionParaProyecto = $idDIreccion;
+    }
+
+    public function asiganrPreferencia($preferencia)
+    {
+        $this->preferencia = $preferencia;
+    }
+
+    public function cancelarUpdate()
+    {
+        $this->reset('openModalActualizarProyecto', 'archivoSubido', 'tipoDeProyectoSelecionado', 'nombreProyecto', 'listaACotizarTxt', 'idDireccionParaProyecto', 'datosGenrales', 'adicionales');
+        $this->resetValidation();
+        $this->openModalActualizarProyecto = false;
+    }
+
+    public function actualizarProyecto()
+    {
+        // Validamos los datos antes de actualizar
+        $this->validate(Proyecto::rules(), Proyecto::messages());
+
+        // Obtener el proyecto por su ID
+        $proyecto = Proyecto::find($this->idProyectoActual);
+
+        if (!$proyecto) {
+            abort(404, 'Proyecto no encontrado');
+        }
+
+        // Si hay un nuevo archivo, almacenarlo
+        $archivoSubido = $this->archivoSubido ? $this->archivoSubido->store('archivosFacturacionProveedores', 'public') : $proyecto->archivo;
+
+        $this->idDireccionParaProyecto = !empty($this->idDireccionParaProyecto) ? $this->idDireccionParaProyecto : null;
+
+        // Actualizar los datos del proyecto
+        $proyecto->update([
+            'direccion_id' => $this->idDireccionParaProyecto,
+            'nombre' => $this->nombreProyecto,
+            'preferencia' => $this->preferencia,
+            'tipo' => $this->tipoDeProyectoSelecionado,
+            'archivo' => $archivoSubido,
+            'items_cotizar' => $this->listaACotizarTxt,
+            'datos_medidas' => json_encode($this->datosGenrales),
+            'datos_adicionales' => json_encode($this->adicionales),
+            'fecha' => now(),
+        ]);
+
+        // Resetear variables y cerrar el modal
+        $this->reset('openModalActualizarProyecto', 'archivoSubido', 'nombreProyecto', 'listaACotizarTxt', 'idDireccionParaProyecto', 'datosGenrales', 'adicionales');
+        $this->dispatch('refresh');
+        $this->resetValidation();
     }
 
     public function editCliente($idCliente)
