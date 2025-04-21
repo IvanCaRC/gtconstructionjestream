@@ -204,6 +204,8 @@ class VistaEspecifica extends Component
         // Si hay un nuevo archivo, almacenarlo
         $archivoSubido = $this->archivoSubido ? $this->archivoSubido->store('archivosFacturacionProveedores', 'public') : $proyecto->archivo;
 
+        $this->idDireccionParaProyecto = !empty($this->idDireccionParaProyecto) ? $this->idDireccionParaProyecto : null;
+
         // Actualizar los datos del proyecto
         $proyecto->update([
             'direccion_id' => $this->idDireccionParaProyecto,

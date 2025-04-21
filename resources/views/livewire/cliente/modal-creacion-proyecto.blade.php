@@ -90,7 +90,7 @@
                                 </option>
                             @endforeach
                         </select>
-                        <small class="form-text text-muted">Por favor, elige una dericcion para el proyecto.</small>
+                        <small class="form-text text-muted">Por favor, elige una direccion para el proyecto.</small>
                         <small class="form-text text-muted">(Nota: Estas direcciones son recuperadas del registro del
                             cliente)</small>
                     @else
@@ -235,7 +235,7 @@
                                 </option>
                             @endforeach
                         </select>
-                        <small class="form-text text-muted">Por favor, elige una dericcion para el proyecto.</small>
+                        <small class="form-text text-muted">Por favor, elige una direccion para el proyecto.</small>
                         <small class="form-text text-muted">(Nota: Estas direcciones son recuperadas del
                             cliente)</small>
                     @else
