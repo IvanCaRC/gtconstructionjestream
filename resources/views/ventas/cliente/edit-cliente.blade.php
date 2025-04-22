@@ -63,8 +63,8 @@
                 <h3>Datos del cliente</h3>
                 <form id="proveedor-formee" action="{{ route('ventas.clientes.recepcionLlamadas.store') }}" method="POST">
                     @csrf
-                    <input id="direcciones-input" name="direcciones">
-                    <input id="cliente-id-input" name="cliente_id" value="">
+                    <input type="hidden" id="direcciones-input" name="direcciones">
+                    <input type="hidden" id="cliente-id-input" name="cliente_id" value="">
                     @livewire('cliente.edit-cliente', ['idcliente' => $idcliente])
                     <div class="form-group">
                         <div class="input-group mb-2" id="address-list">

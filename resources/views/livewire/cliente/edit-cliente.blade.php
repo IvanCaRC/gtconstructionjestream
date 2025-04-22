@@ -220,17 +220,18 @@
                     document.getElementById('direcciones-input').value = directionsJSON;
 
                     // Mostrar la alerta después de la creación si todo es correcto
-                    // Swal.fire({
-                    //     title: 'Cliente actualizado',
-                    //     text: 'El cliente ha sido actualizado correctamente.',
-                    //     icon: 'success',
-                    //     confirmButtonText: 'OK',
-                    //     allowOutsideClick: false // Deshabilitar el clic fuera para cerrar
-                    // }).then((result) => {
-                    //     if (result.isConfirmed) {
-                    //         window.location.href = "{{ route('ventas.clientes.gestionClientes') }}";
-                    //     }
-                    // });
+                    Swal.fire({
+                        title: 'Cliente actualizado',
+                        text: 'El cliente ha sido actualizado correctamente.',
+                        icon: 'success',
+                        confirmButtonText: 'OK',
+                        allowOutsideClick: false // Deshabilitar el clic fuera para cerrar
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            document.getElementById('proveedor-formee').submit();
+                            // window.location.href = "{{ route('ventas.clientes.gestionClientes') }}";
+                        }
+                    });
                 }
             }).catch(error => {
                 // Manejar error si es necesario
