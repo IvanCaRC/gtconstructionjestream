@@ -17,7 +17,7 @@
 </head>
 <body>
     <h1>{{ $title }}</h1>
-    <p>Se mustran los item preliminares a buscar.</p>
+    <p>Items preeliminares.</p>
     <p>{!! nl2br(e($proyecto->items_cotizar)) !!}</p>
     <!-- Agrega aquí el contenido que necesites -->
 </body>
