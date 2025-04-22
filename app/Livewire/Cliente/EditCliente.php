@@ -178,6 +178,8 @@ class EditCliente extends Component
         'telefono' => json_encode($this->telefonos), // Convertir a JSON
         'user_id' => $idUser, // Se actualiza el usuario asignado correctamente
     ]);
+    //Eliminar las direcciones actuales antes de reinsertar
+    Direccion::where('cliente_id', $this->idDecliente)->delete();
 
     // Iterar sobre las direcciones asignadas y guardarlas en la base de datos
     foreach ($this->direccionesAsignadas as $direccion) {
