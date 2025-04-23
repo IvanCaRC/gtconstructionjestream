@@ -15,7 +15,8 @@ class CreateCotizacionesTable extends Migration
             $table->unsignedBigInteger('id_usuario_compras')->nullable();
             $table->string('nombre')->nullable();
             $table->integer('estado');
-            $table->text('items_cotizar')->nullable();
+            $table->text('items_cotizar_proveedor')->nullable();
+            $table->text('items_cotizar_stock')->nullable();
             $table->timestamps();
 
             // Definición de claves foráneas

@@ -30,56 +30,55 @@ class VistaDeCatalogo extends Component
         'mountVistaDeLista' => 'mount',
         'renderVistaDeLista' => 'render',
     ];
-    
-    
+
+
 
     public $nombreProyecto;
     public $nombreCliente;
     public $idLista;
+    public $idCotizaciones;
 
     public $itemsEnLista = [];
 
-    
+
     public function mount()
     {
         // Obtener el usuario actual
         $this->usuarioActual = Auth::user();
 
-        // Consultar el primer registro con estado 0 para el usuario actual
-        $registro = Cotizacion::where('id_usuario_compras', $this->usuarioActual->id) // Verificar usuario actual
-            ->where('estado', 1) // Estado igual a 0
-            ->first(); // Obtener el primer registro (o null si no hay)
-
-        if ($registro) {
+        if ($this->usuarioActual->cotizaciones) {
             // Recuperamos el proyecto relacionado
             // Si se encuentra el registro, guardar el nombre; si no, asignar null
-            $this->idLista = $registro->id;
-            $this->listadeUsuarioActiva = $registro->nombre ?? 'Sin nombre';
-            $proyecto = $registro->proyecto ?? 'Sin proyecto';
-            $cliente = $proyecto->cliente ?? 'Sin cliente    ';
-
-            // Asignamos los valores
-            $this->nombreProyecto = $proyecto->nombre ?? 'Sin nombre';
-
-            $this->nombreCliente = $cliente->nombre ?? 'Sin cliente';
-
-            // Obtener los IDs de los items en la lista
-            $itemsData = json_decode($registro->items_cotizar, true) ?? [];
-            $this->itemsEnLista = array_column($itemsData, 'id');
+            $cotizacionId = $this->usuarioActual->cotizaciones;
+            $cotizacionActiva = Cotizacion::find($cotizacionId);
+            if ($cotizacionActiva) {
+                // Si existe la lista activa, obtener sus detalles
+                $this->idCotizaciones = $cotizacionActiva->id;
+                $this->listadeUsuarioActiva = $cotizacionActiva->nombre ?? 'Sin nombre';
+            } else {
+                // Si no se encuentra la lista, establecer las propiedades en null
+                $this->establecerPropiedadesNulas();
+            }
         } else {
-            // Si no existe el registro
-            $this->idLista = null;
-            $this->listadeUsuarioActiva = null;
-            $this->nombreProyecto = null;
-            $this->nombreCliente = null;
-        } 
+            // Si el usuario no tiene una lista asignada, establecer las propiedades en null
+            $this->establecerPropiedadesNulas();
+        }
+    }
+
+    private function establecerPropiedadesNulas()
+    {
+        $this->idCotizaciones = null;
+        $this->idLista = null;
+        $this->listadeUsuarioActiva = null;
+        $this->nombreProyecto = null;
+        $this->nombreCliente = null;
+        $this->itemsEnLista = [];
     }
 
     public function verLista($idLista)
     {
 
         return redirect()->route('compras.cotisaciones.verCarritoCotisaciones', ['idCotisacion' => $idLista]);
-    
     }
 
 
@@ -87,18 +86,12 @@ class VistaDeCatalogo extends Component
     {
 
         return view('livewire.items-cotizar.vista-de-catalogo');
-
     }
-    
 
-    public function desactivarLista($idLista)
+
+    public function desactivarLista($id)
     {
-        $lista = ListasCotizar::find($idLista);
-
-        $lista->update([
-            'estado' => 2
-        ]);
-
-        return redirect()->route('ventas.fichasTecnicas.fichasTecnicas');
+        Auth::user()->update(['cotizaciones' => null]);
+        return redirect()->route('compras.catalogoCotisacion.catalogoItem');
     }
 }

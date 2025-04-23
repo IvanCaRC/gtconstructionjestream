@@ -92,26 +92,9 @@ class VerMisCotisaciones extends Component
         $cotizacion = Cotizacion::find($id);
         if ($cotizacion) {
             Auth::user()->update(['cotizaciones' => $id]);
+            return redirect()->route('compras.catalogoCotisacion.catalogoItem');
         }
-    }
-
-
-    public function activar($id)
-    {
-        $cotizacion = Cotizacion::find($id);
-        if ($cotizacion) {
-            $cotizacion->estado = 1; // Estado "Activa"
-            $cotizacion->save();
-        }
-    }
-
-    public function desactivar($id)
-    {
-        $cotizacion = Cotizacion::find($id);
-        if ($cotizacion) {
-            $cotizacion->estado = 0; // Estado "Inactiva"
-            $cotizacion->save();
-        }
+        
     }
 
     public function cancelar($id)

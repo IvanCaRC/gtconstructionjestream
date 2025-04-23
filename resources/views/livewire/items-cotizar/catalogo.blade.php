@@ -1,5 +1,4 @@
 <div>
-
     <div class="container-fluid px-4 sm:px-6 lg:px-8 py-1">
         <div class="flex h-screen gap-4 p-4">
             <!-- Primera sección (85%) -->
@@ -38,9 +37,7 @@
                         </div>
                     </div>
                     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-                    hola    
-                    {{$listadeUsuarioActiva}}
-                    {{$nombreCliente}}
+
                     <div>
                         @if ($itemEspecificos->count() > 0)
                             @if (!$tipoDeVista)
@@ -100,13 +97,6 @@
                                                 </td>
 
                                                 <td>
-                                                    <button class="btn btn-info btn-custom"
-                                                        wire:click="viewItem({{ $itemEspecifico->id }})">
-                                                        <i class="fas fa-eye"></i>
-                                                    </button>
-                                                </td>
-
-                                                <td>
 
                                                     @if ($listadeUsuarioActiva == null || $nombreCliente == 'Sin cliente')
                                                         <div class="col-md-12">
@@ -115,20 +105,12 @@
                                                             </label>
                                                         </div>
                                                     @else
-                                                        @if (in_array($itemEspecifico->id, $itemsEnLista))
-                                                            <button class="btn btn-warning btn-custom"
-                                                                wire:click="verLista({{ $idLista }})"
-                                                                title="Este item ya está en tu lista">
-                                                                <i class="fas fa-shopping-cart"></i> Ver en carrito
-                                                            </button>
-                                                        @else
-                                                            <button class="btn btn-success btn-custom"
-                                                                wire:click="agregarItemLista({{ $itemEspecifico->id }})"
-                                                                title="Agrega este item a tu lista">
-                                                                <i class="fas fa-shopping-cart"></i> Añadir a la
-                                                                lista
-                                                            </button>
-                                                        @endif
+                                                        <button class="btn btn-info btn-custom"
+                                                            wire:click="viewItem({{ $itemEspecifico->id }})">
+                                                            <i class="fas fa-shopping-cart"></i> Añadir a la
+                                                            lista
+                                                        </button>
+
                                                     @endif
 
                                                 </td>
@@ -221,20 +203,12 @@
                                                                 </label>
                                                             </div>
                                                         @else
-                                                            @if (in_array($itemEspecifico->id, $itemsEnLista))
-                                                                <button class="btn btn-warning btn-custom"
-                                                                    wire:click="verLista({{ $idLista }})"
-                                                                    title="Este item ya está en tu lista">
-                                                                    <i class="fas fa-shopping-cart"></i> Ver en carrito
-                                                                </button>
-                                                            @else
-                                                                <button class="btn btn-success btn-custom"
-                                                                    wire:click="agregarItemLista({{ $itemEspecifico->id }})"
-                                                                    title="Agrega este item a tu lista">
-                                                                    <i class="fas fa-shopping-cart"></i> Añadir a la
-                                                                    lista
-                                                                </button>
-                                                            @endif
+                                                            <button class="btn btn-info btn-custom"
+                                                                wire:click="viewItem({{ $itemEspecifico->id }})"
+                                                                title="Observa a detalle">
+                                                                <i class="fas fa-shopping-cart"></i> Añadir a la
+                                                                lista
+                                                            </button>
                                                         @endif
 
 
@@ -242,12 +216,6 @@
 
                                                     <td>
 
-
-                                                        <button class="btn btn-info btn-custom"
-                                                            wire:click="viewItem({{ $itemEspecifico->id }})"
-                                                            title="Observa a detalle">
-                                                            <i class="fas fa-eye"></i>
-                                                        </button>
                                                     </td>
                                                 </div>
                                             </div>

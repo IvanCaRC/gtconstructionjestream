@@ -36,41 +36,41 @@ class Catalogo extends Component
 
     public $itemsEnLista = [];
 
+    public $idCotizaciones;
+
     public function mount()
     {
         // Obtener el usuario actual
         $this->usuarioActual = Auth::user();
 
-        // Consultar el primer registro con estado 0 para el usuario actual
-        $registro = Cotizacion::where('id_usuario_compras', $this->usuarioActual->id) // Verificar usuario actual
-            ->where('estado', 1) // Estado igual a 0
-            ->first(); // Obtener el primer registro (o null si no hay)
-
-        if ($registro) {
+        if ($this->usuarioActual->cotizaciones) {
             // Recuperamos el proyecto relacionado
             // Si se encuentra el registro, guardar el nombre; si no, asignar null
-            $this->idLista = $registro->id;
-            $this->listadeUsuarioActiva = $registro->nombre ?? 'Sin nombre';
-            $proyecto = $registro->proyecto ?? 'Sin proyecto';
-            $cliente = $proyecto->cliente ?? 'Sin cliente    ';
-
-            // Asignamos los valores
-            $this->nombreProyecto = $proyecto->nombre ?? 'Sin nombre';
-
-            $this->nombreCliente = $cliente->nombre ?? 'Sin cliente';
-
-            // Obtener los IDs de los items en la lista
-            $itemsData = json_decode($registro->items_cotizar, true) ?? [];
-            $this->itemsEnLista = array_column($itemsData, 'id');
+            $cotizacionId = $this->usuarioActual->cotizaciones;
+            $cotizacionActiva = Cotizacion::find($cotizacionId);
+            if ($cotizacionActiva) {
+                // Si existe la lista activa, obtener sus detalles
+                $this->idCotizaciones = $cotizacionActiva->id;
+                $this->listadeUsuarioActiva = $cotizacionActiva->nombre ?? 'Sin nombre';
+            } else {
+                // Si no se encuentra la lista, establecer las propiedades en null
+                $this->establecerPropiedadesNulas();
+            }
         } else {
-            // Si no existe el registro
-            $this->idLista = null;
-            $this->listadeUsuarioActiva = null;
-            $this->nombreProyecto = null;
-            $this->nombreCliente = null;
+            // Si el usuario no tiene una lista asignada, establecer las propiedades en null
+            $this->establecerPropiedadesNulas();
         }
     }
 
+    private function establecerPropiedadesNulas()
+    {
+        $this->idCotizaciones = null;
+        $this->idLista = null;
+        $this->listadeUsuarioActiva = null;
+        $this->nombreProyecto = null;
+        $this->nombreCliente = null;
+        $this->itemsEnLista = [];
+    }
 
     public function seleccionarFamilia($familiaId)
     {
@@ -97,88 +97,7 @@ class Catalogo extends Component
 
     public $itemsLista = [];
 
-    public function agregarItemLista($idItem)
-    {
-        // Buscar la lista existente (asegúrate de tener el ID de la lista almacenado
 
-        if ($this->idLista !== null) {
-            $lista = ListasCotizar::find($this->idLista);
-
-            if (!$lista) {
-                session()->flash('error', 'No se encontró la lista de cotización.');
-                return;
-            }
-
-            // Decodificar los items ya guardados
-            $items = json_decode($lista->items_cotizar, true) ?? [];
-
-            // Buscar si el item ya está en la lista
-            $itemKey = array_search($idItem, array_column($items, 'id'));
-
-            if ($itemKey !== false) {
-                // Si el item ya existe, aumentar la cantidad
-                $items[$itemKey]['cantidad'] += 1;
-            } else {
-                // Si el item no existe, agregarlo con cantidad inicial 1
-                $items[] = [
-                    'id' => $idItem,
-                    'cantidad' => 1
-                ];
-            }
-
-            // Guardar la lista actualizada en la base de datos
-            $lista->update([
-                'items_cotizar' => json_encode($items)
-            ]);
-
-            $this->itemsEnLista = array_column($items, 'id');
-            return redirect()->route('ventas.clientes.vistaEspecificaListaCotizar', ['idLista' => $lista->id]);
-        } else {
-            $usuario  = $this->usuarioActual->id;
-            $listasEnEstado1 = ListasCotizar::where('usuario_id', $usuario)
-                ->where('estado', 1)
-                ->get();
-
-            foreach ($listasEnEstado1 as $lista) {
-                $lista->update(['estado' => 2]);
-            }
-
-            $user = Auth::user();
-            $idUser = $user->id;
-
-            $listaACotizar = ListasCotizar::create([
-                'usuario_id' => $idUser,
-                'estado' => 1,
-            ]);
-            $this->idLista = $listaACotizar->id;
-            //
-            $items = json_decode($listaACotizar->items_cotizar, true) ?? [];
-
-            // Buscar si el item ya está en la lista
-            $itemKey = array_search($idItem, array_column($items, 'id'));
-
-            if ($itemKey !== false) {
-                // Si el item ya existe, aumentar la cantidad
-                $items[$itemKey]['cantidad'] += 1;
-            } else {
-                // Si el item no existe, agregarlo con cantidad inicial 1
-                $items[] = [
-                    'id' => $idItem,
-                    'cantidad' => 1
-                ];
-            }
-
-            // Guardar la lista actualizada en la base de datos
-            $listaACotizar->update([
-                'items_cotizar' => json_encode($items)
-            ]);
-
-            $this->itemsEnLista = array_column($items, 'id');
-            //
-
-            return redirect()->route('ventas.clientes.vistaEspecificaListaCotizar', ['idLista' => $listaACotizar->id]);
-        }
-    }
 
 
     /**
