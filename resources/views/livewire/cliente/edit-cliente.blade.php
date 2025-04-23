@@ -229,7 +229,6 @@
                     }).then((result) => {
                         if (result.isConfirmed) {
                             document.getElementById('proveedor-formee').submit();
-                            // window.location.href = "{{ route('ventas.clientes.gestionClientes') }}";
                         }
                     });
                 }
