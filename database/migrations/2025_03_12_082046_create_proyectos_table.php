@@ -17,7 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('direccion_id')->nullable();
             $table->integer('proceso');
             $table->string('nombre');
-            $table->integer('preferencia')->nullable();;
+            $table->integer('preferencia')->nullable();
             $table->integer('listas');
             $table->integer('cotisaciones');
             $table->integer('ordenes');
@@ -27,7 +27,11 @@ return new class extends Migration
             $table->text('items_cotizar')->nullable();
             $table->text('datos_medidas')->nullable();
             $table->text('datos_adicionales')->nullable();
+            $table->integer('culminacion')->nullable(); // 0 = Cancelado, 1 = Concretado
+            $table->text('motivo_finalizacion')->nullable(); // Explicacion del motivo de finalizacion
+            $table->text('motivo_detallado')->nullable(); // Explicacion especifica de la finalizacion
             $table->date('fecha');
+            
             $table->timestamps();
 
             $table->foreign('cliente_id')->references('id')->on('clientes')->onDelete('cascade');

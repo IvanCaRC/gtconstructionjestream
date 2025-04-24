@@ -24,6 +24,9 @@ class Proyecto extends Model
         'items_cotizar',
         'datos_medidas',
         'datos_adicionales',
+        'culminacion',
+        'motivo_finalizacion',
+        'motivo_detallado',
         'fecha'
     ];
     public function cliente()

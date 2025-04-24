@@ -43,5 +43,5 @@
     @include('livewire.cliente.card-vista-proyectos')
     @include('livewire.cliente.modal-creacion-proyecto')
     @include('livewire.cliente.modal-actualizacion-proyecto')
-
+    @include('livewire.cliente.modal-cancelacion-proyecto')
 </div>

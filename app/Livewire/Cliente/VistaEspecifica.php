@@ -25,8 +25,17 @@ class VistaEspecifica extends Component
     public $bancarios = [['banco' => '', 'titular' => '', 'cuenta' => '', 'clave' => '']];
 
     public $openModalCreacionProyecto = false;
+
     public $openModalActualizarProyecto = false;
     public $idProyectoActual;
+
+    public $openModalCancelarProyecto = false;
+    public $culminacion;
+    public $motivo_finalizacion;
+    public $motivo_finalizacion_alterno;
+    public $motivo_detallado;
+
+
     public $tipoDeProyectoSelecionado;
     public $fileNamePdf;
     public $archivoSubido;
@@ -123,6 +132,71 @@ class VistaEspecifica extends Component
         $this->resetValidation();
         $this->openModalActualizarProyecto = false;
     }
+
+    //Metodos para solicitar cancelacion de proyecto
+    public function solicitarCancelacion($idProyecto)
+    {
+        $this->idProyectoActual = Proyecto::findOrFail($idProyecto);
+
+        $proyecto = Proyecto::find($idProyecto);
+
+        $this->nombreProyecto = $proyecto->nombre;
+        $this->motivo_finalizacion = '';
+        $this->motivo_detallado = '';
+        $this->openModalCancelarProyecto = true;
+    }
+
+    public function removeCancelacion()
+    {
+        $this->reset('openModalCancelarProyecto');
+        $this->resetValidation();
+        $this->openModalCancelarProyecto = false;
+    }
+
+    //Asociar los motivos de la cancelacion al proyecto actual mediante su ID
+
+    public function enviarSolicitudCancelar()
+{
+    // Validar los campos del formulario
+    $this->validate([
+        'motivo_finalizacion' => 'required|string|max:255',
+        'motivo_detallado' => 'required|string|max:500',
+    ]);
+
+    // Verificar que el ID del proyecto es válido
+    if (empty($this->idProyectoActual)) {
+        session()->flash('error', 'El ID del proyecto no es válido.');
+        return redirect()->route('ventas.clientes.vistaProyectos');
+    }
+
+    // Buscar el proyecto en la base de datos
+    $proyecto = Proyecto::find($this->idProyectoActual);
+
+    // dd('Método ejecutado', $proyecto, $this->idProyectoActual, $this->motivo_finalizacion, $this->motivo_detallado);
+
+    if (!$proyecto) {
+        session()->flash('error', 'El proyecto no fue encontrado.');
+        return redirect()->route('ventas.clientes.vistaProyectos');
+    }
+
+    // Depuración para asegurar que tenemos un modelo y no una colección
+    
+
+    // Actualizar los campos del proyecto
+    $proyecto->update([
+        'culminacion' => 0,
+        'motivo_finalizacion' => $this->motivo_finalizacion,
+        'motivo_detallado' => $this->motivo_detallado,
+    ]);
+
+    // Limpiar campos y finalizar
+    // $this->reset('openModalCancelarProyecto', 'culminacion', 'motivo_finalizacion', 'motivo_detallado');
+    $this->dispatch('refresh');
+    $this->resetValidation();
+    return redirect()->route('ventas.clientes.vistaEspecProyecto', ['idProyecto' => $this->idProyectoActual]);
+    // dd('Método ejecutado', $proyecto, $this->idProyectoActual, $this->motivo_finalizacion, $this->motivo_detallado);
+}
+
 
     public function editCliente($idCliente)
     {
