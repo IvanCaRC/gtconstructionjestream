@@ -6,7 +6,6 @@
     <div class="container">
         <div class="row">
             <!-- Área de carga de la imagen -->
-
             <div class="col-md-4">
                 <div class="form-group">
 

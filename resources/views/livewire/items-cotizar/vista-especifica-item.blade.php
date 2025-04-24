@@ -10,8 +10,9 @@
 
             <div class="col-md-2">
 
-                  
-                  <div class="form-group" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+
+                <div class="form-group"
+                    style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
 
                     <div class="form-group text-center mt-3">
                         @if ($imagenesCargadas == null || count($imagenesCargadas) == 0)
@@ -23,19 +24,18 @@
                         @else
                             <div class="galeria">
                                 <div class="imagen-grande-container">
-                                    <img id="imagenGrande"
-                                        src="{{ asset('storage/' . $imagenesCargadas[0]) }}"
+                                    <img id="imagenGrande" src="{{ asset('storage/' . $imagenesCargadas[0]) }}"
                                         alt="Imagen Principal" style="width: 250px; height: 250px; object-fit: cover;">
                                 </div>
-                                
+
 
                             </div>
                             {{-- Miniaturas --}}
                             <div class="miniaturas-container mt-3">
                                 @foreach ($imagenesCargadas as $index => $imaCarg)
                                     <div class="miniatura">
-                                        <img src="{{ asset('storage/' . $imaCarg) }}"
-                                            alt="Miniatura" class="imagen-miniatura"
+                                        <img src="{{ asset('storage/' . $imaCarg) }}" alt="Miniatura"
+                                            class="imagen-miniatura"
                                             onclick="cambiarImagenPorIndice({{ $index }})">
                                     </div>
                                 @endforeach
@@ -124,7 +124,7 @@
                         </p>
                     @endif
                 </div>
-                
+
                 <div class="form-group">
                     <h3 for="">Descripción</h3>
                     <label for="">{{ $item->descripcion }} </label>
@@ -166,7 +166,7 @@
                         @endforeach
                     @endif
                 </div>
-                
+
                 <div class="row">
                     <div class="col-md-3 mb-3">
                         <label>Familias</label>
@@ -207,20 +207,17 @@
                         <div class="col-md-4 mb-3">
                             <label for="cantidad_piezas_mayoreo" class="mr-2">Cant. Piezas
                                 Mayoreo</label>
-                            <label
-                                for="">{{ $itemEspecifico->cantidad_piezas_mayoreo }}</label>
+                            <label for="">{{ $itemEspecifico->cantidad_piezas_mayoreo }}</label>
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="porcentaje_venta_mayorista" class="mr-2">% Venta
                                 Mayorista</label>
-                            <label
-                                for="">{{ $itemEspecifico->porcentaje_venta_mayorista }}</label>
+                            <label for="">{{ $itemEspecifico->porcentaje_venta_mayorista }}</label>
                         </div>
                         <div class="col-md-4 mb-3">
                             <label for="porcentaje_venta_minorista" class="mr-2">% Venta
                                 Minorista</label>
-                            <label
-                                for="">{{ $itemEspecifico->porcentaje_venta_minorista }}</label>
+                            <label for="">{{ $itemEspecifico->porcentaje_venta_minorista }}</label>
                         </div>
 
                     </div>
@@ -229,7 +226,12 @@
             </div>
 
             <div class="col-md-6">
-                @include('livewire.items-cotizar.elccion-provedores')
+                @if ($listaUsuarioActiva == null)
+                    <p>No hay una cotisacion activa, seleciona una para poder cotizar</p>
+                @else
+                    @include('livewire.items-cotizar.elccion-provedores')
+                @endif
+
             </div>
         </div>
 
@@ -283,6 +285,18 @@
         function cambiarImagenPorIndice(index) {
             indiceActual = index;
             actualizarImagen();
+        }
+    </script>
+
+    <script>
+        function validatePhoneInput(element) {
+            // Permitir solo números, espacios y el signo de +
+            element.value = element.value.replace(/[^0-9\s+]/g, '');
+
+            // Limitar la longitud a 16 caracteres
+            if (element.value.length > 7) {
+                element.value = element.value.substring(0, 7);
+            }
         }
     </script>
 </div>

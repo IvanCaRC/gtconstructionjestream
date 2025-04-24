@@ -18,7 +18,7 @@ class Cotizacion extends Model
         'id_usuario_compras',
         'nombre',
         'estado',
-        'items_cotizar',
+        'items_cotizar_stock',
     ];
 
     /**
