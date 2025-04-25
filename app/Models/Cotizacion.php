@@ -19,6 +19,7 @@ class Cotizacion extends Model
         'nombre',
         'estado',
         'items_cotizar_stock',
+        'items_cotizar_proveedor',
     ];
 
     /**

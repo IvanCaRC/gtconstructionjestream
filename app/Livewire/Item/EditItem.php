@@ -284,7 +284,6 @@ class EditItem extends Component
         $famliasActualesSelecionadas = $this->familiasSeleccionadas;
 
 
-        ItemEspecificoProveedor::where('item_especifico_id', $itemEspecificoActual->id)->delete();
 
 
 
@@ -317,22 +316,55 @@ class EditItem extends Component
 
 
 
+        // 1. Obtener los proveedores actuales en la BD
+        $proveedoresActuales = ItemEspecificoProveedor::where('item_especifico_id', $itemEspecificoActual->id)
+            ->get()
+            ->keyBy('proveedor_id');
 
-        foreach ($this->ProvedoresAsignados as $proveedor) {
-            // Asegurarnos de que el arreglo contiene los datos necesarios
-            if (isset($proveedor['proveedor_id'], $proveedor['tiempo_minimo_entrega'], $proveedor['tiempo_maximo_entrega'], $proveedor['precio_compra'], $proveedor['unidad'], $proveedor['estado'])) {
-                DB::table('item_especifico_proveedor')->insert([
-                    'item_especifico_id' => $itemEspecificoActual->id,
-                    'proveedor_id' => $proveedor['proveedor_id'],
+        // 2. Preparar los proveedores que queremos guardar (indexados por proveedor_id)
+        $proveedoresNuevos = collect($this->ProvedoresAsignados)
+            ->filter(function ($proveedor) {
+                return isset(
+                    $proveedor['proveedor_id'],
+                    $proveedor['tiempo_minimo_entrega'],
+                    $proveedor['tiempo_maximo_entrega'],
+                    $proveedor['precio_compra'],
+                    $proveedor['unidad'],
+                    $proveedor['estado']
+                );
+            })
+            ->keyBy('proveedor_id');
+
+        // 3. Determinar qué hacer con cada proveedor
+        foreach ($proveedoresNuevos as $proveedorId => $proveedor) {
+            if ($proveedoresActuales->has($proveedorId)) {
+                // Actualizar proveedor existente
+                $proveedoresActuales[$proveedorId]->update([
                     'tiempo_min_entrega' => $proveedor['tiempo_minimo_entrega'],
                     'tiempo_max_entrega' => $proveedor['tiempo_maximo_entrega'],
-                    'unidad' => $proveedor['unidad'],
                     'precio_compra' => $proveedor['precio_compra'],
-                    'estado' => $proveedor['estado'], // Estado actual del proveedor
-                    'created_at' => now(),
-                    'updated_at' => now(),
+                    'unidad' => $proveedor['unidad'],
+                    'estado' => $proveedor['estado'],
+                    'updated_at' => now()
+                ]);
+            } else {
+                // Crear nuevo proveedor
+                ItemEspecificoProveedor::create([
+                    'item_especifico_id' => $itemEspecificoActual->id,
+                    'proveedor_id' => $proveedorId,
+                    'tiempo_min_entrega' => $proveedor['tiempo_minimo_entrega'],
+                    'tiempo_max_entrega' => $proveedor['tiempo_maximo_entrega'],
+                    'precio_compra' => $proveedor['precio_compra'],
+                    'unidad' => $proveedor['unidad'],
+                    'estado' => $proveedor['estado']
                 ]);
             }
+        }
+
+        // 4. Eliminar proveedores que ya no están en la selección
+        $proveedoresAEliminar = $proveedoresActuales->diffKeys($proveedoresNuevos);
+        foreach ($proveedoresAEliminar as $proveedor) {
+            $proveedor->delete();
         }
 
         return true;

@@ -1,16 +1,16 @@
 <div>
+    
     @if (in_array($itemEspecifico->id, $itemsEnLista) || in_array($itemEspecifico->id, $itemsEnListaProveedores))
         <h4>El item ya se encuentra en la cotisacion</h4>
-        <button class="btn btn-warning btn-custom" title="Este item ya está en tu lista">
-            <i class="fas fa-shopping-cart"></i> Cmabiar modalidad
+        <button class="btn btn-warning btn-custom" title="Este item ya está en tu lista" >
+            <i class="fas fa-shopping-cart"></i> Cambiar modalidad
+        </button>
+        <button class="btn btn-primary btn-custom" title="Este item ya está en tu lista" wire:click="verLista({{ $idCotizaciones }})">
+            <i class="fas fa-shopping-cart"></i> Ver en lista
         </button>
     @else
         <div class="form-group">
-            @if (session()->has('error'))
-                <div class="alert alert-danger">
-                    {{ session('error') }}
-                </div>
-            @endif
+
             @if ($tipoCotizacion == null)
                 <h4>
                     Seleciona el tipo de cotisacion que realizaras

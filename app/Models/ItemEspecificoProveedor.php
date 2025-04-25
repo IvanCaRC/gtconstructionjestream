@@ -18,6 +18,7 @@ class ItemEspecificoProveedor extends Model
         'tiempo_min_entrega',
         'precio_compra',
         'estado',
+        'unidad',
     ];
 
     public function itemEspecifico()

@@ -226,6 +226,11 @@
             </div>
 
             <div class="col-md-6">
+                @if (session()->has('error'))
+                    <div class="alert alert-danger">
+                        {{ session('error') }}
+                    </div>
+                @endif
                 @if ($listaUsuarioActiva == null)
                     <p>No hay una cotisacion activa, seleciona una para poder cotizar</p>
                 @else

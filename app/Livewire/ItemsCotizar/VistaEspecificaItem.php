@@ -4,7 +4,7 @@ namespace App\Livewire\ItemsCotizar;
 
 use Livewire\Component;
 use App\CustomClases\ConexionProveedorItemTemporal;
-use App\Models\{Cotizacion, Item, ItemEspecifico, ItemEspecificoHasFamilia, ItemEspecificoProveedor, Proyecto};
+use App\Models\{Cotizacion, Item, ItemEspecifico, ItemEspecificoHasFamilia, ItemEspecificoProveedor, Proveedor, Proyecto};
 use Illuminate\Support\Facades\Auth;
 
 class VistaEspecificaItem extends Component
@@ -16,18 +16,20 @@ class VistaEspecificaItem extends Component
     public $familiasSeleccionadas = [];  // Familias asociadas al item
     public $proveedoresAsignados = [];   // Proveedores disponibles para el item
     public $especificaciones = [];       // Especificaciones técnicas del item
-    
+
     public $proveedorSeleccionadoId;     // ID del proveedor seleccionado
     public $tipoCotizacion;              // Tipo de cotización (1: proveedor, 2: stock)
-    
+
     public $usuarioActual;               // Usuario autenticado
     public $listaUsuarioActiva;          // Nombre de la lista activa del usuario
     public $itemsEnLista = [];           // IDs de items en lista (stock)
-    public $itemsEnListaProveedores = [];// IDs de items en lista (proveedores)
-    
+    public $itemsEnListaProveedores = []; // IDs de items en lista (proveedores)
+
     public $idCotizaciones;              // ID de la cotización activa
     public $proyecto;                    // Modelo Proyecto relacionado
     public $cantidad = 1;                // Cantidad para cotizar (valor mínimo 1)
+    public $preferenciaProyecto; // 1 = Tiempo, 2 = Precio, null = Sin preferencia
+    public $proveedorRecomendadoId = null; // ID del proveedor recomendado
 
     /**
      * Inicializa el componente con el item específico
@@ -42,6 +44,7 @@ class VistaEspecificaItem extends Component
         $this->cargarFamilias($idItem);
         $this->cargarEspecificaciones();
         $this->cargarDatosUsuario();
+        $this->ordenarProveedoresSegunPreferencia(); // Ordenar al cargar
     }
 
     /**
@@ -58,8 +61,8 @@ class VistaEspecificaItem extends Component
      */
     private function cargarImagenes()
     {
-        $this->imagenesCargadas = $this->itemEspecifico->image 
-            ? explode(',', $this->itemEspecifico->image) 
+        $this->imagenesCargadas = $this->itemEspecifico->image
+            ? explode(',', $this->itemEspecifico->image)
             : null;
     }
 
@@ -84,6 +87,42 @@ class VistaEspecificaItem extends Component
     }
 
     /**
+     * Ordena los proveedores según la preferencia del proyecto
+     * y establece el proveedor recomendado.
+     */
+    public function ordenarProveedoresSegunPreferencia()
+    {
+        if (empty($this->proveedoresAsignados)) {
+            return;
+        }
+
+        switch ($this->preferenciaProyecto) {
+            case 1: // Tiempo de entrega (más rápido primero)
+                $this->proveedoresAsignados = $this->quicksort(
+                    $this->proveedoresAsignados,
+                    'tiempo_maximo_entrega',
+                    'asc'
+                );
+                $this->proveedorRecomendadoId = $this->proveedoresAsignados[0]['proveedor_id'];
+                break;
+
+            case 2: // Precio (más barato primero)
+                $this->proveedoresAsignados = $this->quicksort(
+                    $this->proveedoresAsignados,
+                    'precio_compra',
+                    'asc'
+                );
+                $this->proveedorRecomendadoId = $this->proveedoresAsignados[0]['proveedor_id'];
+                break;
+
+            default: // Sin preferencia
+                $this->proveedorRecomendadoId = null;
+                break;
+        }
+    }
+
+
+    /**
      * Carga las familias asociadas al item
      */
     private function cargarFamilias($idItem)
@@ -101,7 +140,7 @@ class VistaEspecificaItem extends Component
     private function cargarEspecificaciones()
     {
         $especificaciones = json_decode($this->itemEspecifico->especificaciones, true) ?: [];
-        
+
         $this->especificaciones = array_filter($especificaciones, function ($espec) {
             return !empty($espec['enunciado']) || !empty($espec['concepto']);
         }) ?: [];
@@ -113,20 +152,21 @@ class VistaEspecificaItem extends Component
     private function cargarDatosUsuario()
     {
         $this->usuarioActual = Auth::user();
-        
+
         if (!$this->usuarioActual->cotizaciones) {
             $this->resetearDatosCotizacion();
             return;
         }
 
         $cotizacion = Cotizacion::find($this->usuarioActual->cotizaciones);
-        
+
         if (!$cotizacion) {
             $this->resetearDatosCotizacion();
             return;
         }
 
         $this->proyecto = Proyecto::find($cotizacion->proyecto_id);
+        $this->preferenciaProyecto = $this->proyecto->preferencia;
         $this->idCotizaciones = $cotizacion->id;
         $this->listaUsuarioActiva = $cotizacion->nombre ?? 'Sin nombre';
 
@@ -205,13 +245,13 @@ class VistaEspecificaItem extends Component
     /**
      * Agrega un item a la lista de cotización por stock
      */
-    public function agregarItemStockLista($idItem)
+    public function agregarItemStockLista($data)
     {
+
+        [$idItem, $nombreItem] = explode('|', $data);
         $cotizacion = Cotizacion::find($this->idCotizaciones);
-        
+
         if (!$cotizacion) {
-            session()->flash('error', 'No se encontró la cotización.');
-            return;
         }
 
         if ($this->itemEspecifico->stock < $this->cantidad) {
@@ -219,9 +259,23 @@ class VistaEspecificaItem extends Component
             return;
         }
 
+        if ($this->itemEspecifico->moc > $this->cantidad) {
+            session()->flash('error', 'La cantidad solicitada debe ser mayor al minimo de venta permitidol');
+            return;
+        }
+
+        if ($this->cantidad >= $this->itemEspecifico->cantidad_piezas_mayoreo) {
+            $precio =  $this->itemEspecifico->precio_venta_mayorista;
+        } else {
+            $precio =  $this->itemEspecifico->precio_venta_minorista;
+        }
+
+
         $items = json_decode($cotizacion->items_cotizar_stock, true) ?: [];
         $items[] = [
             'id' => $idItem,
+            'nombreDeItem' => $nombreItem,
+            'precio' => $precio,
             'cantidad' => $this->cantidad,
             'estado' => 0,
         ];
@@ -231,6 +285,99 @@ class VistaEspecificaItem extends Component
         return redirect()->route('compras.cotisaciones.verCarritoCotisaciones', [
             'idCotisacion' => $this->idCotizaciones
         ]);
+    }
+
+    public function agregarItemProveedorLista($data)
+    {
+
+        [$itemId, $proveedorIdRegistro, $nombreItem] = explode('|', $data);
+        $proveedorItem = ItemEspecificoProveedor::where('item_especifico_id', $itemId)
+            ->where('proveedor_id', $proveedorIdRegistro)
+            ->first();
+        $proveedorId = $proveedorItem->id;
+        $precioSelecionado = $proveedorItem->precio_compra;
+
+
+        $proveedor = Proveedor::find($proveedorIdRegistro);
+
+        $cotizacion = Cotizacion::find($this->idCotizaciones);
+
+        if (!$cotizacion) {
+            return $this->emit('mostrarAlerta', 'error', 'No se encontró la cotización');
+        }
+
+        if ($this->itemEspecifico->moc > $this->cantidad) {
+            session()->flash('error', 'La cantidad solicitada debe ser mayor al minimo de venta permitidol');
+            return;
+        }
+
+        if ($this->cantidad >= $this->itemEspecifico->cantidad_piezas_mayoreo) {
+            $precio = round($precioSelecionado * (1 + $this->itemEspecifico->porcentaje_venta_mayorista / 100), 2);
+        } else {
+            $precio = round($precioSelecionado * (1 + $this->itemEspecifico->porcentaje_venta_minorista / 100), 2);
+        }
+
+
+
+        $items = json_decode($cotizacion->items_cotizar_proveedor, true) ?: [];
+
+        $items[] = [
+            'id' => $itemId,
+            'nombreDeItem' => $nombreItem,
+            'proveedor_id' => $proveedorId,
+            'nombreProveedor' => $proveedor->nombre,
+            'precio' => $precio,
+            'cantidad' => $this->cantidad,
+            'estado' => 0,
+        ];
+
+        $cotizacion->update(['items_cotizar_proveedor' => json_encode($items)]);
+
+        return redirect()->route('compras.cotisaciones.verCarritoCotisaciones', [
+            'idCotisacion' => $this->idCotizaciones
+        ]);
+    }
+
+    /**
+     * Implementación de Quicksort para arrays multidimensionales
+     */
+    private function quicksort($array, $key, $order = 'asc')
+    {
+        if (count($array) <= 1) {
+            return $array;
+        }
+
+        $pivot = $array[0][$key];
+        $left = [];
+        $right = [];
+
+        for ($i = 1; $i < count($array); $i++) {
+            if ($order === 'asc') {
+                if ($array[$i][$key] < $pivot) {
+                    $left[] = $array[$i];
+                } else {
+                    $right[] = $array[$i];
+                }
+            } else {
+                if ($array[$i][$key] > $pivot) {
+                    $left[] = $array[$i];
+                } else {
+                    $right[] = $array[$i];
+                }
+            }
+        }
+
+        return array_merge(
+            $this->quicksort($left, $key, $order),
+            [$array[0]], // Pivote
+            $this->quicksort($right, $key, $order)
+        );
+    }
+
+    public function verLista($idLista)
+    {
+
+        return redirect()->route('compras.cotisaciones.verCarritoCotisaciones', ['idCotisacion' => $idLista]);
     }
 
     /**
