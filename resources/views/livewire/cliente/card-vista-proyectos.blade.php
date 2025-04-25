@@ -114,25 +114,30 @@
                                 <td>{{ $proyecto->ordenes }}</td>
                                 <td>
                                     <button class="btn btn-info btn-custom"
-                                        wire:click="viewProyecto({{ $proyecto->id }})"
-                                        title="Ver proyecto">
+                                        wire:click="viewProyecto({{ $proyecto->id }})" title="Ver proyecto">
                                         <i class="fas fa-eye"></i>
                                     </button>
                                 </td>
                                 <td>
                                     <button class="btn btn-primary btn-custom"
-                                        wire:click="cargarDatosProyecto({{ $proyecto->id }})"
-                                        title="Modificar">
+                                        wire:click="cargarDatosProyecto({{ $proyecto->id }})" title="Modificar">
                                         <i class="fas fa-edit"></i>
                                     </button>
                                 </td>
-                                <td>
-                                    <button class="btn btn-danger btn-custom"
-                                        wire:click="solicitarCancelacion({{ $proyecto->id }})"
-                                        title="Cancelar proyecto">
-                                        <i class="fas fa-times-circle"></i>
-                                    </button>
-                                </td>
+                                @if (is_null($proyecto->culminacion))
+                                    <td>
+                                        <button class="btn btn-danger btn-custom"
+                                            wire:click="solicitarCancelacion({{ $proyecto->id }})"
+                                            title="Cancelar proyecto">
+                                            <i class="fas fa-times-circle"></i>
+                                        </button>
+                                    </td>
+                                @endif
+                                @if ($proyecto->culminacion === 0)
+                                    <td>
+                                        <span class="badge bg-warning text-dark">Cancelación pendiente</span>
+                                    </td>
+                                @endif
                             </tr>
                         @endforeach
                     </tbody>

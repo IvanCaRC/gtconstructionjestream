@@ -175,11 +175,13 @@ class VistaEspecificaProyecto extends Component
 
         $this->idDireccionParaProyecto = !empty($this->idDireccionParaProyecto) ? $this->idDireccionParaProyecto : null;
 
+        $preferencia = !empty($this->preferencia) ? $this->preferencia : null;
+
         // Actualizar los datos del proyecto
         $proyecto->update([
             'direccion_id' => $this->idDireccionParaProyecto,
             'nombre' => $this->nombreProyecto,
-            'preferencia' => $this->preferencia,
+            'preferencia' => $preferencia,
             'tipo' => $this->tipoDeProyectoSelecionado,
             'archivo' => $archivoSubido,
             'items_cotizar' => $this->listaACotizarTxt,

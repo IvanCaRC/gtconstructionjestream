@@ -136,7 +136,7 @@ class VistaEspecifica extends Component
     //Metodos para solicitar cancelacion de proyecto
     public function solicitarCancelacion($idProyecto)
     {
-        $this->idProyectoActual = Proyecto::findOrFail($idProyecto);
+        $this->idProyectoActual = $idProyecto;
 
         $proyecto = Proyecto::find($idProyecto);
 
@@ -156,46 +156,34 @@ class VistaEspecifica extends Component
     //Asociar los motivos de la cancelacion al proyecto actual mediante su ID
 
     public function enviarSolicitudCancelar()
-{
-    // Validar los campos del formulario
-    $this->validate([
-        'motivo_finalizacion' => 'required|string|max:255',
-        'motivo_detallado' => 'required|string|max:500',
-    ]);
+    {
+        // Validar los campos del formulario
+        $this->validate(Proyecto::rulesSolicitoCancelacion(), Proyecto::messagesSolicitoCancelacion());
+        // Obtener el proyecto existente en la base de datos
+        $proyecto = Proyecto::find($this->idProyectoActual);
 
-    // Verificar que el ID del proyecto es válido
-    if (empty($this->idProyectoActual)) {
-        session()->flash('error', 'El ID del proyecto no es válido.');
-        return redirect()->route('ventas.clientes.vistaProyectos');
+        if (!$proyecto) {
+            session()->flash('error', 'El proyecto no fue encontrado.');
+            return redirect()->route('ventas.clientes.vistaProyectos');
+        }
+        //Almacenar el motivo de finalizacion en particularo
+        $motivoFinalizacion = $this->motivo_finalizacion === 'otro'
+            ? 'Otro: ' . $this->motivo_finalizacion_alterno
+            : $this->motivo_finalizacion;
+
+        // Insertar los valores en los campos específicos sin crear un nuevo registro
+        $proyecto->fill([
+            'culminacion' => 0,
+            'motivo_finalizacion' => $motivoFinalizacion,
+            'motivo_detallado' => $this->motivo_detallado,
+        ]);
+        $proyecto->save();
+
+        // Limpiar valores después de la actualización
+        $this->reset('openModalCancelarProyecto', 'culminacion', 'motivo_finalizacion', 'motivo_detallado');
+        $this->dispatch('refresh');
+        $this->resetValidation();
     }
-
-    // Buscar el proyecto en la base de datos
-    $proyecto = Proyecto::find($this->idProyectoActual);
-
-    // dd('Método ejecutado', $proyecto, $this->idProyectoActual, $this->motivo_finalizacion, $this->motivo_detallado);
-
-    if (!$proyecto) {
-        session()->flash('error', 'El proyecto no fue encontrado.');
-        return redirect()->route('ventas.clientes.vistaProyectos');
-    }
-
-    // Depuración para asegurar que tenemos un modelo y no una colección
-    
-
-    // Actualizar los campos del proyecto
-    $proyecto->update([
-        'culminacion' => 0,
-        'motivo_finalizacion' => $this->motivo_finalizacion,
-        'motivo_detallado' => $this->motivo_detallado,
-    ]);
-
-    // Limpiar campos y finalizar
-    // $this->reset('openModalCancelarProyecto', 'culminacion', 'motivo_finalizacion', 'motivo_detallado');
-    $this->dispatch('refresh');
-    $this->resetValidation();
-    return redirect()->route('ventas.clientes.vistaEspecProyecto', ['idProyecto' => $this->idProyectoActual]);
-    // dd('Método ejecutado', $proyecto, $this->idProyectoActual, $this->motivo_finalizacion, $this->motivo_detallado);
-}
 
 
     public function editCliente($idCliente)
@@ -280,11 +268,13 @@ class VistaEspecifica extends Component
 
         $this->idDireccionParaProyecto = !empty($this->idDireccionParaProyecto) ? $this->idDireccionParaProyecto : null;
 
+        $preferencia = !empty($this->preferencia) ? $this->preferencia : null;
+
         // Actualizar los datos del proyecto
         $proyecto->update([
             'direccion_id' => $this->idDireccionParaProyecto,
             'nombre' => $this->nombreProyecto,
-            'preferencia' => $this->preferencia,
+            'preferencia' => $preferencia,
             'tipo' => $this->tipoDeProyectoSelecionado,
             'archivo' => $archivoSubido,
             'items_cotizar' => $this->listaACotizarTxt,

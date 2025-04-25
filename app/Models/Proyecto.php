@@ -75,4 +75,25 @@ class Proyecto extends Model
             // 'fecha.date' => 'La fecha no tiene un formato válido.',
         ];
     }
+
+    public static function rulesSolicitoCancelacion()
+    {
+        return [
+            'motivo_finalizacion' => 'required|string|max:255',
+            'motivo_detallado' => 'required|string|max:500',
+            'motivo_finalizacion_alterno' => 'nullable|required_if:motivo_finalizacion,otro|string|max:255',
+        ];
+    }
+
+    public static function messagesSolicitoCancelacion()
+    {
+        return [
+            'motivo_finalizacion.required' => 'Registra el motivo de tu cancelacion.',
+            'motivo_finalizacion.max' => 'Resume un poco tu motivo de finalizacion.',
+            'motivo_detallado.required' => 'Describe los detalles de dicha cancelacion para poder enviarla.',
+            'motivo_detallado.string' => 'Los detalles deben ser un texto.',
+            'motivo_detallado.max' => 'Resume un poco la descripcion del motivo',
+            'motivo_finalizacion_alterno.required_if' => 'Describe el motivo especifico alterno.',
+        ];
+    }
 }

@@ -9,7 +9,7 @@
             <div class="bg-white p-6 rounded shadow-lg w-96">
                 <!-- Título con el nombre del proyecto -->
                 <h2 class="text-lg font-bold text-center">
-                    Cancelación para: <strong>{{ $nombreProyecto }}</strong>
+                    Cancelación para: <strong style="color:crimson">{{ $nombreProyecto }}</strong>
                 </h2>
 
                 <!-- Motivo (por defecto "Cancelación del proyecto") -->
@@ -28,6 +28,9 @@
                             cliente</option>
                         <option value="otro">Otro (a especificar)</option>
                     </select>
+                    @error('motivo_finalizacion')
+                        <span class="text-danger">{{ $message }}</span>
+                    @enderror
                 </div>
                 <small class="form-text text-muted">Selecciona el motivo por el cual se solicita la cancelacion del
                     proyecto.</small>
@@ -36,16 +39,25 @@
                 @if ($motivo_finalizacion === 'otro')
                     <div class="mt-4">
                         <label class="block text-sm font-semibold">Especifica el motivo</label>
-                        <input type="text" wire:model="motivo_finalizacion_alterno" class="border rounded w-full p-2"
+                        <input type="text" wire:model="motivo_finalizacion_alterno"
+                            class="form-control @error('motivo_finalizacion_alterno') is-invalid @enderror"
                             placeholder="Especifica el motivo aquí...">
+
+                        @error('motivo_finalizacion_alterno')
+                            <span class="text-red-500">{{ $message }}</span>
+                        @enderror
                     </div>
                 @endif
                 <!-- Área de texto para detalles de cancelación -->
                 <div class="mt-4">
                     <label class="block text-sm font-semibold">Detalles de la cancelacion</label>
-                    <textarea wire:model="motivo_detallado" rows="3" class="border rounded w-full p-2"
+                    <textarea wire:model="motivo_detallado" rows="3"
+                        class="form-control @error('motivo_detallado') is-invalid @enderror"
                         placeholder="Especifica el motivo de la cancelación..."></textarea>
                 </div>
+                @error('motivo_detallado')
+                    <span class="text-danger">{{ $message }}</span>
+                @enderror
                 <small class="form-text text-muted">Describe con detalle el motivo de dicha cancelacion para que el
                     administrador pueda dar seguimiento al proceso de cancelacion en cuestion.</small>
                 <x-slot name='footer'>
@@ -53,7 +65,7 @@
                         wire:click="removeCancelacion" wire:loading.attr="disabled">Cancelar</button>
                     <button type="button" class="btn btn-primary disabled:opacity-50" wire:loading.attr="disabled"
                         wire:click="enviarSolicitudCancelar">
-                        Actualizar Proyecto
+                        Enviar solicitud
                     </button>
                 </x-slot>
         </x-slot>
