@@ -19,6 +19,10 @@ class UserController extends Controller
     {
         return view('admin.roles');
     }
+    public function verCancelaciones()
+    {
+        return view('admin.cancelaciones');
+    }
 
     public function verPerfil()
     {

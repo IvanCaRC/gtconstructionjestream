@@ -143,6 +143,16 @@
                     </a>
                 </li>
             @endcan
+            {{-- Recepcion de cancelacion de proyectos --}}
+            @can('admin.dashboardAdmin')
+                <!-- Nav Item - Icono de proyectos -->
+                <li class="nav-item @yield('activeCancelaciones')">
+                    <a class="nav-link" href="{{ route('admin.cancelaciones') }}">
+                        <i class="fas fa-ban"></i>
+                        <span>Cancelaciones</span>
+                    </a>
+                </li>
+            @endcan
 
             @can('compras.collapsed')
                 <!-- Nav Item - Pagina colapsada de departamentos-->

@@ -78,18 +78,29 @@
                                 </td>
                                 <td>
                                     {!! $proyecto->proceso == 0
-                                        ? '<span class="badge badge-secondary">Creando lista a cotizar</span>'
+                                        ? '<span class="badge"
+                                                    style="background-color: #6c757d; color: white;">Creando lista a
+                                                    cotizar</span>'
                                         : ($proyecto->proceso == 1
-                                            ? '<span class="badge badge-secondary">Creando cotización</span>'
+                                            ? '<span class="badge"
+                                                    style="background-color: #fd7e14; color: white;">Creando
+                                                    cotizacion</span>'
                                             : ($proyecto->proceso == 2
-                                                ? '<span class="badge badge-secondary">Cotizado</span>'
+                                                ? '<span class="badge"
+                                                    style="background-color:#1a1ca7; color: white;">Cotizado</span>'
                                                 : ($proyecto->proceso == 3
-                                                    ? '<span class="badge badge-secondary">En proceso de venta</span>'
+                                                    ? '<span class="badge" style="background-color:#15d4db; color: white;">En
+                                                    proceso de venta</span>'
                                                     : ($proyecto->proceso == 4
-                                                        ? '<span class="badge badge-secondary">Venta terminada</span>'
+                                                        ? '<span class="badge"
+                                                    style="background-color: #28a745; color: white;">Venta
+                                                    terminada</span>'
                                                         : ($proyecto->proceso == 5
-                                                            ? '<span class="badge badge-secondary">Cancelada</span>'
-                                                            : '<span class="badge badge-secondary">Estado desconocido</span>'))))) !!}
+                                                            ? '<span class="badge"
+                                                    style="background-color: #f10808; color: white;">Cancelado</span>'
+                                                            : '<span class="badge"
+                                                    style="background-color: #742532; color: white;">Estado
+                                                    desconocido</span>'))))) !!}
                                 </td>
                                 <td>{{ $proyecto->nombre }}</td>
                                 <td>
