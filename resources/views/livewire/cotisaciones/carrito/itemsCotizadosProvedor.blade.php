@@ -37,8 +37,13 @@
                     <label>Precio unitario: ${{ number_format($itemEspecifico->precio, 2) }}</label>
                     <br>
                     <label>Precio total:
-                        ${{ number_format($itemEspecifico->precio * $itemEspecifico->cantidad, 2) }}</label>
-
+                        @if ($itemEspecifico->cantidad)
+                        ${{ number_format($itemEspecifico->precio * $itemEspecifico->cantidad, 2) }}
+                        @else
+                            ingresa un presio
+                        @endif
+                       
+                    </label>
                     <div class="row mt-3">
                         <div class="col-md-5">
                             <div class="d-flex align-items-center">
@@ -50,8 +55,8 @@
 
                                 <input type="number" min="0" class="form-control text-center"
                                     style="width: 100px;"
-                                    wire:model.debounce.500ms="cantidades.{{ $itemEspecifico->id }}"
-                                    wire:change="actualizarCantidadProveedor({{ $itemEspecifico->id }}, 0)">
+                                    wire:model="cantidades.{{ $itemEspecifico->id }}"
+                                    wire:keydown="actualizarCantidadProveedor({{ $itemEspecifico->id }}, 0)">
 
                                 <button class="btn btn-success btn-sm ms-2"
                                     wire:click="actualizarCantidadProveedor({{ $itemEspecifico->id }}, 1)">
@@ -61,7 +66,7 @@
                         </div>
                         <div class="col-md-3">
                             <button class="btn btn-outline-danger btn-sm"
-                                wire:click="eliminarItemLista({{ $itemEspecifico->id }})">
+                                wire:click="eliminarItemListaCoti({{ $itemEspecifico->id }})">
                                 Eliminar
                             </button>
                         </div>
@@ -69,9 +74,6 @@
                 </div>
             </div>
         @endforeach
-    @else
-        <div class='px-6 py-2'>
-            <p>No hay items en la lista</p>
-        </div>
+
     @endif
 </div>

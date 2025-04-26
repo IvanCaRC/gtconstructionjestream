@@ -252,6 +252,7 @@ class VistaEspecificaItem extends Component
         $cotizacion = Cotizacion::find($this->idCotizaciones);
 
         if (!$cotizacion) {
+            return;
         }
 
         if ($this->itemEspecifico->stock < $this->cantidad) {

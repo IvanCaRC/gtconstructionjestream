@@ -4,6 +4,7 @@ namespace App\Livewire\Cotisaciones;
 
 use App\Models\Cotizacion;
 use App\Models\ItemEspecifico;
+use App\Models\ItemEspecificoProveedor;
 use App\Models\ItemTemporal;
 use App\Models\ListasCotizar;
 use Livewire\Component;
@@ -64,7 +65,7 @@ class VerCarritoCotisaciones extends Component
     }
 
 
-     /**
+    /**
      * Carga los items Stock Del las lisata
      * 
      * [{"id":"2","nombreDeItem":"Item de prueba","proveedor_id":11,"nombreProveedor":"Construrama 2","precio":1100,"cantidad":21,"estado":0}]
@@ -114,17 +115,34 @@ class VerCarritoCotisaciones extends Component
     {
         $lista = Cotizacion::find($this->idCotisacion);
         $itemEspecifico = ItemEspecifico::findOrFail($idItem);
-        
+
         if (!$lista) return;
-
         $items = json_decode($lista->items_cotizar_proveedor, true) ?? [];
-
         // Buscar el item en la lista
         foreach ($items as $key => &$item) {
             if ($item['id'] == $idItem) {
+                $proveedorItem = ItemEspecificoProveedor::findOrFail($item['proveedor_id']);
+                $precioSelecionado = $proveedorItem->precio_compra;
                 if ($cambio === 0) {
                     // Si cambio es 0, significa que se escribió manualmente en el input
                     $nuevaCantidad = $this->cantidades[$idItem] ?? 1;
+                    if (!$nuevaCantidad) {
+                        session()->flash('error', 'No puedes dejar vacio el campo');
+                    }
+                    if ($itemEspecifico->stock < $nuevaCantidad) {
+                        session()->flash('error', 'La cantidad solicitada excede el stock actual');
+                    } else if ($itemEspecifico->moc > $nuevaCantidad) {
+                        session()->flash('error', 'La cantidad solicitada debe ser mayor al minimo de venta permitidol');
+                    } else {
+                        if ($nuevaCantidad >= $itemEspecifico->cantidad_piezas_mayoreo) {
+                            $precio = round($precioSelecionado * (1 + $itemEspecifico->porcentaje_venta_mayorista / 100), 2);
+                            $item['precio'] = $precio;
+                        } else {
+                            $precio = round($precioSelecionado * (1 + $itemEspecifico->porcentaje_venta_minorista / 100), 2);
+                            $item['precio'] = $precio;
+                        }
+                    }
+
                 } else {
                     // Si se presionó + o -, se suma/resta
                     if ($itemEspecifico->stock < ($item['cantidad'] + $cambio)) {
@@ -135,26 +153,52 @@ class VerCarritoCotisaciones extends Component
                         $nuevaCantidad = $item['cantidad'];
                     } else {
                         $nuevaCantidad = $item['cantidad'] + $cambio;
+
+                        if ($nuevaCantidad >= $itemEspecifico->cantidad_piezas_mayoreo) {
+                            $precio = round($precioSelecionado * (1 + $itemEspecifico->porcentaje_venta_mayorista / 100), 2);
+                            $item['precio'] = $precio;
+                        } else {
+                            $precio = round($precioSelecionado * (1 + $itemEspecifico->porcentaje_venta_minorista / 100), 2);
+                            $item['precio'] = $precio;
+                        }
                     }
                 }
-                if ($nuevaCantidad <= 0) {
-                    // Si la cantidad llega a 0, eliminar el item de la lista
-                    unset($items[$key]);
-                } else {
+                // if ($nuevaCantidad <= 0) {
+                //     // Si la cantidad llega a 0, eliminar el item de la lista
+                //     unset($items[$key]);
+                // } else {
                     // Si no, actualizar la cantidad
                     $item['cantidad'] = $nuevaCantidad;
-                }
+                // }
             }
         }
-
         // Reindexar el array para evitar problemas con las claves eliminadas
         $items = array_values($items);
-
         // Guardar los cambios
         $lista->update(['items_cotizar_proveedor' => json_encode($items)]);
+        // Refrescar la lista en la vista
+        $this->mount($this->idCotisacion);
+    }
+
+    public function eliminarItemListaCoti($idItem)
+    {
+        $lista =  Cotizacion::find($this->idCotisacion);
+
+        if (!$lista) return;
+
+        // Obtener los items de la lista
+        $items = json_decode($lista->items_cotizar_proveedor, true) ?? [];
+
+        // Filtrar los items para eliminar el que coincida con $idItem
+        $items = array_filter($items, fn($item) => $item['id'] != $idItem);
+
+        // Guardar los cambios en la base de datos
+        $lista->update(['items_cotizar_proveedor' => json_encode(array_values($items))]);
 
         // Refrescar la lista en la vista
         $this->mount($this->idCotisacion);
+
+        session()->flash('success', 'Item eliminado correctamente.');
     }
 
     /**
@@ -200,17 +244,31 @@ class VerCarritoCotisaciones extends Component
     {
         $lista = Cotizacion::find($this->idCotisacion);
         $itemEspecifico = ItemEspecifico::findOrFail($idItem);
-        
         if (!$lista) return;
-
         $items = json_decode($lista->items_cotizar_stock, true) ?? [];
-
         // Buscar el item en la lista
         foreach ($items as $key => &$item) {
             if ($item['id'] == $idItem) {
                 if ($cambio === 0) {
                     // Si cambio es 0, significa que se escribió manualmente en el input
                     $nuevaCantidad = $this->cantidades[$idItem] ?? 1;
+
+                    if (!$nuevaCantidad) {
+                        session()->flash('error', 'No puedes dejar vacio el campo');
+                    }
+                    if ($itemEspecifico->stock < $nuevaCantidad) {
+                        session()->flash('error', 'La cantidad solicitada excede el stock actual');
+                    }else if ($itemEspecifico->moc > $nuevaCantidad) {
+                        session()->flash('error', 'La cantidad solicitada debe ser mayor al minimo de venta permitidol');
+                    }else {
+                        if ($nuevaCantidad >= $itemEspecifico->cantidad_piezas_mayoreo) {
+                            $precio = round((1 + $itemEspecifico->precio_venta_mayorista ), 2);
+                            $item['precio'] = $precio;
+                        } else {
+                            $precio = round((1 + $itemEspecifico->precio_venta_minorista ), 2);
+                            $item['precio'] = $precio;
+                        }
+                    }
                 } else {
                     // Si se presionó + o -, se suma/resta
                     if ($itemEspecifico->stock < ($item['cantidad'] + $cambio)) {
@@ -223,22 +281,15 @@ class VerCarritoCotisaciones extends Component
                         $nuevaCantidad = $item['cantidad'] + $cambio;
                     }
                 }
-                if ($nuevaCantidad <= 0) {
-                    // Si la cantidad llega a 0, eliminar el item de la lista
-                    unset($items[$key]);
-                } else {
-                    // Si no, actualizar la cantidad
+
                     $item['cantidad'] = $nuevaCantidad;
-                }
+                
             }
         }
-
         // Reindexar el array para evitar problemas con las claves eliminadas
         $items = array_values($items);
-
         // Guardar los cambios
         $lista->update(['items_cotizar_stock' => json_encode($items)]);
-
         // Refrescar la lista en la vista
         $this->mount($this->idCotisacion);
     }
