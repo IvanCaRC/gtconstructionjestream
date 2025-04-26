@@ -295,6 +295,7 @@ class VistaEspecificaItem extends Component
             ->where('proveedor_id', $proveedorIdRegistro)
             ->first();
         $proveedorId = $proveedorItem->id;
+        $unidad = $proveedorItem->unidad;
         $precioSelecionado = $proveedorItem->precio_compra;
 
 
@@ -326,6 +327,7 @@ class VistaEspecificaItem extends Component
             'nombreDeItem' => $nombreItem,
             'proveedor_id' => $proveedorId,
             'nombreProveedor' => $proveedor->nombre,
+            'unidad' => $unidad,
             'precio' => $precio,
             'cantidad' => $this->cantidad,
             'estado' => 0,
