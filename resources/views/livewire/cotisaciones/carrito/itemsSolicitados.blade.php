@@ -32,11 +32,16 @@
 
                 <div class="col-md-8">
                     <h4>{{ $itemEspecifico->item->nombre }}</h4>
-                    {!! $itemEspecifico->estado == 0
-                        ? '<span class="badge badge-danger">Sin cotizar</span>'
-                        : ($itemEspecifico->estado == 1
-                            ? '<span class="badge badge-success">Cotizado</span>'
-                            : '<span class="badge badge-secondary">Estado desconocido</span>') !!}
+
+                    @if ($itemEspecifico->estado === 0)
+                        {!! $itemEspecifico->estado == 0
+                            ? '<span class="badge badge-danger">Sin cotizar</span>'
+                            : ($itemEspecifico->estado == 1
+                                ? '<span class="badge badge-success">Cotizado</span>'
+                                : '<span class="badge badge-secondary">Estado desconocido</span>') !!}
+                    @endif
+
+
 
                     <br>
                     <label>{{ $itemEspecifico->item->descripcion }}</label>
@@ -55,9 +60,12 @@
 
                     </div>
                     <div class="">
-                        <button class="btn btn-primary btn-custom" wire:click="viewItem({{ $itemEspecifico->id }})">
-                            Cotizar
-                        </button>
+                        @if ($itemEspecifico->estado === 0)
+                            <button class="btn btn-primary btn-custom" wire:click="viewItem({{ $itemEspecifico->id }})">
+                                Cotizar
+                            </button>
+                        @endif
+
                     </div>
                 </div>
             </div>
@@ -81,10 +89,11 @@
                             <h4>{{ $itemEspecifico->item->nombre }}</h4>
                         </div>
                         <div class="col-md-4">
-                            <a class="btn btn-primary btn-custom" href="{{ route('compras.catalogoCotisacion.catalogoItem') }}">
+                            <a class="btn btn-primary btn-custom"
+                                href="{{ route('compras.catalogoCotisacion.catalogoItem') }}">
                                 Buscar en catálogo
                             </a>
-                            
+
                         </div>
                     </div>
 

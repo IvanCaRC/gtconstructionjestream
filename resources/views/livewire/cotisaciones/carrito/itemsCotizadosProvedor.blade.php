@@ -56,7 +56,7 @@
                                 <input type="number" min="0" class="form-control text-center"
                                     style="width: 100px;"
                                     wire:model="cantidades.{{ $itemEspecifico->id }}"
-                                    wire:keydown="actualizarCantidadProveedor({{ $itemEspecifico->id }}, 0)">
+                                    wire:change="actualizarCantidadProveedor({{ $itemEspecifico->id }}, 0)">
 
                                 <button class="btn btn-success btn-sm ms-2"
                                     wire:click="actualizarCantidadProveedor({{ $itemEspecifico->id }}, 1)">

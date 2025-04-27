@@ -128,12 +128,9 @@ class VerCarritoCotisaciones extends Component
                     $nuevaCantidad = $this->cantidades[$idItem] ?? 1;
                     if (!$nuevaCantidad) {
                         session()->flash('error', 'No puedes dejar vacio el campo');
+                        $nuevaCantidad = 1;
                     }
-                    if ($itemEspecifico->stock < $nuevaCantidad) {
-                        session()->flash('error', 'La cantidad solicitada excede el stock actual');
-                    } else if ($itemEspecifico->moc > $nuevaCantidad) {
-                        session()->flash('error', 'La cantidad solicitada debe ser mayor al minimo de venta permitidol');
-                    } else {
+
                         if ($nuevaCantidad >= $itemEspecifico->cantidad_piezas_mayoreo) {
                             $precio = round($precioSelecionado * (1 + $itemEspecifico->porcentaje_venta_mayorista / 100), 2);
                             $item['precio'] = $precio;
@@ -141,35 +138,29 @@ class VerCarritoCotisaciones extends Component
                             $precio = round($precioSelecionado * (1 + $itemEspecifico->porcentaje_venta_minorista / 100), 2);
                             $item['precio'] = $precio;
                         }
-                    }
-
+                    
                 } else {
                     // Si se presionó + o -, se suma/resta
-                    if ($itemEspecifico->stock < ($item['cantidad'] + $cambio)) {
-                        session()->flash('error', 'La cantidad solicitada excede el stock actual');
-                        $nuevaCantidad = $item['cantidad'];
-                    } else if ($itemEspecifico->moc > ($item['cantidad'] + $cambio)) {
-                        session()->flash('error', 'La cantidad solicitada debe ser mayor al minimo de venta permitidol');
-                        $nuevaCantidad = $item['cantidad'];
-                    } else {
+                    $nuevaCantidad = $this->cantidades[$idItem] ?? 1;
+                    if (!$item['cantidad']) {
+                        $nuevaCantidad = 1;
+                    }else
+                     {
                         $nuevaCantidad = $item['cantidad'] + $cambio;
 
                         if ($nuevaCantidad >= $itemEspecifico->cantidad_piezas_mayoreo) {
                             $precio = round($precioSelecionado * (1 + $itemEspecifico->porcentaje_venta_mayorista / 100), 2);
                             $item['precio'] = $precio;
-                        } else {
+                        } 
+                        else {
                             $precio = round($precioSelecionado * (1 + $itemEspecifico->porcentaje_venta_minorista / 100), 2);
                             $item['precio'] = $precio;
                         }
                     }
                 }
-                // if ($nuevaCantidad <= 0) {
-                //     // Si la cantidad llega a 0, eliminar el item de la lista
-                //     unset($items[$key]);
-                // } else {
-                    // Si no, actualizar la cantidad
-                    $item['cantidad'] = $nuevaCantidad;
-                // }
+
+                $item['cantidad'] = $nuevaCantidad;
+
             }
         }
         // Reindexar el array para evitar problemas con las claves eliminadas
@@ -255,17 +246,20 @@ class VerCarritoCotisaciones extends Component
 
                     if (!$nuevaCantidad) {
                         session()->flash('error', 'No puedes dejar vacio el campo');
+                        $nuevaCantidad = $itemEspecifico->moc;
                     }
                     if ($itemEspecifico->stock < $nuevaCantidad) {
                         session()->flash('error', 'La cantidad solicitada excede el stock actual');
-                    }else if ($itemEspecifico->moc > $nuevaCantidad) {
+                        $nuevaCantidad = $itemEspecifico->stock;
+                    } else if ($itemEspecifico->moc > $nuevaCantidad) {
                         session()->flash('error', 'La cantidad solicitada debe ser mayor al minimo de venta permitidol');
-                    }else {
+                        $nuevaCantidad = $itemEspecifico->moc;
+                    } else {
                         if ($nuevaCantidad >= $itemEspecifico->cantidad_piezas_mayoreo) {
-                            $precio = round((1 + $itemEspecifico->precio_venta_mayorista ), 2);
+                            $precio = round((1 + $itemEspecifico->precio_venta_mayorista), 2);
                             $item['precio'] = $precio;
                         } else {
-                            $precio = round((1 + $itemEspecifico->precio_venta_minorista ), 2);
+                            $precio = round((1 + $itemEspecifico->precio_venta_minorista), 2);
                             $item['precio'] = $precio;
                         }
                     }
@@ -282,8 +276,7 @@ class VerCarritoCotisaciones extends Component
                     }
                 }
 
-                    $item['cantidad'] = $nuevaCantidad;
-                
+                $item['cantidad'] = $nuevaCantidad;
             }
         }
         // Reindexar el array para evitar problemas con las claves eliminadas
