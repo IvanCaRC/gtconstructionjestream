@@ -38,11 +38,11 @@
                     <br>
                     <label>Precio total:
                         @if ($itemEspecifico->cantidad)
-                        ${{ number_format($itemEspecifico->precio * $itemEspecifico->cantidad, 2) }}
+                            ${{ number_format($itemEspecifico->precio * $itemEspecifico->cantidad, 2) }}
                         @else
                             ingresa un presio
                         @endif
-                       
+
                     </label>
                     <div class="row mt-3">
                         <div class="col-md-5">
@@ -54,8 +54,7 @@
                                 </button>
 
                                 <input type="number" min="0" class="form-control text-center"
-                                    style="width: 100px;"
-                                    wire:model="cantidades.{{ $itemEspecifico->id }}"
+                                    style="width: 100px;" wire:model="cantidades.{{ $itemEspecifico->id }}"
                                     wire:change="actualizarCantidadProveedor({{ $itemEspecifico->id }}, 0)">
 
                                 <button class="btn btn-success btn-sm ms-2"
@@ -64,10 +63,16 @@
                                 </button>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <button class="btn btn-outline-danger btn-sm"
                                 wire:click="eliminarItemListaCoti({{ $itemEspecifico->id }})">
                                 Eliminar
+                            </button>
+                        </div>
+                        <div class="col-md-5">
+                            <button class="btn btn-outline-primary btn-sm"
+                                wire:click="viewItem({{ $itemEspecifico->id }})">
+                                Cambiar Modalidad
                             </button>
                         </div>
                     </div>

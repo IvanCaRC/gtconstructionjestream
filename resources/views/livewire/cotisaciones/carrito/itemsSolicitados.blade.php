@@ -57,7 +57,8 @@
                                 </label>
                             </div>
                         </div>
-
+                        eliminarItemLista
+                        eliminarItemLista
                     </div>
                     <div class="">
                         @if ($itemEspecifico->estado === 0)

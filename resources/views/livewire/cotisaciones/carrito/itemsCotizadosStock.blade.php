@@ -62,10 +62,16 @@
                                 </button>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <button class="btn btn-outline-danger btn-sm"
                                 wire:click="eliminarItemLista({{ $itemEspecifico->id }})">
                                 Eliminar
+                            </button>
+                        </div>
+                        <div class="col-md-5">
+                            <button class="btn btn-outline-primary btn-sm"
+                                wire:click="viewItem({{ $itemEspecifico->id }})">
+                                Cambiar Modalidad
                             </button>
                         </div>
                     </div>

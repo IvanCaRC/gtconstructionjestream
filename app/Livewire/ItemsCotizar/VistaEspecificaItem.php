@@ -19,6 +19,7 @@ class VistaEspecificaItem extends Component
 
     public $proveedorSeleccionadoId;     // ID del proveedor seleccionado
     public $tipoCotizacion;              // Tipo de cotización (1: proveedor, 2: stock)
+    public $cambioModalida = false;
 
     public $usuarioActual;               // Usuario autenticado
     public $listaUsuarioActiva;          // Nombre de la lista activa del usuario
@@ -249,6 +250,8 @@ class VistaEspecificaItem extends Component
     {
 
         [$idItem, $nombreItem] = explode('|', $data);
+        $this->eliminarItemLista($idItem);
+        $this->eliminarItemListaCoti($idItem);
         $cotizacion = Cotizacion::find($this->idCotizaciones);
 
         if (!$cotizacion) {
@@ -279,7 +282,10 @@ class VistaEspecificaItem extends Component
             'estado' => 0,
         ];
 
+
+
         $cotizacion->update(['items_cotizar_stock' => json_encode($items)]);
+
 
         $listaCotizar = ListasCotizar::find($cotizacion->lista_cotizar_id);
 
@@ -300,8 +306,9 @@ class VistaEspecificaItem extends Component
 
     public function agregarItemProveedorLista($data)
     {
-
         [$itemId, $proveedorIdRegistro, $nombreItem] = explode('|', $data);
+        $this->eliminarItemLista($itemId);
+        $this->eliminarItemListaCoti($itemId);
         $proveedorItem = ItemEspecificoProveedor::where('item_especifico_id', $itemId)
             ->where('proveedor_id', $proveedorIdRegistro)
             ->first();
@@ -309,27 +316,21 @@ class VistaEspecificaItem extends Component
         $unidad = $proveedorItem->unidad;
         $precioSelecionado = $proveedorItem->precio_compra;
 
-
         $proveedor = Proveedor::find($proveedorIdRegistro);
-
         $cotizacion = Cotizacion::find($this->idCotizaciones);
 
         if (!$cotizacion) {
             return $this->emit('mostrarAlerta', 'error', 'No se encontró la cotización');
         }
-
         if (0 > $this->cantidad) {
-            session()->flash('error', 'La cantidad solicitada debe ser mayor a 0');
+            session()->flash('error', 'La cantidad solicitada debe ser mayor a 0lista');
             return;
         }
-
         if ($this->cantidad >= $this->itemEspecifico->cantidad_piezas_mayoreo) {
             $precio = round($precioSelecionado * (1 + $this->itemEspecifico->porcentaje_venta_mayorista / 100), 2);
         } else {
             $precio = round($precioSelecionado * (1 + $this->itemEspecifico->porcentaje_venta_minorista / 100), 2);
         }
-
-
 
         $items = json_decode($cotizacion->items_cotizar_proveedor, true) ?: [];
 
@@ -344,7 +345,10 @@ class VistaEspecificaItem extends Component
             'estado' => 0,
         ];
 
+
         $cotizacion->update(['items_cotizar_proveedor' => json_encode($items)]);
+
+
 
         $listaCotizar = ListasCotizar::find($cotizacion->lista_cotizar_id);
 
@@ -357,7 +361,7 @@ class VistaEspecificaItem extends Component
             // Guardar los cambios
             $listaCotizar->update(['items_cotizar' => json_encode($items)]);
         }
-        
+
         return redirect()->route('compras.cotisaciones.verCarritoCotisaciones', [
             'idCotisacion' => $this->idCotizaciones
         ]);
@@ -404,6 +408,78 @@ class VistaEspecificaItem extends Component
 
         return redirect()->route('compras.cotisaciones.verCarritoCotisaciones', ['idCotisacion' => $idLista]);
     }
+
+    public function cambioDeModalidad()
+    {
+        $this->cambioModalida = true;
+    }
+
+    public function eliminarItemLista($idItem)
+    {
+        $lista =  Cotizacion::find($this->idCotizaciones);
+
+        if (!$lista) return;
+
+        // Obtener los items de la lista
+        $items = json_decode($lista->items_cotizar_stock, true) ?? [];
+
+        // Filtrar los items para eliminar el que coincida con $idItem
+        $items = array_filter($items, fn($item) => $item['id'] != $idItem);
+
+        // Guardar los cambios en la base de datos
+        $lista->update(['items_cotizar_stock' => json_encode(array_values($items))]);
+
+        session()->flash('success', 'Item eliminado correctamente.');
+
+        $listaCotizar = ListasCotizar::find($lista->lista_cotizar_id);
+
+        $items = json_decode($listaCotizar->items_cotizar, true) ?: [];
+        foreach ($items as $key => &$item) {
+            if ($item['id'] == $idItem) {
+                $item['estado'] = 0;
+            }
+            $items = array_values($items);
+            // Guardar los cambios
+            $listaCotizar->update(['items_cotizar' => json_encode($items)]);
+        }
+        // Refrescar la lista en la vista
+        $this->mount($this->idCotizaciones);
+    }
+
+    public function eliminarItemListaCoti($idItem)
+    {
+        $lista =  Cotizacion::find($this->idCotizaciones);
+
+        if (!$lista) return;
+
+        // Obtener los items de la lista
+        $items = json_decode($lista->items_cotizar_proveedor, true) ?? [];
+
+        // Filtrar los items para eliminar el que coincida con $idItem
+        $items = array_filter($items, fn($item) => $item['id'] != $idItem);
+
+        // Guardar los cambios en la base de datos
+        $lista->update(['items_cotizar_proveedor' => json_encode(array_values($items))]);
+
+        // Refrescar la lista en la vista
+
+
+        session()->flash('success', 'Item eliminado correctamente.');
+
+        $listaCotizar = ListasCotizar::find($lista->lista_cotizar_id);
+
+        $items = json_decode($listaCotizar->items_cotizar, true) ?: [];
+        foreach ($items as $key => &$item) {
+            if ($item['id'] == $idItem) {
+                $item['estado'] = 0;
+            }
+            $items = array_values($items);
+            // Guardar los cambios
+            $listaCotizar->update(['items_cotizar' => json_encode($items)]);
+        }
+        $this->mount($this->idCotizaciones);
+    }
+
 
     /**
      * Renderiza la vista del componente

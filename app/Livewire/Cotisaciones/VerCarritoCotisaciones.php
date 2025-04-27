@@ -8,6 +8,7 @@ use App\Models\ItemEspecificoProveedor;
 use App\Models\ItemTemporal;
 use App\Models\ListasCotizar;
 use Livewire\Component;
+use PHPUnit\Framework\Constraint\IsTrue;
 
 class VerCarritoCotisaciones extends Component
 {
@@ -26,6 +27,7 @@ class VerCarritoCotisaciones extends Component
     public $nombreCliente = 'Sin cliente';
     public $preferenciaProyecto = 'Sin preferencia';
     public $idProyectoActual;
+
 
     // Propiedades para gestión de cantidades y estados
     public $cantidades = [];
@@ -167,40 +169,7 @@ class VerCarritoCotisaciones extends Component
         $this->mount($this->idCotisacion);
     }
 
-    public function eliminarItemListaCoti($idItem)
-    {
-        $lista =  Cotizacion::find($this->idCotisacion);
-
-        if (!$lista) return;
-
-        // Obtener los items de la lista
-        $items = json_decode($lista->items_cotizar_proveedor, true) ?? [];
-
-        // Filtrar los items para eliminar el que coincida con $idItem
-        $items = array_filter($items, fn($item) => $item['id'] != $idItem);
-
-        // Guardar los cambios en la base de datos
-        $lista->update(['items_cotizar_proveedor' => json_encode(array_values($items))]);
-
-        // Refrescar la lista en la vista
-        
-
-        session()->flash('success', 'Item eliminado correctamente.');
-        
-        $listaCotizar = ListasCotizar::find($lista->lista_cotizar_id);
-
-        $items = json_decode($listaCotizar->items_cotizar, true) ?: [];
-        foreach ($items as $key => &$item) {
-            if ($item['id'] == $idItem) {
-                $item['estado'] = 0;
-            }
-            $items = array_values($items);
-            // Guardar los cambios
-            $listaCotizar->update(['items_cotizar' => json_encode($items)]);
-        }
-        $this->mount($this->idCotisacion);
-    }
-
+   
     /**
      * Carga los items Stock Del las lisata
      * 
@@ -328,6 +297,39 @@ class VerCarritoCotisaciones extends Component
         $this->mount($this->idCotisacion);
     }
 
+    public function eliminarItemListaCoti($idItem)
+    {
+        $lista =  Cotizacion::find($this->idCotisacion);
+
+        if (!$lista) return;
+
+        // Obtener los items de la lista
+        $items = json_decode($lista->items_cotizar_proveedor, true) ?? [];
+
+        // Filtrar los items para eliminar el que coincida con $idItem
+        $items = array_filter($items, fn($item) => $item['id'] != $idItem);
+
+        // Guardar los cambios en la base de datos
+        $lista->update(['items_cotizar_proveedor' => json_encode(array_values($items))]);
+
+        // Refrescar la lista en la vista
+
+
+        session()->flash('success', 'Item eliminado correctamente.');
+
+        $listaCotizar = ListasCotizar::find($lista->lista_cotizar_id);
+
+        $items = json_decode($listaCotizar->items_cotizar, true) ?: [];
+        foreach ($items as $key => &$item) {
+            if ($item['id'] == $idItem) {
+                $item['estado'] = 0;
+            }
+            $items = array_values($items);
+            // Guardar los cambios
+            $listaCotizar->update(['items_cotizar' => json_encode($items)]);
+        }
+        $this->mount($this->idCotisacion);
+    }
 
 
     /**
@@ -389,6 +391,8 @@ class VerCarritoCotisaciones extends Component
         }
         return redirect()->route('compras.catalogoCotisacion.vistaEspecificaItemCotizar', ['idItem' => $idItem]);
     }
+
+
 
     /**
      * Renderiza la vista del componente
