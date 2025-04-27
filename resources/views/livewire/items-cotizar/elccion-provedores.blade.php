@@ -1,6 +1,6 @@
 <div>
     
-    @if (in_array($itemEspecifico->id, $itemsEnLista) || in_array($itemEspecifico->id, $itemsEnListaProveedores))
+    @if (in_array($itemEspecifico->id, $itemsEnLista) && in_array($itemEspecifico->id, $itemsEnListaProveedores))
         <h4>El item ya se encuentra en la cotisacion</h4>
         <button class="btn btn-warning btn-custom" title="Este item ya está en tu lista" >
             <i class="fas fa-shopping-cart"></i> Cambiar modalidad

@@ -131,6 +131,21 @@ class VerCarritoCotisaciones extends Component
                         $nuevaCantidad = 1;
                     }
 
+                    if ($nuevaCantidad >= $itemEspecifico->cantidad_piezas_mayoreo) {
+                        $precio = round($precioSelecionado * (1 + $itemEspecifico->porcentaje_venta_mayorista / 100), 2);
+                        $item['precio'] = $precio;
+                    } else {
+                        $precio = round($precioSelecionado * (1 + $itemEspecifico->porcentaje_venta_minorista / 100), 2);
+                        $item['precio'] = $precio;
+                    }
+                } else {
+                    // Si se presionó + o -, se suma/resta
+                    $nuevaCantidad = $this->cantidades[$idItem] ?? 1;
+                    if (!$item['cantidad']) {
+                        $nuevaCantidad = 1;
+                    } else {
+                        $nuevaCantidad = $item['cantidad'] + $cambio;
+
                         if ($nuevaCantidad >= $itemEspecifico->cantidad_piezas_mayoreo) {
                             $precio = round($precioSelecionado * (1 + $itemEspecifico->porcentaje_venta_mayorista / 100), 2);
                             $item['precio'] = $precio;
@@ -138,29 +153,10 @@ class VerCarritoCotisaciones extends Component
                             $precio = round($precioSelecionado * (1 + $itemEspecifico->porcentaje_venta_minorista / 100), 2);
                             $item['precio'] = $precio;
                         }
-                    
-                } else {
-                    // Si se presionó + o -, se suma/resta
-                    $nuevaCantidad = $this->cantidades[$idItem] ?? 1;
-                    if (!$item['cantidad']) {
-                        $nuevaCantidad = 1;
-                    }else
-                     {
-                        $nuevaCantidad = $item['cantidad'] + $cambio;
-
-                        if ($nuevaCantidad >= $itemEspecifico->cantidad_piezas_mayoreo) {
-                            $precio = round($precioSelecionado * (1 + $itemEspecifico->porcentaje_venta_mayorista / 100), 2);
-                            $item['precio'] = $precio;
-                        } 
-                        else {
-                            $precio = round($precioSelecionado * (1 + $itemEspecifico->porcentaje_venta_minorista / 100), 2);
-                            $item['precio'] = $precio;
-                        }
                     }
                 }
 
                 $item['cantidad'] = $nuevaCantidad;
-
             }
         }
         // Reindexar el array para evitar problemas con las claves eliminadas
@@ -187,9 +183,22 @@ class VerCarritoCotisaciones extends Component
         $lista->update(['items_cotizar_proveedor' => json_encode(array_values($items))]);
 
         // Refrescar la lista en la vista
-        $this->mount($this->idCotisacion);
+        
 
         session()->flash('success', 'Item eliminado correctamente.');
+        
+        $listaCotizar = ListasCotizar::find($lista->lista_cotizar_id);
+
+        $items = json_decode($listaCotizar->items_cotizar, true) ?: [];
+        foreach ($items as $key => &$item) {
+            if ($item['id'] == $idItem) {
+                $item['estado'] = 0;
+            }
+            $items = array_values($items);
+            // Guardar los cambios
+            $listaCotizar->update(['items_cotizar' => json_encode($items)]);
+        }
+        $this->mount($this->idCotisacion);
     }
 
     /**
@@ -302,10 +311,21 @@ class VerCarritoCotisaciones extends Component
         // Guardar los cambios en la base de datos
         $lista->update(['items_cotizar_stock' => json_encode(array_values($items))]);
 
+        session()->flash('success', 'Item eliminado correctamente.');
+
+        $listaCotizar = ListasCotizar::find($lista->lista_cotizar_id);
+
+        $items = json_decode($listaCotizar->items_cotizar, true) ?: [];
+        foreach ($items as $key => &$item) {
+            if ($item['id'] == $idItem) {
+                $item['estado'] = 0;
+            }
+            $items = array_values($items);
+            // Guardar los cambios
+            $listaCotizar->update(['items_cotizar' => json_encode($items)]);
+        }
         // Refrescar la lista en la vista
         $this->mount($this->idCotisacion);
-
-        session()->flash('success', 'Item eliminado correctamente.');
     }
 
 

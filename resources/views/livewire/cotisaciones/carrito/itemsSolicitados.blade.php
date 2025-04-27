@@ -33,13 +33,13 @@
                 <div class="col-md-8">
                     <h4>{{ $itemEspecifico->item->nombre }}</h4>
 
-                    @if ($itemEspecifico->estado === 0)
-                        {!! $itemEspecifico->estado == 0
-                            ? '<span class="badge badge-danger">Sin cotizar</span>'
-                            : ($itemEspecifico->estado == 1
-                                ? '<span class="badge badge-success">Cotizado</span>'
-                                : '<span class="badge badge-secondary">Estado desconocido</span>') !!}
-                    @endif
+
+                    {!! $itemEspecifico->estado == 0
+                        ? '<span class="badge badge-danger">Sin cotizar</span>'
+                        : ($itemEspecifico->estado == 1
+                            ? '<span class="badge badge-success">Cotizado</span>'
+                            : '<span class="badge badge-secondary">Estado desconocido</span>') !!}
+
 
 
 

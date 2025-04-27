@@ -4,7 +4,7 @@ namespace App\Livewire\ItemsCotizar;
 
 use Livewire\Component;
 use App\CustomClases\ConexionProveedorItemTemporal;
-use App\Models\{Cotizacion, Item, ItemEspecifico, ItemEspecificoHasFamilia, ItemEspecificoProveedor, Proveedor, Proyecto};
+use App\Models\{Cotizacion, Item, ItemEspecifico, ItemEspecificoHasFamilia, ItemEspecificoProveedor, ListasCotizar, Proveedor, Proyecto};
 use Illuminate\Support\Facades\Auth;
 
 class VistaEspecificaItem extends Component
@@ -252,7 +252,6 @@ class VistaEspecificaItem extends Component
         $cotizacion = Cotizacion::find($this->idCotizaciones);
 
         if (!$cotizacion) {
-            return;
         }
 
         if ($this->itemEspecifico->stock < $this->cantidad) {
@@ -271,7 +270,6 @@ class VistaEspecificaItem extends Component
             $precio =  $this->itemEspecifico->precio_venta_minorista;
         }
 
-
         $items = json_decode($cotizacion->items_cotizar_stock, true) ?: [];
         $items[] = [
             'id' => $idItem,
@@ -282,6 +280,18 @@ class VistaEspecificaItem extends Component
         ];
 
         $cotizacion->update(['items_cotizar_stock' => json_encode($items)]);
+
+        $listaCotizar = ListasCotizar::find($cotizacion->lista_cotizar_id);
+
+        $items = json_decode($listaCotizar->items_cotizar, true) ?: [];
+        foreach ($items as $key => &$item) {
+            if ($item['id'] == $idItem) {
+                $item['estado'] = 1;
+            }
+            $items = array_values($items);
+            // Guardar los cambios
+            $listaCotizar->update(['items_cotizar' => json_encode($items)]);
+        }
 
         return redirect()->route('compras.cotisaciones.verCarritoCotisaciones', [
             'idCotisacion' => $this->idCotizaciones
@@ -308,8 +318,8 @@ class VistaEspecificaItem extends Component
             return $this->emit('mostrarAlerta', 'error', 'No se encontró la cotización');
         }
 
-        if ($this->itemEspecifico->moc > $this->cantidad) {
-            session()->flash('error', 'La cantidad solicitada debe ser mayor al minimo de venta permitidol');
+        if (0 > $this->cantidad) {
+            session()->flash('error', 'La cantidad solicitada debe ser mayor a 0');
             return;
         }
 
@@ -336,6 +346,18 @@ class VistaEspecificaItem extends Component
 
         $cotizacion->update(['items_cotizar_proveedor' => json_encode($items)]);
 
+        $listaCotizar = ListasCotizar::find($cotizacion->lista_cotizar_id);
+
+        $items = json_decode($listaCotizar->items_cotizar, true) ?: [];
+        foreach ($items as $key => &$item) {
+            if ($item['id'] == $itemId) {
+                $item['estado'] = 1;
+            }
+            $items = array_values($items);
+            // Guardar los cambios
+            $listaCotizar->update(['items_cotizar' => json_encode($items)]);
+        }
+        
         return redirect()->route('compras.cotisaciones.verCarritoCotisaciones', [
             'idCotisacion' => $this->idCotizaciones
         ]);
