@@ -55,6 +55,86 @@ class VerCarritoCotisaciones extends Component
         $this->cargarItemsTemporales();
         $this->cargarItemsCotizacionStock();
         $this->cargarItemsCotizacionProveedor();
+        $this->cargarResumen();
+        $this->calcularPrecioTotal();
+    }
+
+    public $cantidadDeItemsLista;
+    public $cantidadDeItemsCotizacionStock;
+    public $cantidadDeItemsCotizacionProveedor;
+    public $cantidadDeItemsCotizacion;
+    public $cantidadItemsActivos;
+    public $cantidadItemsInactivos;
+
+    public $precioStock;
+    public $precioProveedor;
+    public $precioTotal;
+
+    private function calcularPrecioTotal()
+    {
+        $cotisacion = Cotizacion::find($this->idCotisacion);
+        if (!$cotisacion) {
+            $this->cantidadDeItemsLista = 0;
+            return;
+        }
+        $itemsDeStock = json_decode($cotisacion->items_cotizar_stock, true) ?? [];
+        $precioAcumuladoStock = 0;
+        foreach ($itemsDeStock as $key => &$item) {
+            $itemEspecifico = ItemEspecifico::findOrFail($item['id']);
+            if ($item['cantidad'] < $itemEspecifico->cantidad_piezas_mayoreo) {
+                $precioAcumuladoStock = $precioAcumuladoStock + ($itemEspecifico->precio_venta_minorista * $item['cantidad']);
+            } else {
+                $precioAcumuladoStock = $precioAcumuladoStock + ($itemEspecifico->precio_venta_mayorista * $item['cantidad']);
+            }
+        }
+        $this->precioStock = $precioAcumuladoStock;
+
+        ///ds
+        $itemsDeProveedor = json_decode($cotisacion->items_cotizar_proveedor, true) ?? [];
+        $precioAcumuladoProveedor = 0;
+        foreach ($itemsDeProveedor as $key => &$item) {
+                $precioAcumuladoProveedor = $precioAcumuladoProveedor + ($item['precio'] * $item['cantidad']);
+        }
+        $this->precioProveedor = $precioAcumuladoProveedor;
+    }
+
+    private function cargarResumen()
+    {
+        $cotisacion = Cotizacion::find($this->idCotisacion);
+        $lista = ListasCotizar::find($cotisacion->lista_cotizar_id);
+
+        if (!$cotisacion) {
+            $this->cantidadDeItemsLista = 0;
+            return;
+        }
+
+        if (!$lista) {
+            $this->cantidadDeItemsLista = 0;
+            return;
+        }
+
+        // Decodificar los elementos de ambas propiedades JSON
+        $itemsTemporales = json_decode($lista->items_cotizar_temporales, true) ?? [];
+        $items = json_decode($lista->items_cotizar, true) ?? [];
+
+        // Sumar la cantidad de elementos de ambas listas
+        $this->cantidadDeItemsLista = count($items) + count($itemsTemporales);
+
+        $itemsDeStock = json_decode($cotisacion->items_cotizar_stock, true) ?? [];
+        $itemsDeProveedor = json_decode($cotisacion->items_cotizar_proveedor, true) ?? [];
+
+        // Sumar la cantidad de elementos de ambas listas
+        $this->cantidadDeItemsCotizacionStock = count($itemsDeStock);
+        $this->cantidadDeItemsCotizacionProveedor = count($itemsDeProveedor);
+        $this->cantidadDeItemsCotizacion = count($itemsDeStock) + count($itemsDeProveedor);
+
+        $this->cantidadItemsActivos = count(array_filter($items, function ($item) {
+            return ($item['estado'] ?? 0) == 1;
+        }));
+
+        $this->cantidadItemsInactivos = count(array_filter($items, function ($item) {
+            return ($item['estado'] ?? 0) == 0;
+        }));
     }
 
     /**
@@ -169,7 +249,7 @@ class VerCarritoCotisaciones extends Component
         $this->mount($this->idCotisacion);
     }
 
-   
+
     /**
      * Carga los items Stock Del las lisata
      * 

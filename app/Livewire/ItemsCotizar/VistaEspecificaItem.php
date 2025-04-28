@@ -443,7 +443,7 @@ class VistaEspecificaItem extends Component
             $listaCotizar->update(['items_cotizar' => json_encode($items)]);
         }
         // Refrescar la lista en la vista
-        $this->mount($this->idCotizaciones);
+
     }
 
     public function eliminarItemListaCoti($idItem)
@@ -477,7 +477,7 @@ class VistaEspecificaItem extends Component
             // Guardar los cambios
             $listaCotizar->update(['items_cotizar' => json_encode($items)]);
         }
-        $this->mount($this->idCotizaciones);
+
     }
 
 
