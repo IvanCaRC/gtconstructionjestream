@@ -1,11 +1,11 @@
-<div class="container-fluid px-4 sm:px-6 lg:px-8 py-3">
+<div class="container-fluid px-4 sm:px-6 lg:px-8 py-3" >
     <div class="mb-3">
         <div class="card">
             <div class="card-body">
                 <h3>Resumen</h3>
                 <div class="row">
                     <div class="col-md-6">
-                        <h5>Resumen</h5>
+                        <h5>Lista a cotizar</h5>
                         <div>
                             <label for="">Cantidad de items de la lista: {{ $cantidadDeItemsLista }}</label>
                         </div>
@@ -17,7 +17,7 @@
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <h5>Resumen</h5>
+                        <h5>Cotizacion</h5>
                         <div>
                             <label for="">Items de cotisacion usando el Stock:
                                 {{ $cantidadDeItemsCotizacionStock }}</label>
@@ -32,7 +32,7 @@
                         </div>
                     </div>
                     <div class="col-md-3">
-                        <h5>Resumen</h5>
+                        <h5>Precios</h5>
                         <div>
                             <label for="">Precios totales Stock: {{ number_format($precioStock, 2) }}</label>
                         </div>
