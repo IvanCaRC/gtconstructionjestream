@@ -22,7 +22,7 @@ return new class extends Migration
             $table->integer('cotisaciones');
             $table->integer('ordenes');
             $table->integer('tipo');
-            $table->integer('estado');
+            $table->integer('estado'); //1._Activo, 2._Inactivo, 3._Cancelado
             $table->string('archivo')->nullable();
             $table->text('items_cotizar')->nullable();
             $table->text('datos_medidas')->nullable();

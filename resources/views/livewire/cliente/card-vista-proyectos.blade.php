@@ -24,7 +24,7 @@
                     </select>
                 </div>
                 <div class="col-md-2">
-                    <select class="form-control mr-2" wire:model="statusProcesos" wire:change="search">
+                    <select class="form-control mr-2" wire:model="statusProcesos" wire:change="filter">
                         <option value="6">Todos los procesos</option>
                         <option value="0">Creando lista a cotizar</option>
                         <option value="1">Creando cotización</option>
@@ -35,7 +35,7 @@
                     </select>
                 </div>
                 <div class="col-md-2">
-                    <select class="form-control mr-2" wire:model="statusTipos" wire:change="search">
+                    <select class="form-control mr-2" wire:model="statusTipos" wire:change="filter">
                         <option value="3">Todos los tipos</option>
                         <option value="2">Cancelados</option>
                         <option value="1">Activo</option>
@@ -47,10 +47,10 @@
                 <table class="table">
                     <thead>
                         <tr>
+                            <th>Nombre</th>
                             <th>Fecha</th>
                             <th>Estado</th>
                             <th>Proceso</th>
-                            <th>Nombre</th>
                             <th>Tipo</th>
                             <th>Dirección</th>
                             <th>Listas</th>
@@ -63,7 +63,8 @@
                     </thead>
                     <tbody>
                         @foreach ($proyectos as $proyecto)
-                            <tr>
+                        <tr style="{{ $proyecto->estado === 3 ? 'background-color: #ffbbbb;' : '' }}">
+                                <td>{{ $proyecto->nombre }}</td>
                                 <td>
                                     {{ $proyecto->fecha }}
                                 </td>
@@ -73,36 +74,36 @@
                                         : ($proyecto->estado == 2
                                             ? '<span class="badge badge-warning">Inactivo</span>'
                                             : ($proyecto->estado == 3
-                                                ? '<span class="badge badge-danger">Cancelado</span>'
+                                                ? '<span class="badge"
+                                                                                                                                                                                                                                        style="background-color: #f10808; color: white;">Cancelado</span>'
                                                 : '<span class="badge badge-secondary">Estado desconocido</span>')) !!}
                                 </td>
                                 <td>
                                     {!! $proyecto->proceso == 0
                                         ? '<span class="badge"
-                                                    style="background-color: #6c757d; color: white;">Creando lista a
-                                                    cotizar</span>'
+                                                                                                                                                                                                                                        style="background-color: #6c757d; color: white;">Creando lista a
+                                                                                                                                                                                                                                        cotizar</span>'
                                         : ($proyecto->proceso == 1
                                             ? '<span class="badge"
-                                                    style="background-color: #fd7e14; color: white;">Creando
-                                                    cotizacion</span>'
+                                                                                                                                                                                                                                        style="background-color: #fd7e14; color: white;">Creando
+                                                                                                                                                                                                                                        cotizacion</span>'
                                             : ($proyecto->proceso == 2
                                                 ? '<span class="badge"
-                                                    style="background-color:#1a1ca7; color: white;">Cotizado</span>'
+                                                                                                                                                                                                                                        style="background-color:#1a1ca7; color: white;">Cotizado</span>'
                                                 : ($proyecto->proceso == 3
                                                     ? '<span class="badge" style="background-color:#15d4db; color: white;">En
-                                                    proceso de venta</span>'
+                                                                                                                                                                                                                                        proceso de venta</span>'
                                                     : ($proyecto->proceso == 4
                                                         ? '<span class="badge"
-                                                    style="background-color: #28a745; color: white;">Venta
-                                                    terminada</span>'
+                                                                                                                                                                                                                                        style="background-color: #28a745; color: white;">Venta
+                                                                                                                                                                                                                                        terminada</span>'
                                                         : ($proyecto->proceso == 5
                                                             ? '<span class="badge"
-                                                    style="background-color: #f10808; color: white;">Cancelado</span>'
+                                                                                                                                                                                                                                        style="background-color: #f10808; color: white;">Cancelado</span>'
                                                             : '<span class="badge"
-                                                    style="background-color: #742532; color: white;">Estado
-                                                    desconocido</span>'))))) !!}
+                                                                                                                                                                                                                                        style="background-color: #742532; color: white;">Estado
+                                                                                                                                                                                                                                        desconocido</span>'))))) !!}
                                 </td>
-                                <td>{{ $proyecto->nombre }}</td>
                                 <td>
                                     {!! $proyecto->tipo == 0
                                         ? '<span class="badge badge-secondary">Obra</span>'
@@ -129,13 +130,13 @@
                                         <i class="fas fa-eye"></i>
                                     </button>
                                 </td>
-                                <td>
-                                    <button class="btn btn-primary btn-custom"
-                                        wire:click="cargarDatosProyecto({{ $proyecto->id }})" title="Modificar">
-                                        <i class="fas fa-edit"></i>
-                                    </button>
-                                </td>
                                 @if (is_null($proyecto->culminacion))
+                                    <td>
+                                        <button class="btn btn-primary btn-custom"
+                                            wire:click="cargarDatosProyecto({{ $proyecto->id }})" title="Modificar">
+                                            <i class="fas fa-edit"></i>
+                                        </button>
+                                    </td>
                                     <td>
                                         <button class="btn btn-danger btn-custom"
                                             wire:click="solicitarCancelacion({{ $proyecto->id }})"
@@ -143,10 +144,17 @@
                                             <i class="fas fa-times-circle"></i>
                                         </button>
                                     </td>
-                                @endif
-                                @if ($proyecto->culminacion === 0)
+                                    <td></td> {{-- Espacio reservado para alineación --}}
+                                @elseif($proyecto->culminacion === 0 && $proyecto->estado !== 3)
+                                    <td colspan="2"></td> {{-- Espacio vacío para mantener alineación --}}
                                     <td>
                                         <span class="badge bg-warning text-dark">Cancelación pendiente</span>
+                                    </td>
+                                @elseif ($proyecto->culminacion === 0 && $proyecto->estado === 3)
+                                    <td colspan="2"></td> {{-- Espacio vacío para mantener alineación --}}
+                                    <td>
+                                        <span class="badge" style="background-color: #f10808; color: white;">Proyecto
+                                            Cancelado</span>
                                     </td>
                                 @endif
                             </tr>

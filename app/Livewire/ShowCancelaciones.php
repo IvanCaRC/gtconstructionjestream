@@ -12,15 +12,33 @@ class ShowCancelaciones extends Component
 
     public $openModalRespuestaCancelacion = false;
 
+    public $searchTerm = '';
+
     public $idProyectoActual;
     public $nombreProyecto;
     public $motivo_finalizacion;
     public $motivo_finalizacion_alterno;
     public $motivo_detallado;
 
+    public function updatingSearchTerm()
+    {
+        $this->resetPage();
+    }
 
     public function render()
     {
+        $query = Proyecto::all();
+        if ($this->searchTerm) {
+            $query->where(function ($q) {
+                $q->where('nombre', 'LIKE', "%{$this->searchTerm}%");
+            });
+        }
+
+        // // Filtro de estado
+        // if ($this->statusFiltroDeBusqueda !== "2" && $this->statusFiltroDeBusqueda !== null) {
+        //     $query->where('status', $this->statusFiltroDeBusqueda);
+        // }
+
         $proyectos = Proyecto::with('cliente.user')->select(
             'id',
             'nombre',
@@ -34,6 +52,11 @@ class ShowCancelaciones extends Component
         return view('livewire.show-cancelaciones', [
             'proyectos' => $proyectos
         ]);
+    }
+
+    public function search()
+    {
+        $this->resetPage();
     }
 
     public function viewProyecto($idProyecto)
@@ -95,6 +118,7 @@ class ShowCancelaciones extends Component
             'culminacion' => null,
             'motivo_finalizacion' => null,
             'motivo_detallado' => null,
+            'estado' => 1,
         ]);
         $proyecto->save();
 
@@ -118,6 +142,7 @@ class ShowCancelaciones extends Component
 
         // Remover los campos de la cancelacion para reactivar el proyecto
         $proyecto->fill([
+            'estado' => 3,
             'proceso' => 5,
         ]);
         $proyecto->save();

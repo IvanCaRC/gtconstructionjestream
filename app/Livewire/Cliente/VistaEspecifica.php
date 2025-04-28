@@ -176,6 +176,7 @@ class VistaEspecifica extends Component
             'culminacion' => 0,
             'motivo_finalizacion' => $motivoFinalizacion,
             'motivo_detallado' => $this->motivo_detallado,
+            'estado' => 2,
         ]);
         $proyecto->save();
 

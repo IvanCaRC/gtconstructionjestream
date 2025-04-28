@@ -4,12 +4,37 @@
     <div class="container-fluid px-4 sm:px-6 lg:px-8 py-12">
         <div class="card">
             <div class="card-body">
+                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
                 <div class="table-responsive">
+
+                    <div class="d-flex justify-content-between mb-3">
+                        <!-- Input de búsqueda -->
+                        <input type="text" class="form-control mr-2" id="searchInput" wire:model='searchTerm'
+                            wire:keydown='search' placeholder="Buscar proyecto...">
+
+                        <!-- Filtro de Estado -->
+                        <select class="form-control mr-2" wire:model="statusFiltroDeBusqueda" wire:change="filter">
+                            <option value="0">Todos los estados</option>
+                            <option value="1">Activo</option>
+                            <option value="3">Cancelado</option>
+                        </select>
+
+                        <!-- Filtro de tipo de solicitud -->
+                        <select class="form-control mr-2" wire:model="roleFiltroDeBusqueda" wire:change="filter">
+                            <option value="0">Todos los informes</option>
+                            <option value="1">Informa Cancelacion</option>
+                            <option value="1">Informa Culminacion</option>
+                        </select>
+                    </div>
+
                     @if ($proyectos->count() > 0)
                         <table class="table">
                             <thead>
                                 <tr>
+                                    <th>Solicita</th>
                                     <th>Nombre del Proyecto</th>
+                                    <th>Estado del proyecto</th>
                                     <th>Cliente</th>
                                     <th>Tipo de Proyecto</th>
                                     <th>Proceso</th>
@@ -22,19 +47,44 @@
                             <tbody>
                                 @foreach ($proyectos as $proyecto)
                                     <tr>
+                                        <td>
+                                            @if ($proyecto->culminacion == 0)
+                                                <span class="badge"
+                                                    style="background-color: #fa0000; color: white;">Cancelacion</span>
+                                            @elseif ($proyecto->culminacion == 1)
+                                                <span class="badge"
+                                                    style="background-color: #34ff63; color: white;">Culminacion</span>
+                                            @else
+                                                <span class="badge badge-danger">Sin asignar</span>
+                                            @endif
+                                        </td>
                                         <td>{{ $proyecto->nombre }}</td>
+                                        <td>
+                                            @if ($proyecto->estado == 1)
+                                                <span class="badge"
+                                                    style="background-color: #34ff63; color: white;">Activo</span>
+                                            @elseif ($proyecto->estado == 2)
+                                                <span class="badge"
+                                                    style="background-color: #db8012; color: white;">Inactivo</span>
+                                            @elseif ($proyecto->estado == 3)
+                                                <span class="badge"
+                                                    style="background-color: #fb0909; color: white;">Cancelado</span>
+                                            @else
+                                                <span class="badge badge-danger">Sin asignar</span>
+                                            @endif
+                                        </td>
                                         <td>{{ $proyecto->cliente->nombre ?? 'Sin asignar' }}</td>
                                         {{-- 0 Obra 1 Suministro --}}
                                         <td>
                                             @if ($proyecto->tipo == 0)
                                                 <span class="badge"
-                                                    style="background-color: #494d52; color: white;">Obra</span>
+                                                    style="background-color: #524949; color: white;">Obra</span>
                                             @elseif ($proyecto->tipo == 1)
                                                 <span class="badge"
                                                     style="background-color: #fd43149c; color: white;">Suministro</span>
-                                                    @else
-                                                    <span class="badge badge-danger">Sin asignar</span>
-                                                @endif
+                                            @else
+                                                <span class="badge badge-danger">Sin asignar</span>
+                                            @endif
                                         </td>
                                         <td>
                                             @if ($proyecto->proceso == 0)
@@ -51,12 +101,17 @@
                                             @elseif ($proyecto->proceso == 3)
                                                 <span class="badge" style="background-color:#15d4db; color: white;">En
                                                     proceso de venta</span>
-                                                    @elseif ($proyecto->proceso == 4)
-                                                    <span class="badge" style="background-color: #28a745; color: white;">Venta terminada</span>
-                                                    @elseif ($proyecto->proceso == 5)
-                                                    <span class="badge" style="background-color: #f10808; color: white;">Cancelado</span>
+                                            @elseif ($proyecto->proceso == 4)
+                                                <span class="badge"
+                                                    style="background-color: #28a745; color: white;">Venta
+                                                    terminada</span>
+                                            @elseif ($proyecto->proceso == 5)
+                                                <span class="badge"
+                                                    style="background-color: #f10808; color: white;">Cancelado</span>
                                             @else
-                                                <span class="badge" style="background-color: #742532; color: white;">Estado desconocido</span>
+                                                <span class="badge"
+                                                    style="background-color: #742532; color: white;">Estado
+                                                    desconocido</span>
                                             @endif
                                         </td>
                                         <td>{{ $proyecto->cliente->user->name ?? '' }}
@@ -69,13 +124,23 @@
                                                 <i class="fas fa-eye"></i>
                                             </button>
                                         </td>
-                                        <td>
-                                            <button class="btn btn-warning btn-custom"
-                                                wire:click="evaluarCancelacion({{ $proyecto->id }})"
-                                                title="Ver motivos de cancelacion">
-                                                <i class="fas fa-file-alt"></i> Ver motivos
-                                            </button>
-                                        </td>
+                                        @if ($proyecto->estado === 2 )
+                                            <td>
+                                                <button class="btn btn-warning btn-custom"
+                                                    wire:click="evaluarCancelacion({{ $proyecto->id }})"
+                                                    title="Ver motivos de cancelacion">
+                                                    <i class="fas fa-file-alt"></i> Ver motivos
+                                                </button>
+                                            </td>
+                                        @elseif ($proyecto->estado === 1 || $proyecto->estado === 3)
+                                            <td>
+                                                <button class="btn btn-success btn-custom"
+                                                    wire:click="evaluarCancelacion({{ $proyecto->id }})"
+                                                    title="Ya haz respomndido a esta solicitud">
+                                                    <i class="fas fa-check-circle"></i> Solicitud respondida
+                                                </button>
+                                            </td>
+                                        @endif
                                     </tr>
                                 @endforeach
                             </tbody>
