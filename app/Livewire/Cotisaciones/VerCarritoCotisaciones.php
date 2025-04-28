@@ -472,6 +472,10 @@ class VerCarritoCotisaciones extends Component
         return redirect()->route('compras.catalogoCotisacion.vistaEspecificaItemCotizar', ['idItem' => $idItem]);
     }
 
+    public function enviarLista(){
+        return true;
+    }
+
 
 
     /**
