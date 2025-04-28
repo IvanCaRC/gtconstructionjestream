@@ -28,38 +28,17 @@ class ShowCancelaciones extends Component
     public function render()
     {
 
-        $query = Proyecto::query();
+        $query = Proyecto::whereNotNull('culminacion');
 
-        $query->when($this->searchTerm, function ($query) {
-            $query->where('nombre', 'like', '%' . $this->searchTerm . '%');
-        });
+        if ($this->searchTerm) {
+            $query->where(function ($q) {
+                $q->where('nombre', 'LIKE', "%{$this->searchTerm}%")
+                    ;
+            });
+        }
 
-        // if ($this->searchTerm) {
-        //     $query->where(function ($q) {
-        //         $q->where('nombre', 'LIKE', "%{$this->searchTerm}%");
-        //     });
-        // }
-        // else 
-        // {
-        //     $query = Proyecto::all();
-        // }
-        
-
-        // // Filtro de estado
-        // if ($this->statusFiltroDeBusqueda !== "2" && $this->statusFiltroDeBusqueda !== null) {
-        //     $query->where('status', $this->statusFiltroDeBusqueda);
-        // }
-
-        $proyectos = Proyecto::with('cliente.user')->select(
-            'id',
-            'nombre',
-            'cliente_id',
-            'tipo',
-            'proceso',
-            'estado',
-            'fecha'
-        )->paginate(10);
-
+        $proyectos =  $query->paginate(10);
+    
         return view('livewire.show-cancelaciones', [
             'proyectos' => $proyectos
         ]);

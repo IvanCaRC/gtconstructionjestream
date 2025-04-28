@@ -8,7 +8,7 @@
                         <h3>Resumen</h3>
                     </div>
                     <div class="col-md-3">
-                        <button class="btn btn-outline-primary btn-sm" onclick="confirmSave()">
+                        <button class="btn btn-outline-primary btn-sm" onclick="accionCotisacion()">
                             Terminar cotisacion
                         </button>
                     </div>
@@ -87,34 +87,37 @@
         </div>
     </div>
     <script>
-        function confirmSave() {
+        function accionCotisacion() {
             // Llamar al método save de Livewire
-            @this.call('enviarLista').then(response => {
-                if (response) {
-                    // Mostrar la alerta después de la creación si todo es correcto
+            // Mostrar la alerta después de la creación si todo es correcto
+            Swal.fire({
+                title: "¿Deseas enviar la lista al cliente?",
+                showDenyButton: true,
+                showCancelButton: true,
+                confirmButtonText: "si",
+                denyButtonText: `No, solo desactivar lista`
+            }).then((result) => {
+                /* Read more about isConfirmed, isDenied below */
+                if (result.isConfirmed) {
                     Swal.fire({
-                        title: "Custom width, padding, color, background.",
-                        width: 600,
-                        padding: "3em",
-                        color: "#716add",
-                        background: "#fff url(/images/trees.png)",
-                        backdrop: `
-    rgba(0,0,123,0.4)
-    url("https://sweetalert2.github.io/images/nyan-cat.gif")
-    left top
-    no-repeat
-  `
+                        title: "¿Deseas enviar la lista al cliente?",
+                        showDenyButton: true,
+                        showCancelButton: true,
+                        confirmButtonText: "si",
+                        denyButtonText: `No, solo desactivar lista`
+                    }).then((result) => {
+                        /* Read more about isConfirmed, isDenied below */
+                        if (result.isConfirmed) {
+                            Swal.fire("Saved!", "", "success");
+                        } else if (result.isDenied) {
+                            Swal.fire("Lista Desactivada", "", "success");
+                        }
                     });
+                } else if (result.isDenied) {
+                    Swal.fire("Lista Desactivada", "", "success");
                 }
-            }).catch(error => {
-                // Manejar error si es necesario
-                Swal.fire({
-                    title: 'Error',
-                    text: 'Hubo un problema al crear el item.',
-                    icon: 'error',
-                    confirmButtonText: 'OK'
-                });
             });
+
         }
     </script>
 </div>
