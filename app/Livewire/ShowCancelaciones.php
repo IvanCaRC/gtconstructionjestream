@@ -27,12 +27,23 @@ class ShowCancelaciones extends Component
 
     public function render()
     {
-        $query = Proyecto::all();
-        if ($this->searchTerm) {
-            $query->where(function ($q) {
-                $q->where('nombre', 'LIKE', "%{$this->searchTerm}%");
-            });
-        }
+
+        $query = Proyecto::query();
+
+        $query->when($this->searchTerm, function ($query) {
+            $query->where('nombre', 'like', '%' . $this->searchTerm . '%');
+        });
+
+        // if ($this->searchTerm) {
+        //     $query->where(function ($q) {
+        //         $q->where('nombre', 'LIKE', "%{$this->searchTerm}%");
+        //     });
+        // }
+        // else 
+        // {
+        //     $query = Proyecto::all();
+        // }
+        
 
         // // Filtro de estado
         // if ($this->statusFiltroDeBusqueda !== "2" && $this->statusFiltroDeBusqueda !== null) {
