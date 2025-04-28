@@ -78,16 +78,21 @@
                                     </td>
                                     <td>
                                         <!-- Botón para ver detalles -->
-                                        <button class="btn btn-info btn-sm mr-1"
-                                            wire:click="verDetalles({{ $lista->id }})">
-                                            <i class="fas fa-eye"></i>
-                                        </button>
 
                                         @if ($lista->estado == 0)
-                                            <button class="btn btn-primary btn-sm mr-1" title="Editar"
-                                                wire:click="editarlista({{ $lista->id }})">
-                                                <i class="fas fa-edit"></i>
+                                            @if (Auth::user()->cotizaciones != $lista->id)
+
+                                            
+                                            <button class="btn btn-primary btn-sm mr-1"
+                                                wire:click="verDetalles({{ $lista->id }})">
+                                                Selecionar
                                             </button>
+                                            @else
+                                            <button class="btn btn-primary btn-sm mr-1"
+                                                wire:click="verDetalles({{ $lista->id }})">
+                                                Ver lista
+                                            </button>
+                                            @endif
                                         @endif
                                         @if ($lista->estado != 2)
                                             <button class="btn btn-danger btn-sm"

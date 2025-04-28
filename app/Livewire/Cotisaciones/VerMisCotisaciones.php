@@ -84,7 +84,11 @@ class VerMisCotisaciones extends Component
     public function verDetalles($id)
     {
         // Redirigir a la ruta especificada con el ID de la cotización
+        $cotizacion = Cotizacion::find($id);
+        if ($cotizacion) {
+            Auth::user()->update(['cotizaciones' => $id]);
         return redirect()->route('compras.cotisaciones.verCarritoCotisaciones', ['idCotisacion' => $id]);
+        }
     }
 
     public function editarlista($id)

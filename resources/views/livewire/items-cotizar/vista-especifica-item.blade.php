@@ -115,7 +115,7 @@
                 <div class="form-group">
                     <h1 for="">{{ $item->nombre }}</h1>
                     @if ($itemEspecifico->estado)
-                        <span class="badge badge-success">Actualizado</span>
+                        <e class="badge badge-success">Actualizado</span>
                     @else
                         <span class="badge badge-danger">Desactualizado</span>
                         <p class="card-text text-muted">
@@ -275,7 +275,7 @@
     <script>
         function cancelar() {
             // Llamar al método update2 de Livewire
-            window.location.href = "{{ route('ventas.fichasTecnicas.fichasTecnicas') }}";
+            window.location.href = "{{ route('compras.catalogoCotisacion.catalogoItem') }}";
         }
     </script>
     <script>
