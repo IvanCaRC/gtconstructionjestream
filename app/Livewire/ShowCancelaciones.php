@@ -13,6 +13,8 @@ class ShowCancelaciones extends Component
     public $openModalRespuestaCancelacion = false;
 
     public $searchTerm = '';
+    public $statusFiltroDeBusqueda;
+    public $tipoFiltroDeBusqueda;
 
     public $idProyectoActual;
     public $nombreProyecto;
@@ -20,25 +22,56 @@ class ShowCancelaciones extends Component
     public $motivo_finalizacion_alterno;
     public $motivo_detallado;
 
+
+
     public function updatingSearchTerm()
     {
         $this->resetPage();
+    }
+
+    public function updated($propertyName)
+    {
+        if (in_array($propertyName, ['statusFiltroDeBusqueda', 'tipoFiltroDeBusqueda'])) {
+            $this->filter();  // Llama al método de filtro para restablecer la página y aplicar los filtros
+        }
+    }
+
+    public function filter()
+    {
+        $this->resetPage();  // Asegura que la paginación se restablezca
     }
 
     public function render()
     {
 
         $query = Proyecto::whereNotNull('culminacion');
-
+        //Aplicar busqueda
         if ($this->searchTerm) {
             $query->where(function ($q) {
-                $q->where('nombre', 'LIKE', "%{$this->searchTerm}%")
-                    ;
+                $q->where('nombre', 'LIKE', "%{$this->searchTerm}%");
             });
         }
+        //Filtro en funcion del estado del proyecto 
+        $query->when($this->statusFiltroDeBusqueda != 0, function ($query) {
+            if ($this->statusFiltroDeBusqueda == 1) {
+                $query->where('estado', 1); // Proyectos Activos
+            } elseif ($this->statusFiltroDeBusqueda == 2) {
+                $query->where('estado', 2); // Proyectos inactivos
+            } elseif ($this->statusFiltroDeBusqueda == 3) {
+                $query->where('estado', 3); // Proyectos Cancelados
+            }
+        });
+        //Filtro en funcion del tipo de solicitud
+        $query->when($this->tipoFiltroDeBusqueda != 0, function ($query) {
+            if ($this->tipoFiltroDeBusqueda == 1) {
+                $query->where('culminacion', 0); // Culminacion por cancelacion
+            } elseif ($this->tipoFiltroDeBusqueda == 2) {
+                $query->where('culminacion', 1); // PCulminacion por concretacion
+            }
+        });
 
         $proyectos =  $query->paginate(10);
-    
+
         return view('livewire.show-cancelaciones', [
             'proyectos' => $proyectos
         ]);
@@ -133,9 +166,10 @@ class ShowCancelaciones extends Component
         // Remover los campos de la cancelacion para reactivar el proyecto
         $proyecto->fill([
             'estado' => 3,
-            'proceso' => 5,
         ]);
         $proyecto->save();
+
+        session()->flash('success', 'La cancelacion a sido realizada exitosamente.');
 
         // Limpiar valores del modal
         $this->reset('openModalRespuestaCancelacion', 'motivo_finalizacion', 'motivo_detallado');

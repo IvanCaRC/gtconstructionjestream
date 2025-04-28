@@ -17,14 +17,15 @@
                         <select class="form-control mr-2" wire:model="statusFiltroDeBusqueda" wire:change="filter">
                             <option value="0">Todos los estados</option>
                             <option value="1">Activo</option>
+                            <option value="2">Inactivo</option>
                             <option value="3">Cancelado</option>
                         </select>
 
                         <!-- Filtro de tipo de solicitud -->
-                        <select class="form-control mr-2" wire:model="roleFiltroDeBusqueda" wire:change="filter">
+                        <select class="form-control mr-2" wire:model="tipoFiltroDeBusqueda" wire:change="filter">
                             <option value="0">Todos los informes</option>
                             <option value="1">Informa Cancelacion</option>
-                            <option value="1">Informa Culminacion</option>
+                            <option value="2">Informa Culminacion</option>
                         </select>
                     </div>
 
@@ -46,7 +47,7 @@
                             </thead>
                             <tbody>
                                 @foreach ($proyectos as $proyecto)
-                                    <tr>
+                                    <tr style="{{ $proyecto->estado === 3 ? 'background-color: #ffbbbb;' : '' }}">
                                         <td>
                                             @if ($proyecto->culminacion == 0)
                                                 <span class="badge"
@@ -124,7 +125,7 @@
                                                 <i class="fas fa-eye"></i>
                                             </button>
                                         </td>
-                                        @if ($proyecto->estado === 2 )
+                                        @if ($proyecto->estado === 2)
                                             <td>
                                                 <button class="btn btn-warning btn-custom"
                                                     wire:click="evaluarCancelacion({{ $proyecto->id }})"
@@ -135,8 +136,8 @@
                                         @elseif ($proyecto->estado === 1 || $proyecto->estado === 3)
                                             <td>
                                                 <button class="btn btn-success btn-custom"
-                                                    wire:click="evaluarCancelacion({{ $proyecto->id }})"
-                                                    title="Ya haz respomndido a esta solicitud">
+                                                    onclick="mostrarNotificacion()"
+                                                    title="Ya has respondido a esta solicitud">
                                                     <i class="fas fa-check-circle"></i> Solicitud respondida
                                                 </button>
                                             </td>
@@ -160,4 +161,17 @@
             </div>
         </div>
     </div>
+
+    <script>
+        function mostrarNotificacion() {
+            Swal.fire({
+                icon: 'success',
+                title: 'Solicitud respondida',
+                text: 'Esta solicitud ya ha sido atendida.',
+                showConfirmButton: true,
+                confirmButtonText: 'Entendido'
+            });
+        }
+    </script>
+
 </div>
