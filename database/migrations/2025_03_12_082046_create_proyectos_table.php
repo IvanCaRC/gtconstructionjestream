@@ -21,7 +21,7 @@ return new class extends Migration
             $table->integer('listas');
             $table->integer('cotisaciones');
             $table->integer('ordenes');
-            $table->integer('tipo');
+            $table->integer('tipo'); //1._ Suministro, 0._ Obra
             $table->integer('estado'); //1._Activo, 2._Inactivo, 3._Cancelado
             $table->string('archivo')->nullable();
             $table->text('items_cotizar')->nullable();

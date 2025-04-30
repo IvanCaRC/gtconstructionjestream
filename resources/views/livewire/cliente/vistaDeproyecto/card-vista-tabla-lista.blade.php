@@ -134,9 +134,17 @@
                                     </button>
                                 @endif
 
-                                <button class="btn btn-info btn-sm mr-1" title="Ver" wire:click="ver">
-                                    <i class="fas fa-eye"></i>
+                                {{-- <button class="btn btn-info btn-sm mr-1" title="Ver PDF" onclick="window.open('{{ route('proyecto.pdf-lista', ['id' => $this->proyecto->id]) }}', '_blank')">
+                                    <i class="fas fa-file-pdf"></i>
+                                </button> --}}
+
+                                <button class="btn btn-info btn-sm mr-1" title="Ver PDF" wire:click="prepararPDFLista">
+                                    <i class="fas fa-file-pdf"></i>
                                 </button>
+
+                                {{-- <button class="btn btn-info btn-sm mr-1" title="Ver PDF" onclick="window.open('{{ route('proyecto.pdf-lista', ['id' => $proyecto->id, 'usuario' => auth()->user()->name]) }}', '_blank')">
+                                    <i class="fas fa-file-pdf"></i>
+                                </button> --}}
 
                                 @if ($lista->estado == 1)
                                     <button class="btn btn-primary btn-sm mr-1" title="Editar" wire:click="editarlista({{ $lista->id }})">
