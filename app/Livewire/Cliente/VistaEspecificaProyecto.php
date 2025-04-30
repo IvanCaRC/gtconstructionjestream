@@ -3,11 +3,12 @@
 namespace App\Livewire\Cliente;
 
 use App\Models\Cliente;
-use App\Models\Cotizacion;
+use App\Models\Direccion;
 use App\Models\ListasCotizar;
 use App\Models\Proyecto;
 use Livewire\Component;
 use Barryvdh\DomPDF\Facade\Pdf; // Asegúrate de importar la fachada de DomPDF
+use Illuminate\Support\Facades\Session; //Implementar session para almacenar datos para el pdf
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
@@ -16,7 +17,7 @@ use Illuminate\Support\Facades\Auth;
 class VistaEspecificaProyecto extends Component
 {
     protected $listeners = ['refresh' => 'render'];
-    
+
     public $proyecto;
     public $searchTerm = '';
     public $statusFiltro = 0; // Filtro de estado
@@ -88,7 +89,56 @@ class VistaEspecificaProyecto extends Component
 
         return view('livewire.cliente.vista-especifica-proyecto', [
             'pdfUrl' => route('proyecto.pdf', ['id' => $this->proyecto->id]),
+            'pdfListaUrl' => route('proyecto.pdf-lista', ['id' => $this->proyecto->id]),
         ], ['listas' => $listas]);
+    }
+    //Visualizar PDF.
+    public function prepararPDFLista()
+    {
+        //Cliente asociado al proyecto
+        $cliente = Cliente::findOrFail($this->proyecto->cliente_id);
+        // Lista de cotización vinculada al proyecto
+        $lista = ListasCotizar::where('proyecto_id', $this->proyecto->id)->first();
+        //Obtener valor de los numeros de telefono registrados:
+        $telefonos = json_decode($cliente->telefono, true);
+        //Recuperar el valor del contacto
+        $nombre_contacto = !empty($telefonos[0]['nombre']) ? $telefonos[0]['nombre'] : 'No registrado';
+        //Recuperar el telefono designado
+        $numero = !empty($telefonos[0]['numero']) ? $telefonos[0]['numero'] : 'No registrado';
+        //Obtener la direccion en funcion del id del cliente
+        $direccion = Direccion::where('cliente_id', $cliente->id)->first();
+        //Datos para el PDF
+        Session::put('proyecto_nombre', $this->proyecto->nombre);
+        Session::put('proyecto_fecha', $this->proyecto->created_at->format('d/m/Y'));
+        Session::put('proyecto_tipo', $this->proyecto->tipo == 1 ? 'suministro' : 'obra');
+        Session::put('usuario', auth()->user()->name);
+        Session::put('usuario_first_last_name', auth()->user()->first_last_name);
+        Session::put('usuario_second_last_name', auth()->user()->second_last_name);
+        Session::put('cliente_nombre', $cliente->nombre);
+        Session::put('cliente_correo', $cliente->correo ?? 'No disponible');
+        Session::put('cliente_direccion', $direccion ? "{$direccion->calle} {$direccion->numero}, {$direccion->colonia}, {$direccion->municipio}, {$direccion->ciudad}, {$direccion->estado}, {$direccion->pais}, CP: {$direccion->cp}" : 'No registrada');
+        Session::put('cliente_telefono', $numero);
+        Session::put('cliente_contacto', $nombre_contacto);
+        Session::put('items_cotizar', $lista?->items_cotizar ?? 'No hay ítems registrados');
+        Session::put('items_cotizar_temporales', $lista?->items_cotizar_temporales ?? 'No hay ítems temporales');
+
+        return redirect()->route('proyecto.pdf-lista', ['id' => $this->proyecto->id]);
+    }
+
+    //Descargar PDF.
+    public function generarPDFLista()
+    {
+        $data = [
+            'title' => 'Lista de Ítems a Cotizar',
+            'proyecto' => $this->proyecto->nombre, // Nombre del proyecto
+            'usuario' => auth()->user()->name, // Nombre del usuario
+        ];
+
+        $pdf = Pdf::loadView('pdf.lista', $data)->setPaper('a4', 'portrait');
+
+        return response()->streamDownload(function () use ($pdf) {
+            echo $pdf->output();
+        }, 'lista_items.pdf');
     }
 
     public function toggleEstado($id)

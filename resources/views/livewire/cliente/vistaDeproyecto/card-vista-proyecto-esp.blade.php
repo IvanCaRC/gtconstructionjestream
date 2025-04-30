@@ -113,12 +113,17 @@
                                     <p>No hay archivo de suministro disponible.</p>
                                 @endif
                             </div>
-                            <div class="col-md-3 ">
+                            <div class="col-md-3 text-center">
                                 <h5>Lista a cotizar</h5>
                                 @if ($pdfUrl)
-                                    <a href="{{ $pdfUrl }}" target="_blank" class="btn btn-secondary">
-                                        Ver Archivo de items a cotizar
-                                    </a>
+                                    <div class="btn-group">
+                                        <a href="{{ $pdfUrl }}" target="_blank" class="btn btn-outline-secondary">
+                                            📄 Ver PDF
+                                        </a>
+                                        <a href="{{ $pdfUrl }}" download="reporte_proyecto.pdf" class="btn btn-outline-primary">
+                                            ⬇️ Descargar PDF
+                                        </a>
+                                    </div>
                                 @else
                                     <p>No hay lista de items adjunta.</p>
                                 @endif
