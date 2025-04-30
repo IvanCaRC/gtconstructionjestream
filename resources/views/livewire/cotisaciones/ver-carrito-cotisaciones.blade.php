@@ -8,9 +8,8 @@
                         <h3>Resumen</h3>
                     </div>
                     <div class="col-md-3">
-                        <button class="btn btn-outline-primary btn-sm" onclick="accionCotisacion()">
-                            Terminar cotisacion
-                        </button>
+
+                        
                     </div>
                 </div>
                 <div class="row">
@@ -86,38 +85,4 @@
             </div>
         </div>
     </div>
-    <script>
-        function accionCotisacion() {
-            // Llamar al método save de Livewire
-            // Mostrar la alerta después de la creación si todo es correcto
-            Swal.fire({
-                title: "¿Deseas enviar la lista al cliente?",
-                showDenyButton: true,
-                showCancelButton: true,
-                confirmButtonText: "si",
-                denyButtonText: `No, solo desactivar lista`
-            }).then((result) => {
-                /* Read more about isConfirmed, isDenied below */
-                if (result.isConfirmed) {
-                    Swal.fire({
-                        title: "¿Deseas enviar la lista al cliente?",
-                        showDenyButton: true,
-                        showCancelButton: true,
-                        confirmButtonText: "si",
-                        denyButtonText: `No, solo desactivar lista`
-                    }).then((result) => {
-                        /* Read more about isConfirmed, isDenied below */
-                        if (result.isConfirmed) {
-                            Swal.fire("Saved!", "", "success");
-                        } else if (result.isDenied) {
-                            Swal.fire("Lista Desactivada", "", "success");
-                        }
-                    });
-                } else if (result.isDenied) {
-                    Swal.fire("Lista Desactivada", "", "success");
-                }
-            });
-
-        }
-    </script>
 </div>

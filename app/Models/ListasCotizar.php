@@ -31,7 +31,6 @@ class ListasCotizar extends Model
     {
         return $this->hasOneThrough(Cliente::class, Proyecto::class, 'id', 'id', 'proyecto_id', 'cliente_id');
     }
-    
 
 
 

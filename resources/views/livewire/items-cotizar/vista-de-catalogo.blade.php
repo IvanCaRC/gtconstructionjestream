@@ -8,14 +8,20 @@
                 </h4>
             </div>
         @else
-            <div class="col-md-10">
+            <div class="col-md-8">
                 <h4 class="px-3">
-
                     Cotizacion "<span class="fw-bold text-primary ">{{ $listadeUsuarioActiva }}</span>" activa.
                 </h4>
             </div>
+            <div class="col-md-2">
+                <button class="btn btn-outline-primary btn-sm" onclick="accionCotisacion()">
+                    Enviar cotisacion
+                </button>
+            </div>
             <div class="col-md-1">
-                <a href="#" wire:click="desactivarLista({{ $idCotizaciones }})" class="d-block">Desactivar</a>
+                <button class="btn btn-outline-danger btn-sm" wire:click="desactivarLista({{ $idCotizaciones }})">
+                    Desactivar
+                </button>
             </div>
             <div class="col-md-1">
                 <button class="btn btn-light border-0 shadow-sm " style="width: 50px; height: 50px;"
@@ -27,4 +33,44 @@
 
 
     </div>
+    <script>
+        function accionCotisacion() {
+            // Llamar al método enviar de Livewire
+            @this.call('enviar').then(response => {
+                if (response) {
+                    // Mostrar la alerta después de la actualización si todo es correcto
+                    Swal.fire({
+                        title: "¿Estás seguro que deseas enviar la cotización al cliente?",
+                        text: "Esta acción no la puedes deshacer.",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Sí, Enviar!"
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            Swal.fire({
+                                title: "¡Enviada!",
+                                text: "La cotización ha sido enviada.",
+                                icon: "success",
+                                confirmButtonText: "OK"
+                            }).then(() => {
+                                // Redirigir después de la confirmación
+                                window.location.href = "{{ route('compras.cotisaciones.verMisCotisaciones') }}";
+                            });
+                        }
+                    });
+                }
+            }).catch(error => {
+                // Manejar error si es necesario
+                Swal.fire({
+                    title: 'Error',
+                    text: 'No se pudo enviar la cotización.',
+                    icon: 'error',
+                    confirmButtonText: 'OK'
+                });
+            });
+        }
+    </script>
+    
 </div>

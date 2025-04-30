@@ -84,7 +84,10 @@
                         <option value="1">Activo</option>
                         <option value="2">Cotizando</option>
                         <option value="3">Cotizado</option>
+                        <option value="5">En proceso de venta</option>
+                        <option value="6">Terminado</option>
                         <option value="4">Cancelado</option>
+
                     </select>
                 </div>
             </div>
@@ -96,7 +99,9 @@
                             <th>Listas a cotizar</th>
                             <th></th>
                             <th>Cotizaciones</th>
+                            <th></th>
                             <th>Ordenes de venta</th>
+                            <th></th>
 
                         </tr>
                     </thead>
@@ -110,6 +115,8 @@
                                         2 => ['label' => 'Cotizando', 'class' => 'badge-warning'],
                                         3 => ['label' => 'Cotizado', 'class' => 'badge-primary'],
                                         4 => ['label' => 'Cancelado', 'class' => 'badge-danger'],
+                                        5 => ['label' => 'En proceso de venta', 'class' => 'badge-warning'],
+                                        6 => ['label' => 'Terminado', 'class' => 'badge-primary'],
                                     ];
 
                                     $estado = $estados[$lista->estado] ?? [
@@ -127,7 +134,7 @@
 
                             <td class="columna-estatica">
 
-                                @if ($lista->estado != 4)
+                                @if ($lista->estado != 4 && $lista->estado == 2)
                                     <button class="btn btn-danger btn-sm" title="Cancelar"
                                         wire:click="cancelar({{ $lista->id }})">
                                         Cancelar
@@ -139,21 +146,30 @@
                                 </button>
 
                                 @if ($lista->estado == 1)
-                                    <button class="btn btn-primary btn-sm mr-1" title="Editar" wire:click="editarlista({{ $lista->id }})">
+                                    <button class="btn btn-primary btn-sm mr-1" title="Editar"
+                                        wire:click="editarlista({{ $lista->id }})">
                                         <i class="fas fa-edit"></i>
                                     </button>
                                 @endif
                             </td>
 
-                            <td>
+                            <td class="columna-estatica">
                                 @if ($lista->estado == 1)
-                                    <button class="btn btn-custom" style="background-color: #4c72de; color: white;">
+                                    <button class="btn btn-custom" style="background-color: #4c72de; color: white;"
+                                        wire:click="enviarListaCotizar({{ $lista->id }})">
                                         Mandar a cotizar
                                     </button>
                                 @elseif ($lista->estado == 2)
-                                    <label for="">Cotizaciones...</label>
-                                @elseif ($lista->estado == 3)
                                     <label for="">Cotizando...</label>
+                                @elseif ($lista->estado >= 3)
+                                    @php
+                                        $cotizacion = App\Models\Cotizacion::where(
+                                            'lista_cotizar_id',
+                                            $lista->id,
+                                        )->first();
+                                    @endphp
+
+                                    <span class="fw-bold">{{ $cotizacion->nombre ?? 'Cotización' }}</span>
                                 @elseif ($lista->estado == 4)
                                     <label for="">Mostrar cotizacion y opciones</label>
                                 @elseif ($lista->estado == 5)
@@ -161,8 +177,34 @@
                                         no la tiene simplemente marcar como cancelada.</label>
                                 @endif
                             </td>
+                            <td class="columna-estatica">
+                                @if ($lista->estado >= 3 && $lista->estado != 4)
+                                    <!-- Botón de Cancelar (existente) -->
+                                    <button class="btn btn-danger btn-sm" wire:click="cancelar({{ $lista->id }})"
+                                        title="Cancelar cotización">
+                                        <i class="fas fa-times me-1"></i> Cancelar
+                                    </button>
+                                @endif
+                                @if ($lista->estado == 3)
+                                    <button class="btn btn-primary btn-sm"
+                                        wire:click="aceptarCotisacion({{ $cotizacion->id }})"
+                                        title="Cancelar cotización">
+                                        Aceptar
+                                    </button>
+                                @endif
+                                @if ($lista->estado >= 3)
+                                    <button class="btn btn-info btn-sm text-white"
+                                        wire:click="generarPDF({{ $lista->id }})"
+                                        title="Generar PDF de la cotización">
+                                        <i class="fas fa-file-pdf me-1"></i> PDF
+                                    </button>
+                                @endif
+                            </td>
                             <td>
-
+                                Aui iran las ordenes
+                            </td>
+                            <td>
+                                aqui aqui iran las acciones
                             </td>
                             </tr>
                         @endforeach

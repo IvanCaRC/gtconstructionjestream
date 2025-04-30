@@ -23,8 +23,10 @@
                         <option value="">Estado</option>
                         <option value="0">Activa</option>
                         <option value="1">Enviada</option>
-                        <option value="2">Cancelada</option>
-                        <option value="3">Terminada</option>
+                        <option value="2">Aceptada pendiente de pago</option>
+                        <option value="5">Pagada</option>
+                        <option value="3">Cancelada</option>
+                        <option value="4">Terminada</option>
                     </select>
                 </div>
             </div>
@@ -67,12 +69,16 @@
                                             {!! $lista->estado == 0
                                                 ? '<span class="badge badge-success">Activa</span>'
                                                 : ($lista->estado == 1
-                                                    ? '<span class="badge badge-primary">Enviada</span>'
+                                                    ? '<span class="badge badge-secondary">Enviada</span>'
                                                     : ($lista->estado == 2
-                                                        ? '<span class="badge badge-danger">Cancelada</span>'
+                                                        ? '<span class="badge badge-warning">Aceptada pendiente de pago</span>'
                                                         : ($lista->estado == 3
-                                                            ? '<span class="badge badge-success">Venta terminada</span>'
-                                                            : '<span class="badge badge-secondary">Estado desconocido</span>'))) !!}
+                                                            ? '<span class="badge badge-danger">Cancelada</span>'
+                                                            : ($lista->estado == 4
+                                                                ? '<span class="badge badge-success">Compra terminada</span>'
+                                                                : ($lista->estado == 5
+                                                                    ? '<span class="badge badge-primary">Pagada</span>'
+                                                                    : '<span class="badge badge-secondary">Estado desconocido</span>'))))) !!}
                                         </label>
 
                                     </td>
@@ -81,17 +87,15 @@
 
                                         @if ($lista->estado == 0)
                                             @if (Auth::user()->cotizaciones != $lista->id)
-
-                                            
-                                            <button class="btn btn-primary btn-sm mr-1"
-                                                wire:click="verDetalles({{ $lista->id }})">
-                                                Selecionar
-                                            </button>
+                                                <button class="btn btn-primary btn-sm mr-1"
+                                                    wire:click="verDetalles({{ $lista->id }})">
+                                                    Selecionar
+                                                </button>
                                             @else
-                                            <button class="btn btn-primary btn-sm mr-1"
-                                                wire:click="verDetalles({{ $lista->id }})">
-                                                Ver lista
-                                            </button>
+                                                <button class="btn btn-primary btn-sm mr-1"
+                                                    wire:click="verDetalles({{ $lista->id }})">
+                                                    Ver lista
+                                                </button>
                                             @endif
                                         @endif
                                         @if ($lista->estado != 2)

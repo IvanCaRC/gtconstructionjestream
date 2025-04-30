@@ -3,6 +3,7 @@
 namespace App\Livewire\Cliente;
 
 use App\Models\Cliente;
+use App\Models\Cotizacion;
 use App\Models\ListasCotizar;
 use App\Models\Proyecto;
 use Livewire\Component;
@@ -268,5 +269,80 @@ class VistaEspecificaProyecto extends Component
 
         // Cerrar el modal
         return redirect()->route('ventas.clientes.vistaEspecificaListaCotizar', ['idLista' => $lista->id]);
+    }
+
+    public function enviarListaCotizar($lista)
+    { 
+        $proyectoModi = Proyecto::find($this->proyecto->id);
+        // Buscar la lista actual
+        $lista = ListasCotizar::find($lista);
+
+        if (!$lista) {
+            session()->flash('error', 'No se encontró la lista.');
+            return;
+        }
+
+        // Obtener el proyecto seleccionado
+
+        $proyectoModi->update([
+            'proceso' => 1,
+        ]);
+
+        // Actualizar la lista
+        $lista->update([
+            'estado' => 2,
+        ]);
+
+        Auth::user()->update(['lista' => null]);
+        // Mensaje de éxito
+        session()->flash('success', 'Lista fue enviada correctamente a la cotisacion.');
+
+        // Cerrar el modal
+        $this->dispatch('refresh');
+        return ;
+    }
+
+    public function aceptarCotisacion($cotisacionId)
+    { 
+        $proyectoModi = Proyecto::find($this->proyecto->id);
+        
+        $cotisacion = Cotizacion::find($cotisacionId);
+        $lista = ListasCotizar::find($cotisacion->lista_cotizar_id);
+
+        if
+         (!$lista) {
+            session()->flash('error', 'No se encontró la lista.');
+            return;
+        }
+        if (!$proyectoModi) {
+            session()->flash('error', 'No se encontró el proyecto.');
+            return;
+        }
+        if (!$cotisacion) {
+            session()->flash('error', 'No se encontró la cotisacion.');
+            return;
+        }
+
+        // Obtener el proyecto seleccionado
+
+        $proyectoModi->update([
+            'proceso' => 3,
+        ]);
+
+        // Actualizar la lista
+        $lista->update([
+            'estado' => 5,
+        ]);
+
+        $cotisacion->update([
+            'estado' => 2,
+        ]);
+
+        // Mensaje de éxito
+        session()->flash('success', 'Lista fue enviada correctamente a la cotisacion.');
+
+        // Cerrar el modal
+        $this->dispatch('refresh');
+        return ;
     }
 }

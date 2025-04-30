@@ -7,6 +7,7 @@
 @section('activeFondoPermanenteRecepcionCotizacion', 'background-permanent')
 @section('contend')
 
-<h1>Esta es la Vista de recepcion de cotizaciones</h1>
+
+@livewire('Ventas.RecepsionCotizacio.Recepcioncotiosacion')
 
 @endsection

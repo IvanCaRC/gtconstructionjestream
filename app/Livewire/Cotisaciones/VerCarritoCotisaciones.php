@@ -482,7 +482,6 @@ class VerCarritoCotisaciones extends Component
 
 
 
-
     /**
      * Renderiza la vista del componente
      */

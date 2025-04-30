@@ -48,6 +48,6 @@ class Cotizacion extends Model
 
     public function listaCotizar()
     {
-        return $this->belongsTo(listasCotizar::class, 'lista_cotizar_id');
+        return $this->belongsTo(ListasCotizar::class, 'lista_cotizar_id');
     }
 }

@@ -464,6 +464,7 @@ class VistaEspecificaListaCotizar extends Component
     public function enviarListaCotizar($proyectoId)
     {
         // Buscar la lista actual
+        $proyectoModi = Proyecto::find($proyectoId);
         $lista = ListasCotizar::find($this->idListaActual);
 
         if (!$lista) {
@@ -475,6 +476,10 @@ class VistaEspecificaListaCotizar extends Component
 
 
         // Actualizar la lista
+        $proyectoModi->update([
+            'proceso' => 1,
+        ]);
+
         $lista->update([
             'estado' => 2,
         ]);
