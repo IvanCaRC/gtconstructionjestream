@@ -3,6 +3,7 @@
 namespace App\Livewire\Cliente;
 
 use App\Models\Cliente;
+use App\Models\Cotizacion;
 use App\Models\Direccion;
 use App\Models\ListasCotizar;
 use App\Models\Proyecto;
