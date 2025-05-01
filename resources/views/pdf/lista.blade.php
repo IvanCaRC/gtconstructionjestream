@@ -28,7 +28,7 @@
     <p><strong>Dirección:</strong> {{ $cliente_direccion }}</p>
     <p><strong>Contacto del Cliente:</strong> {{ $cliente_contacto }}</p>
     <p><strong>Teléfono:</strong> {{ $cliente_telefono }}</p>
-    {{-- <p><strong>Ítems a Cotizar:</strong> {{ $items_cotizar }}</p> --}}
+    <p><strong>Ítems a Cotizar:</strong> {{ $items_cotizar }}</p>
     @foreach ($items_cotizar_data as $item)
     <p><strong>Imagen del Ítem:</strong></p>
     <img src="{{ $item['imagen'] }}" alt="Imagen del ítem">

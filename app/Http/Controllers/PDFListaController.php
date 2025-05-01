@@ -26,7 +26,7 @@ class PDFListaController extends Controller
             'cliente_direccion' => Session::get('cliente_direccion', 'No registrada'),
             'cliente_telefono' => Session::get('cliente_telefono', 'No disponible'),
             'cliente_contacto' => Session::get('cliente_contacto', 'No registrado'),
-            // 'items_cotizar' => Session::get('items_cotizar', 'No hay ítems registrados'),
+            'items_cotizar' => Session::get('items_cotizar', 'No hay ítems registrados'),
             'items_cotizar_data' => Session::get('items_cotizar_data', []),
             'items_cotizar_temporales' => Session::get('items_cotizar_temporales', 'No hay ítems temporales'),
         ];

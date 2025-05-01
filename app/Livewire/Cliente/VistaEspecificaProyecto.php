@@ -110,21 +110,31 @@ class VistaEspecificaProyecto extends Component
         $numero = !empty($telefonos[0]['numero']) ? $telefonos[0]['numero'] : 'No registrado';
         //Obtener la direccion en funcion del id del cliente
         $direccion = Direccion::where('cliente_id', $cliente->id)->first();
-        //Recuperar items de la lista a cotizar
+        // Recuperar items de la lista a cotizar
         $items = json_decode($lista?->items_cotizar ?? '[]', true);
         $items_data = [];
-        //Ciclo para recuperacion de items en la lista a cotizar
+
+        // Ciclo para recuperación de items en la lista a cotizar
         foreach ($items as $item) {
-            $item_base = Item::find($item['id']);
-            $item_especifico = ItemEspecifico::where('item_id', $item['id'])->first();
+            // Buscar primero el ItemEspecifico usando el id del ítem en la lista
+            $item_especifico = ItemEspecifico::where('id', $item['id'])->first();
 
-            $imagen = $item_especifico?->image ? asset('storage/' . explode(',', $item_especifico->image)[0]) : asset('storage/default.jpg');
+            // Recuperar el nombre correctamente desde la tabla Item usando item_id
+            $item_base = $item_especifico
+                ? Item::where('id', $item_especifico->item_id)->first()
+                : null;
 
+            // Ruta correcta de la imagen
+            $imagen = $item_especifico?->image
+                ? asset('storage/' . explode(',', $item_especifico->image)[0])
+                : asset('storage/default.jpg');
+
+            // Guardar en el array con la fuente correcta para cada dato
             $items_data[] = [
                 'imagen' => $imagen,
-                'nombre' => $item_base?->nombre ?? 'Nombre no disponible',
-                'marca' => $item_especifico?->marca ?? 'Marca no registrada',
-                'cantidad' => $item['cantidad'] . ' ' . ($item_especifico?->unidad ?? 'unidad no especificada')
+                'nombre' => $item_base?->nombre ?? 'Nombre no disponible',  // ✅ Ahora viene de Item y está correctamente relacionado
+                'marca' => $item_especifico?->marca ?? 'Marca no registrada', // ✅ Sigue viniendo de ItemEspecifico
+                'cantidad' => $item['cantidad'] . ' ' . ($item_especifico?->unidad ?? 'unidad no especificada') // ✅ También de ItemEspecifico
             ];
         }
         //Datos para el PDF
@@ -139,7 +149,7 @@ class VistaEspecificaProyecto extends Component
         Session::put('cliente_direccion', $direccion ? "{$direccion->calle} {$direccion->numero}, {$direccion->colonia}, {$direccion->municipio}, {$direccion->ciudad}, {$direccion->estado}, {$direccion->pais}, CP: {$direccion->cp}" : 'No registrada');
         Session::put('cliente_telefono', $numero);
         Session::put('cliente_contacto', $nombre_contacto);
-        // Session::put('items_cotizar', $lista?->items_cotizar ?? 'No hay ítems registrados');
+        Session::put('items_cotizar', $lista?->items_cotizar ?? 'No hay ítems registrados');
         Session::put('items_cotizar_data', $items_data);
         Session::put('items_cotizar_temporales', $lista?->items_cotizar_temporales ?? 'No hay ítems temporales');
 
