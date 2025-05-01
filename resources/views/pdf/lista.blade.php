@@ -28,7 +28,15 @@
     <p><strong>Dirección:</strong> {{ $cliente_direccion }}</p>
     <p><strong>Contacto del Cliente:</strong> {{ $cliente_contacto }}</p>
     <p><strong>Teléfono:</strong> {{ $cliente_telefono }}</p>
-    <p><strong>Ítems a Cotizar:</strong> {{ $items_cotizar }}</p>
+    {{-- <p><strong>Ítems a Cotizar:</strong> {{ $items_cotizar }}</p> --}}
+    @foreach ($items_cotizar_data as $item)
+    <p><strong>Imagen del Ítem:</strong></p>
+    <img src="{{ $item['imagen'] }}" alt="Imagen del ítem">
+    <p><strong>Nombre:</strong> {{ $item['nombre'] }}</p>
+    <p><strong>Marca:</strong> {{ $item['marca'] }}</p>
+    <p><strong>Cantidad Solicitada:</strong> {{ $item['cantidad'] }}</p>
+    <hr>
+@endforeach
     <p><strong>Ítems Temporales:</strong> {{ $items_cotizar_temporales }}</p>
 </body>
 

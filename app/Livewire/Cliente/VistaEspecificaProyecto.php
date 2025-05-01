@@ -5,6 +5,8 @@ namespace App\Livewire\Cliente;
 use App\Models\Cliente;
 use App\Models\Cotizacion;
 use App\Models\Direccion;
+use App\Models\Item;
+use App\Models\ItemEspecifico;
 use App\Models\ListasCotizar;
 use App\Models\Proyecto;
 use Livewire\Component;
@@ -108,6 +110,23 @@ class VistaEspecificaProyecto extends Component
         $numero = !empty($telefonos[0]['numero']) ? $telefonos[0]['numero'] : 'No registrado';
         //Obtener la direccion en funcion del id del cliente
         $direccion = Direccion::where('cliente_id', $cliente->id)->first();
+        //Recuperar items de la lista a cotizar
+        $items = json_decode($lista?->items_cotizar ?? '[]', true);
+        $items_data = [];
+        //Ciclo para recuperacion de items en la lista a cotizar
+        foreach ($items as $item) {
+            $item_base = Item::find($item['id']);
+            $item_especifico = ItemEspecifico::where('item_id', $item['id'])->first();
+
+            $imagen = $item_especifico?->image ? asset('storage/' . explode(',', $item_especifico->image)[0]) : asset('storage/default.jpg');
+
+            $items_data[] = [
+                'imagen' => $imagen,
+                'nombre' => $item_base?->nombre ?? 'Nombre no disponible',
+                'marca' => $item_especifico?->marca ?? 'Marca no registrada',
+                'cantidad' => $item['cantidad'] . ' ' . ($item_especifico?->unidad ?? 'unidad no especificada')
+            ];
+        }
         //Datos para el PDF
         Session::put('proyecto_nombre', $this->proyecto->nombre);
         Session::put('proyecto_fecha', $this->proyecto->created_at->format('d/m/Y'));
@@ -120,7 +139,8 @@ class VistaEspecificaProyecto extends Component
         Session::put('cliente_direccion', $direccion ? "{$direccion->calle} {$direccion->numero}, {$direccion->colonia}, {$direccion->municipio}, {$direccion->ciudad}, {$direccion->estado}, {$direccion->pais}, CP: {$direccion->cp}" : 'No registrada');
         Session::put('cliente_telefono', $numero);
         Session::put('cliente_contacto', $nombre_contacto);
-        Session::put('items_cotizar', $lista?->items_cotizar ?? 'No hay ítems registrados');
+        // Session::put('items_cotizar', $lista?->items_cotizar ?? 'No hay ítems registrados');
+        Session::put('items_cotizar_data', $items_data);
         Session::put('items_cotizar_temporales', $lista?->items_cotizar_temporales ?? 'No hay ítems temporales');
 
         return redirect()->route('proyecto.pdf-lista', ['id' => $this->proyecto->id]);
@@ -323,7 +343,7 @@ class VistaEspecificaProyecto extends Component
     }
 
     public function enviarListaCotizar($lista)
-    { 
+    {
         $proyectoModi = Proyecto::find($this->proyecto->id);
         // Buscar la lista actual
         $lista = ListasCotizar::find($lista);
@@ -350,18 +370,17 @@ class VistaEspecificaProyecto extends Component
 
         // Cerrar el modal
         $this->dispatch('refresh');
-        return ;
+        return;
     }
 
     public function aceptarCotisacion($cotisacionId)
-    { 
+    {
         $proyectoModi = Proyecto::find($this->proyecto->id);
-        
+
         $cotisacion = Cotizacion::find($cotisacionId);
         $lista = ListasCotizar::find($cotisacion->lista_cotizar_id);
 
-        if
-         (!$lista) {
+        if (!$lista) {
             session()->flash('error', 'No se encontró la lista.');
             return;
         }
@@ -394,6 +413,6 @@ class VistaEspecificaProyecto extends Component
 
         // Cerrar el modal
         $this->dispatch('refresh');
-        return ;
+        return;
     }
 }
