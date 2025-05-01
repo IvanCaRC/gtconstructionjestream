@@ -29,6 +29,7 @@ class PDFListaController extends Controller
             'items_cotizar' => Session::get('items_cotizar', 'No hay ítems registrados'),
             'items_cotizar_data' => Session::get('items_cotizar_data', []),
             'items_cotizar_temporales' => Session::get('items_cotizar_temporales', 'No hay ítems temporales'),
+            'items_cotizar_temporales_data' => Session::get('items_cotizar_temporales_data', []),
         ];
 
         $pdf = Pdf::loadView('pdf.lista', $data)->setPaper('a4', 'portrait');

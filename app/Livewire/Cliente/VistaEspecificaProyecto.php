@@ -7,6 +7,7 @@ use App\Models\Cotizacion;
 use App\Models\Direccion;
 use App\Models\Item;
 use App\Models\ItemEspecifico;
+use App\Models\ItemTemporal;
 use App\Models\ListasCotizar;
 use App\Models\Proyecto;
 use Livewire\Component;
@@ -114,6 +115,9 @@ class VistaEspecificaProyecto extends Component
         $items = json_decode($lista?->items_cotizar ?? '[]', true);
         $items_data = [];
 
+        // Recuperar items temporales de la lista a cotizar
+        $items_temporales = json_decode($lista?->items_cotizar_temporales ?? '[]', true);
+        $items_temporales_data = [];
         // Ciclo para recuperación de items en la lista a cotizar
         foreach ($items as $item) {
             // Buscar primero el ItemEspecifico usando el id del ítem en la lista
@@ -137,6 +141,24 @@ class VistaEspecificaProyecto extends Component
                 'cantidad' => $item['cantidad'] . ' ' . ($item_especifico?->unidad ?? 'unidad no especificada') // ✅ También de ItemEspecifico
             ];
         }
+        //Ciclo de recuperacion de items temporales
+        foreach ($items_temporales as $item) {
+            // Buscar primero el ItemTemporal usando el id del ítem en la lista
+            $item_temporal = ItemTemporal::where('id', $item['id'])->first();
+        
+            // Recuperar el nombre y descripción desde la tabla Item usando item_id
+            $item_base = $item_temporal 
+                ? Item::where('id', $item_temporal->item_id)->first() 
+                : null;
+        
+            // Guardar en el array con la fuente correcta para cada dato
+            $items_temporales_data[] = [
+                'nombre' => $item_base?->nombre ?? 'Nombre no disponible',  // ✅ Ahora viene de Item
+                'descripcion' => $item_base?->descripcion ?? 'Descripción no disponible', // ✅ También de Item
+                'unidad' => $item_temporal?->unidad ?? 'Unidad no especificada' // ✅ Desde ItemTemporal
+            ];
+        }
+
         //Datos para el PDF
         Session::put('proyecto_nombre', $this->proyecto->nombre);
         Session::put('proyecto_fecha', $this->proyecto->created_at->format('d/m/Y'));
@@ -152,6 +174,7 @@ class VistaEspecificaProyecto extends Component
         Session::put('items_cotizar', $lista?->items_cotizar ?? 'No hay ítems registrados');
         Session::put('items_cotizar_data', $items_data);
         Session::put('items_cotizar_temporales', $lista?->items_cotizar_temporales ?? 'No hay ítems temporales');
+        Session::put('items_cotizar_temporales_data', $items_temporales_data);
 
         return redirect()->route('proyecto.pdf-lista', ['id' => $this->proyecto->id]);
     }

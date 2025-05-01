@@ -30,14 +30,20 @@
     <p><strong>Teléfono:</strong> {{ $cliente_telefono }}</p>
     <p><strong>Ítems a Cotizar:</strong> {{ $items_cotizar }}</p>
     @foreach ($items_cotizar_data as $item)
-    <p><strong>Imagen del Ítem:</strong></p>
-    <img src="{{ $item['imagen'] }}" alt="Imagen del ítem">
-    <p><strong>Nombre:</strong> {{ $item['nombre'] }}</p>
-    <p><strong>Marca:</strong> {{ $item['marca'] }}</p>
-    <p><strong>Cantidad Solicitada:</strong> {{ $item['cantidad'] }}</p>
-    <hr>
-@endforeach
+        <p><strong>Imagen del Ítem:</strong></p>
+        <img src="{{ $item['imagen'] }}" alt="Imagen del ítem">
+        <p><strong>Nombre:</strong> {{ $item['nombre'] }}</p>
+        <p><strong>Marca:</strong> {{ $item['marca'] }}</p>
+        <p><strong>Cantidad Solicitada:</strong> {{ $item['cantidad'] }}</p>
+        <hr>
+    @endforeach
     <p><strong>Ítems Temporales:</strong> {{ $items_cotizar_temporales }}</p>
+    @foreach ($items_cotizar_temporales_data as $item)
+        <p><strong>Nombre:</strong> {{ $item['nombre'] }}</p>
+        <p><strong>Descripción:</strong> {{ $item['descripcion'] }}</p>
+        <p><strong>Unidad:</strong> {{ $item['unidad'] }}</p>
+        <hr>
+    @endforeach
 </body>
 
 </html>
