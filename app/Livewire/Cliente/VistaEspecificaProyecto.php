@@ -129,9 +129,7 @@ class VistaEspecificaProyecto extends Component
                 : null;
 
             // Ruta correcta de la imagen
-            $imagen = $item_especifico?->image
-                ? asset('storage/' . explode(',', $item_especifico->image)[0])
-                : asset('storage/default.jpg');
+            $imagen = asset('storage/' . explode(',', $item_especifico->image)[0]);
 
             // Guardar en el array con la fuente correcta para cada dato
             $items_data[] = [
@@ -145,12 +143,12 @@ class VistaEspecificaProyecto extends Component
         foreach ($items_temporales as $item) {
             // Buscar primero el ItemTemporal usando el id del ítem en la lista
             $item_temporal = ItemTemporal::where('id', $item['id'])->first();
-        
+
             // Recuperar el nombre y descripción desde la tabla Item usando item_id
-            $item_base = $item_temporal 
-                ? Item::where('id', $item_temporal->item_id)->first() 
+            $item_base = $item_temporal
+                ? Item::where('id', $item_temporal->item_id)->first()
                 : null;
-        
+
             // Guardar en el array con la fuente correcta para cada dato
             $items_temporales_data[] = [
                 'nombre' => $item_base?->nombre ?? 'Nombre no disponible',  // ✅ Ahora viene de Item
