@@ -6,8 +6,5 @@
 @section('activeOrdenesVenta', 'active')
 @section('activeFondoPermanenteOrdenesVenta', 'background-permanent')
 @section('contend')
-
-
-<h1>Orden venta</h1>
-
+@livewire('Ventas.OrdeneVenta.OrdenVenta')
 @endsection
