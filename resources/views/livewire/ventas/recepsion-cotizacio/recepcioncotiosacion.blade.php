@@ -29,6 +29,7 @@
                                 <th>Ciente</th>
                                 <th>Proyecto</th>
                                 <th>Lista</th>
+                                <th>Estado</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -49,9 +50,32 @@
                                         Lista {{ $lista->listaCotizar->nombre }}
                                     </td>
                                     <td>
-                                        <!-- Botón para Ver Proyecto -->
+                                        <label>
+                                            {!! $lista->estado == 0
+                                                ? '<span class="badge badge-success">Activa</span>'
+                                                : ($lista->estado == 1
+                                                    ? '<span class="badge badge-secondary">Recibida</span>'
+                                                    : ($lista->estado == 2
+                                                        ? '<span class="badge badge-warning">Aceptada pendiente de pago</span>'
+                                                        : ($lista->estado == 3
+                                                            ? '<span class="badge badge-danger">Cancelada</span>'
+                                                            : ($lista->estado == 4
+                                                                ? '<span class="badge badge-success">Compra terminada</span>'
+                                                                : ($lista->estado == 5
+                                                                    ? '<span class="badge badge-primary">Pagada</span>'
+                                                                    : '<span class="badge badge-secondary">Estado desconocido</span>'))))) !!}
+                                        </label>
+                                    </td>
+                                    <td>
+                                        @if ($lista->estado == 1)
+                                            <button class="btn btn-primary btn-sm"
+                                                wire:click="abrirModal({{ $lista->id }})" title="Cancelar cotización">
+                                                Aceptar
+                                            </button>
+                                        @endif
+
                                         <button class="btn btn-primary btn-sm"
-                                             wire:click="viewProyecto({{ $lista->proyecto->id }})"
+                                            wire:click="viewProyecto({{ $lista->proyecto->id }})"
                                             title="Ver detalles del proyecto">
                                             <i class="fas fa-eye me-1"></i> Proyecto
                                         </button>
@@ -61,15 +85,14 @@
                                             <i class="fas fa-times me-1"></i> Cancelar
                                         </button>
 
-                                        <button class="btn btn-primary btn-sm" wire:click="cancelar({{ $lista->id }})"
-                                            title="Cancelar cotización">
-                                            Aceptar
-                                        </button>
+
                                         <button class="btn btn-info btn-sm text-white"
                                             wire:click="generarPDF({{ $lista->id }})"
                                             title="Generar PDF de la cotización">
                                             <i class="fas fa-file-pdf me-1"></i> PDF
                                         </button>
+                                        <!-- Botón para Ver Proyecto -->
+
                                     </td>
                                 </tr>
                             @endforeach
@@ -86,5 +109,5 @@
 
         </div>
     </div>
-
+    @include('livewire.ventas.recepsion-cotizacio.modalCreacionOrdenVenta')
 </div>

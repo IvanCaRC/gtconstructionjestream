@@ -116,13 +116,28 @@
                     <h1 for="">{{ $item->nombre }}</h1>
                     @if ($itemEspecifico->estado)
                         <e class="badge badge-success">Actualizado</span>
-                    @else
-                        <span class="badge badge-danger">Desactualizado</span>
-                        <p class="card-text text-muted">
-                            Última actualización:
-                            {{ $itemEspecifico->item->updated_at->format('d/m/Y') }}
-                        </p>
+                        @else
+                            <span class="badge badge-danger">Desactualizado</span>
+                            <p class="card-text text-muted">
+                                Última actualización:
+                                {{ $itemEspecifico->item->updated_at->format('d/m/Y') }}
+                            </p>
                     @endif
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h3 for="">Precio Mayotista</h3>
+                        <label style="font-size: 1.5rem; color: #dc3545; font-weight: bold;">
+                            ${{ $itemEspecifico->precio_venta_mayorista }}
+                        </label>
+                    </div>
+                    <div class="col-md-6">
+                        <h3 for="">Precio Minorista</h3>
+                        <label style="font-size: 1.5rem; color: #dc3545; font-weight: bold;">
+                            ${{ $itemEspecifico->precio_venta_minorista }}
+                        </label>
+
+                    </div>
                 </div>
 
                 <div class="form-group">

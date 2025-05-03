@@ -216,7 +216,7 @@
                             </a>
 
                             <a class="collapse-item @yield('activeItemsCotizar') text-white @yield('activeFondoPermanenteItemsCotizar') mb-2"
-                                 href="{{ route('compras.catalogoCotisacion.catalogoItem') }}"
+                                href="{{ route('compras.catalogoCotisacion.catalogoItem') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
                                 onmouseout="this.style.backgroundColor='@yield('activeBackgroundItemsCOtizar')';">
                                 Items para cotizar
@@ -275,6 +275,13 @@
                                 onmouseover="this.style.backgroundColor='#003366';"
                                 onmouseout="this.style.backgroundColor='@yield('activeBackgroundRecepcionCotizacion')';">
                                 Recepcion Cotizaciones
+                            </a>
+
+                            <a class="collapse-item @yield('activeOrdenesVenta') text-white @yield('activeFondoPermanenteOrdenesVenta') mb-2"
+                                href="{{ route('ventas.ordenesVenta.vistaOrdenVenta') }}"
+                                onmouseover="this.style.backgroundColor='#003366';"
+                                onmouseout="this.style.backgroundColor='@yield('activeBackgroundOrdenesVenta')';">
+                                Órdenes de venta
                             </a>
 
                             <div class="collapse-divider"></div>

@@ -77,6 +77,7 @@ class VerCarritoCotisaciones extends Component
             $this->cantidadDeItemsLista = 0;
             return;
         }
+
         $itemsDeStock = json_decode($cotisacion->items_cotizar_stock, true) ?? [];
         $precioAcumuladoStock = 0;
         foreach ($itemsDeStock as $key => &$item) {
@@ -89,7 +90,6 @@ class VerCarritoCotisaciones extends Component
         }
         $this->precioStock = $precioAcumuladoStock;
 
-        ///ds
         $itemsDeProveedor = json_decode($cotisacion->items_cotizar_proveedor, true) ?? [];
         $precioAcumuladoProveedor = 0;
         foreach ($itemsDeProveedor as $key => &$item) {

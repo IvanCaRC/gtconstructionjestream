@@ -134,24 +134,18 @@
 
                             <td class="columna-estatica">
 
-                                @if ($lista->estado != 4 && $lista->estado == 2)
+                                @if ($lista->estado == 1 || $lista->estado == 2)
                                     <button class="btn btn-danger btn-sm" title="Cancelar"
                                         wire:click="cancelar({{ $lista->id }})">
                                         Cancelar
                                     </button>
                                 @endif
 
-                                {{-- <button class="btn btn-info btn-sm mr-1" title="Ver PDF" onclick="window.open('{{ route('proyecto.pdf-lista', ['id' => $this->proyecto->id]) }}', '_blank')">
-                                    <i class="fas fa-file-pdf"></i>
-                                </button> --}}
+
 
                                 <button class="btn btn-info btn-sm mr-1" title="Ver PDF" wire:click="prepararPDFLista">
                                     <i class="fas fa-file-pdf"></i>
                                 </button>
-
-                                {{-- <button class="btn btn-info btn-sm mr-1" title="Ver PDF" onclick="window.open('{{ route('proyecto.pdf-lista', ['id' => $proyecto->id, 'usuario' => auth()->user()->name]) }}', '_blank')">
-                                    <i class="fas fa-file-pdf"></i>
-                                </button> --}}
 
                                 @if ($lista->estado == 1)
                                     <button class="btn btn-primary btn-sm mr-1" title="Editar"
@@ -162,6 +156,9 @@
                             </td>
 
                             <td class="columna-estatica">
+                                @php
+                                    $cotizacion = App\Models\Cotizacion::where('lista_cotizar_id', $lista->id)->first();
+                                @endphp
                                 @if ($lista->estado == 1)
                                     <button class="btn btn-custom" style="background-color: #4c72de; color: white;"
                                         wire:click="enviarListaCotizar({{ $lista->id }})">
@@ -169,20 +166,12 @@
                                     </button>
                                 @elseif ($lista->estado == 2)
                                     <label for="">Cotizando...</label>
-                                @elseif ($lista->estado >= 3)
-                                    @php
-                                        $cotizacion = App\Models\Cotizacion::where(
-                                            'lista_cotizar_id',
-                                            $lista->id,
-                                        )->first();
-                                    @endphp
-
-                                    <span class="fw-bold">{{ $cotizacion->nombre ?? 'Cotización' }}</span>
+                                @elseif ($lista->estado == 3)
+                                    <span class="fw-bold">{{ $cotizacion->nombre }}</span>
                                 @elseif ($lista->estado == 4)
-                                    <label for="">Mostrar cotizacion y opciones</label>
+                                    <span class="fw-bold">{{ $cotizacion->nombre ?? 'No hay cotizacion recuperada' }}</span>
                                 @elseif ($lista->estado == 5)
-                                    <label for="">Preguntar si tiene una cotizacion y mostrarla cancelada. Si
-                                        no la tiene simplemente marcar como cancelada.</label>
+                                    <span class="fw-bold">{{ $cotizacion->nombre }}</span>
                                 @endif
                             </td>
                             <td class="columna-estatica">
@@ -200,12 +189,14 @@
                                         Aceptar
                                     </button>
                                 @endif
-                                @if ($lista->estado >= 3)
-                                    <button class="btn btn-info btn-sm text-white"
-                                        wire:click="generarPDF({{ $lista->id }})"
-                                        title="Generar PDF de la cotización">
-                                        <i class="fas fa-file-pdf me-1"></i> PDF
-                                    </button>
+                                @if ($lista->estado == 3 || $lista->estado == 4 || $lista->estado == 5)
+                                    @if ($cotizacion)
+                                        <button class="btn btn-info btn-sm text-white"
+                                            wire:click="generarPDF({{ $lista->id }})"
+                                            title="Generar PDF de la cotización">
+                                            <i class="fas fa-file-pdf me-1"></i> PDF
+                                        </button>
+                                    @endif
                                 @endif
                             </td>
                             <td>

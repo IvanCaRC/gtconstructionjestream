@@ -1,8 +1,11 @@
 <?php
-
 namespace App\Livewire\Ventas\RecepsionCotizacio;
 
+use App\Http\Controllers\Cotisaciones;
 use App\Models\Cotizacion;
+use App\Models\ItemEspecifico;
+use App\Models\ListasCotizar;
+use App\Models\ordenVenta;
 use App\Models\Proyecto;
 use Livewire\Component;
 use Livewire\WithPagination;
@@ -13,25 +16,24 @@ class Recepcioncotiosacion extends Component
 {
     use WithPagination;
 
-    public $searchTerm = ''; // Término de búsqueda
-    public $statusFiltro = 0; // Filtro de preferencia: 0 = Todos, 1 = Precio, 2 = Tiempo de entrega
-    public $estado;
+    public $searchTerm = '';
+    public $statusFiltro = 0;
+    public $precioStock = 0;
+    public $precioProveedor = 0;
+    public $precioTotal = 0;
 
-    // Método que se ejecuta al actualizar 'searchTerm'
     public function search()
     {
-        $this->resetPage(); // Reinicia la paginación al realizar una búsqueda
+        $this->resetPage();
     }
 
-    // Método que se ejecuta al actualizar 'statusFiltroDeBusqueda'
-    public function filter()
-    {
-        $this->resetPage(); // Reinicia la paginación al cambiar el filtro
-    }
-
+    /**
+     * Redirige a la vista de detalles de la cotización
+     * @param int $id ID de la cotización
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function verDetalles($id)
     {
-        // Redirigir a la ruta especificada con el ID de la cotización
         $cotizacion = Cotizacion::find($id);
         if ($cotizacion) {
             Auth::user()->update(['cotizaciones' => $id]);
@@ -39,6 +41,11 @@ class Recepcioncotiosacion extends Component
         }
     }
 
+    /**
+     * Redirige a editar la lista de cotización
+     * @param int $id ID de la cotización
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function editarlista($id)
     {
         $cotizacion = Cotizacion::find($id);
@@ -48,37 +55,52 @@ class Recepcioncotiosacion extends Component
         }
     }
 
+    /**
+     * Cancela una cotización
+     * @param int $id ID de la cotización
+     */
     public function cancelar($id)
     {
         $cotizacion = Cotizacion::find($id);
         if ($cotizacion) {
             $cotizacion->estado = 2; // Estado "Cancelada"
             $cotizacion->save();
+
             if (Auth::user()->cotizaciones == $id) {
                 Auth::user()->update(['cotizaciones' => null]);
             }
         }
     }
 
+
+
+    /**
+     * Redirige a la vista de detalles del proyecto
+     * @param int $idProyecto ID del proyecto
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function viewProyecto($idProyecto)
+    {
+        $proyecto = Proyecto::find($idProyecto);
+        if (!$proyecto) {
+            abort(404, 'Proyecto no encontrado');
+        }
+        return redirect()->route('ventas.clientes.vistaEspecProyecto', ['idProyecto' => $idProyecto]);
+    }
+
+
+
+    /**
+     * Renderiza la vista principal del componente
+     * @return \Illuminate\View\View
+     */
     public function render()
     {
+        $query = Auth::user()->hasRole('Administrador')
+            ? $this->getQueryForAdmin()
+            : $this->getQueryForRegularUser();
 
-
-        if (Auth::user()->hasRole('Administrador')) {
-            $query = Cotizacion::with(['proyecto', 'proyecto.cliente'])
-                ->orderBy('created_at', 'desc')
-                ->where('estado', 1);
-        } else {
-            $usuarioId = Auth::id();
-        
-            // Obtener cotizaciones donde el cliente del proyecto fue creado por el usuario actual
-            $query = Cotizacion::with(['proyecto', 'proyecto.cliente'])
-                ->whereHas('proyecto.cliente', function($q) use ($usuarioId) {
-                    $q->where('user_id', $usuarioId);
-                })
-                ->orderBy('created_at', 'desc')
-                ->where('estado', 1);
-        }
+        // Aplicar búsqueda
         if (!empty($this->searchTerm)) {
             $query->where(function ($q) {
                 $q->where('nombre', 'like', '%' . $this->searchTerm . '%')
@@ -86,31 +108,133 @@ class Recepcioncotiosacion extends Component
             });
         }
 
-
-
-        // Aplicar filtro de preferencia basado en la relación con 'proyecto'
+        // Aplicar filtro de preferencia
         if ($this->statusFiltro != 0) {
             $query->whereHas('proyecto', function ($q) {
                 $q->where('preferencia', $this->statusFiltro);
             });
         }
 
-
-        // Paginar los resultados
         $listasCotizar = $query->paginate(10);
 
         return view('livewire.ventas.recepsion-cotizacio.recepcioncotiosacion', compact('listasCotizar'));
     }
 
-
-    public function viewProyecto($idProyecto)
+    /**
+     * Construye la consulta para administradores
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    private function getQueryForAdmin()
     {
-        $proyecto = Proyecto::find($idProyecto);
+        return Cotizacion::with(['proyecto', 'proyecto.cliente'])
+            ->orderBy('created_at', 'desc')
+            ->whereIn('estado', [1, 2]);
+    }
 
-        if ($proyecto === null) {
-            abort(404, 'proyecto no encontrado');
+    /**
+     * Construye la consulta para usuarios regulares
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    private function getQueryForRegularUser()
+    {
+        $usuarioId = Auth::id();
+
+        return Cotizacion::with(['proyecto', 'proyecto.cliente'])
+            ->whereHas('proyecto.cliente', function ($q) use ($usuarioId) {
+                $q->where('user_id', $usuarioId);
+            })
+            ->orderBy('created_at', 'desc')
+            ->whereIn('estado', [1, 2]);
+    }
+
+
+    public $openModalOrdenVenta = false;
+    public $cotisacionSelecionada;
+    public $metodoPago = 1;
+    public $formaPago = 1;
+
+    public function abrirModal($id)
+    {
+        $cotisacion = Cotizacion::find($id);
+        $this->openModalOrdenVenta = true;
+        $this->cotisacionSelecionada = $cotisacion;
+    }
+
+    public function cerrarModal()
+    {
+        $this->reset('openModalOrdenVenta', 'cotisacionSelecionada', 'metodoPago', 'formaPago');
+    }
+
+    public function asignarMetodoPago($valor)
+    {
+        $this->metodoPago = $valor;
+    }
+
+    public function asignarFormaPago($valor)
+    {
+        $this->formaPago = $valor;
+    }
+
+    private function calcularPrecioTotal($id)
+    {
+        $cotizacion = Cotizacion::find($id);
+        if (!$cotizacion) return;
+
+        // Calcular precio de items en stock
+        $itemsStock = json_decode($cotizacion->items_cotizar_stock, true) ?? [];
+        $this->precioStock = array_reduce($itemsStock, function ($carry, $item) {
+            $itemEspecifico = ItemEspecifico::find($item['id']);
+            if (!$itemEspecifico) return $carry;
+
+            $precio = ($item['cantidad'] < $itemEspecifico->cantidad_piezas_mayoreo)
+                ? $itemEspecifico->precio_venta_minorista
+                : $itemEspecifico->precio_venta_mayorista;
+
+            return $carry + ($precio * $item['cantidad']);
+        }, 0);
+
+        // Calcular precio de items con proveedor
+        $itemsProveedor = json_decode($cotizacion->items_cotizar_proveedor, true) ?? [];
+        $this->precioProveedor = array_reduce($itemsProveedor, function ($carry, $item) {
+            return $carry + ($item['precio'] * $item['cantidad']);
+        }, 0);
+
+        $this->precioTotal = $this->precioStock + $this->precioProveedor;
+    }
+    /**
+     * Acepta una cotización y crea una orden de venta
+     * @param int $id ID de la cotización
+     * @return bool
+     */
+    public function aceptar()
+    {
+        $cotizacion = Cotizacion::find($this->cotisacionSelecionada->id);
+        if (!$cotizacion) {
+            abort(404, 'Cotización no encontrada');
         }
 
-        return redirect()->route('ventas.clientes.vistaEspecProyecto', ['idProyecto' => $idProyecto]);
+        $lista = ListasCotizar::find($cotizacion->lista_cotizar_id);
+        $proyecto = Proyecto::find($lista->proyecto_id ?? null);
+
+        $this->calcularPrecioTotal($this->cotisacionSelecionada->id);
+
+        // Actualizar estados
+        $cotizacion->update(['estado' => 2]);
+        if ($lista) $lista->update(['estado' => 5]);
+        if ($proyecto) $proyecto->update(['proceso' => 3]);
+
+        // Crear orden de venta
+        $ordenVenta = OrdenVenta::create([
+            'id_cliente' => $proyecto->cliente_id,
+            'id_usuario' => $lista->usuario_id,
+            'id_cotizacion' => $cotizacion->id,
+            'direccion_id' => $proyecto->direccion_id,
+            'monto' => $this->precioTotal,
+            'formaPago' => $this->formaPago,
+            'metodoPago' => $this->metodoPago, // Estado inicial de la cotización
+            'estado' => 0, // Estado inicial de la cotización
+        ]);
+        $this->reset('openModalOrdenVenta', 'cotisacionSelecionada', 'metodoPago', 'formaPago');
+        return true;
     }
 }
