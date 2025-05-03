@@ -77,7 +77,7 @@
                                     <td style="text-align: right; font-weight: bold; color: rgb(207, 0, 0);">
                                         {{ number_format($lista->montoPagar, 2) }} MXN
                                     </td>
-                                    
+
                                     <td>
                                         <label>
                                             {!! $lista->estado == 0
@@ -92,26 +92,23 @@
                                         </label>
                                     </td>
                                     <td>
-                                        @if ($lista->estado == 1)
+                                        @if (Auth::user()->hasRole('Administrador') || Auth::user()->hasRole('Finanzas'))
                                             <button class="btn btn-primary btn-sm"
                                                 wire:click="abrirModal({{ $lista->id }})"
-                                                title="Cancelar cotización">
-                                                Aceptar
+                                                title="Pagar">
+                                                Pagar
                                             </button>
                                         @endif
 
-                                        {{-- <button class="btn btn-primary btn-sm"
-                                            wire:click="viewProyecto({{ $lista->proyecto->id }})"
-                                            title="Ver detalles del proyecto">
-                                            <i class="fas fa-eye me-1"></i> Proyecto
-                                        </button> --}}
+
+
+                                        @if ($lista->estado != 1)
+                                            <button class="btn btn-danger btn-sm"
+                                                wire:click="cancelar({{ $lista->id }})" title="Cancelar cotización">
+                                                <i class="fas fa-times me-1"></i> Cancelar
+                                            </button>
+                                        @endif
                                         <!-- Botón de Cancelar (existente) -->
-                                        <button class="btn btn-danger btn-sm" wire:click="cancelar({{ $lista->id }})"
-                                            title="Cancelar cotización">
-                                            <i class="fas fa-times me-1"></i> Cancelar
-                                        </button>
-
-
                                         <button class="btn btn-info btn-sm text-white"
                                             wire:click="generarPDF({{ $lista->id }})"
                                             title="Generar PDF de la cotización">

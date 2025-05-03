@@ -6,6 +6,7 @@ use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\Cotisaciones;
 use App\Http\Controllers\FamiliaController;
 use App\Http\Controllers\FichasTecnicas;
+use App\Http\Controllers\FinanzasController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ItemCotizar;
 use App\Http\Controllers\MantenimientoController;
@@ -131,3 +132,5 @@ Route::get('compras/cotisaciones/verCarritoCotisaciones/{idCotisacion}', [Cotisa
 Route::get('compras/catalogoCotisacion/vistaEspecificaItemCotizar/{idItem}', [ItemCotizar::class, 'vistaEspecificaDeCotisacion'])->middleware('auth', 'nocache')->name('compras.catalogoCotisacion.vistaEspecificaItemCotizar');
 
 Route::get('ventas/ordenesVenta/vistaOrdenVenta', [ordenVentas::class, 'index'])->middleware('auth', 'nocache')->name('ventas.ordenesVenta.vistaOrdenVenta');
+
+Route::get('finanzas/ordenesVenta/vistaOrdenVentaFin', [FinanzasController::class, 'ordenesVenta'])->middleware('auth', 'nocache')->name('finanzas.ordenesVenta.vistaOrdenVentaFin');

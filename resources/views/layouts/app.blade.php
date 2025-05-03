@@ -294,12 +294,12 @@
             @can('finanzas.collapsed')
                 <!-- Nav Item - Pagina colapsada de departamentos-->
                 <li class="nav-item">
-                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFinanzas"
+                    <a class="nav-link  @yield('activedesplegableFinansas')" href="#" data-toggle="collapse" data-target="#collapseFinanzas"
                         aria-expanded="true" aria-controls="collapseFinanzas">
                         <i class="fas fa-fw fa-building"></i>
                         <span>Finanzas</span>
                     </a>
-                    <div id="collapseFinanzas" class="collapse" aria-labelledby="headingPages"
+                    <div id="collapseFinanzas" class="collapse @yield('activeCollapseFinanzas')" aria-labelledby="headingPages"
                         data-parent="#accordionSidebar">
                         <div class="bg-primary-dark text-white py-2 collapse-inner rounded">
                             <a class="collapse-item @yield('activeAlogin') text-white"
@@ -314,6 +314,12 @@
                                 href="{{ route('mantenimiento.enconstruccion') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
                                 onmouseout="this.style.backgroundColor='';">Reportes</a>
+                            <a class="collapse-item @yield('activeOrdenesVenta2') text-white @yield('activeFondoPermanenteOrdenesVenta2') mb-2"
+                                href="{{ route('finanzas.ordenesVenta.vistaOrdenVentaFin') }}"
+                                onmouseover="this.style.backgroundColor='#003366';"
+                                onmouseout="this.style.backgroundColor='@yield('activeBackgroundOrdenesVenta2')';">
+                                Órdenes de venta
+                            </a>
 
                             <div class="collapse-divider"></div>
                         </div>

@@ -1,0 +1,14 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+
+class FinanzasController extends Controller
+{
+    public function ordenesVenta()
+    {
+        // Retornar la vista de la lista de proveedores
+        return view('finanzas.ordenesVenta.vistaOrdenVentaFin');
+    }
+}
