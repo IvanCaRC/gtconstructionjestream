@@ -12,7 +12,10 @@ use App\Models\ItemEspecificoProveedor;
 use App\Models\ItemTemporal;
 use App\Models\ListasCotizar;
 use App\Models\Proyecto;
+use App\Models\Role;
+use App\Notifications\SolicitudCotizacionNotification;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 
 class VistaEspecificaListaCotizar extends Component
 {
@@ -474,7 +477,6 @@ class VistaEspecificaListaCotizar extends Component
 
         // Obtener el proyecto seleccionado
 
-
         // Actualizar la lista
         $proyectoModi->update([
             'proceso' => 1,
@@ -485,6 +487,11 @@ class VistaEspecificaListaCotizar extends Component
         ]);
 
         Auth::user()->update(['lista' => null]);
+
+        // **Enviar la notificación a los usuarios con rol "Compras" antes de redirigir**
+        $usuariosNotificados = Role::whereIn('name', ['Compras', 'Administrador'])->get()->flatMap->users;
+        Notification::send($usuariosNotificados, new SolicitudCotizacionNotification($proyectoModi->id, $proyectoModi->nombre));
+
         // Mensaje de éxito
         session()->flash('success', 'Lista fue enviada correctamente a la cotisacion.');
 
