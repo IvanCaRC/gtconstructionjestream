@@ -1,5 +1,5 @@
 <div class="container-fluid px-4 sm:px-6 lg:px-8 py-3">
-    <h2 class="ml-3">Recepcion de Cotizaciones</h2>
+    <h2 class="ml-3">Ordenes de venta</h2>
     <div class="card">
         <div class="card-body">
             <div class="row mb-3">
@@ -17,7 +17,7 @@
                     </select>
                 </div>
             </div>
-            @if ($listasCotizar && $listasCotizar->count() > 0)
+            @if ($ordenesVenta && $ordenesVenta->count() > 0)
 
                 <div wire:poll.3000ms>
                     <table class="table">
@@ -27,58 +27,84 @@
                                     <th>Usuario</th>
                                 @endif
                                 <th>Cliente</th>
-                                <th>Proyecto</th>
                                 <th>Lista</th>
+                                <th>Forma de pago</th>
+                                <th>Metodo de pago</th>
+                                <th>Monto Total</th>
+                                <th>Monto por pagar</th>
                                 <th>Estado</th>
                                 <th></th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($listasCotizar as $lista)
+                            @foreach ($ordenesVenta as $lista)
                                 <tr>
                                     @if (Auth::user()->hasRole('Administrador'))
                                         <td>
-                                            {{ $lista->proyecto->cliente->user->name ?? 'Sin asignar' }}
-                                            {{ $lista->proyecto->cliente->user->first_last_name ?? 'Sin asignar' }}
-                                            {{ $lista->proyecto->cliente->user->second_last_name ?? 'Sin asignar' }}
+                                            {{ $lista->usuario->name ?? 'Sin asignar' }}
+                                            {{ $lista->usuario->first_last_name ?? 'Sin asignar' }}
+                                            {{ $lista->usuario->second_last_name ?? 'Sin asignar' }}
                                         </td>
                                     @endif
 
-                                    <td>{{ $lista->proyecto->cliente->nombre }}</td>
-                                    <td>{{ $lista->proyecto->nombre }}</td>
+                                    <td>{{ $lista->cliente->nombre }}</td>
                                     <td>
-                                        Lista {{ $lista->listaCotizar->nombre }}
+                                        Cotisacion {{ $lista->cotizacion->nombre }}
                                     </td>
                                     <td>
                                         <label>
+                                            {!! $lista->formaPago == 1
+                                                ? '<span class="badge badge-warning">Parcial</span>'
+                                                : ($lista->formaPago == 2
+                                                    ? '<span class="badge badge-warning">Total</span>'
+                                                    : '<span class="badge badge-secondary">Estado desconocido</span>') !!}
+                                        </label>
+                                    </td>
+                                    <td>
+                                        <label>
+                                            {!! $lista->metodoPago == 1
+                                                ? '<span class="badge badge-primary">Deposito</span>'
+                                                : ($lista->metodoPago == 2
+                                                    ? '<span class="badge badge-primary">Efectivo</span>'
+                                                    : ($lista->metodoPago == 3
+                                                        ? '<span class="badge badge-primary">Transferencia</span>'
+                                                        : '<span class="badge badge-secondary">Estado desconocido</span>')) !!}
+                                        </label>
+                                    </td>
+                                    <td style="text-align: right; font-weight: bold; color: green;">
+                                        {{ number_format($lista->monto, 2) }} MXN
+                                    </td>
+                                    <td style="text-align: right; font-weight: bold; color: rgb(207, 0, 0);">
+                                        {{ number_format($lista->montoPagar, 2) }} MXN
+                                    </td>
+                                    
+                                    <td>
+                                        <label>
                                             {!! $lista->estado == 0
-                                                ? '<span class="badge badge-success">Activa</span>'
+                                                ? '<span class="badge badge-warning">Pendiente de pago</span>'
                                                 : ($lista->estado == 1
-                                                    ? '<span class="badge badge-secondary">Recibida</span>'
+                                                    ? '<span class="badge badge-success">Pago completado</span>'
                                                     : ($lista->estado == 2
-                                                        ? '<span class="badge badge-warning">Aceptada pendiente de pago</span>'
+                                                        ? '<span class="badge badge-warning">Pago parcial</span>'
                                                         : ($lista->estado == 3
                                                             ? '<span class="badge badge-danger">Cancelada</span>'
-                                                            : ($lista->estado == 4
-                                                                ? '<span class="badge badge-success">Compra terminada</span>'
-                                                                : ($lista->estado == 5
-                                                                    ? '<span class="badge badge-primary">Pagada</span>'
-                                                                    : '<span class="badge badge-secondary">Estado desconocido</span>'))))) !!}
+                                                            : '<span class="badge badge-secondary">Estado desconocido</span>'))) !!}
                                         </label>
                                     </td>
                                     <td>
                                         @if ($lista->estado == 1)
                                             <button class="btn btn-primary btn-sm"
-                                                wire:click="abrirModal({{ $lista->id }})" title="Cancelar cotización">
+                                                wire:click="abrirModal({{ $lista->id }})"
+                                                title="Cancelar cotización">
                                                 Aceptar
                                             </button>
                                         @endif
 
-                                        <button class="btn btn-primary btn-sm"
+                                        {{-- <button class="btn btn-primary btn-sm"
                                             wire:click="viewProyecto({{ $lista->proyecto->id }})"
                                             title="Ver detalles del proyecto">
                                             <i class="fas fa-eye me-1"></i> Proyecto
-                                        </button>
+                                        </button> --}}
                                         <!-- Botón de Cancelar (existente) -->
                                         <button class="btn btn-danger btn-sm" wire:click="cancelar({{ $lista->id }})"
                                             title="Cancelar cotización">
@@ -98,7 +124,7 @@
                             @endforeach
                         </tbody>
                     </table>
-                    {{ $listasCotizar->links() }}
+                    {{ $ordenesVenta->links() }}
                 </div>
             @else
                 <div>
@@ -109,5 +135,5 @@
 
         </div>
     </div>
-    @include('livewire.ventas.recepsion-cotizacio.modalCreacionOrdenVenta')
+
 </div>

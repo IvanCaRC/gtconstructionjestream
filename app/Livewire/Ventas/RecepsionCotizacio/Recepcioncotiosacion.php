@@ -230,6 +230,7 @@ class Recepcioncotiosacion extends Component
             'id_cotizacion' => $cotizacion->id,
             'direccion_id' => $proyecto->direccion_id,
             'monto' => $this->precioTotal,
+            'montoPagar' => $this->precioTotal,
             'formaPago' => $this->formaPago,
             'metodoPago' => $this->metodoPago, // Estado inicial de la cotización
             'estado' => 0, // Estado inicial de la cotización

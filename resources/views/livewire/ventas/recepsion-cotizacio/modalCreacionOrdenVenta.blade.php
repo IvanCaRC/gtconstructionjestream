@@ -10,8 +10,7 @@
                     wire:change="asignarMetodoPago($event.target.value)">
                     <option value="1">Deposito</option>
                     <option value="2">Efectivo</option>
-                    <option value="3">tarjeta</option>
-                    <option value="4">Transferencia bancaria</option>
+                    <option value="3">Transferencia</option>
                 </select>
             </div>
 

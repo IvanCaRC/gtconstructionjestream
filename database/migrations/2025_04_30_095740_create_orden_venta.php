@@ -20,6 +20,7 @@ return new class extends Migration
             $table->string('formaPago')->nullable();
             $table->string('metodoPago')->nullable();
             $table->string('monto')->nullable();
+            $table->string('montoPagar')->nullable();
             $table->integer('estado');
             $table->timestamps();
             

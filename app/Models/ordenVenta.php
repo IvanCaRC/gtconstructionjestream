@@ -19,16 +19,31 @@ class ordenVenta extends Model
         'formaPago',
         'metodoPago',
         'monto',
+        'montoPagar',
         'estado',
     ];
 
-    // public function proveedor()
-    // {
-    //     return $this->belongsTo(Proveedor::class); //Relacion con un proveedor registrado
-    // }
 
-    // public function familia()
-    // {
-    //     return $this->belongsTo(Familia::class); //Relacion con una familia registrada
-    // }
+
+    /**
+     * Relación con el modelo User para el creador de la cotización.
+     */
+    public function usuario()
+    {
+        return $this->belongsTo(User::class, 'id_usuario');
+    }
+
+    public function cliente()
+    {
+        return $this->belongsTo(Cliente::class, 'id_cliente');
+    }
+
+    /**
+     * Relación con el modelo User para el usuario de compras.
+     */
+
+    public function cotizacion()
+    {
+        return $this->belongsTo(Cotizacion::class, 'id_cotizacion');
+    }
 }
