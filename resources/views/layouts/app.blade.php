@@ -358,13 +358,13 @@
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-bell fa-fw"></i>
                                 <span class="badge badge-danger badge-counter">
-                                    {{ Auth::user()->unreadNotifications->whereNotIn('data.type', ['solicitud_cancelacion', 'mensaje_general'])->count() }}
+                                    {{ Auth::user()->unreadNotifications->whereNotIn('data.type', ['solicitud_cancelacion', 'rechazo_cancelacion', 'mensaje_general'])->count() }}
                                 </span>
                             </a>
                             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="alertsDropdown">
                                 <h6 class="dropdown-header">Notificaciones</h6>
-                                @forelse (Auth::user()->unreadNotifications->whereNotIn('data.type', ['solicitud_cancelacion', 'mensaje_general']) as $notification)
+                                @forelse (Auth::user()->unreadNotifications->whereNotIn('data.type', ['solicitud_cancelacion', 'rechazo_cancelacion', 'mensaje_general']) as $notification)
                                     @php
                                         $type = $notification->data['type'] ?? 'general';
                                     @endphp
@@ -386,7 +386,7 @@
                                         </div>
                                     </a>
                                 @empty
-                                    <p class="dropdown-item">No hay notificaciones.</p>
+                                    <p class="dropdown-item">Sin notificaciones.</p>
                                 @endforelse
                             </div>
                         </li>
@@ -397,18 +397,26 @@
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-envelope fa-fw"></i>
                                 <span class="badge badge-danger badge-counter">
-                                    {{ Auth::user()->unreadNotifications->whereIn('data.type', ['solicitud_cancelacion', 'mensaje_general'])->count() }}
+                                    {{ Auth::user()->unreadNotifications->whereIn('data.type', ['solicitud_cancelacion', 'rechazo_cancelacion', 'mensaje_general'])->count() }}
                                 </span>
                             </a>
                             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="messagesDropdown">
                                 <h6 class="dropdown-header">Mensajes</h6>
-                                @forelse (Auth::user()->unreadNotifications->whereIn('data.type', ['solicitud_cancelacion', 'mensaje_general']) as $notification)
+                                @forelse (Auth::user()->unreadNotifications->whereIn('data.type', ['solicitud_cancelacion', 'rechazo_cancelacion', 'mensaje_general']) as $notification)
                                     <a class="dropdown-item d-flex align-items-center bg-light text-dark"
                                         href="{{ route('notifications.markAsRead', $notification->id) }}?redirect_to={{ urlencode($notification->data['url']) }}">
                                         <div class="mr-3">
-                                            <div class="icon-circle bg-warning">
-                                                <i class="fas fa-exclamation-triangle text-white"></i>
+                                            <div
+                                                class="icon-circle 
+                                                @if ($notification->data['type'] === 'solicitud_cancelacion') bg-warning
+                                                @elseif($notification->data['type'] === 'rechazo_cancelacion') bg-danger
+                                                @else bg-primary @endif">
+                                                <i
+                                                    class="
+                                                @if ($notification->data['type'] === 'solicitud_cancelacion') fas fa-exclamation-triangle
+                                                @elseif($notification->data['type'] === 'rechazo_cancelacion') fas fa-times-circle
+                                                @else fas fa-envelope @endif text-white"></i>
                                             </div>
                                         </div>
                                         <div>

@@ -5,6 +5,7 @@ namespace App\Livewire;
 use App\Models\Proyecto;
 use Livewire\Component;
 use Livewire\WithPagination;
+use App\Notifications\RechazoCancelacionNotification;
 
 class ShowCancelaciones extends Component
 {
@@ -144,6 +145,15 @@ class ShowCancelaciones extends Component
             'estado' => 1,
         ]);
         $proyecto->save();
+
+        //Procedo de envio de notificacion al usuario
+        //Obtener al usuario al que sera enviada la notifiacion.
+        $cliente = $proyecto->cliente;
+        $usuario = $cliente->user;
+        //Confirmar que el usuario existe y enviar la notificacion
+        if ($usuario) {
+            $usuario->notify(new RechazoCancelacionNotification($proyecto->id, $proyecto->nombre, $cliente->id));
+        }
 
         // Limpiar valores del modal
         $this->reset('openModalRespuestaCancelacion', 'motivo_finalizacion', 'motivo_detallado');

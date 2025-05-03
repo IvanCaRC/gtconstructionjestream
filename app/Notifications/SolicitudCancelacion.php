@@ -33,7 +33,7 @@ class SolicitudCancelacion extends Notification
 
         return [
             'type' => 'solicitud_cancelacion',
-            'message' => 'El usuario: ' . $this->solicitante . ' ha solicitado cancelación para el proyecto "' . $this->nombreProyecto . '".',
+            'message' => 'El usuario: ' . $this->solicitante . ' ha solicitado la cancelación del proyecto: "' . $this->nombreProyecto . '".',
             'url' => $url,
         ];
     }

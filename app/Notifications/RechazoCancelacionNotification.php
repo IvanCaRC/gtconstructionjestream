@@ -3,9 +3,8 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
+use Illuminate\Support\Facades\Log;
 
 class RechazoCancelacionNotification extends Notification
 {
@@ -13,48 +12,29 @@ class RechazoCancelacionNotification extends Notification
 
     protected $idProyecto;
     protected $nombreProyecto;
-    protected $usuarioAsociado;
+    protected $idCliente;
 
-    /**
-     * Create a new notification instance.
-     */
-    public function __construct($idProyecto, $nombreProyecto, $usuarioAsociado)
+    public function __construct($idProyecto, $nombreProyecto, $idCliente)
     {
         $this->idProyecto = $idProyecto;
         $this->nombreProyecto = $nombreProyecto;
-        $this->usuarioAsociado = $usuarioAsociado;
+        $this->idCliente = $idCliente;
     }
 
-    /**
-     * Get the notification's delivery channels.
-     *
-     * @return array<int, string>
-     */
     public function via($notifiable)
     {
         return ['database'];
     }
 
-    /**
-     * Get the mail representation of the notification.
-     */
-    public function toMail(object $notifiable): MailMessage
+    public function toArray($notifiable)
     {
-        return (new MailMessage)
-                    ->line('The introduction to the notification.')
-                    ->action('Notification Action', url('/'))
-                    ->line('Thank you for using our application!');
-    }
+        $url = config('app.url') . route('ventas.clientes.vistaEspecificaCliente', ['idCliente' => $this->idCliente], false);
+        Log::info('Generando URL para RechazoCancelacionNotification: ' . $url);
 
-    /**
-     * Get the array representation of the notification.
-     *
-     * @return array<string, mixed>
-     */
-    public function toArray(object $notifiable): array
-    {
         return [
-            //
+            'type' => 'rechazo_cancelacion',
+            'message' => 'Tu solicitud de cancelación para el proyecto "' . $this->nombreProyecto . '" ha sido rechazada.',
+            'url' => $url,
         ];
     }
 }

@@ -1,6 +1,6 @@
 <div>
     @include('livewire.cliente.modal-respuesta-cancelacion-proyecto')
-    <h1 class="pl-4">Cancelaciones de proyectos</h1>
+    <h1 class="pl-4">Concretaciones y cancelaciones de proyectos</h1>
     <div class="container-fluid px-4 sm:px-6 lg:px-8 py-12">
         <div class="card">
             <div class="card-body">
