@@ -30,8 +30,9 @@
     <p><strong>Teléfono:</strong> {{ $cliente_telefono }}</p>
     <p><strong>Ítems a Cotizar:</strong> {{ $items_cotizar }}</p>
     @foreach ($items_cotizar_data as $item)
+        <p><strong>Ruta generada:</strong> {{ $item['imagen'] }}</p>
         <p><strong>Imagen del Ítem:</strong></p>
-        <img src="{{ $item['imagen'] }}" alt="Imagen del ítem">
+        <img src="{{ asset($item['imagen']) }}">
         <p><strong>Nombre:</strong> {{ $item['nombre'] }}</p>
         <p><strong>Marca:</strong> {{ $item['marca'] }}</p>
         <p><strong>Cantidad Solicitada:</strong> {{ $item['cantidad'] }}</p>
