@@ -3,8 +3,8 @@
 
         @if ($idLista == null)
             <div class="col-md-12">
-                <h4 class="px-5">
-                    No hay una lista activa. Activa o crea una para realizar la lista.
+                <h4 class="px-5 text-danger fw-bold">
+                    ⚠ No hay una lista activa. Activa o crea una para realizar la lista.
                 </h4>
             </div>
         @else
