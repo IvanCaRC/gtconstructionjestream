@@ -4,6 +4,9 @@ namespace App\Livewire\Cliente;
 
 use App\Models\Cliente;
 use App\Models\Proyecto;
+use App\Models\Role;
+use App\Notifications\SolicitudCancelacion;
+use Illuminate\Support\Facades\Notification;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\Features\SupportFileUploads\WithFileUploads;
@@ -179,6 +182,10 @@ class VistaEspecifica extends Component
             'estado' => 2,
         ]);
         $proyecto->save();
+
+        //Crear notificacion para el administrador
+        $adminUsers = Role::where('name', 'Administrador')->first()->users;
+        Notification::send($adminUsers, new SolicitudCancelacion($proyecto->id, $proyecto->nombre, auth()->user()->name));
 
         // Limpiar valores después de la actualización
         $this->reset('openModalCancelarProyecto', 'culminacion', 'motivo_finalizacion', 'motivo_detallado');
