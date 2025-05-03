@@ -3,6 +3,7 @@
 namespace App\Livewire;
 
 use App\Models\Proyecto;
+use App\Notifications\ConfirmacionCancelacionNotification;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Notifications\RechazoCancelacionNotification;
@@ -178,6 +179,15 @@ class ShowCancelaciones extends Component
             'estado' => 3,
         ]);
         $proyecto->save();
+
+        // Obtener el usuario asignado al proyecto
+        $cliente = $proyecto->cliente;
+        $usuario = $cliente->user;
+
+        // Enviar la notificación si el usuario existe
+        if ($usuario) {
+            $usuario->notify(new ConfirmacionCancelacionNotification($proyecto->id, $proyecto->nombre, $cliente->id));
+        }
 
         session()->flash('success', 'La cancelacion a sido realizada exitosamente.');
 
