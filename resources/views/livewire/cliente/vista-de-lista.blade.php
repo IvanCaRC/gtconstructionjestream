@@ -2,22 +2,31 @@
     <div class="row bg-white py-4  shadow">
 
         @if ($idLista == null)
-            <div class="col-md-12">
-                <h4 class="px-5 text-danger fw-bold">
-                    ⚠ No hay una lista activa. Activa o crea una para realizar la lista.
+            <div class="col-md-12 d-flex align-items-center justify-content-start">
+                <h4 class="text-danger fw-bold mb-0 px-3">
+                    ⚠ No hay una lista activa. Activa o crea una para registrar items.
                 </h4>
+                <div class="ms-3">
+                    <button class="btn btn-outline-success shadow-sm fw-bold"
+                        onclick="window.location.href='{{ route('ventas.clientes.gestionClientes') }}'">
+                        <i class="fas fa-list"></i> Activar una lista
+                    </button>
+                </div>
             </div>
         @else
             @if ($nombreCliente == 'Sin cliente')
                 <div class="col-md-8">
-                    <h4 class="px-5">
-                        La lista que se encuentra actualmente activa no cuenta con un cliente y proyecto asignado.
+                    <h4 class="px-5 text-danger fw-bold">
+                        ⚠ Esta lista no se encuentra asociada a un cliente o proyecto por lo que su progreso no se
+                        guardara.
                     </h4>
                 </div>
-                <button class="btn btn-outline-success shadow-sm fw-bold"
-                    onclick="window.location.href='{{ route('ventas.clientes.gestionClientes') }}'">
-                    <i class="fas fa-list"></i> Seleccionar lista
-                </button>
+                <div class="ms-3">
+                    <button class="btn btn-outline-success shadow-sm fw-bold"
+                        onclick="window.location.href='{{ route('ventas.clientes.gestionClientes') }}'">
+                        <i class="fas fa-list"></i> Activar una lista
+                    </button>
+                </div>
                 <div class="col-md-1">
                     <a href="#" wire:click="desactivarLista({{ $idLista }})"
                         class="btn btn-outline-danger shadow-sm fw-bold text-center">
