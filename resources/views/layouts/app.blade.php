@@ -358,44 +358,45 @@
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
 
-                        <!-- Sección de Notificaciones Generales (Ítems y Proveedores) -->
-                        <li class="nav-item dropdown no-arrow mx-1">
-                            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <i class="fas fa-bell fa-fw"></i>
-                                <span class="badge badge-danger badge-counter">
-                                    {{ Auth::user()->unreadNotifications->whereNotIn('data.type', ['solicitud_cancelacion', 'rechazo_cancelacion', 'confirmacion_cancelacion', 'solicitudCotizacion_notificacion', 'mensaje_general'])->count() }}
-                                </span>
-                            </a>
-                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-                                aria-labelledby="alertsDropdown">
-                                <h6 class="dropdown-header">Notificaciones</h6>
-                                @forelse (Auth::user()->unreadNotifications->whereNotIn('data.type', ['solicitud_cancelacion', 'rechazo_cancelacion', 'confirmacion_cancelacion', 'solicitudCotizacion_notificacion', 'mensaje_general']) as $notification)
-                                    @php
-                                        $type = $notification->data['type'] ?? 'general';
-                                    @endphp
+                        <!-- Sección de Notificaciones Generales (Ítems, Proveedores y listas a cotizar) -->
+<li class="nav-item dropdown no-arrow mx-1">
+    <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
+        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <i class="fas fa-bell fa-fw"></i>
+        <span class="badge badge-danger badge-counter">
+            {{ Auth::user()->unreadNotifications->whereNotIn('data.type', ['solicitud_cancelacion', 'rechazo_cancelacion', 'confirmacion_cancelacion', 'solicitudCotizacion_notificacion', 'mensaje_general'])->count() }}
+        </span>
+    </a>
+    <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+        aria-labelledby="alertsDropdown">
+        <h6 class="dropdown-header">Notificaciones</h6>
+        @forelse (Auth::user()->unreadNotifications->whereNotIn('data.type', ['solicitud_cancelacion', 'rechazo_cancelacion', 'confirmacion_cancelacion', 'solicitudCotizacion_notificacion', 'mensaje_general']) as $notification)
 
-                                    <a class="dropdown-item d-flex align-items-center bg-light text-dark"
-                                        href="{{ route('notifications.markAsRead', $notification->id) }}?redirect_to={{ urlencode($notification->data['url']) }}">
-                                        <div class="mr-3">
-                                            <div
-                                                class="icon-circle 
-                                                {{ $type === 'proveedor_desactualizado' ? 'bg-warning' : ($type === 'item_especifico_desactualizado' ? 'bg-primary' : 'bg-secondary') }}">
-                                                <i
-                                                    class="{{ $type === 'proveedor_desactualizado' ? 'fas fa-truck' : ($type === 'item_especifico_desactualizado' ? 'fas fa-box-open' : 'fas fa-cube') }} text-white"></i>
-                                            </div>
-                                        </div>
-                                        <div>
-                                            <div class="small text-gray-500">
-                                                {{ $notification->created_at->diffForHumans() }}</div>
-                                            <span class="font-weight-bold">{{ $notification->data['message'] }}</span>
-                                        </div>
-                                    </a>
-                                @empty
-                                    <p class="dropdown-item">Sin notificaciones.</p>
-                                @endforelse
-                            </div>
-                        </li>
+            <a class="dropdown-item d-flex align-items-center bg-light text-dark"
+                href="{{ route('notifications.markAsRead', $notification->id) }}?redirect_to={{ urlencode($notification->data['url']) }}">
+                <div class="mr-3">
+                    <div
+                        class="icon-circle 
+                        {{ $notification->data['type'] === 'proveedor_desactualizado' ? 'bg-warning' : 
+                        ($notification->data['type'] === 'item_especifico_desactualizado' ? 'bg-primary' : 
+                        ($notification->data['type'] === 'seleccion_lista' ? 'bg-success' : 'bg-secondary')) }}">
+                        <i
+                            class="{{ $notification->data['type'] === 'proveedor_desactualizado' ? 'fas fa-truck' : 
+                            ($notification->data['type'] === 'item_especifico_desactualizado' ? 'fas fa-box-open' : 
+                            ($notification->data['type'] === 'seleccion_lista' ? 'fas fa-list-alt' : 'fas fa-cube')) }} text-white"></i>
+                    </div>
+                </div>
+                <div>
+                    <div class="small text-gray-500">
+                        {{ $notification->created_at->diffForHumans() }}</div>
+                    <span class="font-weight-bold">{{ $notification->data['message'] }}</span>
+                </div>
+            </a>
+        @empty
+            <p class="dropdown-item">Sin notificaciones.</p>
+        @endforelse
+    </div>
+</li>
 
                         <!-- Sección de Mensajes -->
                         <li class="nav-item dropdown no-arrow mx-1">
