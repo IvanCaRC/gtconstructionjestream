@@ -13,7 +13,7 @@
                 </div>
                 <div class="col-md-2">
                     <select class="form-control mr-2" wire:model="statusFiltro" wire:change="search">
-                        <option value="0">Preferencia</option>
+                        <option value="0">Sin Preferencia</option>
                         <option value="1">Tiempo de entrega</option>
                         <option value="2">Precio</option>
                     </select>
@@ -26,6 +26,7 @@
                     <table class="table">
                         <thead>
                             <tr>
+                                <th>Proyecto</th>
                                 <th>Nombre</th>
                                 <th>Fecha de Creación</th>
                                 <th>Preferencia</th>
@@ -35,6 +36,7 @@
                         <tbody>
                             @foreach ($listasCotizar as $lista)
                                 <tr>
+                                    <td>{{ $lista->proyecto->nombre }}</td>
                                     <td>Lista {{ $lista->nombre }}</td>
                                     <td>{{ $lista->created_at->format('d/m/Y') }}</td>
                                     <td>

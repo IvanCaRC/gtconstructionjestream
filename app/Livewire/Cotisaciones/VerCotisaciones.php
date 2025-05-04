@@ -6,9 +6,12 @@ use App\Models\Cotizacion;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\ListasCotizar;
+use App\Models\Proyecto;
 use App\Models\User;
+use App\Notifications\SeleccionListaNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Notification;
 
 class VerCotisaciones extends Component
 {
@@ -63,12 +66,12 @@ class VerCotisaciones extends Component
     public $selecionarOtroUsuario = false;
 
     public $idListaSelecionada;
-    
+
     public function seleccionar($id)
     {
         $this->idListaSelecionada = $id;
         if (Auth::user()->hasRole('Administrador')) {
-            
+
             $this->openModalAsignarUsuario = true;
 
             // $this->obtenerUsuarios();
@@ -77,20 +80,21 @@ class VerCotisaciones extends Component
         }
     }
 
-    public function selecionactivadeotrousuario(){
+    public function selecionactivadeotrousuario()
+    {
         $this->selecionarOtroUsuario = true;
     }
 
-    
+
     public $searchTearmUsuario = '';
     public $usuariosAsignables = [];
     public $usuarioSeleccionadoId = null;
 
-    
+
 
     public function cancelarAsignacion()
     {
-        $this->reset(['selecionarOtroUsuario','idListaSelecionada','openModalAsignarUsuario', 'searchTearmUsuario', 'usuariosAsignables', 'usuarioSeleccionadoId', 'selecionarOtroUsuario']);
+        $this->reset(['selecionarOtroUsuario', 'idListaSelecionada', 'openModalAsignarUsuario', 'searchTearmUsuario', 'usuariosAsignables', 'usuarioSeleccionadoId', 'selecionarOtroUsuario']);
     }
 
     public function obtenerUsuarios()
@@ -119,10 +123,10 @@ class VerCotisaciones extends Component
         $lista->id_usuario_compras = $idUsuario;
 
         // Transformar y añadir el campo 'estado' en 'items_cotizar'
-        
+
 
         // Transformar y añadir el campo 'estado' en 'items_cotizar_temporales'
-        
+
 
         // Guardar los cambios en la base de datos
         $lista->save();
@@ -136,6 +140,17 @@ class VerCotisaciones extends Component
             'nombre' => $lista->nombre,
             'estado' => 0, // Estado inicial de la cotización
         ]);
+
+        // Obtener el usuario que fue asignado para enviar la notificacion.
+        $usuarioAsignado = User::findOrFail($idUsuario);
+
+        // Obtener el nombre del proyecto antes de enviar la notificación
+        $proyecto = Proyecto::find($lista->proyecto_id);
+        $nombreProyecto = $proyecto ? $proyecto->nombre : 'Sin nombre';
+
+        // Enviar notificación al usuario asignado
+        Notification::send($usuarioAsignado, new SeleccionListaNotification($lista, $nombreProyecto));
+
         $this->cancelarAsignacion();
         return redirect()->route('compras.cotisaciones.verMisCotisaciones');
 
