@@ -148,8 +148,8 @@
                 <!-- Nav Item - Icono de proyectos -->
                 <li class="nav-item @yield('activeCancelaciones')">
                     <a class="nav-link" href="{{ route('admin.cancelaciones') }}">
-                        <i class="fas fa-ban"></i>
-                        <span>Cancelaciones</span>
+                        <i class="fas fa-clipboard-check"></i>
+                        <span>Culminación de Proyectos</span>
                     </a>
                 </li>
             @endcan

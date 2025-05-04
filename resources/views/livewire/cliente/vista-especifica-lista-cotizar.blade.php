@@ -158,7 +158,7 @@
                     <hr>
                     <label for="">Items: {{ $cantidadItemsDiferentes }}</label>
 
-                    <label for="">Items Personalisados: {{ $cantidadItemsTemporaesDiferentes }}. </label>
+                    <label for="">Items Personalizados: {{ $cantidadItemsTemporaesDiferentes }}. </label>
                     <br>
                     <label for="">Total:
                         {{ $cantidadItemsDiferentes + $cantidadItemsTemporaesDiferentes }}</label>
@@ -193,7 +193,7 @@
                                 <div>
                                     <div class="py-3">
                                         <button class="btn btn-primary" wire:click="enviarListaCotizar({{ $idProyectoActual }})">
-                                          Enviar a cotisacion 
+                                          Enviar a cotizacion 
                                         </button>
 
                                     </div>
