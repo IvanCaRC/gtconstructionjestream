@@ -25,7 +25,7 @@
         </x-slot>
         <x-slot name='footer'>
             <button type="button" class="btn btn-secondary mr-2" wire:click="cerrarModal">Cancelar</button>
-            <button type="button" class="btn btn-primary mr-2" wire:click="aceptar">Guardar Item</button>
+            <button type="button" class="btn btn-primary mr-2" wire:click="aceptar">Crear orden de venta</button>
         </x-slot>
     </x-dialog-modal>
 </div>

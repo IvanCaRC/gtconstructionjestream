@@ -1,4 +1,5 @@
 <div class="container-fluid px-4 sm:px-6 lg:px-8 py-3">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <h2 class="ml-3">Ordenes de venta</h2>
     <div class="card">
         <div class="card-body">
@@ -19,7 +20,7 @@
             </div>
             @if ($ordenesVenta && $ordenesVenta->count() > 0)
 
-                <div wire:poll.3000ms>
+                <div>
                     <table class="table">
                         <thead>
                             <tr>
@@ -92,13 +93,13 @@
                                         </label>
                                     </td>
                                     <td>
-                                        @if (Auth::user()->hasRole('Administrador') || Auth::user()->hasRole('Finanzas'))
+                                        @if ($esVistaFinanzas && $lista->estado == 0)
                                             <button class="btn btn-primary btn-sm"
-                                                wire:click="abrirModal({{ $lista->id }})"
-                                                title="Pagar">
+                                                wire:click="abrirModalPagar({{ $lista->id }})" title="Pagar">
                                                 Pagar
                                             </button>
                                         @endif
+
 
 
 
@@ -132,5 +133,7 @@
 
         </div>
     </div>
+    @include('livewire.ventas.ordene-venta.modalParaPagar')
 
+    
 </div>

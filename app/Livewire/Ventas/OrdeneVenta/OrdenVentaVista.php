@@ -8,6 +8,7 @@ use App\Models\ListasCotizar;
 use App\Models\ordenVenta;
 use App\Models\Proyecto;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -15,7 +16,6 @@ class OrdenVentaVista extends Component
 {
 
     use WithPagination;
-
     public $searchTerm = '';
     public $statusFiltro = 0;
     public $precioStock = 0;
@@ -27,6 +27,12 @@ class OrdenVentaVista extends Component
         $this->resetPage();
     }
 
+    public $esVistaFinanzas = false;
+
+    public function mount()
+    {
+        $this->esVistaFinanzas = \Route::currentRouteName() === 'finanzas.ordenesVenta.vistaOrdenVentaFin';
+    }
 
 
     /**
@@ -126,31 +132,86 @@ class OrdenVentaVista extends Component
             ->whereIn('estado', [1, 2]);
     }
 
+    public $openModalPagar = false;
+    public $ordenVentaSelecionada;
+    public $cantidadPagar = 0;
+    public $montoPagar = 0;
 
-    public $openModalOrdenVenta = false;
-    public $cotisacionSelecionada;
-    public $metodoPago = 1;
-    public $formaPago = 1;
-
-    public function abrirModal($id)
+    public function abrirModalPagar($ordenVentaId)
     {
-        $cotisacion = Cotizacion::find($id);
-        $this->openModalOrdenVenta = true;
-        $this->cotisacionSelecionada = $cotisacion;
+        $this->ordenVentaSelecionada = OrdenVenta::findOrFail($ordenVentaId);
+        $this->montoPagar = $this->ordenVentaSelecionada->montoPagar;
+        $this->openModalPagar = true;
+
     }
 
     public function cerrarModal()
     {
-        $this->reset('openModalOrdenVenta', 'cotisacionSelecionada', 'metodoPago', 'formaPago');
+        $this->reset(['openModalPagar', 'ordenVentaSelecionada', 'cantidadPagar','montoPagar']);
     }
 
-    public function asignarMetodoPago($valor)
+    public function aceptar()
     {
-        $this->metodoPago = $valor;
+        // Validaciones
+        $this->validate([
+            'cantidadPagar' => 'required|numeric|min:0.01|max:' . $this->ordenVentaSelecionada->montoPagar
+        ]);
+
+        try {
+            DB::beginTransaction();
+
+            if ($this->cantidadPagar < $this->ordenVentaSelecionada->montoPagar) {
+                $this->Abonar4cantidad($this->cantidadPagar);
+                $mensaje = "Abono registrado correctamente";
+            } else {
+                $this->liquidar($this->cantidadPagar);
+                $mensaje = "Orden liquidada completamente";
+            }
+
+            DB::commit();
+
+            $this->dispatch('mostrarAlerta', [
+                'icono' => 'success',
+                'titulo' => 'Éxito',
+                'texto' => $mensaje
+            ]);
+
+            $this->cerrarModal();
+            $this->emit('pagoRealizado'); // Para actualizar listas si es necesario
+
+            return true;
+        } catch (\Exception $e) {
+            DB::rollBack();
+            $this->dispatch('mostrarAlerta', [
+                'icono' => 'error',
+                'titulo' => 'Error',
+                'texto' => 'Ocurrió un error: ' . $e->getMessage()
+            ]);
+            return false;
+        }
     }
 
-    public function asignarFormaPago($valor)
+    public function liquidar()
     {
-        $this->formaPago = $valor;
+        $this->ordenVentaSelecionada->update([
+            'montoPagar' => 0,
+            'estado' => 1, // 1 = Liquidada
+        ]);
+
+        // Aquí podrías registrar también el pago en tu tabla de transacciones
+        // Transaction::create([...]);
+    }
+
+    public function Abonar4cantidad($cantidad)
+    {
+        $nuevoMonto = $this->ordenVentaSelecionada->montoPagar - $cantidad;
+
+        $this->ordenVentaSelecionada->update([
+            'montoPagar' => $nuevoMonto,
+            'estado' => 0, // 0 = Pendiente
+        ]);
+
+        // Aquí podrías registrar el abono en tu tabla de transacciones
+        // Transaction::create([...]);
     }
 }
