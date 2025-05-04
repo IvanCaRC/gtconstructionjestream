@@ -4,7 +4,7 @@
         @if ($listadeUsuarioActiva == null)
             <div class="col-md-12">
                 <h4 class="px-5">
-                    No hay una cotisacion activa. Activa una para poder realizar la cotisacion
+                    No hay una cotizacion activa. Activa una para poder realizar la cotisacion
                 </h4>
             </div>
         @else
@@ -15,7 +15,7 @@
             </div>
             <div class="col-md-2">
                 <button class="btn btn-outline-primary btn-sm" onclick="accionCotisacion()">
-                    Enviar cotisacion
+                    Enviar cotizacion
                 </button>
             </div>
             <div class="col-md-1">

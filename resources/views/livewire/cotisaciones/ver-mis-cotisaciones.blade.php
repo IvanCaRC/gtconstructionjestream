@@ -58,7 +58,7 @@
                                         </td>
                                     @endif
 
-                                    <td>Cotisacion {{ $lista->nombre }}</td>
+                                    <td>Cotizacion {{ $lista->nombre }}</td>
                                     <td>{{ $lista->created_at->format('d/m/Y') }}</td>
                                     <td>
                                         {{ $lista->proyecto->preferencia == 1 ? 'Tiempo de entrega' : ($lista->proyecto->preferencia == 2 ? 'Precio' : 'Sin preferencia') }}

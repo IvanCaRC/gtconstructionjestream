@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Ver cotisaciones')
+@section('title', 'Ver cotizaciones')
 @section('activedesplegablecotizaciones', 'active')
 @section('activeCollapseCotizaciones', 'show')
 @section('activeItemsCotizar', 'active')

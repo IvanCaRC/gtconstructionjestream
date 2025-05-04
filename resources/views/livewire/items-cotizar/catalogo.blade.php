@@ -101,7 +101,7 @@
                                                     @if ($listadeUsuarioActiva == null || $nombreCliente == 'Sin cliente')
                                                         <div class="col-md-12">
                                                             <label class="px-5">
-                                                                Deves activar una cotisacion para agregarla al carrito
+                                                                Debes activar una cotizacion para agregarla al carrito
                                                             </label>
                                                         </div>
                                                     @else
@@ -198,7 +198,7 @@
                                                         @if ($listadeUsuarioActiva == null || $nombreCliente == 'Sin cliente')
                                                             <div class="">
                                                                 <label class="">
-                                                                    Deves activar una cotisacion para agregarla al
+                                                                    Debes activar una cotizacion para agregarla al
                                                                     carrito
                                                                 </label>
                                                             </div>

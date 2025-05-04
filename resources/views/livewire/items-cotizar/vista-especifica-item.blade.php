@@ -206,7 +206,7 @@
                         <label>{{ $itemEspecifico->unidad }}</label>
                     </div>
                     <div class="col-md-3 mb-3">
-                        <label for="stock" class="mr-2">Stock Actutal del Producto</label>
+                        <label for="stock" class="mr-2">Stock Actual del Producto</label>
                         <br>
                         <label for="">{{ $itemEspecifico->stock }}</label>
                     </div>
@@ -247,7 +247,7 @@
                     </div>
                 @endif
                 @if ($listaUsuarioActiva == null)
-                    <p>No hay una cotisacion activa, seleciona una para poder cotizar</p>
+                    <p>No hay una cotizacion activa, seleciona una para poder cotizar</p>
                 @else
                     @include('livewire.items-cotizar.elccion-provedores')
                 @endif
