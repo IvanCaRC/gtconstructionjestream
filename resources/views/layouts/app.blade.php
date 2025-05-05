@@ -358,6 +358,7 @@
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
 
+                        {{-- Notificaciones correspondientes al sistema --}}
                         <li class="nav-item dropdown no-arrow mx-1">
                             <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -375,15 +376,15 @@
                                         <div class="mr-3">
                                             <div
                                                 class="icon-circle 
-                                                {{ $notification->data['type'] === 'proveedor_desactualizado'
-                                                    ? 'bg-warning'
-                                                    : ($notification->data['type'] === 'item_especifico_desactualizado'
-                                                        ? 'bg-primary'
-                                                        : ($notification->data['type'] === 'seleccion_lista'
-                                                            ? 'bg-success'
-                                                            : ($notification->data['type'] === 'cotizacion_enviada'
-                                                                ? 'bg-info'
-                                                                : 'bg-secondary'))) }}">
+                                                    {{ $notification->data['type'] === 'proveedor_desactualizado'
+                                                        ? 'bg-warning'
+                                                        : ($notification->data['type'] === 'item_especifico_desactualizado'
+                                                            ? 'bg-primary'
+                                                            : ($notification->data['type'] === 'seleccion_lista'
+                                                                ? 'bg-success'
+                                                                : ($notification->data['type'] === 'cotizacion_enviada'
+                                                                    ? 'bg-success'
+                                                                        : 'bg-secondary'))) }}">
                                                 <i
                                                     class="{{ $notification->data['type'] === 'proveedor_desactualizado'
                                                         ? 'fas fa-truck'
@@ -392,7 +393,7 @@
                                                             : ($notification->data['type'] === 'seleccion_lista'
                                                                 ? 'fas fa-list-alt'
                                                                 : ($notification->data['type'] === 'cotizacion_enviada'
-                                                                    ? 'fas fa-reply'
+                                                                    ? 'fas fa-check-circle' // Ícono de éxito
                                                                     : 'fas fa-cube'))) }} text-white"></i>
                                             </div>
                                         </div>

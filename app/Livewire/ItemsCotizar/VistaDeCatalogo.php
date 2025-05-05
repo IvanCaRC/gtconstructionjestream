@@ -8,9 +8,11 @@ use Livewire\Component;
 
 use App\Models\ListasCotizar;
 use App\Models\Proyecto;
+use App\Models\Role;
 use App\Models\User;
+use App\Notifications\CotizacionEnviada;
 use Illuminate\Support\Facades\Auth;
-use App\Notifications\CotizacionEnviadaNotification;
+use Illuminate\Support\Facades\Notification;
 
 class VistaDeCatalogo extends Component
 {
@@ -110,14 +112,17 @@ class VistaDeCatalogo extends Component
             $proyecto->save(); // Guardar el cambio en la base de datos
         }
 
-        // // **Enviar notificación al usuario asociado (`usuario_id`)**
-        // if ($cotizacionActiva->usuario_id) {
-        //     $usuarioCompras = User::find($cotizacionActiva->usuario_id); // Obtener usuario específico
+        // **Enviar notificación al usuario asociado (`usuario_id`)**
+        if ($cotizacionActiva->usuario_id) {
+            $usuarioCompras = User::find($cotizacionActiva->usuario_id); // Obtener usuario específico
 
-        //     if ($usuarioCompras) {
-        //         $usuarioCompras->notify(new CotizacionEnviadaNotification($proyecto->nombre, $lista->nombre));
-        //     }
-        // }
+            if ($usuarioCompras) {
+                $usuarioCompras->notify(new CotizacionEnviada($proyecto->nombre, $lista->nombre));
+            }
+        }
+
+        // $adminUsers = Role::where('name', 'Administrador')->first()->users;
+        // Notification::send($adminUsers, new CotizacionEnviada($proyecto->id, $proyecto->nombre, auth()->user()->name));
 
         // Limpiar cotizaciones del usuario autenticado
         Auth::user()->update(['cotizaciones' => null]);
