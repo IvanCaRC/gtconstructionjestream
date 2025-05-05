@@ -99,7 +99,6 @@ class VistaDeLista extends Component
 
     public function desactivarLista($idLista)
     {
-
         Auth::user()->update(['lista' => null]);
         return redirect()->route('ventas.fichasTecnicas.fichasTecnicas');
     }

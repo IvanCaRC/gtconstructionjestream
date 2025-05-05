@@ -6,12 +6,11 @@ use App\Models\Cotizacion;
 use Livewire\Component;
 
 
-use Livewire\WithPagination;
-use App\Models\Familia;
-use App\Models\ItemEspecifico;
 use App\Models\ListasCotizar;
 use App\Models\Proyecto;
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
+use App\Notifications\CotizacionEnviadaNotification;
 
 class VistaDeCatalogo extends Component
 {
@@ -111,6 +110,14 @@ class VistaDeCatalogo extends Component
             $proyecto->save(); // Guardar el cambio en la base de datos
         }
 
+        // // **Enviar notificación al usuario asociado (`usuario_id`)**
+        // if ($cotizacionActiva->usuario_id) {
+        //     $usuarioCompras = User::find($cotizacionActiva->usuario_id); // Obtener usuario específico
+
+        //     if ($usuarioCompras) {
+        //         $usuarioCompras->notify(new CotizacionEnviadaNotification($proyecto->nombre, $lista->nombre));
+        //     }
+        // }
 
         // Limpiar cotizaciones del usuario autenticado
         Auth::user()->update(['cotizaciones' => null]);
@@ -121,8 +128,6 @@ class VistaDeCatalogo extends Component
 
     public function desactivarLista($id)
     {
-
-
         Auth::user()->update(['cotizaciones' => null]);
         return redirect()->route('compras.catalogoCotisacion.catalogoItem');
     }

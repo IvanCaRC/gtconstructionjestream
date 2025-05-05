@@ -30,11 +30,11 @@
                     <div class="col-md-3">
                         <h5>Cotizacion</h5>
                         <div>
-                            <label for="">Items de cotisacion usando el Stock:
+                            <label for="">Items de cotizacion usando el Stock:
                                 {{ $cantidadDeItemsCotizacionStock }}</label>
                         </div>
                         <div>
-                            <label for="">Items de cotisacion usando el Proveedor:
+                            <label for="">Items de cotizacion usando el Proveedor:
                                 {{ $cantidadDeItemsCotizacionProveedor }}</label>
                         </div>
                         <div>
