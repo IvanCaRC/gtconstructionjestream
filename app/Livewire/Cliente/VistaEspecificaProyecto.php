@@ -105,15 +105,82 @@ class VistaEspecificaProyecto extends Component
         $lista = ListasCotizar::where('proyecto_id', $this->proyecto->id)->first();
         //Obtener valor de los numeros de telefono registrados:
         $telefonos = json_decode($cliente->telefono, true);
-        //Recuperar el valor del contacto
-        $nombre_contacto = !empty($telefonos[0]['nombre']) ? $telefonos[0]['nombre'] : 'No registrado';
-        //Recuperar el telefono designado
-        $numero = !empty($telefonos[0]['numero']) ? $telefonos[0]['numero'] : 'No registrado';
+
+        // Verificamos si hay al menos dos registros en $telefonos
+        if (!empty($telefonos) && is_array($telefonos)) {
+            $nombre_contacto_1 = $telefonos[0]['nombre'] ?? 'No registrado';
+            $numero_1 = $telefonos[0]['numero'] ?? 'No registrado';
+
+            // Si existe un segundo contacto, lo recuperamos
+            $nombre_contacto_2 = isset($telefonos[1]) ? $telefonos[1]['nombre'] ?? 'No registrado' : 'No registrado';
+            $numero_2 = isset($telefonos[1]) ? $telefonos[1]['numero'] ?? 'No registrado' : 'No registrado';
+        } else {
+            // Si no hay datos, asignamos "No registrado" por defecto
+            $nombre_contacto_1 = 'No registrado';
+            $numero_1 = 'No registrado';
+            $nombre_contacto_2 = 'No registrado';
+            $numero_2 = 'No registrado';
+        }
+
         //Obtener la direccion en funcion del id del cliente
         $direccion = Direccion::where('cliente_id', $cliente->id)->first();
         // Recuperar items de la lista a cotizar
         $items = json_decode($lista?->items_cotizar ?? '[]', true);
         $items_data = [];
+        //Recuperar los datos de medidas en un formato para presentar en el pdf
+        $datos_medidas_decodificados = json_decode($this->proyecto->datos_medidas ?? '[]', true);
+        $frentes = [];
+        $fondos = [];
+        $alturasTecho = [];
+        $areasTotales = [];
+        $alturasMuros = [];
+        $canalones = [];
+        $perimetrales = [];
+        $caballetes = [];
+        //Ciclo para obtener los datos de las medidas descritas en el proyecto
+        foreach ($datos_medidas_decodificados as $dato) {
+            $frentes[] = $dato['frente'] ?? 'No especificado';
+            $fondos[] = $dato['fondo'] ?? 'No especificado';
+            $alturasTecho[] = $dato['alturaTecho'] ?? 'No especificado';
+            $areasTotales[] = $dato['areaTotal'] ?? 'No especificado';
+            $alturasMuros[] = $dato['alturaMuros'] ?? 'No especificado';
+            $canalones[] = $dato['canalon'] ?? 'No especificado';
+            $perimetrales[] = $dato['perimetral'] ?? 'No especificado';
+            $caballetes[] = $dato['caballete'] ?? 'No especificado';
+        }
+        //Recuperar los datos adicionales en un formato para presentar en el pdf
+        $datos_adicionales_decodificados = json_decode($this->proyecto->datos_adicionales ?? '[]', true);
+        $estructuras = [];
+        $cantidades = [];
+        //Ciclo para obtener los datos adicionales descritos en el proyecto
+        foreach ($datos_adicionales_decodificados as $dato) {
+            $estructuras[] = $dato['estructura'] ?? 'No especificado';
+            $cantidades[] = $dato['cantidad'] ?? 'No definida';
+        }
+        //Almanecar con formato de presentacion para pdf
+        $estructura_cantidad = [];
+        //Ciclo para unir el tipo de estructura y su cantidad
+        foreach ($estructuras as $index => $estructura) {
+            $cantidad = $cantidades[$index] ?? 'Cantidad no definida'; // Evitar errores si falta una cantidad
+            $estructura_cantidad[] = "{$estructura} - {$cantidad}";
+        }
+
+        //Variables correspondientes a la direccion
+        $componentes_direccion = [
+            $direccion->calle ?? '',
+            $direccion->numero ?? '',
+            $direccion->colonia ?? '',
+            $direccion->municipio ?? '',
+            $direccion->ciudad ?? '',
+            $direccion->estado ?? '',
+            $direccion->pais ?? '',
+            "CP: {$direccion->cp}" ?? ''
+        ];
+
+        // Eliminamos "Campo no recuperado" y espacios en blanco innecesarios
+        $componentes_direccion_filtrados = array_filter($componentes_direccion, function ($valor) {
+            return $valor !== 'Campo no recuperado' && trim($valor) !== '';
+        });
 
         // Recuperar items temporales de la lista a cotizar
         $items_temporales = json_decode($lista?->items_cotizar_temporales ?? '[]', true);
@@ -160,15 +227,28 @@ class VistaEspecificaProyecto extends Component
         //Datos para el PDF
         Session::put('proyecto_nombre', $this->proyecto->nombre);
         Session::put('proyecto_fecha', $this->proyecto->created_at->format('d/m/Y'));
-        Session::put('proyecto_tipo', $this->proyecto->tipo == 1 ? 'suministro' : 'obra');
+        Session::put('proyecto_tipo', $this->proyecto->tipo == 1 ? 'Suministro' : 'Obra');
+        Session::put('frentes', implode(', ', $frentes));
+        Session::put('fondos', implode(', ', $fondos));
+        Session::put('alturasTecho', implode(', ', $alturasTecho));
+        Session::put('areasTotales', implode(', ', $areasTotales));
+        Session::put('alturasMuros', implode(', ', $alturasMuros));
+        Session::put('canalones', implode(', ', $canalones));
+        Session::put('perimetrales', implode(', ', $perimetrales));
+        Session::put('caballetes', implode(', ', $caballetes));
+        Session::put('estructuras', implode(', ', $estructuras));
+        Session::put('cantidades', implode(', ', $cantidades));
+        Session::put('estructura_cantidad', implode(', ', $estructura_cantidad));
         Session::put('usuario', auth()->user()->name);
         Session::put('usuario_first_last_name', auth()->user()->first_last_name);
         Session::put('usuario_second_last_name', auth()->user()->second_last_name);
         Session::put('cliente_nombre', $cliente->nombre);
         Session::put('cliente_correo', $cliente->correo ?? 'No disponible');
-        Session::put('cliente_direccion', $direccion ? "{$direccion->calle} {$direccion->numero}, {$direccion->colonia}, {$direccion->municipio}, {$direccion->ciudad}, {$direccion->estado}, {$direccion->pais}, CP: {$direccion->cp}" : 'No registrada');
-        Session::put('cliente_telefono', $numero);
-        Session::put('cliente_contacto', $nombre_contacto);
+        Session::put('cliente_direccion', implode(', ', $componentes_direccion_filtrados));
+        Session::put('cliente_contacto_1', $nombre_contacto_1);
+        Session::put('cliente_telefono_1', $numero_1);
+        Session::put('cliente_contacto_2', $nombre_contacto_2);
+        Session::put('cliente_telefono_2', $numero_2);
         Session::put('items_cotizar', $lista?->items_cotizar ?? 'No hay ítems registrados');
         Session::put('items_cotizar_data', $items_data);
         Session::put('items_cotizar_temporales', $lista?->items_cotizar_temporales ?? 'No hay ítems temporales');

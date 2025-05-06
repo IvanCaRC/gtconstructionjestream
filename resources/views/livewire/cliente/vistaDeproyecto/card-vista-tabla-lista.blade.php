@@ -134,15 +134,6 @@
 
                             <td class="columna-estatica">
 
-                                @if ($lista->estado == 1 || $lista->estado == 2)
-                                    <button class="btn btn-danger btn-sm" title="Cancelar"
-                                        wire:click="cancelar({{ $lista->id }})">
-                                        Cancelar
-                                    </button>
-                                @endif
-
-
-
                                 <button class="btn btn-info btn-sm mr-1" title="Ver PDF" wire:click="prepararPDFLista">
                                     <i class="fas fa-file-pdf"></i>
                                 </button>
@@ -153,6 +144,14 @@
                                         <i class="fas fa-edit"></i>
                                     </button>
                                 @endif
+
+                                @if ($lista->estado == 1 || $lista->estado == 2)
+                                    <button class="btn btn-danger btn-sm" title="Cancelar"
+                                        wire:click="cancelar({{ $lista->id }})">
+                                        Cancelar
+                                    </button>
+                                @endif
+                                
                             </td>
 
                             <td class="columna-estatica">

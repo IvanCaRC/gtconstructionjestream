@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use Barryvdh\DomPDF\Facade\Pdf;
-use Illuminate\Http\Request;
 use App\Models\Proyecto;
 use Illuminate\Support\Facades\Session;
 
@@ -18,14 +17,27 @@ class PDFListaController extends Controller
             'proyecto' => Session::get('proyecto_nombre', 'Nombre no disponible'),
             'proyecto_fecha' => Session::get('proyecto_fecha', 'Fecha no registrada'),
             'proyecto_tipo' => Session::get('proyecto_tipo', 'No registrado'),
+            'frentes' => Session::get('frentes', 'No especificados'),
+            'fondos' => Session::get('fondos', 'No especificados'),
+            'alturasTecho' => Session::get('alturasTecho', 'No especificadas'),
+            'areasTotales' => Session::get('areasTotales', 'No especificadas'),
+            'alturasMuros' => Session::get('alturasMuros', 'No especificadas'),
+            'canalones' => Session::get('canalones', 'No especificados'),
+            'perimetrales' => Session::get('perimetrales', 'No especificados'),
+            'caballetes' => Session::get('caballetes', 'No especificados'),
+            'estructuras' => Session::get('estructuras', 'No especificada(s)'),
+            'cantidades' => Session::get('cantidades', 'No definida(s)'),
+            'estructura_cantidad' => Session::get('estructura_cantidad', 'No disponible'),
             'usuario' => Session::get('usuario', 'Usuario desconocido'),
             'usuario_first_last_name' => Session::get('usuario_first_last_name', ''),
             'usuario_second_last_name' => Session::get('usuario_second_last_name', ''),
             'cliente_nombre' => Session::get('cliente_nombre', 'No disponible'),
             'cliente_correo' => Session::get('cliente_correo', 'No disponible'),
             'cliente_direccion' => Session::get('cliente_direccion', 'No registrada'),
-            'cliente_telefono' => Session::get('cliente_telefono', 'No disponible'),
-            'cliente_contacto' => Session::get('cliente_contacto', 'No registrado'),
+            'cliente_contacto_1' => Session::get('cliente_contacto_1', 'No registrado'),
+            'cliente_telefono_1' => Session::get('cliente_telefono_1', 'No registrado'),
+            'cliente_contacto_2' => Session::get('cliente_contacto_2', 'No registrado'),
+            'cliente_telefono_2' => Session::get('cliente_telefono_2', 'No registrado'),
             'items_cotizar' => Session::get('items_cotizar', 'No hay ítems registrados'),
             'items_cotizar_data' => Session::get('items_cotizar_data', []),
             'items_cotizar_temporales' => Session::get('items_cotizar_temporales', 'No hay ítems temporales'),
