@@ -10,7 +10,7 @@
 
     <!-- Leaflet CSS -->
 
-
+    <link rel="icon" type="image/png" href="{{ asset('storage/StockImages/stockUser.png') }}">
 
 
     <!-- Fonts -->
