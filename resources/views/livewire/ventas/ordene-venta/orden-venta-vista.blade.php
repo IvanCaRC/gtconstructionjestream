@@ -103,7 +103,7 @@
 
 
 
-                                        @if ($lista->estado != 1)
+                                        @if (!$esVistaFinanzas  && ($lista->estado == 0 || $lista->estado == 1))
                                             <button class="btn btn-danger btn-sm"
                                                 wire:click="cancelar({{ $lista->id }})" title="Cancelar cotización">
                                                 <i class="fas fa-times me-1"></i> Cancelar
@@ -135,5 +135,6 @@
     </div>
     @include('livewire.ventas.ordene-venta.modalParaPagar')
 
-    
+
+
 </div>

@@ -217,17 +217,16 @@
 
                             <a class="collapse-item @yield('activeItemsCotizar') text-white @yield('activeFondoPermanenteItemsCotizar') mb-2"
                                 href="{{ route('compras.catalogoCotisacion.catalogoItem') }}"
-                                href="{{ route('compras.catalogoCotisacion.catalogoItem') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
                                 onmouseout="this.style.backgroundColor='@yield('activeBackgroundItemsCOtizar')';">
                                 Items para cotizar
                             </a>
 
-                            <a class="collapse-item @yield('activeAforgot') text-white mb-2"
-                                href="{{ route('mantenimiento.enconstruccion') }}"
+                            <a class="collapse-item @yield('activeOrdenesCompra') text-white @yield('activeFondoPermanenteOrdenesCompra') mb-2"
+                                href="{{ route('compras.cotisaciones.verOrdenesCompra') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
-                                onmouseout="this.style.backgroundColor='';">
-                                Ordenes de Compra
+                                onmouseout="this.style.backgroundColor='@yield('activeBackgroundOrdenesCompra')';">
+                                Ordenes de compra
                             </a>
                             <div class="collapse-divider"></div>
                         </div>
@@ -294,8 +293,8 @@
             @can('finanzas.collapsed')
                 <!-- Nav Item - Pagina colapsada de departamentos-->
                 <li class="nav-item">
-                    <a class="nav-link  @yield('activedesplegableFinansas')" href="#" data-toggle="collapse" data-target="#collapseFinanzas"
-                        aria-expanded="true" aria-controls="collapseFinanzas">
+                    <a class="nav-link  @yield('activedesplegableFinansas')" href="#" data-toggle="collapse"
+                        data-target="#collapseFinanzas" aria-expanded="true" aria-controls="collapseFinanzas">
                         <i class="fas fa-fw fa-building"></i>
                         <span>Finanzas</span>
                     </a>
@@ -359,44 +358,51 @@
                     <ul class="navbar-nav ml-auto">
 
                         <!-- Sección de Notificaciones Generales (Ítems, Proveedores y listas a cotizar) -->
-<li class="nav-item dropdown no-arrow mx-1">
-    <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
-        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-        <i class="fas fa-bell fa-fw"></i>
-        <span class="badge badge-danger badge-counter">
-            {{ Auth::user()->unreadNotifications->whereNotIn('data.type', ['solicitud_cancelacion', 'rechazo_cancelacion', 'confirmacion_cancelacion', 'solicitudCotizacion_notificacion', 'mensaje_general'])->count() }}
-        </span>
-    </a>
-    <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
-        aria-labelledby="alertsDropdown">
-        <h6 class="dropdown-header">Notificaciones</h6>
-        @forelse (Auth::user()->unreadNotifications->whereNotIn('data.type', ['solicitud_cancelacion', 'rechazo_cancelacion', 'confirmacion_cancelacion', 'solicitudCotizacion_notificacion', 'mensaje_general']) as $notification)
-
-            <a class="dropdown-item d-flex align-items-center bg-light text-dark"
-                href="{{ route('notifications.markAsRead', $notification->id) }}?redirect_to={{ urlencode($notification->data['url']) }}">
-                <div class="mr-3">
-                    <div
-                        class="icon-circle 
-                        {{ $notification->data['type'] === 'proveedor_desactualizado' ? 'bg-warning' : 
-                        ($notification->data['type'] === 'item_especifico_desactualizado' ? 'bg-primary' : 
-                        ($notification->data['type'] === 'seleccion_lista' ? 'bg-success' : 'bg-secondary')) }}">
-                        <i
-                            class="{{ $notification->data['type'] === 'proveedor_desactualizado' ? 'fas fa-truck' : 
-                            ($notification->data['type'] === 'item_especifico_desactualizado' ? 'fas fa-box-open' : 
-                            ($notification->data['type'] === 'seleccion_lista' ? 'fas fa-list-alt' : 'fas fa-cube')) }} text-white"></i>
-                    </div>
-                </div>
-                <div>
-                    <div class="small text-gray-500">
-                        {{ $notification->created_at->diffForHumans() }}</div>
-                    <span class="font-weight-bold">{{ $notification->data['message'] }}</span>
-                </div>
-            </a>
-        @empty
-            <p class="dropdown-item">Sin notificaciones.</p>
-        @endforelse
-    </div>
-</li>
+                        <li class="nav-item dropdown no-arrow mx-1">
+                            <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fas fa-bell fa-fw"></i>
+                                <span class="badge badge-danger badge-counter">
+                                    {{ Auth::user()->unreadNotifications->whereNotIn('data.type', ['solicitud_cancelacion', 'rechazo_cancelacion', 'confirmacion_cancelacion', 'solicitudCotizacion_notificacion', 'mensaje_general'])->count() }}
+                                </span>
+                            </a>
+                            <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
+                                aria-labelledby="alertsDropdown">
+                                <h6 class="dropdown-header">Notificaciones</h6>
+                                @forelse (Auth::user()->unreadNotifications->whereNotIn('data.type', ['solicitud_cancelacion', 'rechazo_cancelacion', 'confirmacion_cancelacion', 'solicitudCotizacion_notificacion', 'mensaje_general']) as $notification)
+                                    <a class="dropdown-item d-flex align-items-center bg-light text-dark"
+                                        href="{{ route('notifications.markAsRead', $notification->id) }}?redirect_to={{ urlencode($notification->data['url']) }}">
+                                        <div class="mr-3">
+                                            <div
+                                                class="icon-circle 
+                        {{ $notification->data['type'] === 'proveedor_desactualizado'
+                            ? 'bg-warning'
+                            : ($notification->data['type'] === 'item_especifico_desactualizado'
+                                ? 'bg-primary'
+                                : ($notification->data['type'] === 'seleccion_lista'
+                                    ? 'bg-success'
+                                    : 'bg-secondary')) }}">
+                                                <i
+                                                    class="{{ $notification->data['type'] === 'proveedor_desactualizado'
+                                                        ? 'fas fa-truck'
+                                                        : ($notification->data['type'] === 'item_especifico_desactualizado'
+                                                            ? 'fas fa-box-open'
+                                                            : ($notification->data['type'] === 'seleccion_lista'
+                                                                ? 'fas fa-list-alt'
+                                                                : 'fas fa-cube')) }} text-white"></i>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="small text-gray-500">
+                                                {{ $notification->created_at->diffForHumans() }}</div>
+                                            <span class="font-weight-bold">{{ $notification->data['message'] }}</span>
+                                        </div>
+                                    </a>
+                                @empty
+                                    <p class="dropdown-item">Sin notificaciones.</p>
+                                @endforelse
+                            </div>
+                        </li>
 
                         <!-- Sección de Mensajes -->
                         <li class="nav-item dropdown no-arrow mx-1">

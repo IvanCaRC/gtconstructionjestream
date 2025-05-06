@@ -14,11 +14,20 @@ return new class extends Migration
         Schema::create('orden_compra', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('id_provedor'); // Clave foránea
-            $table->unsignedBigInteger('id_cotisacion');
+            $table->unsignedBigInteger('id_cotizacion');
             $table->unsignedBigInteger('id_usuario');
-            $table->unsignedBigInteger('id_remision');
-            
+            $table->string('formaPago')->nullable();
+            $table->string('modalidad')->nullable();
+            $table->string('monto')->nullable();
+            $table->string('montoPagar')->nullable();
+            $table->text('items_cotizar_proveedor')->nullable();
+            $table->integer('estado');
+
             $table->timestamps();
+
+            $table->foreign('id_usuario')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('id_cotizacion')->references('id')->on('cotizaciones')->onDelete('cascade');
+            $table->foreign('id_provedor')->references('id')->on('direcciones')->onDelete('cascade');
         });
     }
 

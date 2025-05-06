@@ -129,7 +129,7 @@ class OrdenVentaVista extends Component
         return OrdenVenta::query()
             ->where('id_usuario', $usuarioId) // Filtrar por usuario
             ->orderBy('created_at', 'desc')
-            ->whereIn('estado', [1, 2]);
+            >whereIn('estado', [1, 2]);
     }
 
     public $openModalPagar = false;
@@ -142,7 +142,6 @@ class OrdenVentaVista extends Component
         $this->ordenVentaSelecionada = OrdenVenta::findOrFail($ordenVentaId);
         $this->montoPagar = $this->ordenVentaSelecionada->montoPagar;
         $this->openModalPagar = true;
-
     }
 
     public function cerrarModal()
@@ -152,7 +151,6 @@ class OrdenVentaVista extends Component
 
     public function aceptar()
     {
-        // Validaciones
         $this->validate([
             'cantidadPagar' => 'required|numeric|min:0.01|max:' . $this->ordenVentaSelecionada->montoPagar
         ]);
@@ -164,7 +162,7 @@ class OrdenVentaVista extends Component
                 $this->Abonar4cantidad($this->cantidadPagar);
                 $mensaje = "Abono registrado correctamente";
             } else {
-                $this->liquidar($this->cantidadPagar);
+                $this->liquidar();
                 $mensaje = "Orden liquidada completamente";
             }
 
@@ -178,7 +176,7 @@ class OrdenVentaVista extends Component
 
             $this->cerrarModal();
             $this->emit('pagoRealizado'); // Para actualizar listas si es necesario
-
+            $this->reset(['openModalPagar', 'ordenVentaSelecionada', 'cantidadPagar','montoPagar']);
             return true;
         } catch (\Exception $e) {
             DB::rollBack();
@@ -187,6 +185,7 @@ class OrdenVentaVista extends Component
                 'titulo' => 'Error',
                 'texto' => 'Ocurrió un error: ' . $e->getMessage()
             ]);
+            $this->reset(['openModalPagar', 'ordenVentaSelecionada', 'cantidadPagar','montoPagar']);
             return false;
         }
     }
@@ -198,8 +197,11 @@ class OrdenVentaVista extends Component
             'estado' => 1, // 1 = Liquidada
         ]);
 
-        // Aquí podrías registrar también el pago en tu tabla de transacciones
-        // Transaction::create([...]);
+        $cotisacion = Cotizacion::findOrFail($this->ordenVentaSelecionada->id_cotizacion);
+        $cotisacion->update([
+            'estado' => 5, // 1 = Liquidada
+        ]);
+
     }
 
     public function Abonar4cantidad($cantidad)
@@ -210,8 +212,5 @@ class OrdenVentaVista extends Component
             'montoPagar' => $nuevoMonto,
             'estado' => 0, // 0 = Pendiente
         ]);
-
-        // Aquí podrías registrar el abono en tu tabla de transacciones
-        // Transaction::create([...]);
     }
 }
