@@ -9,5 +9,5 @@
 
 
 
-@livewire('finanzas.orden-compra')
+@livewire('finanzas.orden-compra-fin')
 @endsection

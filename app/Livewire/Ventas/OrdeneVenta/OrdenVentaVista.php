@@ -129,7 +129,7 @@ class OrdenVentaVista extends Component
         return OrdenVenta::query()
             ->where('id_usuario', $usuarioId) // Filtrar por usuario
             ->orderBy('created_at', 'desc')
-            >whereIn('estado', [1, 2]);
+            ->whereIn('estado', [1, 2]);
     }
 
     public $openModalPagar = false;
