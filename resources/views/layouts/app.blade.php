@@ -292,14 +292,14 @@
 
             @can('finanzas.collapsed')
                 <!-- Nav Item - Pagina colapsada de departamentos-->
-                <li class="nav-item">
+                <li class="nav-item @yield('activedesplegableFinansas')">
 
-                    <a class="nav-link  @yield('activedesplegableFinansas')" href="#" data-toggle="collapse"
+                    <a class="nav-link collapsed  " href="#" data-toggle="collapse"
                         data-target="#collapseFinanzas" aria-expanded="true" aria-controls="collapseFinanzas">
                         <i class="fas fa-fw fa-building"></i>
                         <span>Finanzas</span>
                     </a>
-                    <div id="collapseFinanzas" class="collapse @yield('activeCollapseFinanzas')" aria-labelledby="headingPages"
+                    <div id="collapseFinanzas" class="collapse @yield('activeCollapseFinanzas') container-flex2" aria-labelledby="headingPages"
                         data-parent="#accordionSidebar">
                         <div class="bg-primary-dark text-white py-2 collapse-inner rounded">
                             
