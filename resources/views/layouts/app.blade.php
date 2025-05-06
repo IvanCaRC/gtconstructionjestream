@@ -293,8 +293,7 @@
             @can('finanzas.collapsed')
                 <!-- Nav Item - Pagina colapsada de departamentos-->
                 <li class="nav-item">
-                    <a class="nav-link  @yield('activedesplegableFinansas')" href="#" data-toggle="collapse"
-                        data-target="#collapseFinanzas" aria-expanded="true" aria-controls="collapseFinanzas">
+
                     <a class="nav-link  @yield('activedesplegableFinansas')" href="#" data-toggle="collapse"
                         data-target="#collapseFinanzas" aria-expanded="true" aria-controls="collapseFinanzas">
                         <i class="fas fa-fw fa-building"></i>
@@ -311,10 +310,12 @@
                                 href="{{ route('mantenimiento.enconstruccion') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
                                 onmouseout="this.style.backgroundColor='';">Seguimiento Mensual</a>
-                            <a class="collapse-item @yield('activeAforgot') text-white"
-                                href="{{ route('mantenimiento.enconstruccion') }}"
+                            <a class="collapse-item @yield('activeOrdenesCompra2') text-white @yield('activeFondoPermanenteOrdenesCompraa2') mb-2"
+                                href="{{ route('finanzas.ordenCompra.vistaOrdenCompraFin') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
-                                onmouseout="this.style.backgroundColor='';">Reportes</a>
+                                onmouseout="this.style.backgroundColor='@yield('activeBackgroundOrdenesCompra2')';">
+                                Órdenes de Compra
+                            </a>
                             <a class="collapse-item @yield('activeOrdenesVenta2') text-white @yield('activeFondoPermanenteOrdenesVenta2') mb-2"
                                 href="{{ route('finanzas.ordenesVenta.vistaOrdenVentaFin') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"

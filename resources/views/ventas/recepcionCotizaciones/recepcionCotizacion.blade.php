@@ -2,7 +2,6 @@
 @section('title', 'Recepcion de cotizaciones')
 @section('activedesplegableVentas', 'active')
 @section('activeCollapseVentas', 'show')
-
 @section('activeRecepcionCotizacion', 'active')
 @section('activeFondoPermanenteRecepcionCotizacion', 'background-permanent')
 @section('contend')
