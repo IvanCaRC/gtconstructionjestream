@@ -217,17 +217,16 @@
 
                             <a class="collapse-item @yield('activeItemsCotizar') text-white @yield('activeFondoPermanenteItemsCotizar') mb-2"
                                 href="{{ route('compras.catalogoCotisacion.catalogoItem') }}"
-                                href="{{ route('compras.catalogoCotisacion.catalogoItem') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
                                 onmouseout="this.style.backgroundColor='@yield('activeBackgroundItemsCOtizar')';">
                                 Items para cotizar
                             </a>
 
-                            <a class="collapse-item @yield('activeAforgot') text-white mb-2"
-                                href="{{ route('mantenimiento.enconstruccion') }}"
+                            <a class="collapse-item @yield('activeOrdenesCompra') text-white @yield('activeFondoPermanenteOrdenesCompra') mb-2"
+                                href="{{ route('compras.cotisaciones.verOrdenesCompra') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
-                                onmouseout="this.style.backgroundColor='';">
-                                Ordenes de Compra
+                                onmouseout="this.style.backgroundColor='@yield('activeBackgroundOrdenesCompra')';">
+                                Ordenes de compra
                             </a>
                             <div class="collapse-divider"></div>
                         </div>
@@ -296,6 +295,8 @@
                 <li class="nav-item">
                     <a class="nav-link  @yield('activedesplegableFinansas')" href="#" data-toggle="collapse"
                         data-target="#collapseFinanzas" aria-expanded="true" aria-controls="collapseFinanzas">
+                    <a class="nav-link  @yield('activedesplegableFinansas')" href="#" data-toggle="collapse"
+                        data-target="#collapseFinanzas" aria-expanded="true" aria-controls="collapseFinanzas">
                         <i class="fas fa-fw fa-building"></i>
                         <span>Finanzas</span>
                     </a>
@@ -358,7 +359,7 @@
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
 
-                        {{-- Notificaciones correspondientes al sistema --}}
+                        <!-- Sección de Notificaciones Generales (Ítems, Proveedores y listas a cotizar) -->
                         <li class="nav-item dropdown no-arrow mx-1">
                             <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -376,15 +377,13 @@
                                         <div class="mr-3">
                                             <div
                                                 class="icon-circle 
-                                                    {{ $notification->data['type'] === 'proveedor_desactualizado'
-                                                        ? 'bg-warning'
-                                                        : ($notification->data['type'] === 'item_especifico_desactualizado'
-                                                            ? 'bg-primary'
-                                                            : ($notification->data['type'] === 'seleccion_lista'
-                                                                ? 'bg-success'
-                                                                : ($notification->data['type'] === 'cotizacion_enviada'
-                                                                    ? 'bg-success'
-                                                                        : 'bg-secondary'))) }}">
+                        {{ $notification->data['type'] === 'proveedor_desactualizado'
+                            ? 'bg-warning'
+                            : ($notification->data['type'] === 'item_especifico_desactualizado'
+                                ? 'bg-primary'
+                                : ($notification->data['type'] === 'seleccion_lista'
+                                    ? 'bg-success'
+                                    : 'bg-secondary')) }}">
                                                 <i
                                                     class="{{ $notification->data['type'] === 'proveedor_desactualizado'
                                                         ? 'fas fa-truck'
@@ -392,9 +391,7 @@
                                                             ? 'fas fa-box-open'
                                                             : ($notification->data['type'] === 'seleccion_lista'
                                                                 ? 'fas fa-list-alt'
-                                                                : ($notification->data['type'] === 'cotizacion_enviada'
-                                                                    ? 'fas fa-check-circle' // Ícono de éxito
-                                                                    : 'fas fa-cube'))) }} text-white"></i>
+                                                                : 'fas fa-cube')) }} text-white"></i>
                                             </div>
                                         </div>
                                         <div>

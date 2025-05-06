@@ -128,7 +128,7 @@ class Recepcioncotiosacion extends Component
     {
         return Cotizacion::with(['proyecto', 'proyecto.cliente'])
             ->orderBy('created_at', 'desc')
-            ->whereIn('estado', [1, 2]);
+            ->whereIn('estado', [1, 2,3,4,5,6,]);
     }
 
     /**
@@ -144,7 +144,7 @@ class Recepcioncotiosacion extends Component
                 $q->where('user_id', $usuarioId);
             })
             ->orderBy('created_at', 'desc')
-            ->whereIn('estado', [1, 2]);
+            ->whereIn('estado', [1, 2,3,4,5,6,]);
     }
 
 

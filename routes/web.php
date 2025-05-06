@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\adminController;
 use App\Http\Controllers\ClienteController;
+use App\Http\Controllers\ComprasController;
 use App\Http\Controllers\Cotisaciones;
 use App\Http\Controllers\FamiliaController;
 use App\Http\Controllers\FichasTecnicas;
@@ -134,3 +135,7 @@ Route::get('compras/catalogoCotisacion/vistaEspecificaItemCotizar/{idItem}', [It
 Route::get('ventas/ordenesVenta/vistaOrdenVenta', [ordenVentas::class, 'index'])->middleware('auth', 'nocache')->name('ventas.ordenesVenta.vistaOrdenVenta');
 
 Route::get('finanzas/ordenesVenta/vistaOrdenVentaFin', [FinanzasController::class, 'ordenesVenta'])->middleware('auth', 'nocache')->name('finanzas.ordenesVenta.vistaOrdenVentaFin');
+
+Route::get('compras/cotisaciones/verOrdenesCompra', [ComprasController::class, 'ordenesCompra'])->middleware('auth', 'nocache')->name('compras.cotisaciones.verOrdenesCompra');
+
+Route::get('compras/cotisaciones/vistaEspecificaOrdenesCompra/{idCotisacion}', [ComprasController::class, 'vistaEspecificaOrdenCompra'])->middleware('auth', 'nocache')->name('compras.cotisaciones.vistaEspecificaOrdenesCompra');

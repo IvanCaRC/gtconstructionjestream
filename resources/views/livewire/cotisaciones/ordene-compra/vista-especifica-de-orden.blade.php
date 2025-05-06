@@ -27,24 +27,23 @@
         }
 
         .ml-3 {
-            margin-left: 1rem;
+            cliente margin-left: 1rem;
         }
     </style>
+    <br>
     <div class="ml-3">
         <div class="row align-items-center">
-            <button type="button" class="btn-icon" wire:click="regresarGestionClientes"public
+            <button type="button" class="btn-icon" wire:click="regresarGestionClientes">
                 <i class="fas fa-arrow-left"></i>
             </button>
-            <h2 class="ml-3">Detalles de cliente</h2>Z
+            <h2 class="ml-3">Ordenes de compra </h2>
         </div>
     </div>
-    @include('livewire.cliente.card-cliente')
-    <div>
-        <br>
-    </div>
-    @include('livewire.cliente.vistaDeproyecto.card-vista-proyecto-esp')
-    <br>
-    @include('livewire.cliente.vistaDeproyecto.card-vista-tabla-lista')
-    <br>
-    @include('livewire.cliente.modal-actualizacion-proyecto')
+
+    @include('livewire.cotisaciones.ordene-compra.vistaEspecificaOrdenCompra.cardProyecto')
+<br>
+    @include('livewire.cotisaciones.ordene-compra.vistaEspecificaOrdenCompra.cardListaOrdenesCompra')
+
+
+
 </div>
