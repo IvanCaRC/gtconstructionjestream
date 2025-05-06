@@ -59,7 +59,7 @@
                                         </td>
                                     @endif
 
-                                    <td>Cotisacion {{ $lista->nombre }}</td>
+                                    <td>Cotizacion {{ $lista->nombre }}</td>
                                     <td>{{ $lista->created_at->format('d/m/Y') }}</td>
                                     <td>
                                         {{ $lista->proyecto->preferencia == 1 ? 'Tiempo de entrega' : ($lista->proyecto->preferencia == 2 ? 'Precio' : 'Sin preferencia') }}
@@ -90,14 +90,16 @@
 
                                         @if ($lista->estado == 0)
                                             @if (Auth::user()->cotizaciones != $lista->id)
-                                                <button class="btn btn-primary btn-sm mr-1"
+                                                <button
+                                                    class="btn btn-primary btn-sm mr-1 font-weight-bold border border-primary"
                                                     wire:click="verDetalles({{ $lista->id }})">
-                                                    Selecionar
+                                                    <i class="fas fa-list"></i> Seleccionar lista
                                                 </button>
                                             @else
-                                                <button class="btn btn-primary btn-sm mr-1"
+                                                <button
+                                                    class="btn btn-success btn-sm mr-1 font-weight-bold border border-dark"
                                                     wire:click="verDetalles({{ $lista->id }})">
-                                                    Ver lista
+                                                    <i class="fas fa-check-circle"></i> Lista activa
                                                 </button>
                                             @endif
                                         @endif

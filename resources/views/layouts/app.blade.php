@@ -295,6 +295,8 @@
                 <li class="nav-item">
                     <a class="nav-link  @yield('activedesplegableFinansas')" href="#" data-toggle="collapse"
                         data-target="#collapseFinanzas" aria-expanded="true" aria-controls="collapseFinanzas">
+                    <a class="nav-link  @yield('activedesplegableFinansas')" href="#" data-toggle="collapse"
+                        data-target="#collapseFinanzas" aria-expanded="true" aria-controls="collapseFinanzas">
                         <i class="fas fa-fw fa-building"></i>
                         <span>Finanzas</span>
                     </a>

@@ -31,8 +31,6 @@ class VerMisCotisaciones extends Component
 
     public function render()
     {
-
-
         if (Auth::user()->hasRole('Administrador')) {
             $query = Cotizacion::with('proyecto')
                 ->orderBy('created_at', 'desc')

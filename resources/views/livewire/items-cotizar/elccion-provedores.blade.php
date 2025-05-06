@@ -16,9 +16,9 @@
 
             @if ($tipoCotizacion == null)
                 <h4>
-                    Seleciona el tipo de cotisacion que realizaras
+                    Selecciona el tipo de cotizacion que realizaras
                 </h4>
-                <button href="#" wire:click="cambiarStock()" class="btn btn-primary mt-3">Cotisacion de
+                <button href="#" wire:click="cambiarStock()" class="btn btn-primary mt-3">Cotizacion de
                     stock</button>
                 <button href="#" wire:click="cambiarProveedor()" class="btn btn-primary mt-3">Cotizacion de
                     proveedor</button>
@@ -28,7 +28,7 @@
                     <h4>
                         Cambiar tipo de cotizacion
                     </h4>
-                    <button href="#" wire:click="cambiarStock()" class="btn btn-primary mt-3">Cotisacion de
+                    <button href="#" wire:click="cambiarStock()" class="btn btn-primary mt-3">Cotizacion de
                         stock</button>
                 @endif
                 @if ($tipoCotizacion == 2)
@@ -51,9 +51,9 @@
 
             @if ($tipoCotizacion == null)
                 <h4>
-                    Seleciona el tipo de cotisacion que realizaras
+                    Selecciona el tipo de cotizacion que realizaras
                 </h4>
-                <button href="#" wire:click="cambiarStock()" class="btn btn-primary mt-3">Cotisacion de
+                <button href="#" wire:click="cambiarStock()" class="btn btn-primary mt-3">Cotizacion de
                     stock</button>
                 <button href="#" wire:click="cambiarProveedor()" class="btn btn-primary mt-3">Cotizacion de
                     proveedor</button>
@@ -63,7 +63,7 @@
                     <h4>
                         Cambiar tipo de cotizacion
                     </h4>
-                    <button href="#" wire:click="cambiarStock()" class="btn btn-primary mt-3">Cotisacion de
+                    <button href="#" wire:click="cambiarStock()" class="btn btn-primary mt-3">Cotizacion de
                         stock</button>
                 @endif
                 @if ($tipoCotizacion == 2)
