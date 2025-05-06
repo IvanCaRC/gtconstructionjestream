@@ -1,140 +1,174 @@
-<div class="container-fluid px-4 sm:px-6 lg:px-8 py-3">
+<div class="container-fluid px-4 sm:px-6 lg:px-8 py-1">
+
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <h2 class="ml-3">Ordenes de Compra</h2>
+
+    <style>
+        .switch-toggle {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 30px;
+        }
+
+        .switch-toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            inset: 0;
+            background-color: #d9534f;
+            /* rojo por defecto */
+            transition: .4s;
+            border-radius: 30px;
+        }
+
+        .slider::before {
+            position: absolute;
+            content: "";
+            height: 24px;
+            width: 24px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked+.slider {
+            background-color: #5cb85c;
+            /* verde cuando está activo */
+        }
+
+        input:checked+.slider::before {
+            transform: translateX(30px);
+        }
+
+        table {
+
+            width: 100%;
+        }
+
+        .columna-estatica {
+            width: 260px;
+            /* o el valor que tú quieras */
+
+        }
+
+        .columna-estatica-numero1 {
+            width: 140px;
+            /* o el valor que tú quieras */
+
+        }
+
+        .columna-estatica-estado {
+            width: 90px;
+            /* o el valor que tú quieras */
+
+        }
+    </style>
+    <br>
+    <h3 class="ml-3">Ordenes de compra del proyecto</h3>
     <div class="card">
         <div class="card-body">
-            <div class="row mb-3">
+            <div class="row m   b-3">
                 <div class="col-md-10">
-                    <!-- Input de búsqueda -->
-                    <input type="text" class="form-control mr-2" id="searchInput" placeholder="Buscar lista..."
-                        wire:model='searchTerm' wire:keydown='search'>
-                    <!-- Filtro de Estado -->
+                    <input type="text" class="form-control mr-2" id="searchInput" placeholder="Buscar lista...">
                 </div>
                 <div class="col-md-2">
-                    <select class="form-control mr-2" wire:model="statusFiltro" wire:change="search">
-                        <option value="0">Preferencia</option>
-                        <option value="1">Tiempo de entrega</option>
-                        <option value="2">Precio</option>
+                    <select class="form-control mr-2">
+                        <option value="0">Todos los estados</option>
+                        <option value="1">Activo</option>
+                        <option value="2">Cotizando</option>
+                        <option value="3">Cotizado</option>
+                        <option value="5">En proceso de venta</option>
+                        <option value="6">Terminado</option>
+                        <option value="4">Cancelado</option>
                     </select>
                 </div>
             </div>
-            @if ($ordenesVenta && $ordenesVenta->count() > 0)
-
-                <div>
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                @if (Auth::user()->hasRole('Administrador'))
-                                    <th>Usuario</th>
-                                @endif
-                                <th>Cliente</th>
-                                <th>Lista</th>
-                                <th>Forma de pago</th>
-                                <th>Metodo de pago</th>
-                                <th>Monto Total</th>
-                                <th>Monto por pagar</th>
-                                <th>Estado</th>
-                                <th></th>
+            @if ($listas && $listas->count() > 0)
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Estado</th>
+                            <th>Modalidad</th>
+                            <th>Forma de pago</th>
+                            <th>Monto</th>
+                            <th>Monto por pagar</th>
+                            <th>Proveedor</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach ($listas as $lista)
                             </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($ordenesVenta as $lista)
-                                <tr>
-                                    {{-- @if (Auth::user()->hasRole('Administrador'))
-                                        <td>
-                                            {{ $lista->usuario->name ?? 'Sin asignar' }}
-                                            {{ $lista->usuario->first_last_name ?? 'Sin asignar' }}
-                                            {{ $lista->usuario->second_last_name ?? 'Sin asignar' }}
-                                        </td>
-                                    @endif
-
-                                    <td>{{ $lista->cliente->nombre }}</td> --}}
-                                    <td>
-                                        Cotisacion {{ $lista->cotizacion->nombre }}
-                                    </td>
-                                    <td>
-                                        <label>
-                                            {!! $lista->formaPago == 1
-                                                ? '<span class="badge badge-warning">Parcial</span>'
-                                                : ($lista->formaPago == 2
-                                                    ? '<span class="badge badge-warning">Total</span>'
-                                                    : '<span class="badge badge-secondary">Estado desconocido</span>') !!}
-                                        </label>
-                                    </td>
-                                    <td>
-                                        <label>
-                                            {!! $lista->metodoPago == 1
-                                                ? '<span class="badge badge-primary">Deposito</span>'
-                                                : ($lista->metodoPago == 2
-                                                    ? '<span class="badge badge-primary">Efectivo</span>'
-                                                    : ($lista->metodoPago == 3
-                                                        ? '<span class="badge badge-primary">Transferencia</span>'
-                                                        : '<span class="badge badge-secondary">Estado desconocido</span>')) !!}
-                                        </label>
-                                    </td>
-                                    <td style="text-align: right; font-weight: bold; color: green;">
-                                        {{ number_format($lista->monto, 2) }} MXN
-                                    </td>
-                                    <td style="text-align: right; font-weight: bold; color: rgb(207, 0, 0);">
-                                        {{ number_format($lista->montoPagar, 2) }} MXN
-                                    </td>
-
-                                    <td>
-                                        <label>
-                                            {!! $lista->estado == 0
-                                                ? '<span class="badge badge-warning">Pendiente de pago</span>'
-                                                : ($lista->estado == 1
-                                                    ? '<span class="badge badge-success">Pago completado</span>'
-                                                    : ($lista->estado == 2
-                                                        ? '<span class="badge badge-warning">Pago parcial</span>'
-                                                        : ($lista->estado == 3
-                                                            ? '<span class="badge badge-danger">Cancelada</span>'
-                                                            : '<span class="badge badge-secondary">Estado desconocido</span>'))) !!}
-                                        </label>
-                                    </td>
-                                    <td>
-                                        {{-- @if ($esVistaFinanzas && $lista->estado == 0)
-                                            <button class="btn btn-primary btn-sm"
-                                                wire:click="abrirModalPagar({{ $lista->id }})" title="Pagar">
-                                                Pagar
-                                            </button>
-                                        @endif
+                            <td>
+                                {{ $lista->created_at }}
+                            </td>
+                            <td>
+                                {!! $lista->estado == 0
+                                    ? '<span class="badge badge-danger">Por pagar</span>'
+                                    : ($lista->estado == 1
+                                        ? '<span class="badge badge-success">Pagado</span>'
+                                        : ($lista->estado == 2
+                                            ? '<span class="badge badge-danger">Cancelado</span>'
+                                            : '<span class="badge badge-secondary">Estado desconocido</span>')) !!}
+                            </td>
+                            <td>
+                                {{ $lista->modalidad }}
+                            </td>
+                            <td>
+                                {!! $lista->formaPago == 0
+                                    ? '<span class="badge badge-primary">Deposito</span>'
+                                    : ($lista->formaPago == 1
+                                        ? '<span class="badge badge-primary">Efectivo</span>'
+                                        : ($lista->formaPago == 2
+                                            ? '<span class="badge badge-primary">Transferencia</span>'
+                                            : ($lista->formaPago == 3
+                                                ? '<span class="badge badge-danger">Cancelada</span>'
+                                                : '<span class="badge badge-secondary">Estado desconocido</span>'))) !!}
+                            </td>
+                            <td style="text-align: left; font-weight: bold; color: green;">
+                                {{ number_format($lista->monto, 2) }} MXN
+                            </td>
+                            <td style="text-align: left; font-weight: bold; color: rgb(207, 0, 0);">
+                                {{ number_format($lista->montoPagar, 2) }} MXN
+                            </td>
+                            <td>
+                                {{ $lista->proveedor->nombre }}
+                            </td>
+                            <td>
 
 
 
 
-                                        @if (!$esVistaFinanzas  && ($lista->estado == 0 || $lista->estado == 1))
-                                            <button class="btn btn-danger btn-sm"
-                                                wire:click="cancelar({{ $lista->id }})" title="Cancelar cotización">
-                                                <i class="fas fa-times me-1"></i> Cancelar
-                                            </button>
-                                        @endif
-                                        <!-- Botón de Cancelar (existente) -->
-                                        <button class="btn btn-info btn-sm text-white"
-                                            wire:click="generarPDF({{ $lista->id }})"
-                                            title="Generar PDF de la cotización">
-                                            <i class="fas fa-file-pdf me-1"></i> PDF
-                                        </button>
-                                        <!-- Botón para Ver Proyecto --> --}}
-
-                                    </td>
-                                </tr>
-                            @endforeach
-                        </tbody>
-                    </table>
-                    {{ $ordenesVenta->links() }}
-                </div>
+                                @if (!$lista->estado == 1)
+                                    <button class="btn btn-primary btn-sm"
+                                        wire:click="abrirModalPagar({{ $lista->id }})" title="Pagar">
+                                        Pagar
+                                    </button>
+                                @endif
+                                <button class="btn btn-info btn-sm mr-1" title="Ver PDF" wire:click="prepararPDFLista">
+                                    <i class="fas fa-file-pdf"></i>
+                                </button>
+                            </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             @else
                 <div>
-                    No tienes listas para cotizar.
+                    No hay ordenes en esta lista.
                 </div>
             @endif
-            <!-- Enlace de paginación -->
-
         </div>
     </div>
 
-
-
+    @include('livewire.finanzas.modalParaPagar')
 
 </div>

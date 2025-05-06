@@ -4,7 +4,7 @@
 @section('activeCollapseFinanzas', 'show')
 
 @section('activeOrdenesCompra2', 'active')
-@section('activeFondoPermanenteOrdenesCompra2', 'background-permanent')
+@section('activeFondoPermanenteOrdenesCompraa2', 'background-permanent')
 @section('contend')
 
 
