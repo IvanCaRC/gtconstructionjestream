@@ -2,7 +2,23 @@
     <div class="bg-white p-6 rounded-lg shadow-md">
         <h2 class="text-xl font-semibold mb-4">Resumen Financiero</h2>
         
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- Selector de período -->
+        <div class="mb-6">
+            <label for="periodo" class="block text-sm font-medium text-gray-700 mb-2">Filtrar por período:</label>
+            <select 
+                wire:model.live="periodoSeleccionado" 
+                id="periodo"
+                class="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+            >
+                <option value="general">General (todas las fechas)</option>
+                <option value="ultimo_mes">Último mes</option>
+                <option value="ultimos_3_meses">Últimos 3 meses</option>
+                <option value="ultimos_6_meses">Últimos 6 meses</option>
+            </select>
+        </div>
+        
+        <!-- Tarjetas de resumen -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
             <!-- Ventas Totales -->
             <div class="bg-green-50 p-4 rounded-lg border border-green-200">
                 <h3 class="text-green-800 font-medium">Ventas Totales</h3>
@@ -24,6 +40,6 @@
             </div>
         </div>
     
-        <!-- Botón para recalcular -->
+        
     </div>
 </div>
