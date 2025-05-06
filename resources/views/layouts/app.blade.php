@@ -302,14 +302,19 @@
                     <div id="collapseFinanzas" class="collapse @yield('activeCollapseFinanzas')" aria-labelledby="headingPages"
                         data-parent="#accordionSidebar">
                         <div class="bg-primary-dark text-white py-2 collapse-inner rounded">
-                            <a class="collapse-item @yield('activeAlogin') text-white"
-                                href="{{ route('mantenimiento.enconstruccion') }}"
+                            
+                            <a class="collapse-item @yield('activeIngresosEgresos') text-white @yield('activeFondoPermanenteIngresosEgresos2') mb-2"
+                                href="{{ route('finanzas.ingresosEgresos.ingresosEgeresosVistaGeneral') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
-                                onmouseout="this.style.backgroundColor='';">Control de Ingresos/Egresos</a>
+                                onmouseout="this.style.backgroundColor='@yield('activeBackgroundIngresosEgresos')';">
+                                Ingresos/Egresos
+                            </a>
+                            
                             <a class="collapse-item @yield('activeAregister') text-white"
                                 href="{{ route('mantenimiento.enconstruccion') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
                                 onmouseout="this.style.backgroundColor='';">Seguimiento Mensual</a>
+
                             <a class="collapse-item @yield('activeOrdenesCompra2') text-white @yield('activeFondoPermanenteOrdenesCompraa2') mb-2"
                                 href="{{ route('finanzas.ordenCompra.vistaOrdenCompraFin') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"

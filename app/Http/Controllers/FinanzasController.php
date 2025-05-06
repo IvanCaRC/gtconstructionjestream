@@ -18,4 +18,11 @@ class FinanzasController extends Controller
         return view('finanzas.ordenCompra.vistaOrdenCompraFin');
 
     }
+
+    public function ingresosEgresos()
+    {
+        // Retornar la vista de la lista de proveedores
+        return view('finanzas.ingresosEgresos.ingresosEgeresosVistaGeneral');
+
+    }
 }

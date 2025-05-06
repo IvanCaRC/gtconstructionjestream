@@ -140,5 +140,6 @@ Route::get('compras/cotisaciones/verOrdenesCompra', [ComprasController::class, '
 
 Route::get('compras/cotisaciones/vistaEspecificaOrdenesCompra/{idCotisacion}', [ComprasController::class, 'vistaEspecificaOrdenCompra'])->middleware('auth', 'nocache')->name('compras.cotisaciones.vistaEspecificaOrdenesCompra');
 
-
 Route::get('finanzas/ordenCompra/vistaOrdenCompraFin', [FinanzasController::class, 'ordenescompra'])->middleware('auth', 'nocache')->name('finanzas.ordenCompra.vistaOrdenCompraFin');
+
+Route::get('finanzas/ingresosEgresos/ingresosEgeresosVistaGeneral', [FinanzasController::class, 'ingresosEgresos'])->middleware('auth', 'nocache')->name('finanzas.ingresosEgresos.ingresosEgeresosVistaGeneral');
