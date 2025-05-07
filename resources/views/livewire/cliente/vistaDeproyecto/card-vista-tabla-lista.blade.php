@@ -84,21 +84,24 @@
 
             <div class="row m   b-3">
                 <div class="col-md-10">
-                    <input type="text" class="form-control mr-2" id="searchInput" placeholder="Buscar lista...">
+                    <input type="text" class="form-control mr-2" id="searchInput" placeholder="Buscar lista..." wire:model='searchTerm' wire:keydown='search'>
                 </div>
                 <div class="col-md-2">
-                    <select class="form-control mr-2">
+                    <select class="form-control" wire:model="statusFiltro" wire:change="filter">
                         <option value="0">Todos los estados</option>
-                        <option value="1">Activo</option>
-                        <option value="2">Cotizando</option>
+                        <option value="1">Creando Lista</option>
+                        <option value="2">Creando cotizacion</option>
                         <option value="3">Cotizado</option>
-                        <option value="5">En proceso de venta</option>
-                        <option value="6">Terminado</option>
-                        <option value="4">Cancelado</option>
-
+                        <option value="4">Esperandopago</option>
+                        <option value="5">Pagado</option>
+                        <option value="6">Preparando</option>
+                        <option value="7">En proceso de entraga</option>
+                        <option value="8">Terminado</option>
+                        <option value="9">Cancelado</option>
                     </select>
                 </div>
             </div>
+            <br>
             @if ($listas && $listas->count() > 0)
                 <table class="table">
                     <thead>
@@ -250,13 +253,14 @@
                                 @endif
                             </td>
                             <td>
+
                                 @if ($lista->estado < 4)
                                     <label for="">...</label>
-                                @elseif ($lista->estado > 3)
+                                @elseif ($cotizacion && $lista->estado > 3)
                                     <button class="btn btn-info btn-sm text-white"
                                         onclick="window.open('{{ route('proyecto.pdf-orden-venta', ['id' => $ordenVenta->id]) }}', '_blank')"
                                         title="Ver el documento de orden de venta">
-                                        <i class="fas fa-file-pdf me-1"></i> PDF Orden Venta
+                                        <i class="fas fa-file-pdf me-1"></i> PDF
                                     </button>
                                 @endif
                                 @if ($lista->estado == 4)

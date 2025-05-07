@@ -97,6 +97,17 @@ class VistaEspecificaProyecto extends Component
             'pdfListaUrl' => route('proyecto.pdf-lista', ['id' => $this->proyecto->id]),
         ], ['listas' => $listas]);
     }
+
+    public function search()
+    {
+
+    }
+
+    public function filter()
+    {
+
+    }
+    
     //Visualizar PDF.
     public function prepararPDFLista($lista_id)
     {

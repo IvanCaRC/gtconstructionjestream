@@ -15,6 +15,7 @@ class PDFCotizacionController extends Controller
     public function generarPDFCotizacion($id)
     {
         try {
+
             // ✅ Recuperar cotización con relaciones necesarias
             $cotizacion = Cotizacion::with('usuario', 'proyecto', 'listaCotizar')->findOrFail($id);
             $cliente = Cliente::findOrFail($cotizacion->proyecto->cliente_id);
@@ -69,7 +70,7 @@ class PDFCotizacionController extends Controller
             foreach ($items_proveedor as $item) {
                 $item_especifico = ItemEspecifico::find($item['id']); // 🔹 Primero buscamos el ItemEspecifico
                 $item_base = $item_especifico ? Item::find($item_especifico->item_id) : null; // 🔹 Luego recuperamos el Item asociado
-            
+
                 $items_cotizacion[] = [
                     'cantidad' => $item['cantidad'] ?? '-',
                     'nombre' => $item['nombreDeItem'] ?? $item_base?->nombre ?? 'Nombre no disponible',
@@ -97,8 +98,9 @@ class PDFCotizacionController extends Controller
                 'items_cotizacion' => $items_cotizacion, // ✅ Ahora apuntamos a la lista fusionada
                 'subtotal' => $total_cotizacion, // ✅ Subtotal sin impuestos
                 'impuestos' => $total_cotizacion * 0.16, // ✅ Asumiendo un 16% de IVA, ajusta si es necesario
-                'total' => $total_cotizacion + ($total_cotizacion * 0.16), // ✅ Total con impuestos
+                'total' =>             ceil(($total_cotizacion + ($total_cotizacion * 0.16)) * 10) / 10, // ✅ Total con impuestos
             ];
+
 
             // ✅ Generar el PDF con los datos reales
             $pdf = Pdf::loadView('pdf.cotizacion', $data)->setPaper('a4', 'portrait');
