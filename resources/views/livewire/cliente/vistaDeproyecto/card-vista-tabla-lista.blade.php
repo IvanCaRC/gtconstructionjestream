@@ -50,7 +50,13 @@
         }
 
         .columna-estatica {
-            width: 260px;
+            width: 200px;
+            /* o el valor que tú quieras */
+
+        }
+
+        .columna-estatica-columna{
+            width: 250px;
             /* o el valor que tú quieras */
 
         }
@@ -95,6 +101,9 @@
                 <table class="table">
                     <thead>
                         <tr>
+                            <th>
+
+                            </th>
                             <th>Estado</th>
                             <th>Listas a cotizar</th>
                             <th></th>
@@ -108,7 +117,21 @@
                     <tbody>
                         @foreach ($listas as $lista)
                             </tr>
+                            <td>
+                                @if ($lista->estado == 7)
+                                    <button class="btn btn-primary btn-sm" wire:click="cancelar({{ $lista->id }})"
+                                        title="Cancelar cotización">
+                                        Terminar
+                                    </button>
+                                    <button class="btn btn-danger btn-sm" wire:click="cancelar({{ $lista->id }})"
+                                        title="Cancelar cotización">
+                                        Cancelar
+                                    </button>
+                                @endif
+                            </td>
                             <td class="text-center columna-estatica-estado">
+
+
                                 @php
                                     $estados = [
                                         1 => ['label' => 'Creando Lista', 'class' => 'badge-success'],
@@ -174,17 +197,16 @@
                                     </button>
                                 @elseif ($lista->estado == 2)
                                     <label for="">Cotizando...</label>
-                                @elseif ($lista->estado == 3)
-                                    <span class="fw-bold">{{ $cotizacion->nombre }}</span>
-                                @elseif ($lista->estado == 4)
+                                @elseif ($lista->estado >= 3 && $lista->estado != 9)
                                     <span
                                         class="fw-bold">{{ $cotizacion->nombre ?? 'No hay cotizacion recuperada' }}</span>
-                                @elseif ($lista->estado == 5)
-                                    <span class="fw-bold">{{ $cotizacion->nombre }}</span>
+                                @elseif ($lista->estado == 9)
+                                    <span
+                                        class="fw-bold">{{ $cotizacion->nombre ?? 'No hay cotizacion recuperada' }}</span>
                                 @endif
                             </td>
-                            <td class="columna-estatica">
-                                @if ($lista->estado >= 3 && $lista->estado != 4)
+                            <td class="columna-estatica-columna">
+                                @if ($lista->estado == 3 && $lista->estado != 9)
                                     <!-- Botón de Cancelar (existente) -->
                                     <button class="btn btn-danger btn-sm" wire:click="cancelar({{ $lista->id }})"
                                         title="Cancelar cotización">
@@ -198,7 +220,7 @@
                                         Aceptar
                                     </button>
                                 @endif
-                                @if ($lista->estado == 3 || $lista->estado == 4 || $lista->estado == 5)
+                                @if ($lista->estado >= 3)
                                     @if ($cotizacion)
                                         <button class="btn btn-info btn-sm text-white"
                                             onclick="window.open('{{ route('proyecto.pdf-cotizacion', ['id' => $lista->id]) }}', '_blank')"
@@ -208,7 +230,8 @@
                                     @endif
                                 @endif
                             </td>
-                            <td>
+                            {{-- ////// --}}
+                            <td class="">
                                 @php
                                     if ($cotizacion) {
                                         $ordenVenta = App\Models\ordenVenta::where(
@@ -218,64 +241,30 @@
                                     }
 
                                 @endphp
-                                @if ($lista->estado == 1)
+                                @if ($lista->estado < 3)
                                     <label for="">...</label>
-                                @elseif ($lista->estado == 2)
-                                    <label for="">...</label>
-                                @elseif ($lista->estado == 3)
-                                    @if ($cotizacion->estado < 3)
-                                        <label for="">...</label>
-                                    @else
-                                        <button class="btn btn-danger btn-sm"
-                                            wire:click="cancelar({{ $lista->id }})" title="Cancelar cotización">
-                                            <i class="fas fa-times me-1"></i> Cancelar
-                                        </button>
-                                    @endif
-                                @elseif ($lista->estado == 4)
-                                    <span class="fw-bold">Orden de venta numero
-                                        {{ $ordenVenta->id ?? 'No hay cotizacion recuperada' }}</span>
-                                @elseif ($lista->estado == 5)
-                                    <span class="fw-bold">Orden de venta numero {{ $ordenVenta->id }}</span>
+                                @elseif ($lista->estado == 9)
+                                    <span class="fw-bold">
+                                        {{ $ordenVenta->id ?? 'No hay orden de venta recuperada' }}</span>
+                                @elseif ($lista->estado >= 4 && $lista->estado != 9)
+                                <span class="fw-bold">
+                                    {{ $ordenVenta->id ?? 'No hay orden de venta recuperada' }}</span>
                                 @endif
                             </td>
                             <td>
-                                @if ($lista->estado == 1)
+                                @if ($lista->estado < 4)
                                     <label for="">...</label>
-                                @elseif ($lista->estado == 2)
-                                    <label for="">...</label>
-                                @elseif ($lista->estado == 3)
-                                    @if ($cotizacion->estado < 3)
-                                        <label for="">...</label>
-                                    @else
-                                        <button class="btn btn-danger btn-sm"
-                                            wire:click="cancelar({{ $lista->id }})" title="Cancelar cotización">
-                                            <i class="fas fa-times me-1"></i> Cancelar
-                                        </button>
-                                        <button class="btn btn-info btn-sm text-white"
-                                            wire:click="generarPDF({{ $lista->id }})"
-                                            title="Generar PDF de la cotización">
-                                            <i class="fas fa-file-pdf me-1"></i> PDF
-                                        </button>
+                                @elseif ($lista->estado > 3 && $lista->estado != 9)
+                                    <button class="btn btn-info btn-sm text-white"
+                                        wire:click="generarPDF({{ $lista->id }})"
+                                        title="Generar PDF de la cotización">
+                                        <i class="fas fa-file-pdf me-1"></i> PDF
+                                    </button>
                                     @endif
-                                @elseif ($lista->estado == 4)
+                                @if ($lista->estado == 4)
                                     <button class="btn btn-danger btn-sm" wire:click="cancelar({{ $lista->id }})"
                                         title="Cancelar cotización">
                                         <i class="fas fa-times me-1"></i> Cancelar
-                                    </button>
-                                    <button class="btn btn-info btn-sm text-white"
-                                        wire:click="generarPDF({{ $lista->id }})"
-                                        title="Generar PDF de la cotización">
-                                        <i class="fas fa-file-pdf me-1"></i> PDF
-                                    </button>
-                                @elseif ($lista->estado == 5)
-                                    <button class="btn btn-danger btn-sm" wire:click="cancelar({{ $lista->id }})"
-                                        title="Cancelar cotización">
-                                        <i class="fas fa-times me-1"></i> Cancelar
-                                    </button>
-                                    <button class="btn btn-info btn-sm text-white"
-                                        wire:click="generarPDF({{ $lista->id }})"
-                                        title="Generar PDF de la cotización">
-                                        <i class="fas fa-file-pdf me-1"></i> PDF
                                     </button>
                                 @endif
                             </td>

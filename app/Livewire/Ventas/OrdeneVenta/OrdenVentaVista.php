@@ -199,7 +199,15 @@ class OrdenVentaVista extends Component
 
         $cotisacion = Cotizacion::findOrFail($this->ordenVentaSelecionada->id_cotizacion);
         $cotisacion->update([
+            'estado' => 3, // 1 = Liquidada
+        ]);
+        $ListaCotisar = ListasCotizar::findOrFail($cotisacion->lista_cotizar_id);
+        $ListaCotisar->update([
             'estado' => 5, // 1 = Liquidada
+        ]);
+        $proyecto = Proyecto::findOrFail($ListaCotisar->proyecto_id);
+        $proyecto->update([
+            'proceso' => 4, // 1 = Liquidada
         ]);
 
     }

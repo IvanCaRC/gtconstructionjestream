@@ -244,13 +244,13 @@ class Recepcioncotiosacion extends Component
 
         // Actualizar estados
         $cotizacion->update(['estado' => 2]);
-        if ($lista) $lista->update(['estado' => 5]);
+        if ($lista) $lista->update(['estado' => 4]);
         if ($proyecto) $proyecto->update(['proceso' => 3]);
 
         // Crear orden de venta
         $ordenVenta = OrdenVenta::create([
             'id_cliente' => $proyecto->cliente_id,
-            'id_usuario' => $lista->usuario_id,
+            'id_usuario' => $cotizacion->usuario_id,
             'id_cotizacion' => $cotizacion->id,
             'direccion_id' => $proyecto->direccion_id,
             'monto' => $this->precioTotal,

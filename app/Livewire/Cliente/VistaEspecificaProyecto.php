@@ -420,6 +420,11 @@ class VistaEspecificaProyecto extends Component
 
         $this->proyecto->increment('listas'); // Incrementa el campo "proyectos" en 1
 
+        $proyec = Proyecto::findOrFail($this->proyecto->id);
+        $proyec->update([
+            'proceso' => 0,
+        ]);
+
 
         $this->dispatch('refresh');
         // return redirect()->route('ventas.clientes.vistaEspecProyecto', ['idProyecto' => $proyecto->id]);
@@ -431,15 +436,38 @@ class VistaEspecificaProyecto extends Component
         $lista = ListasCotizar::find($id);
 
         if ($lista) {
-            $lista->estado = 4; // Estado 5 = Cancelado
+            $lista->estado = 9; // Estado 5 = Cancelado
             $lista->save();
             if (Auth::user()->lista == $id) {
                 Auth::user()->update(['lista' => null]);
             }
+
+            if (!$lista->id_usuario_compra) {
+                // Código cuando no hay usuario de compra asignado
+            } else {
+                $cotizacion = Cotizacion::where('lista_cotizar_id', $lista->id)->first();
+
+                if ($cotizacion) {
+                    $cotizacion->update([
+                        'estado' => 7,
+                    ]);
+                } else {
+                    // Manejar el caso cuando no se encuentra la cotización
+                    // Puedes lanzar una excepción, registrar un error o tomar otra acción
+                    Log::error("No se encontró cotización para la lista ID: {$lista->id}");
+                }
+            }
+
+
+            $proyectoModi = Proyecto::find($this->proyecto->id);
+            $proyectoModi->update([
+                'proceso' => 10,
+            ]);
             session()->flash('message', 'La lista ha sido cancelada correctamente.');
         } else {
             session()->flash('error', 'La lista no fue encontrada.');
         }
+        $this->dispatch('refresh');
     }
 
     public function editarlista($id)
@@ -464,6 +492,10 @@ class VistaEspecificaProyecto extends Component
     public function enviarListaCotizar($lista)
     {
         $proyectoModi = Proyecto::find($this->proyecto->id);
+        $proyectoModi->update([
+            'proceso' => 1,
+        ]);
+
         // Buscar la lista actual
         $lista = ListasCotizar::find($lista);
 
@@ -474,9 +506,6 @@ class VistaEspecificaProyecto extends Component
 
         // Obtener el proyecto seleccionado
 
-        $proyectoModi->update([
-            'proceso' => 1,
-        ]);
 
         // Actualizar la lista
         $lista->update([

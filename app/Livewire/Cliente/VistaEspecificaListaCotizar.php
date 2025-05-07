@@ -496,6 +496,6 @@ class VistaEspecificaListaCotizar extends Component
         session()->flash('success', 'Lista fue enviada correctamente a la cotisacion.');
 
         // Cerrar el modal
-        return redirect()->route('ventas.clientes.vistaEspecProyecto', ['idProyecto' => $proyectoId]);
+        return true;
     }
 }

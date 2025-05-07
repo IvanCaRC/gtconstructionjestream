@@ -1,5 +1,6 @@
 <div>
     <div class="container-fluid px-4 sm:px-6 lg:px-8 py-1">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <div class="flex h-screen gap-4 p-4">
             <!-- Primera sección (85%) -->
             <div class="flex-1 bg-white p-4 rounded-lg border border-black" style="flex: 0 0 80%;">
@@ -183,7 +184,7 @@
                                     Desactivar
                                 </button>
                             </div>
-                        @else 
+                        @else
                             <div class="card-body">
 
                                 <label>
@@ -192,8 +193,13 @@
                                 </label>
                                 <div>
                                     <div class="py-3">
-                                        <button class="btn btn-primary" wire:click="enviarListaCotizar({{ $idProyectoActual }})">
-                                          Enviar a cotizacion 
+                                        @php
+                                            $totalItems = count($itemsDeLaLista) + count($itemsTemporalesDeLaLista);
+                                        @endphp
+
+                                        <button class="btn btn-primary"
+                                            onclick="enviar({{ $idProyectoActual }}, {{ $totalItems }})">
+                                            Enviar a cotización
                                         </button>
 
                                     </div>
@@ -216,4 +222,48 @@
     </div>
     @include('livewire.cliente.modalItemPersonalisado.modalItemPersonalisado')
     @include('livewire.cliente.modalEleccionLista.modalEleccionCLieteProyectoLista')
+
+    <script>
+        function enviar(idProyecto, totalItems) {
+            if (totalItems == 0) {
+                Swal.fire('Error', 'No puedes enviar una lista vacía', 'error');
+                return;
+            }
+
+            Swal.fire({
+                title: 'Confirmar Envío',
+                html: '¿Deseas enviar la lista a cotizar?',
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Confirmar',
+                cancelButtonText: 'Cancelar',
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    @this.call('enviarListaCotizar', idProyecto)
+                        .then(result => {
+                            if (result) {
+                                Swal.fire({
+                                    title: 'Envío exitoso',
+                                    text: 'La lista se envió correctamente',
+                                    icon: 'success',
+                                    confirmButtonText: 'OK'
+                                }).then(() => {
+                                    // Solución 1: Redirección con parámetro dinámico
+                                    window.location.href =
+                                        `/ventas/clientes/vistaEspecProyecto/${idProyecto}`;
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            Swal.fire('Error', 'Ocurrió un problema al enviar la lista', 'error');
+                            console.error(error);
+                        });
+                }
+            });
+        }
+    </script>
+
+
 </div>

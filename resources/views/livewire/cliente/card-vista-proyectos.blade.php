@@ -63,7 +63,7 @@
                     </thead>
                     <tbody>
                         @foreach ($proyectos as $proyecto)
-                        <tr style="{{ $proyecto->estado === 3 ? 'background-color: #ffbbbb;' : '' }}">
+                            <tr style="{{ $proyecto->estado === 3 ? 'background-color: #ffbbbb;' : '' }}">
                                 <td>{{ $proyecto->nombre }}</td>
                                 <td>
                                     {{ $proyecto->fecha }}
@@ -75,34 +75,31 @@
                                             ? '<span class="badge badge-warning">Inactivo</span>'
                                             : ($proyecto->estado == 3
                                                 ? '<span class="badge"
-                                                                                                                                                                                                                                        style="background-color: #f10808; color: white;">Cancelado</span>'
+                                                                                                                                                                                                                                                                            style="background-color: #f10808; color: white;">Cancelado</span>'
                                                 : '<span class="badge badge-secondary">Estado desconocido</span>')) !!}
                                 </td>
                                 <td>
-                                    {!! $proyecto->proceso == 0
-                                        ? '<span class="badge"
-                                                                                                                                                                                                                                        style="background-color: #6c757d; color: white;">Creando lista a
-                                                                                                                                                                                                                                        cotizar</span>'
-                                        : ($proyecto->proceso == 1
-                                            ? '<span class="badge"
-                                                                                                                                                                                                                                        style="background-color: #fd7e14; color: white;">Creando
-                                                                                                                                                                                                                                        cotizacion</span>'
-                                            : ($proyecto->proceso == 2
-                                                ? '<span class="badge"
-                                                                                                                                                                                                                                        style="background-color:#1a1ca7; color: white;">Cotizado</span>'
-                                                : ($proyecto->proceso == 3
-                                                    ? '<span class="badge" style="background-color:#15d4db; color: white;">En
-                                                                                                                                                                                                                                        proceso de venta</span>'
-                                                    : ($proyecto->proceso == 4
-                                                        ? '<span class="badge"
-                                                                                                                                                                                                                                        style="background-color: #28a745; color: white;">Venta
-                                                                                                                                                                                                                                        terminada</span>'
-                                                        : ($proyecto->proceso == 5
-                                                            ? '<span class="badge"
-                                                                                                                                                                                                                                        style="background-color: #f10808; color: white;">Cancelado</span>'
-                                                            : '<span class="badge"
-                                                                                                                                                                                                                                        style="background-color: #742532; color: white;">Estado
-                                                                                                                                                                                                                                        desconocido</span>'))))) !!}
+                                    <label>
+                                        {!! $proyecto->proceso == 0
+                                            ? '<span class="badge badge-primary">Creando lista a cotizar</span>'
+                                            : ($proyecto->proceso == 1
+                                                ? '<span class="badge badge-primary">Creando cotización</span>'
+                                                : ($proyecto->proceso == 2
+                                                    ? '<span class="badge badge-primary">Cotizado</span>'
+                                                    : ($proyecto->proceso == 3
+                                                        ? '<span class="badge badge-warning">Esperando pago</span>'
+                                                        : ($proyecto->proceso == 4
+                                                            ? '<span class="badge badge-primary">Pagado/span>'
+                                                            : ($proyecto->proceso == 5
+                                                                ? '<span class="badge badge-warning">Preparando</span>'
+                                                                : ($proyecto->proceso == 6
+                                                                    ? '<span class="badge badge-warning">En proceso de entrga</span>'
+                                                                    : ($proyecto->proceso == 7
+                                                                        ? '<span class="badge badge-success">Venta terminada</span>'
+                                                                        : ($proyecto->proceso == 8
+                                                                            ? '<span class="badge badge-danger">Cancelado</span>'
+                                                                            : '<span class="badge badge-secondary">Estado desconocido</span>')))))))) !!}
+                                    </label>
                                 </td>
                                 <td>
                                     {!! $proyecto->tipo == 0

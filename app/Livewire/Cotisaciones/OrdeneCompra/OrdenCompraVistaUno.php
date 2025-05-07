@@ -9,6 +9,7 @@ use App\Models\Cotizacion;
 
 use App\Models\ListasCotizar;
 use App\Models\ordenCompra;
+use App\Models\Proyecto;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -31,14 +32,14 @@ class OrdenCompraVistaUno extends Component
         if (Auth::user()->hasRole('Administrador')) {
             $query = Cotizacion::with('proyecto')
                 ->orderBy('created_at', 'desc')
-                ->whereIn('estado', [5]);
+                ->whereIn('estado', [3]);
         } else {
             $usuarioId = Auth::id();
             // Obtener las listas a cotizar con estado igual a 3
             $query = Cotizacion::where('id_usuario_compras', $usuarioId)
                 ->with('proyecto')
                 ->orderBy('created_at', 'desc')
-                ->whereIn('estado', [5]);
+                ->whereIn('estado', [3]);
         }
         if (!empty($this->searchTerm)) {
             $query->where(function ($q) {
@@ -53,13 +54,13 @@ class OrdenCompraVistaUno extends Component
         if (Auth::user()->hasRole('Administrador')) {
             $query2 = Cotizacion::with('proyecto')
                 ->orderBy('created_at', 'desc')
-                ->whereIn('estado', [6]);
+                ->whereIn('estado', [4]);
         } else {
             $usuarioId = Auth::id();
             $query2 = Cotizacion::where('id_usuario_compras', $usuarioId)
                 ->with('proyecto')
                 ->orderBy('created_at', 'desc')
-                ->whereIn('estado', [6]);
+                ->whereIn('estado', [4]);
         }
         if (!empty($this->searchTerm)) {
             $query2->where(function ($q) {
@@ -111,34 +112,32 @@ class OrdenCompraVistaUno extends Component
     {
         $cotizacion = Cotizacion::findOrFail($this->cotisacionSelecionada->id);
     
-        // Decodificar los items desde la cotización
         $items = json_decode($cotizacion->items_cotizar_proveedor, true);
     
-        // Mapear cada item para agregar el proveedor real
+        // Mapear cada item para agregar el proveedor real y el precio_compra
         $itemsConProveedorReal = collect($items)->map(function ($item) {
             $pivot = DB::table('item_especifico_proveedor')->where('id', $item['proveedor_id'])->first();
     
-            // Si no se encuentra, puedes lanzar un error o ignorar
             if (!$pivot) {
                 throw new \Exception("No se encontró item_especifico_proveedor con id {$item['proveedor_id']}");
             }
     
-            // Añadir el proveedor real al item
+            // Usar el proveedor real y el precio de compra de la tabla pivote
             $item['proveedor_real_id'] = $pivot->proveedor_id;
+            $item['precio_compra'] = $pivot->precio_compra;
     
             return $item;
         });
     
-        // Agrupar por el proveedor real
+        // Agrupar por proveedor real
         $itemsPorProveedor = $itemsConProveedorReal->groupBy('proveedor_real_id');
     
         foreach ($itemsPorProveedor as $proveedorId => $itemsProveedor) {
-            // Calcular el monto total
+            // Calcular el monto total usando precio_compra
             $monto = collect($itemsProveedor)->reduce(function ($carry, $item) {
-                return $carry + ($item['precio'] * $item['cantidad']);
+                return $carry + ($item['precio_compra'] * $item['cantidad']);
             }, 0);
     
-            // Crear la orden de compra
             ordenCompra::create([
                 'id_provedor' => $proveedorId,
                 'id_cotizacion' => $cotizacion->id,
@@ -152,12 +151,17 @@ class OrdenCompraVistaUno extends Component
             ]);
         }
     
-        $cotizacion->update([
-            'estado' => 6,
-        ]);
+        $cotizacion->update(['estado' => 4]);
+    
+        $ListaCotisar = ListasCotizar::findOrFail($cotizacion->lista_cotizar_id);
+        $ListaCotisar->update(['estado' => 6]);
+    
+        $proyecto = Proyecto::findOrFail($ListaCotisar->proyecto_id);
+        $proyecto->update(['proceso' => 5]);
     
         $this->reset('openModalCrearOrdenCompra', 'cotisacionSelecionada', 'metodoPago', 'cantidadPagar');
     }
+    
     
     public function verOrdenCOmpra($idCotisacion)
     {
