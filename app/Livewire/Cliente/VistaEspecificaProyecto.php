@@ -442,7 +442,7 @@ class VistaEspecificaProyecto extends Component
                 Auth::user()->update(['lista' => null]);
             }
 
-            if (!$lista->id_usuario_compra) {
+            if (!$lista->id_usuario_compras) {
                 // Código cuando no hay usuario de compra asignado
             } else {
                 $cotizacion = Cotizacion::where('lista_cotizar_id', $lista->id)->first();

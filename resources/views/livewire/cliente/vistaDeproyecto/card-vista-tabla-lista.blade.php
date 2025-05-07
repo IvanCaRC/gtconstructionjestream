@@ -55,7 +55,7 @@
 
         }
 
-        .columna-estatica-columna{
+        .columna-estatica-columna {
             width: 250px;
             /* o el valor que tú quieras */
 
@@ -186,10 +186,7 @@
                                     $cotizacion = App\Models\Cotizacion::where('lista_cotizar_id', $lista->id)->first();
                                 @endphp
                                 @if ($lista->estado == 1)
-                                    <button class="btn btn-custom" style="background-color: #4c72de; color: white;"
-                                        wire:click="enviarListaCotizar({{ $lista->id }})">
-                                        Mandar a cotizar
-                                    </button>
+                                    <label for="">Creando lista...</label>
                                 @elseif ($lista->estado == 2)
                                     <label for="">Cotizando...</label>
                                 @elseif ($lista->estado >= 3 && $lista->estado != 9)
@@ -242,8 +239,8 @@
                                     <span class="fw-bold">
                                         {{ $ordenVenta->id ?? 'No hay orden de venta recuperada' }}</span>
                                 @elseif ($lista->estado >= 4 && $lista->estado != 9)
-                                <span class="fw-bold">
-                                    {{ $ordenVenta->id ?? 'No hay orden de venta recuperada' }}</span>
+                                    <span class="fw-bold">
+                                        {{ $ordenVenta->id ?? 'No hay orden de venta recuperada' }}</span>
                                 @endif
                             </td>
                             <td>
@@ -255,7 +252,7 @@
                                         title="Generar PDF de la cotización">
                                         <i class="fas fa-file-pdf me-1"></i> PDF
                                     </button>
-                                    @endif
+                                @endif
                                 @if ($lista->estado == 4)
                                     <button class="btn btn-danger btn-sm" wire:click="cancelar({{ $lista->id }})"
                                         title="Cancelar cotización">
