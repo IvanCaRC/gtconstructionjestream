@@ -134,7 +134,7 @@
 
                             <td class="columna-estatica">
 
-                                <button class="btn btn-info btn-sm mr-1" title="Ver PDF" wire:click="prepararPDFLista">
+                                <button class="btn btn-info btn-sm mr-1" title="Ver PDF" wire:click="prepararPDFLista({{ $lista->id }})">
                                     <i class="fas fa-file-pdf"></i>
                                 </button>
 

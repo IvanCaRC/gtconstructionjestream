@@ -120,6 +120,7 @@
     </table>
 
     <!-- Suministro de Materiales -->
+    <!-- Seccion de items registrados en el sistema -->
     <p class="section">Suministro de Materiales</p>
     @foreach ($items_cotizar_data as $item)
         @php
@@ -157,6 +158,29 @@
         </table>
         <hr>
     @endforeach
+
+    <!-- Seccion de items temporales que no estan registrados -->
+    @if (!empty($items_cotizar_temporales_data))
+        <p class="section">Ítems Especiales</p>
+        @foreach ($items_cotizar_temporales_data as $item)
+            <table style="width: 100%; border-collapse: collapse;">
+                <tr style="background-color: #eaeaea;">
+                    <th style="width: 25%; text-align: center; padding: 8px;">Nombre</th>
+                    <th style="width: 25%; text-align: center; padding: 8px;">Descripción</th>
+                    <th style="width: 25%; text-align: center; padding: 8px;">Cantidad</th>
+                    <th style="width: 25%; text-align: center; padding: 8px;">Unidad</th>
+                </tr>
+                <tr>
+                    <td style="text-align: center; padding: 8px;">{{ $item['nombre'] }}</td>
+                    <td style="text-align: center; padding: 8px;">{{ $item['descripcion'] ?? 'Sin descripción' }}</td>
+                    <td style="text-align: center; padding: 8px;">{{ $item['cantidad'] ?? 'No especificado' }}</td>
+                    <td style="text-align: center; padding: 8px;">{{ $item['unidad'] ?? 'Unidad no especificada' }}
+                    </td>
+                </tr>
+            </table>
+            <hr>
+        @endforeach
+    @endif
 
     @if ($proyecto_tipo === 'Obra')
         <p class="section">Obra</p>
@@ -203,18 +227,23 @@
 
     <!-- Adicionales de la Obra -->
     <p class="section">Adicionales de la obra</p>
-    <table>
-        <tr style="background-color: #f4f4f4;">
-            <th style="width: 50%; text-align: center; padding: 8px;">Elementos</th>
-            <th style="width: 50%; text-align: center; padding: 8px;">Cantidades</th>
-        </tr>
-        @foreach ($estructuras as $index => $estructura)
-            <tr>
-                <td style="text-align: center; padding: 8px;">{{ $estructura }}</td>
-                <td style="text-align: center; padding: 8px;">{{ $cantidades[$index] ?? 'N/A' }}</td>
+
+    @if (array_filter($estructuras) && array_filter($cantidades))
+        <table>
+            <tr style="background-color: #f4f4f4;">
+                <th style="width: 50%; text-align: center; padding: 8px;">Elementos</th>
+                <th style="width: 50%; text-align: center; padding: 8px;">Cantidades</th>
             </tr>
-        @endforeach
-    </table>
+            @foreach ($estructuras as $index => $estructura)
+                <tr>
+                    <td style="text-align: center; padding: 8px;">{{ $estructura }}</td>
+                    <td style="text-align: center; padding: 8px;">{{ $cantidades[$index] ?? 'N/A' }}</td>
+                </tr>
+            @endforeach
+        </table>
+    @else
+        <p style="text-align: center; padding: 10px; font-style: italic;">Sin datos adicionales registrados</p>
+    @endif
 
 </body>
 

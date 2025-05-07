@@ -97,12 +97,18 @@ class VistaEspecificaProyecto extends Component
         ], ['listas' => $listas]);
     }
     //Visualizar PDF.
-    public function prepararPDFLista()
+    public function prepararPDFLista($lista_id)
     {
         //Cliente asociado al proyecto
         $cliente = Cliente::findOrFail($this->proyecto->cliente_id);
         // Lista de cotización vinculada al proyecto
-        $lista = ListasCotizar::where('proyecto_id', $this->proyecto->id)->first();
+        $lista = ListasCotizar::where('proyecto_id', $this->proyecto->id)
+            ->where('id', $lista_id) // ✅ Filtramos por ID
+            ->first();
+
+        if (!$lista) {
+            return session()->flash('error', 'Lista no encontrada.');
+        }
         //Obtener valor de los numeros de telefono registrados:
         $telefonos = json_decode($cliente->telefono, true);
 
@@ -219,9 +225,10 @@ class VistaEspecificaProyecto extends Component
 
             // Guardar en el array con la fuente correcta para cada dato
             $items_temporales_data[] = [
-                'nombre' => $item_base?->nombre ?? 'Nombre no disponible',  // ✅ Ahora viene de Item
-                'descripcion' => $item_base?->descripcion ?? 'Descripción no disponible', // ✅ También de Item
-                'unidad' => $item_temporal?->unidad ?? 'Unidad no especificada' // ✅ Desde ItemTemporal
+                'nombre' => $item_base?->nombre ?? 'Nombre no disponible',
+                'descripcion' => $item_base?->descripcion ?? 'Descripción no disponible',
+                'cantidad' => $item['cantidad'] ?? 'No especificado', // ✅ Ahora se recupera correctamente
+                'unidad' => $item_temporal?->unidad ?? 'Unidad no especificada'
             ];
         }
 
