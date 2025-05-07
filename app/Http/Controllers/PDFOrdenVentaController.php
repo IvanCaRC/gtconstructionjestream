@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Item;
 use App\Models\ItemEspecifico;
-use App\Models\OrdenVenta;
+use App\Models\ordenVenta;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 class PDFOrdenVentaController extends Controller
@@ -12,7 +12,7 @@ class PDFOrdenVentaController extends Controller
     public function generarPDFOrdenVenta($id)
     {
         try {
-            $ordenVenta = OrdenVenta::with('cotizacion', 'cliente', 'usuario', 'direccion')->findOrFail($id);
+            $ordenVenta = ordenVenta::with('cotizacion', 'cliente', 'usuario', 'direccion')->findOrFail($id);
             $cotizacion = $ordenVenta->cotizacion;
             $cliente = $ordenVenta->cliente->nombre ?? 'Nombre no disponible';
 
@@ -73,7 +73,7 @@ class PDFOrdenVentaController extends Controller
                 'items_orden' => $items_orden,
                 'subtotal' => $subtotal,
                 'impuestos' => $impuestos,
-                'total' => $total
+                'total' => ceil(($total) * 10) / 10
             ];
 
             // ✅ Depuración previa para validar `$data` antes de cargar la vista
@@ -81,7 +81,7 @@ class PDFOrdenVentaController extends Controller
                 abort(500, 'Los datos están vacíos. Verifica la recuperación.');
             }
 
-            $pdf = Pdf::loadView('pdf.OrdenVenta', $data)->setPaper('a4', 'portrait');
+            $pdf = Pdf::loadView('pdf.ordenventa', $data)->setPaper('a4', 'portrait');
             return $pdf->stream('orden_venta.pdf');
         } catch (\Exception $e) {
             abort(500, 'Error al generar el PDF. ' . $e->getMessage());
