@@ -254,9 +254,9 @@
                                     <label for="">...</label>
                                 @elseif ($lista->estado > 3)
                                     <button class="btn btn-info btn-sm text-white"
-                                        wire:click="generarPDF({{ $lista->id }})"
-                                        title="Generar PDF de la cotización">
-                                        <i class="fas fa-file-pdf me-1"></i> PDF
+                                        onclick="window.open('{{ route('proyecto.pdf-orden-venta', ['id' => $ordenVenta->id]) }}', '_blank')"
+                                        title="Ver el documento de orden de venta">
+                                        <i class="fas fa-file-pdf me-1"></i> PDF Orden Venta
                                     </button>
                                 @endif
                                 @if ($lista->estado == 4)

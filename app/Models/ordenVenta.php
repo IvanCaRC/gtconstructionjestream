@@ -9,7 +9,7 @@ class ordenVenta extends Model
 {
     use HasFactory;
 
-    protected $table = 'orden_venta'; 
+    protected $table = 'orden_venta';
 
     protected $fillable = [
         'id_cliente',
@@ -45,5 +45,10 @@ class ordenVenta extends Model
     public function cotizacion()
     {
         return $this->belongsTo(Cotizacion::class, 'id_cotizacion');
+    }
+
+    public function direccion()
+    {
+        return $this->belongsTo(Direccion::class, 'direccion_id');
     }
 }
