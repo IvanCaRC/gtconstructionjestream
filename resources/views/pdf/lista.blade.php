@@ -1,3 +1,9 @@
+@php
+    $path = public_path('img/membretadoGTC.png');
+    $type = pathinfo($path, PATHINFO_EXTENSION);
+    $data = file_get_contents($path);
+    $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
+@endphp
 <!DOCTYPE html>
 <html lang="es">
 
@@ -57,9 +63,11 @@
 <body>
 
     <!-- Espacio para membretado -->
-    <div style="height: 100px;"></div>
-
-    <h1>{{ $title }}</h1>
+    @if ($base64)
+        <div style="text-align: center; margin-bottom: 20px;">
+            <img src="{{ $base64 }}" style="max-width: 700px; height: auto;">
+        </div>
+    @endif
 
     <!-- Datos del Cliente -->
     <p class="section">Datos del Cliente</p>

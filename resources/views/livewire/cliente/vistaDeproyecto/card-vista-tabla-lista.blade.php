@@ -137,9 +137,15 @@
 
                             <td class="columna-estatica">
 
-                                <button class="btn btn-info btn-sm mr-1" title="Ver PDF" wire:click="prepararPDFLista({{ $lista->id }})">
+                                <button class="btn btn-info btn-sm mr-1" title="Ver PDF"
+                                    wire:click="prepararPDFLista({{ $lista->id }})">
                                     <i class="fas fa-file-pdf"></i>
                                 </button>
+
+                                {{-- <button class="btn btn-info btn-sm mr-1" title="Ver PDF"
+                                    onclick="window.open('{{ route('proyecto.pdf-lista', ['id' => $lista->id]) }}', '_blank')">
+                                    <i class="fas fa-file-pdf"></i>
+                                </button> --}}
 
                                 @if ($lista->estado == 1)
                                     <button class="btn btn-primary btn-sm mr-1" title="Editar"
@@ -195,8 +201,8 @@
                                 @if ($lista->estado == 3 || $lista->estado == 4 || $lista->estado == 5)
                                     @if ($cotizacion)
                                         <button class="btn btn-info btn-sm text-white"
-                                            wire:click="generarPDF({{ $lista->id }})"
-                                            title="Generar PDF de la cotización">
+                                            onclick="window.open('{{ route('proyecto.pdf-cotizacion', ['id' => $lista->id]) }}', '_blank')"
+                                            title="Generar y ver el documento de la cotización">
                                             <i class="fas fa-file-pdf me-1"></i> PDF
                                         </button>
                                     @endif

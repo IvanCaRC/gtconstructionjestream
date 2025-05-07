@@ -69,7 +69,8 @@
                                     <td>
                                         @if ($lista->estado == 1)
                                             <button class="btn btn-primary btn-sm"
-                                                wire:click="abrirModal({{ $lista->id }})" title="Cancelar cotización">
+                                                wire:click="abrirModal({{ $lista->id }})"
+                                                title="Cancelar cotización">
                                                 Aceptar
                                             </button>
                                         @endif
@@ -86,9 +87,15 @@
                                         </button>
 
 
+                                        {{-- <button class="btn btn-info btn-sm text-white"
+                                            wire:click="generarPDFCotizacion({{ $lista->id }})"
+                                            title="Ver el documento de la cotizacion">
+                                            <i class="fas fa-file-pdf me-1"></i> PDF
+                                        </button> --}}
+
                                         <button class="btn btn-info btn-sm text-white"
-                                            wire:click="generarPDF({{ $lista->id }})"
-                                            title="Generar PDF de la cotización">
+                                            onclick="window.open('{{ route('proyecto.pdf-cotizacion', ['id' => $lista->id]) }}', '_blank')"
+                                            title="Ver el documento de la cotización">
                                             <i class="fas fa-file-pdf me-1"></i> PDF
                                         </button>
                                         <!-- Botón para Ver Proyecto -->
