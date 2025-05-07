@@ -25,7 +25,7 @@
                 Cancelar
             </button>
             <button type="button" class="btn btn-primary" onclick="confirmarPago()" wire:loading.attr="disabled">
-                Pagar
+                Crear
             </button>
         </x-slot>
     </x-dialog-modal>
