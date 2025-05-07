@@ -21,7 +21,6 @@
             padding: 10px;
             font-size: 14px;
             font-weight: bold;
-            text-transform: uppercase;
             border-bottom: 2px solid #333;
             text-align: center;
         }
@@ -43,62 +42,71 @@
             background-color: #eaeaea;
         }
 
-        .data-table td {
-            background-color: #f9f9f9;
-        }
-
         .highlight {
             font-weight: bold;
-            color: #333;
+        }
+
+        .signature {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .signature-line {
+            border-top: 1px solid #333;
+            width: 200px;
+            margin: 10px auto;
+        }
+    </style>
+    <style>
+        .signature-container {
+            position: absolute;
+            bottom: 40px;
+            /* 🔹 Siempre al final del documento */
+            width: 100%;
+            text-align: center;
+        }
+
+        .signature-table {
+            width: 100%;
+            table-layout: fixed;
+        }
+
+        .signature-cell {
+            width: 50%;
+            padding-top: 40px;
+            /* 🔹 Espacio antes de la línea */
+            vertical-align: bottom;
+            text-align: center;
+        }
+
+        .signature-line {
+            border-top: 1px solid #333;
+            width: 80%;
+            height: 50px;
+            /* 🔹 Más espacio para firmar */
+            margin: 20px auto;
         }
     </style>
 </head>
 
 <body>
 
-    <!-- Espacio para el membrete -->
     @if ($base64)
         <div style="text-align: center; margin-bottom: 20px;">
             <img src="{{ $base64 }}" style="max-width: 700px; height: auto;">
         </div>
     @endif
 
-    {{-- <h1>{{ $title }}</h1> --}}
+    <p class="section">Orden de Venta</p>
 
-    <!-- Información de la empresa y cotización -->
-    <p class="section">Información de la Empresa</p>
-    <table class="data-table">
+    <table>
         <tr>
-            <td class="highlight">Correo:</td>
-            <td>administración@gtcgroup.com.mx</td>
-            <td class="highlight">Teléfono:</td>
-            <td>+52 9513791159</td>
-        </tr>
-        <tr>
-            <td class="highlight">Dirección:</td>
-            <td>Veracruz, Veracruz</td>
-            <td class="highlight">Sitio Web:</td>
-            <td><a href="https://www.gtcgroup.com.mx">www.gtcgroup.com.mx</a></td>
-        </tr>
-        <tr>
-            <td class="highlight">Horario de Atención:</td>
-            <td colspan="3">Lunes a Viernes de 9:00 a 18:00 hrs</td>
-        </tr>
-    </table>
-
-    <p class="section">Datos de la Cotización</p>
-    <table class="data-table">
-        <tr>
-            <td class="highlight">No. de Cotización:</td>
-            <td>{{ $cotizacion->id ?? '-' }}</td>
+            <td class="highlight">No. de Orden:</td>
+            <td>{{ $orden->id ?? '-' }}</td>
             <td class="highlight">Fecha de Emisión:</td>
             <td>{{ \Carbon\Carbon::now()->format('d/m/Y') }}</td>
-        </tr>
-        <tr>
-            <td class="highlight">Válido Hasta:</td>
-            <td>{{ \Carbon\Carbon::now()->addDays(30)->format('d/m/Y') }}</td>
-            <td class="highlight">Atendido por:</td>
-            <td>{{ $usuario_atendio }}</td>
         </tr>
         <tr>
             <td class="highlight">Cliente:</td>
@@ -106,38 +114,34 @@
             <td class="highlight">Dirección:</td>
             <td>{{ $direccion }}</td>
         </tr>
-        <tr>
-            <td class="highlight">Proyecto:</td>
-            <td>{{ $proyecto }}</td>
-            <td class="highlight">Tipo de Proyecto:</td>
-            <td>{{ $tipo_proyecto }}</td>
-        </tr>
     </table>
 
-    <!-- Tabla de Ítems -->
-    @if (!empty($items_cotizacion))
-        <p class="section">Ítems Cotizados</p>
+    @if (!empty($items_orden))
+        <p class="section">Detalle de la Orden</p>
         <table>
             <tr>
                 <th>Cantidad</th>
-                <th>Nombre</th>
+                <th>Nombre</th> <!-- 🔹 Agregamos la columna "Nombre" -->
                 <th>Descripción</th>
-                <th>Marca</th>
+                <th>Marca</th> <!-- 🔹 Nueva columna -->
                 <th>Precio Unitario</th>
-                <th>Precio</th>
+                <th>Precio</th> <!-- 🔹 Nueva columna -->
             </tr>
-            @foreach ($items_cotizacion as $item)
+            @foreach ($items_orden as $item)
                 <tr>
-                    <td>{{ $item['cantidad'] ?? '-' }}</td>
-                    <td>{{ $item['nombre'] ?? '-' }}</td>
-                    <td>{{ $item['descripcion'] ?? '-' }}</td>
-                    <td>{{ $item['marca'] ?? '-' }}</td>
-                    <td>${{ number_format($item['precio'] ?? 0, 2) }}</td>
+                    <td>{{ $item['cantidad'] }}</td>
+                    <td>{{ $item['nombre'] }}</td> <!-- 🔹 Mostramos el nombre -->
+                    <td>{{ $item['descripcion'] }}</td>
+                    <td>{{ $item['marca'] }}</td> <!-- 🔹 Mostramos la marca -->
+                    <td>${{ number_format($item['precio'], 2) }}</td>
                     <td>${{ number_format(($item['precio'] ?? 0) * ($item['cantidad'] ?? 1), 2) }}</td>
+                    <!-- 🔹 Cálculo de precio total -->
                 </tr>
             @endforeach
+        </table>
 
-            <!-- ✅ Nueva fila para Resumen de Costos dentro de la tabla de ítems -->
+        <p class="section">Resumen de Costos</p>
+        <table>
             <tr style="background-color: #f4f4f4; font-weight: bold;">
                 <td colspan="4"></td> <!-- Espacio vacío para alineación -->
                 <td style="text-align: right;">Subtotal:</td>
@@ -145,7 +149,7 @@
             </tr>
             <tr style="background-color: #eaeaea; font-weight: bold;">
                 <td colspan="4"></td> <!-- Espacio vacío para alineación -->
-                <td style="text-align: right;">IVA:</td>
+                <td style="text-align: right;">IVA (16%):</td>
                 <td>${{ number_format($impuestos ?? 0, 2) }}</td>
             </tr>
             <tr style="background-color: #dbeeff; font-weight: bold;">
@@ -155,6 +159,21 @@
             </tr>
         </table>
     @endif
+
+    <div class="signature-container">
+        <table class="signature-table">
+            <tr>
+                <td class="signature-cell">
+                    <p style="margin-bottom: 30px;">Firma del Cliente</p>
+                    <div class="signature-line"></div>
+                </td>
+                <td class="signature-cell">
+                    <p style="margin-bottom: 30px;">Firma del Responsable</p>
+                    <div class="signature-line"></div>
+                </td>
+            </tr>
+        </table>
+    </div>
 
 </body>
 

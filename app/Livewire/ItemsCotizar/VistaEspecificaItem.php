@@ -268,9 +268,9 @@ class VistaEspecificaItem extends Component
         }
 
         if ($this->cantidad >= $this->itemEspecifico->cantidad_piezas_mayoreo) {
-            $precio =  $this->itemEspecifico->precio_venta_mayorista;
+            $precio = round($this->itemEspecifico->precio_venta_mayorista, 2);
         } else {
-            $precio =  $this->itemEspecifico->precio_venta_minorista;
+            $precio =   round($this->itemEspecifico->precio_venta_minorista, 2);
         }
 
         $items = json_decode($cotizacion->items_cotizar_stock, true) ?: [];

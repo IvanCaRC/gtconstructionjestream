@@ -20,6 +20,7 @@ use App\Http\Controllers\VentasRecepcionCotisaciones;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\PDFListaController;
 use App\Http\Controllers\PDFCotizacionController;
+use App\Http\Controllers\PDFOrdenVentaController;
 
 /*
 |--------------------------------------------------------------------------
@@ -38,6 +39,8 @@ Route::get('/proyecto/{id}/pdf', [PdfController::class, 'generarPdf'])->name('pr
 Route::get('/proyecto/{id}/pdf-lista', [PDFListaController::class, 'generarPDFLista'])->name('proyecto.pdf-lista');
 
 Route::get('/proyecto/{id}/pdf-cotizacion', [PDFCotizacionController::class, 'generarPDFCotizacion'])->name('proyecto.pdf-cotizacion');
+
+Route::get('/proyecto/{id}/pdf-orden-venta', [PDFOrdenVentaController::class, 'generarPDFOrdenVenta'])->name('proyecto.pdf-orden-venta');
 
 Route::get('/', function () {
     return redirect()->route('login');

@@ -6,6 +6,7 @@ use App\Models\Cliente;
 use App\Models\Cotizacion;
 use App\Models\Direccion;
 use App\Models\Item;
+use App\Models\ItemEspecifico;
 use App\Models\ListasCotizar;
 use Barryvdh\DomPDF\Facade\Pdf;
 
@@ -52,22 +53,29 @@ class PDFCotizacionController extends Controller
 
             // ✅ Procesamos los ítems de stock
             foreach ($items_stock as $item) {
+                $item_especifico = ItemEspecifico::find($item['id']); // 🔹 Primero buscamos el ItemEspecifico
+                $item_base = $item_especifico ? Item::find($item_especifico->item_id) : null; // 🔹 Luego recuperamos el Item asociado
+
                 $items_cotizacion[] = [
                     'cantidad' => $item['cantidad'] ?? '-',
-                    'nombre' => $item['nombre'] ?? 'Nombre no disponible',
-                    'descripcion' => $item['descripcion'] ?? 'Descripción no disponible',
-                    'precio' => 0, // ✅ Este campo se llenará si existe en proveedor
+                    'nombre' => $item_base?->nombre ?? 'Nombre no disponible',
+                    'descripcion' => $item_base?->descripcion ?? 'Descripción no disponible',
+                    'marca' => $item_especifico?->marca ?? 'Sin marca', // 🔹 Ahora agregamos la marca correctamente
+                    'precio' => $item['precio'] ?? $item_especifico?->precio_venta_minorista ?? $item_especifico?->precio_venta_mayorista ?? 0,
                 ];
             }
 
             // ✅ Procesamos los ítems de proveedor y aseguramos que los datos queden registrados
             foreach ($items_proveedor as $item) {
-                $item_base = Item::find($item['id']); // ✅ Buscamos el ítem en `Item`
+                $item_especifico = ItemEspecifico::find($item['id']); // 🔹 Primero buscamos el ItemEspecifico
+                $item_base = $item_especifico ? Item::find($item_especifico->item_id) : null; // 🔹 Luego recuperamos el Item asociado
+            
                 $items_cotizacion[] = [
                     'cantidad' => $item['cantidad'] ?? '-',
-                    'nombre' => $item['nombreDeItem'] ?? 'Nombre no disponible',
-                    'descripcion' => $item_base?->descripcion ?? 'Descripción no disponible', // ✅ Se toma de la BD si está disponible
-                    'precio' => $item['precio'] ?? 0, // ✅ Recuperamos el precio correctamente
+                    'nombre' => $item['nombreDeItem'] ?? $item_base?->nombre ?? 'Nombre no disponible',
+                    'descripcion' => $item_base?->descripcion ?? 'Descripción no disponible',
+                    'marca' => $item_especifico?->marca ?? 'Sin marca', // 🔹 Ahora agregamos la marca correctamente
+                    'precio' => $item['precio'] ?? $item_base?->precio ?? 0,
                 ];
             }
 
