@@ -420,6 +420,11 @@ class VistaEspecificaProyecto extends Component
 
         $this->proyecto->increment('listas'); // Incrementa el campo "proyectos" en 1
 
+        $proyec = Proyecto::findOrFail( $this->proyecto->id);
+        $proyec->update([
+            'proceso' => 0,
+        ]);
+
 
         $this->dispatch('refresh');
         // return redirect()->route('ventas.clientes.vistaEspecProyecto', ['idProyecto' => $proyecto->id]);

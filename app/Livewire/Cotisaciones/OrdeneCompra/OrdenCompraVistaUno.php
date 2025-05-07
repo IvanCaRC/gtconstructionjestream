@@ -9,6 +9,7 @@ use App\Models\Cotizacion;
 
 use App\Models\ListasCotizar;
 use App\Models\ordenCompra;
+use App\Models\Proyecto;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
@@ -31,14 +32,14 @@ class OrdenCompraVistaUno extends Component
         if (Auth::user()->hasRole('Administrador')) {
             $query = Cotizacion::with('proyecto')
                 ->orderBy('created_at', 'desc')
-                ->whereIn('estado', [5]);
+                ->whereIn('estado', [3]);
         } else {
             $usuarioId = Auth::id();
             // Obtener las listas a cotizar con estado igual a 3
             $query = Cotizacion::where('id_usuario_compras', $usuarioId)
                 ->with('proyecto')
                 ->orderBy('created_at', 'desc')
-                ->whereIn('estado', [5]);
+                ->whereIn('estado', [3]);
         }
         if (!empty($this->searchTerm)) {
             $query->where(function ($q) {
@@ -53,13 +54,13 @@ class OrdenCompraVistaUno extends Component
         if (Auth::user()->hasRole('Administrador')) {
             $query2 = Cotizacion::with('proyecto')
                 ->orderBy('created_at', 'desc')
-                ->whereIn('estado', [6]);
+                ->whereIn('estado', [4]);
         } else {
             $usuarioId = Auth::id();
             $query2 = Cotizacion::where('id_usuario_compras', $usuarioId)
                 ->with('proyecto')
                 ->orderBy('created_at', 'desc')
-                ->whereIn('estado', [6]);
+                ->whereIn('estado', [4]);
         }
         if (!empty($this->searchTerm)) {
             $query2->where(function ($q) {
@@ -153,7 +154,17 @@ class OrdenCompraVistaUno extends Component
         }
     
         $cotizacion->update([
-            'estado' => 6,
+            'estado' => 4,
+        ]);
+
+
+        $ListaCotisar = ListasCotizar::findOrFail($cotizacion->lista_cotizar_id);
+        $ListaCotisar->update([
+            'estado' => 6, // 1 = Liquidada
+        ]);
+        $proyecto = Proyecto::findOrFail($ListaCotisar->proyecto_id);
+        $proyecto->update([
+            'proceso' => 5, // 1 = Liquidada
         ]);
     
         $this->reset('openModalCrearOrdenCompra', 'cotisacionSelecionada', 'metodoPago', 'cantidadPagar');

@@ -183,7 +183,7 @@
                                     Desactivar
                                 </button>
                             </div>
-                        @else 
+                        @else
                             <div class="card-body">
 
                                 <label>
@@ -192,8 +192,9 @@
                                 </label>
                                 <div>
                                     <div class="py-3">
-                                        <button class="btn btn-primary" wire:click="enviarListaCotizar({{ $idProyectoActual }})">
-                                          Enviar a cotizacion 
+                                        <button class="btn btn-primary"
+                                            wire:click="enviarListaCotizar({{ $idProyectoActual }})">
+                                            Enviar a cotizacion
                                         </button>
 
                                     </div>
@@ -216,4 +217,57 @@
     </div>
     @include('livewire.cliente.modalItemPersonalisado.modalItemPersonalisado')
     @include('livewire.cliente.modalEleccionLista.modalEleccionCLieteProyectoLista')
+
+    <script>
+        function confirmarPago(montoPagar) {
+            const cantidad = parseFloat(document.getElementById('cantidadPagar').value);
+            console.log("Monto pagar:", montoPagar, "Cantidad ingresada:", cantidad);
+
+            if (!cantidad || cantidad <= 0) {
+                Swal.fire('Error', 'Ingrese una cantidad válida', 'error');
+                return;
+            }
+
+            if (cantidad > montoPagar) {
+                Swal.fire('Error', 'La cantidad no puede ser mayor al monto pendiente', 'error');
+                return;
+            }
+
+            const esPagoCompleto = cantidad >= montoPagar;
+            const titulo = esPagoCompleto ?
+                "¿Confirmar pago completo?" :
+                "¿Registrar abono parcial?";
+
+            const html = esPagoCompleto ?
+                `Se marcará la orden como <strong>completamente pagada</strong>.` :
+                `Se registrará un abono de <strong>$${cantidad.toFixed(2)}</strong>.<br>
+               Saldo restante: <strong>$${(montoPagar - cantidad).toFixed(2)}</strong>`;
+
+            Swal.fire({
+                title: titulo,
+                html: html,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonText: 'Confirmar',
+                cancelButtonText: 'Cancelar',
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    @this.call('aceptar').then(result => {
+                        if (result) {
+                            Swal.fire({
+                                title: esPagoCompleto ? '¡Pago completado!' : '¡Abono registrado!',
+                                html: esPagoCompleto ?
+                                    'La orden ha sido liquidada completamente.' :
+                                    `Abono registrado:<br><strong>$${cantidad.toFixed(2)} MXN</strong>`,
+                                icon: 'success'
+                            });
+                        }
+                    });
+                }
+            });
+        }
+    </script>
+
 </div>

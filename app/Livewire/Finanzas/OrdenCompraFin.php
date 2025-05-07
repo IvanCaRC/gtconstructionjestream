@@ -3,7 +3,9 @@
 namespace App\Livewire\Finanzas;
 
 use App\Models\Cotizacion;
+use App\Models\ListasCotizar;
 use App\Models\ordenCompra;
+use App\Models\Proyecto;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
@@ -66,10 +68,10 @@ class OrdenCompraFin extends Component
         $this->validate([
             'cantidadPagar' => 'required|numeric|min:0.01|max:' . $this->ordenCompraSeleccionada->montoPagar
         ]);
-
+    
         try {
             DB::beginTransaction();
-
+    
             if ($this->cantidadPagar < $this->ordenCompraSeleccionada->montoPagar) {
                 $this->Abonar4cantidad($this->cantidadPagar);
                 $mensaje = "Abono registrado correctamente";
@@ -77,17 +79,33 @@ class OrdenCompraFin extends Component
                 $this->liquidar();
                 $mensaje = "Orden liquidada completamente";
             }
-
+    
             DB::commit();
-
+    
             $this->dispatch('mostrarAlerta', [
                 'icono' => 'success',
                 'titulo' => 'Éxito',
                 'texto' => $mensaje
             ]);
-
+    
+            $cotisacion = Cotizacion::findOrFail($this->ordenCompraSeleccionada->id_cotizacion);
+    
+            $ordenes = ordenCompra::where('id_cotizacion', $cotisacion->id)->get();
+    
+            if ($ordenes->every(fn($orden) => $orden->estado == 1)) {
+                $cotisacion->update(['estado' => 5]);
+                $ListaCotisar = ListasCotizar::findOrFail($cotisacion->lista_cotizar_id);
+                $ListaCotisar->update([
+                    'estado' => 7, // 1 = Liquidada
+                ]);
+                $proyecto = Proyecto::findOrFail($ListaCotisar->proyecto_id);
+                $proyecto->update([
+                    'proceso' => 6, // 1 = Liquidada
+                ]);
+            }
+    
             $this->cerrarModal();
-            $this->emit('pagoRealizado'); // Para actualizar listas si es necesario
+            $this->emit('pagoRealizado');
             $this->reset(['openModalPagar', 'ordenCompraSeleccionada', 'cantidadPagar','montoPagar']);
             return true;
         } catch (\Exception $e) {
@@ -101,19 +119,13 @@ class OrdenCompraFin extends Component
             return false;
         }
     }
-
+    
     public function liquidar()
     {
         $this->ordenCompraSeleccionada->update([
             'montoPagar' => 0,
             'estado' => 1, // 1 = Liquidada
         ]);
-
-        $cotisacion = Cotizacion::findOrFail($this->ordenCompraSeleccionada->id_cotizacion);
-        $cotisacion->update([
-            'estado' => 6, // 1 = Liquidada
-        ]);
-
     }
 
     public function Abonar4cantidad($cantidad)
