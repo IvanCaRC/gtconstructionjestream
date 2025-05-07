@@ -203,6 +203,7 @@ class VistaEspecificaProyecto extends Component
                 'imagen' => $imagen,
                 'nombre' => $item_base?->nombre ?? 'Nombre no disponible',  // ✅ Ahora viene de Item y está correctamente relacionado
                 'marca' => $item_especifico?->marca ?? 'Marca no registrada', // ✅ Sigue viniendo de ItemEspecifico
+                'descripcion' => $item_base?->descripcion ?? 'Sin descripción', // ✅ Ahora se agrega la descripción
                 'cantidad' => $item['cantidad'] . ' ' . ($item_especifico?->unidad ?? 'unidad no especificada') // ✅ También de ItemEspecifico
             ];
         }
