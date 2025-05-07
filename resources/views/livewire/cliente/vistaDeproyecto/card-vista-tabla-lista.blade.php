@@ -220,8 +220,8 @@
                                 @if ($lista->estado >= 3 && $lista->estado != 9)
                                     @if ($cotizacion)
                                         <button class="btn btn-info btn-sm text-white"
-                                            onclick="window.open('{{ route('proyecto.pdf-cotizacion', ['id' => $lista->id]) }}', '_blank')"
-                                            title="Generar y ver el documento de la cotización">
+                                            onclick="window.open('{{ route('proyecto.pdf-cotizacion', ['id' => $cotizacion->id]) }}', '_blank')"
+                                            title="Ver el documento de la cotización">
                                             <i class="fas fa-file-pdf me-1"></i> PDF
                                         </button>
                                     @endif
