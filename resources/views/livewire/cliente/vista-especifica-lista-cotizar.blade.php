@@ -1,5 +1,6 @@
 <div>
     <div class="container-fluid px-4 sm:px-6 lg:px-8 py-1">
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         <div class="flex h-screen gap-4 p-4">
             <!-- Primera sección (85%) -->
             <div class="flex-1 bg-white p-4 rounded-lg border border-black" style="flex: 0 0 80%;">
@@ -192,9 +193,13 @@
                                 </label>
                                 <div>
                                     <div class="py-3">
+                                        @php
+                                            $totalItems = count($itemsDeLaLista) + count($itemsTemporalesDeLaLista);
+                                        @endphp
+
                                         <button class="btn btn-primary"
-                                            wire:click="enviarListaCotizar({{ $idProyectoActual }})">
-                                            Enviar a cotizacion
+                                            onclick="enviar({{ $idProyectoActual }}, {{ $totalItems }})">
+                                            Enviar a cotización
                                         </button>
 
                                     </div>
@@ -219,33 +224,15 @@
     @include('livewire.cliente.modalEleccionLista.modalEleccionCLieteProyectoLista')
 
     <script>
-        function confirmarPago(montoPagar) {
-            const cantidad = parseFloat(document.getElementById('cantidadPagar').value);
-            console.log("Monto pagar:", montoPagar, "Cantidad ingresada:", cantidad);
-
-            if (!cantidad || cantidad <= 0) {
-                Swal.fire('Error', 'Ingrese una cantidad válida', 'error');
+        function enviar(idProyecto, totalItems) {
+            if (totalItems == 0) {
+                Swal.fire('Error', 'No puedes enviar una lista vacía', 'error');
                 return;
             }
-
-            if (cantidad > montoPagar) {
-                Swal.fire('Error', 'La cantidad no puede ser mayor al monto pendiente', 'error');
-                return;
-            }
-
-            const esPagoCompleto = cantidad >= montoPagar;
-            const titulo = esPagoCompleto ?
-                "¿Confirmar pago completo?" :
-                "¿Registrar abono parcial?";
-
-            const html = esPagoCompleto ?
-                `Se marcará la orden como <strong>completamente pagada</strong>.` :
-                `Se registrará un abono de <strong>$${cantidad.toFixed(2)}</strong>.<br>
-               Saldo restante: <strong>$${(montoPagar - cantidad).toFixed(2)}</strong>`;
 
             Swal.fire({
-                title: titulo,
-                html: html,
+                title: 'Confirmar Envío',
+                html: '¿Deseas enviar la lista a cotizar?',
                 icon: 'question',
                 showCancelButton: true,
                 confirmButtonText: 'Confirmar',
@@ -254,20 +241,29 @@
                 cancelButtonColor: '#d33',
             }).then((result) => {
                 if (result.isConfirmed) {
-                    @this.call('aceptar').then(result => {
-                        if (result) {
-                            Swal.fire({
-                                title: esPagoCompleto ? '¡Pago completado!' : '¡Abono registrado!',
-                                html: esPagoCompleto ?
-                                    'La orden ha sido liquidada completamente.' :
-                                    `Abono registrado:<br><strong>$${cantidad.toFixed(2)} MXN</strong>`,
-                                icon: 'success'
-                            });
-                        }
-                    });
+                    @this.call('enviarListaCotizar', idProyecto)
+                        .then(result => {
+                            if (result) {
+                                Swal.fire({
+                                    title: 'Envío exitoso',
+                                    text: 'La lista se envió correctamente',
+                                    icon: 'success',
+                                    confirmButtonText: 'OK'
+                                }).then(() => {
+                                    // Solución 1: Redirección con parámetro dinámico
+                                    window.location.href =
+                                        `/ventas/clientes/vistaEspecProyecto/${idProyecto}`;
+                                });
+                            }
+                        })
+                        .catch(error => {
+                            Swal.fire('Error', 'Ocurrió un problema al enviar la lista', 'error');
+                            console.error(error);
+                        });
                 }
             });
         }
     </script>
+
 
 </div>

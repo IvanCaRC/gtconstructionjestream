@@ -239,17 +239,17 @@
                                 @if ($lista->estado < 3)
                                     <label for="">...</label>
                                 @elseif ($lista->estado == 9)
-                                    <span class="fw-bold">Orden de venta numero
-                                        {{ $ordenVenta->id ?? 'No hay cotizacion recuperada' }}</span>
+                                    <span class="fw-bold">
+                                        {{ $ordenVenta->id ?? 'No hay orden de venta recuperada' }}</span>
                                 @elseif ($lista->estado >= 4 && $lista->estado != 9)
                                 <span class="fw-bold">
-                                    {{ $ordenVenta->id ?? 'No hay cotizacion recuperada' }}</span>
+                                    {{ $ordenVenta->id ?? 'No hay orden de venta recuperada' }}</span>
                                 @endif
                             </td>
                             <td>
                                 @if ($lista->estado < 4)
                                     <label for="">...</label>
-                                @elseif ($lista->estado > 3)
+                                @elseif ($lista->estado > 3 && $lista->estado != 9)
                                     <button class="btn btn-info btn-sm text-white"
                                         wire:click="generarPDF({{ $lista->id }})"
                                         title="Generar PDF de la cotización">
