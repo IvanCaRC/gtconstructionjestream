@@ -2,12 +2,13 @@
 
 namespace App\Livewire\Ventas\RecepsionCotizacio;
 
-use App\Http\Controllers\Cotisaciones;
+
 use App\Models\Cotizacion;
 use App\Models\ItemEspecifico;
 use App\Models\ListasCotizar;
 use App\Models\ordenVenta;
 use App\Models\Proyecto;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -72,8 +73,28 @@ class Recepcioncotiosacion extends Component
             }
         }
     }
+    //Funcion para abrir el PDF de la cotizacion generada.
+    public function generarPDFCotizacion($id)
+    {
+        // ✅ Recupera la cotización desde la BD con relaciones necesarias
+        $cotizacion = Cotizacion::with('usuario', 'proyecto', 'listaCotizar')->findOrFail($id);
 
+        // ✅ Organiza los datos para el PDF
+        $data = [
+            'title' => 'Cotización',
+            'cliente' => $cotizacion->usuario->name ?? 'Sin asignar',
+            'proyecto' => $cotizacion->proyecto->nombre ?? 'No asignado',
+            'estado' => $cotizacion->estado,
+            'usuario_atendio' => "{$cotizacion->usuario->name} {$cotizacion->usuario->first_last_name} {$cotizacion->usuario->second_last_name}",
+            'items_stock' => json_decode($cotizacion->items_cotizar_stock, true),
+            'items_proveedor' => json_decode($cotizacion->items_cotizar_proveedor, true),
+        ];
 
+        // ✅ Generar el PDF con los datos reales
+        $pdf = Pdf::loadView('pdf.cotizacion', $data)->setPaper('a4', 'portrait');
+
+        return $pdf->stream('cotizacion.pdf'); // Muestra el PDF en el navegador
+    }
 
     /**
      * Redirige a la vista de detalles del proyecto
@@ -88,6 +109,8 @@ class Recepcioncotiosacion extends Component
         }
         return redirect()->route('ventas.clientes.vistaEspecProyecto', ['idProyecto' => $idProyecto]);
     }
+
+
 
 
 

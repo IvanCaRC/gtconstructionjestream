@@ -165,6 +165,11 @@
                                     <i class="fas fa-file-pdf"></i>
                                 </button>
 
+                                {{-- <button class="btn btn-info btn-sm mr-1" title="Ver PDF"
+                                    onclick="window.open('{{ route('proyecto.pdf-lista', ['id' => $lista->id]) }}', '_blank')">
+                                    <i class="fas fa-file-pdf"></i>
+                                </button> --}}
+
                                 @if ($lista->estado == 1)
                                     <button class="btn btn-primary btn-sm mr-1" title="Editar"
                                         wire:click="editarlista({{ $lista->id }})">
@@ -215,8 +220,8 @@
                                 @if ($lista->estado >= 3)
                                     @if ($cotizacion)
                                         <button class="btn btn-info btn-sm text-white"
-                                            wire:click="generarPDF({{ $lista->id }})"
-                                            title="Generar PDF de la cotización">
+                                            onclick="window.open('{{ route('proyecto.pdf-cotizacion', ['id' => $lista->id]) }}', '_blank')"
+                                            title="Generar y ver el documento de la cotización">
                                             <i class="fas fa-file-pdf me-1"></i> PDF
                                         </button>
                                     @endif

@@ -43,8 +43,19 @@
                                         {{ $lista->proyecto->preferencia == 1 ? 'Tiempo de entrega' : ($lista->proyecto->preferencia == 2 ? 'Precio' : 'Sin preferencia') }}
                                     </td>
                                     <td>
-                                        <button class="btn btn-primary btn-custom"
-                                            wire:click="seleccionar({{ $lista->id }})">Seleccionar</button>
+                                        <!-- Botón de generación de PDF -->
+                                        {{-- <button class="btn btn-info text-white"
+                                            style="width: 160px; height: 35px; white-space: nowrap;"
+                                            onclick="window.open('{{ route('proyecto.pdf-lista', ['id' => $lista->id]) }}', '_blank')"
+                                            title="Generar y ver el documento de la lista">
+                                            <i class="fas fa-file-pdf me-1"></i> Archivo de lista
+                                        </button> --}}
+
+                                        <!-- Botón de selección -->
+                                        <button class="btn btn-primary btn-custom" style="width: 120px; height: 35px;"
+                                            wire:click="seleccionar({{ $lista->id }})">
+                                            Seleccionar
+                                        </button>
                                     </td>
                                 </tr>
                             @endforeach
