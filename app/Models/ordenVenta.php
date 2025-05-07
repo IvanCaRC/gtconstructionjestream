@@ -23,9 +23,6 @@ class ordenVenta extends Model
         'estado',
     ];
 
-
-
-
   public function usuario(){
       return $this->belongsTo(User::class, 'id_usuario');}
 
@@ -33,8 +30,6 @@ class ordenVenta extends Model
     {
         return $this->belongsTo(Cliente::class, 'id_cliente');
     }
-
-
 
     public function cotizacion()
     {

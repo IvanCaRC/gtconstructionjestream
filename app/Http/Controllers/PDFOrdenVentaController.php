@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Item;
 use App\Models\ItemEspecifico;
-use App\Models\ListasCotizar;
 use App\Models\OrdenVenta;
 use Barryvdh\DomPDF\Facade\Pdf;
 
