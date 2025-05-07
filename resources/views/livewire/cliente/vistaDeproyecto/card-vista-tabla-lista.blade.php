@@ -111,12 +111,15 @@
                             <td class="text-center columna-estatica-estado">
                                 @php
                                     $estados = [
-                                        1 => ['label' => 'Activo', 'class' => 'badge-success'],
-                                        2 => ['label' => 'Cotizando', 'class' => 'badge-warning'],
+                                        1 => ['label' => 'Creando Lista', 'class' => 'badge-success'],
+                                        2 => ['label' => 'Creando cotizacion', 'class' => 'badge-primary'],
                                         3 => ['label' => 'Cotizado', 'class' => 'badge-primary'],
-                                        4 => ['label' => 'Cancelado', 'class' => 'badge-danger'],
-                                        5 => ['label' => 'En proceso de venta', 'class' => 'badge-warning'],
-                                        6 => ['label' => 'Terminado', 'class' => 'badge-primary'],
+                                        4 => ['label' => 'Esperando pago', 'class' => 'badge-warning'],
+                                        5 => ['label' => 'Pagado', 'class' => 'badge-primary'],
+                                        6 => ['label' => 'Preparando', 'class' => 'badge-warning'],
+                                        7 => ['label' => 'En proceso de entraga', 'class' => 'badge-warning'],
+                                        8 => ['label' => 'Terminado', 'class' => 'badge-success'],
+                                        9 => ['label' => 'Cancelado', 'class' => 'badge-danger'],
                                     ];
 
                                     $estado = $estados[$lista->estado] ?? [

@@ -74,14 +74,16 @@
                                                     : ($lista->estado == 2
                                                         ? '<span class="badge badge-warning">Aceptada pendiente de pago</span>'
                                                         : ($lista->estado == 3
-                                                            ? '<span class="badge badge-danger">Cancelada</span>'
+                                                            ? '<span class="badge badge-danger">Pagado</span>'
                                                             : ($lista->estado == 4
                                                                 ? '<span class="badge badge-success">Compra terminada</span>'
                                                                 : ($lista->estado == 5
-                                                                    ? '<span class="badge badge-primary">Pagada</span>'
+                                                                    ? '<span class="badge badge-primary">Comprando</span>'
                                                                     : ($lista->estado == 6
-                                                                        ? '<span class="badge badge-primary">Comprando</span>'
-                                                                        : '<span class="badge badge-secondary">Estado desconocido</span>')))))) !!}
+                                                                        ? '<span class="badge badge-primary">En proceso de entrega</span>'
+                                                                        : ($lista->estado == 7
+                                                                        ? '<span class="badge badge-primary">Terminado</span>'
+                                                                        : '<span class="badge badge-secondary">Estado desconocido</span>'))))))) !!}
                                         </label>
 
                                     </td>

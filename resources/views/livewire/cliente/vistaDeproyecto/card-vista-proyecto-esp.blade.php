@@ -44,18 +44,22 @@
                     <div>
                         <label>
                             {!! $proyecto->proceso == 0
-                                ? '<span class="badge badge-secondary">Creando lista a cotizar</span>'
+                                ? '<span class="badge badge-primary">Creando lista a cotizar</span>'
                                 : ($proyecto->proceso == 1
-                                    ? '<span class="badge badge-secondary">Creando cotización</span>'
+                                    ? '<span class="badge badge-primary">Creando cotización</span>'
                                     : ($proyecto->proceso == 2
-                                        ? '<span class="badge badge-secondary">Cotizado</span>'
+                                        ? '<span class="badge badge-primary">Cotizado</span>'
                                         : ($proyecto->proceso == 3
-                                            ? '<span class="badge badge-secondary">En proceso de venta</span>'
+                                            ? '<span class="badge badge-warning">Esperando pago</span>'
                                             : ($proyecto->proceso == 4
-                                                ? '<span class="badge badge-secondary">Venta terminada</span>'
+                                                ? '<span class="badge badge-primary">Pagado/span>'
                                                 : ($proyecto->proceso == 5
-                                                    ? '<span class="badge badge-secondary">Cancelada</span>'
-                                                    : '<span class="badge badge-secondary">Estado desconocido</span>'))))) !!}
+                                                    ? '<span class="badge badge-warning">Preparando</span>'
+                                                    : ($proyecto->proceso == 6
+                                                        ? '<span class="badge badge-warning">En proceso de entrga</span>'
+                                                        : ($proyecto->proceso == 7
+                                                            ? '<span class="badge badge-success">Venta terminada</span>'
+                                                            : '<span class="badge badge-secondary">Estado desconocido</span>'))))))) !!}
                         </label>
                     </div>
                 </div>
@@ -120,7 +124,8 @@
                                         <a href="{{ $pdfUrl }}" target="_blank" class="btn btn-outline-secondary">
                                             📄 Ver PDF
                                         </a>
-                                        <a href="{{ $pdfUrl }}" download="reporte_proyecto.pdf" class="btn btn-outline-primary">
+                                        <a href="{{ $pdfUrl }}" download="reporte_proyecto.pdf"
+                                            class="btn btn-outline-primary">
                                             ⬇️ Descargar PDF
                                         </a>
                                     </div>
