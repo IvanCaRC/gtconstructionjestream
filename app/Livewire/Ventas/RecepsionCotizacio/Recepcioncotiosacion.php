@@ -61,17 +61,27 @@ class Recepcioncotiosacion extends Component
      * Cancela una cotización
      * @param int $id ID de la cotización
      */
+
+
     public function cancelar($id)
     {
-        $cotizacion = Cotizacion::find($id);
-        if ($cotizacion) {
-            $cotizacion->estado = 2; // Estado "Cancelada"
-            $cotizacion->save();
 
-            if (Auth::user()->cotizaciones == $id) {
-                Auth::user()->update(['cotizaciones' => null]);
-            }
+        if (Auth::user()->cotizaciones == $id) {
+            Auth::user()->update(['cotizaciones' => null]);
         }
+        $cotisacion = Cotizacion::findOrFail($id);
+        $cotisacion->update([
+            'estado' => 7, // 1 = Liquidada
+        ]);
+        $ListaCotisar = ListasCotizar::findOrFail($cotisacion->lista_cotizar_id);
+        $ListaCotisar->update([
+            'estado' => 9, // 1 = Liquidada
+        ]);
+        $proyecto = Proyecto::findOrFail($ListaCotisar->proyecto_id);
+        $proyecto->update([
+            'proceso' => 10, // 1 = Liquidada
+        ]);
+        $this->dispatch('refresh');
     }
     //Funcion para abrir el PDF de la cotizacion generada.
     public function generarPDFCotizacion($id)
@@ -223,7 +233,13 @@ class Recepcioncotiosacion extends Component
             return $carry + ($item['precio'] * $item['cantidad']);
         }, 0);
 
-        $this->precioTotal = $this->precioStock + $this->precioProveedor;
+        $subtotal = $this->precioStock + $this->precioProveedor;
+        $iva = $subtotal * 0.16;
+        $totalConIva = $subtotal + $iva;
+        
+        // Redondear al próximo múltiplo de 0.10 hacia arriba
+        $this->precioTotal = ceil($totalConIva * 10) / 10;
+        
     }
     /**
      * Acepta una cotización y crea una orden de venta
@@ -259,6 +275,7 @@ class Recepcioncotiosacion extends Component
             'metodoPago' => $this->metodoPago, // Estado inicial de la cotización
             'estado' => 0, // Estado inicial de la cotización
         ]);
+        $proyecto->increment('ordenes');
         $this->reset('openModalOrdenVenta', 'cotisacionSelecionada', 'metodoPago', 'formaPago');
         return true;
     }

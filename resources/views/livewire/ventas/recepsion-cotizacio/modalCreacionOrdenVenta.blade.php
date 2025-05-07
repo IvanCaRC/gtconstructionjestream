@@ -1,7 +1,11 @@
 <div>
     <x-dialog-modal wire:model="openModalOrdenVenta">
         <x-slot name='title'>
-            Crear orden de venta
+            Crear orden de venta             @if (session()->has('error'))
+            <div class="alert alert-danger">
+                {{ session('error') }}
+            </div>
+        @endif
         </x-slot>
         <x-slot name='content'>
             <div class="form-group">

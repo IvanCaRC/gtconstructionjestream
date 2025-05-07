@@ -9,6 +9,7 @@ use App\Models\Item;
 use App\Models\ItemEspecifico;
 use App\Models\ItemTemporal;
 use App\Models\ListasCotizar;
+use App\Models\ordenVenta;
 use App\Models\Proyecto;
 use Livewire\Component;
 use Barryvdh\DomPDF\Facade\Pdf; // Asegúrate de importar la fachada de DomPDF
@@ -405,14 +406,14 @@ class VistaEspecificaProyecto extends Component
         $user = Auth::user();
         $idUser = $user->id;
 
-        $resultado = 'numero ' . strval($proyectoLista + 1);
 
+        $nombre = strtoupper(substr(strval($this->proyecto->nombre), 0, 1)) . 'LAC' . strval($proyectoLista + 1);
 
 
         $listaACotizar = ListasCotizar::create([
             'proyecto_id' => $proyecto,
             'usuario_id' => $idUser,
-            'nombre' => $resultado,
+            'nombre' => $nombre,
             'estado' => 1,
         ]);
 
@@ -470,6 +471,45 @@ class VistaEspecificaProyecto extends Component
         $this->dispatch('refresh');
     }
 
+    public function cancelarCotisacion($id)
+    {
+        $cotisacion = Cotizacion::findOrFail($id);
+        $cotisacion->update([
+            'estado' => 7, // 1 = Liquidada
+        ]);
+        $ListaCotisar = ListasCotizar::findOrFail($cotisacion->lista_cotizar_id);
+        $ListaCotisar->update([
+            'estado' => 9, // 1 = Liquidada
+        ]);
+        $proyecto = Proyecto::findOrFail($ListaCotisar->proyecto_id);
+        $proyecto->update([
+            'proceso' => 10, // 1 = Liquidada
+        ]);
+        $this->dispatch('refresh');
+    }
+
+    public function cancelarOrdenVenta($id)
+    {
+
+        $ordenVenta = ordenVenta::findOrFail($id);
+        $ordenVenta->update([
+            'estado' => 3, // 1 = Liquidada
+        ]);
+        $cotisacion = Cotizacion::findOrFail($ordenVenta->id_cotizacion);
+        $cotisacion->update([
+            'estado' => 7, // 1 = Liquidada
+        ]);
+        $ListaCotisar = ListasCotizar::findOrFail($cotisacion->lista_cotizar_id);
+        $ListaCotisar->update([
+            'estado' => 9, // 1 = Liquidada
+        ]);
+        $proyecto = Proyecto::findOrFail($ListaCotisar->proyecto_id);
+        $proyecto->update([
+            'proceso' => 10, // 1 = Liquidada
+        ]);
+        $this->dispatch('refresh');
+    }
+
     public function editarlista($id)
     {
         // Buscar la lista actual
@@ -521,46 +561,128 @@ class VistaEspecificaProyecto extends Component
         return;
     }
 
-    public function aceptarCotisacion($cotisacionId)
+    public $openModalOrdenVenta = false;
+    public $cotisacionSelecionada;
+    public $metodoPago = 1;
+    public $formaPago = 1;
+    public $precioStock = 0;
+    public $precioProveedor = 0;
+    public $precioTotal = 0;
+
+
+    public function abrirModal($id)
     {
-        $proyectoModi = Proyecto::find($this->proyecto->id);
+        $cotisacion = Cotizacion::find($id);
+        $this->openModalOrdenVenta = true;
+        $this->cotisacionSelecionada = $cotisacion;
+    }
 
-        $cotisacion = Cotizacion::find($cotisacionId);
-        $lista = ListasCotizar::find($cotisacion->lista_cotizar_id);
+    public function cerrarModal()
+    {
+        $this->reset('openModalOrdenVenta', 'cotisacionSelecionada', 'metodoPago', 'formaPago');
+    }
 
-        if (!$lista) {
-            session()->flash('error', 'No se encontró la lista.');
-            return;
+    public function asignarMetodoPago($valor)
+    {
+        $this->metodoPago = $valor;
+    }
+
+    public function asignarFormaPago($valor)
+    {
+        $this->formaPago = $valor;
+    }
+
+    private function calcularPrecioTotal($id)
+    {
+        $cotizacion = Cotizacion::find($id);
+        if (!$cotizacion) return;
+
+        // Calcular precio de items en stock
+        $itemsStock = json_decode($cotizacion->items_cotizar_stock, true) ?? [];
+        $this->precioStock = array_reduce($itemsStock, function ($carry, $item) {
+            $itemEspecifico = ItemEspecifico::find($item['id']);
+            if (!$itemEspecifico) return $carry;
+
+            $precio = ($item['cantidad'] < $itemEspecifico->cantidad_piezas_mayoreo)
+                ? $itemEspecifico->precio_venta_minorista
+                : $itemEspecifico->precio_venta_mayorista;
+
+            return $carry + ($precio * $item['cantidad']);
+        }, 0);
+
+        // Calcular precio de items con proveedor
+        $itemsProveedor = json_decode($cotizacion->items_cotizar_proveedor, true) ?? [];
+        $this->precioProveedor = array_reduce($itemsProveedor, function ($carry, $item) {
+            return $carry + ($item['precio'] * $item['cantidad']);
+        }, 0);
+
+        $subtotal = $this->precioStock + $this->precioProveedor;
+        $iva = $subtotal * 0.16;
+        $this->precioTotal = $subtotal + $iva;
+    }
+    /**
+     * Acepta una cotización y crea una orden de venta
+     * @param int $id ID de la cotización
+     * @return bool
+     */
+    public function aceptar()
+    {
+        $cotizacion = Cotizacion::find($this->cotisacionSelecionada->id);
+
+        if (!$cotizacion) {
+            abort(404, 'Cotización no encontrada');
         }
-        if (!$proyectoModi) {
-            session()->flash('error', 'No se encontró el proyecto.');
-            return;
+
+        $itemsDeStock = json_decode($cotizacion->items_cotizar_stock, true) ?? [];
+
+        try {
+            
+            foreach ($itemsDeStock as $item) {
+                $itemEspecifico = ItemEspecifico::find($item['id']);
+
+                if (!$itemEspecifico) {
+                    throw new \Exception("Item específico con ID {$item['id']} no encontrado.");
+                }
+
+                if ($itemEspecifico->stock < intval($item['cantidad'])) {
+                    throw new \Exception("Stock insuficiente para el item {$item['nombreDeItem']}.");
+                }
+
+                $itemEspecifico->update([
+                    'stock' => $itemEspecifico->stock - intval($item['cantidad'])
+                ]);
+            }
+            $lista = ListasCotizar::find($cotizacion->lista_cotizar_id);
+            $proyecto = Proyecto::find($lista->proyecto_id ?? null);
+
+            $this->calcularPrecioTotal($this->cotisacionSelecionada->id);
+
+            // Actualizar estados
+            $cotizacion->update(['estado' => 2]);
+            if ($lista) $lista->update(['estado' => 4]);
+            if ($proyecto) $proyecto->update(['proceso' => 3]);
+
+            // Crear orden de venta
+            $ordenVenta = ordenVenta::create([
+                'id_cliente' => $proyecto->cliente_id,
+                'id_usuario' => $cotizacion->usuario_id,
+                'id_cotizacion' => $cotizacion->id,
+                'direccion_id' => $proyecto->direccion_id,
+                'monto' => $this->precioTotal,
+                'montoPagar' => $this->precioTotal,
+                'formaPago' => $this->formaPago,
+                'metodoPago' => $this->metodoPago, // Estado inicial de la cotización
+                'estado' => 0, // Estado inicial de la cotización
+            ]);
+
+            $proyecto->increment('ordenes'); // Incrementa el campo "proyectos" en 1
+            $this->reset('openModalOrdenVenta', 'cotisacionSelecionada', 'metodoPago', 'formaPago');
+            return true;
+            // ... resto del código
+
+        } catch (\Exception $e) {
+            session()->flash('error', $e->getMessage());
+            return false; // o redirect()->back() si estás en un controlador
         }
-        if (!$cotisacion) {
-            session()->flash('error', 'No se encontró la cotisacion.');
-            return;
-        }
-
-        // Obtener el proyecto seleccionado
-
-        $proyectoModi->update([
-            'proceso' => 3,
-        ]);
-
-        // Actualizar la lista
-        $lista->update([
-            'estado' => 5,
-        ]);
-
-        $cotisacion->update([
-            'estado' => 2,
-        ]);
-
-        // Mensaje de éxito
-        session()->flash('success', 'Lista fue enviada correctamente a la cotisacion.');
-
-        // Cerrar el modal
-        $this->dispatch('refresh');
-        return;
     }
 }

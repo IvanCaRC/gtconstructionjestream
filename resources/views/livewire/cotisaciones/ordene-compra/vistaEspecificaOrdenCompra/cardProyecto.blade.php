@@ -16,20 +16,22 @@
                 <div>
                     <label>
                         {!! $cotisacion->estado == 0
-                            ? '<span class="badge badge-success">Activa</span>'
+                            ? '<span class="badge badge-primary">Activa</span>'
                             : ($cotisacion->estado == 1
-                                ? '<span class="badge badge-secondary">Enviada</span>'
+                                ? '<span class="badge badge-primary">Enviada</span>'
                                 : ($cotisacion->estado == 2
                                     ? '<span class="badge badge-warning">Aceptada pendiente de pago</span>'
                                     : ($cotisacion->estado == 3
-                                        ? '<span class="badge badge-danger">Cancelada</span>'
+                                        ? '<span class="badge badge-primary">Pagado</span>'
                                         : ($cotisacion->estado == 4
-                                            ? '<span class="badge badge-success">Compra terminada</span>'
+                                            ? '<span class="badge badge-warning">Comprando</span>'
                                             : ($cotisacion->estado == 5
-                                                ? '<span class="badge badge-primary">Pagada</span>'
+                                                ? '<span class="badge badge-warning">En proceso de entrega</span>'
                                                 : ($cotisacion->estado == 6
-                                                    ? '<span class="badge badge-primary">Comprando</span>'
-                                                    : '<span class="badge badge-secondary">Estado desconocido</span>')))))) !!}
+                                                    ? '<span class="badge badge-success">Terminado</span>'
+                                                    : ($cotisacion->estado == 7
+                                                    ? '<span class="badge badge-primary">Cancelado</span>'
+                                                    : '<span class="badge badge-secondary">Estado desconocido</span>'))))))) !!}
                     </label>
                 </div>
             </div>

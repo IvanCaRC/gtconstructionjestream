@@ -6,7 +6,7 @@ use App\Models\Cotizacion;
 use Livewire\Component;
 use Livewire\WithPagination;
 use App\Models\ListasCotizar;
-
+use App\Models\Proyecto;
 use Illuminate\Support\Facades\Auth;
 
 class VerMisCotisaciones extends Component
@@ -47,11 +47,6 @@ class VerMisCotisaciones extends Component
                 ->when($this->estado, function ($q) {
                     $q->where('estado', $this->estado);
                 });
-
-            // Resto del código...
-
-
-            // Aplicar búsqueda por nombre o fecha de creación
 
         }
 
@@ -101,13 +96,18 @@ class VerMisCotisaciones extends Component
 
     public function cancelar($id)
     {
-        $cotizacion = Cotizacion::find($id);
-        if ($cotizacion) {
-            $cotizacion->estado = 2; // Estado "Cancelada"
-            $cotizacion->save();
-            if (Auth::user()->cotizaciones == $id) {
-                Auth::user()->update(['cotizaciones' => null]);
-            }
-        }
+        $cotisacion = Cotizacion::findOrFail($id);
+        $cotisacion->update([
+            'estado' => 7, // 1 = Liquidada
+        ]);
+        $ListaCotisar = ListasCotizar::findOrFail($cotisacion->lista_cotizar_id);
+        $ListaCotisar->update([
+            'estado' => 9, // 1 = Liquidada
+        ]);
+        $proyecto = Proyecto::findOrFail($ListaCotisar->proyecto_id);
+        $proyecto->update([
+            'proceso' => 10, // 1 = Liquidada
+        ]);
+        $this->dispatch('refresh');
     }
 }

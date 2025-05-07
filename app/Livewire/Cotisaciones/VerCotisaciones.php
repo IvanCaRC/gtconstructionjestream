@@ -131,13 +131,20 @@ class VerCotisaciones extends Component
         // Guardar los cambios en la base de datos
         $lista->save();
 
+        $proyecto = Proyecto::find($lista->proyecto_id);
+        $cotisacionNumero = strval($proyecto->cotisaciones + 1); // No necesita el punto al inicio
+
+        $nombre = $lista->nombre . $cotisacionNumero . $usuarioVentas; // Usar `.` para concatenar
+
+
+
         // Crear la cotización basada en la lista a cotizar
         $cotizacion = Cotizacion::create([
             'lista_cotizar_id' => $lista->id,
             'proyecto_id' => $lista->proyecto_id,
             'usuario_id' => $usuarioVentas,
             'id_usuario_compras' => $idUsuario,
-            'nombre' => $lista->nombre,
+            'nombre' => $nombre,
             'estado' => 0, // Estado inicial de la cotización
         ]);
 
@@ -145,7 +152,10 @@ class VerCotisaciones extends Component
         $usuarioAsignado = User::findOrFail($idUsuario);
 
         // Obtener el nombre del proyecto antes de enviar la notificación
-        $proyecto = Proyecto::find($lista->proyecto_id);
+
+
+        $proyecto->increment('cotisaciones'); // Incrementa el campo "proyectos" en 1
+
         $nombreProyecto = $proyecto ? $proyecto->nombre : 'Sin nombre';
 
         // Enviar notificación al usuario asignado

@@ -80,6 +80,8 @@
                 <button class="btn btn-custom" style="background-color: #4c72de; color: white;"
                     wire:click="saveListaNueva">Registrar lista</button>
             </div>
+
+
             <div class="row m   b-3">
                 <div class="col-md-10">
                     <input type="text" class="form-control mr-2" id="searchInput" placeholder="Buscar lista...">
@@ -205,19 +207,18 @@
                             <td class="columna-estatica-columna">
                                 @if ($lista->estado == 3 && $lista->estado != 9)
                                     <!-- Botón de Cancelar (existente) -->
-                                    <button class="btn btn-danger btn-sm" wire:click="cancelar({{ $lista->id }})"
+                                    <button class="btn btn-danger btn-sm" wire:click="cancelarCotisacion({{ $cotizacion->id }})"
                                         title="Cancelar cotización">
                                         <i class="fas fa-times me-1"></i> Cancelar
                                     </button>
                                 @endif
                                 @if ($lista->estado == 3)
-                                    <button class="btn btn-primary btn-sm"
-                                        wire:click="aceptarCotisacion({{ $cotizacion->id }})"
+                                    <button class="btn btn-primary btn-sm" wire:click="abrirModal({{ $cotizacion->id }})"
                                         title="Cancelar cotización">
                                         Aceptar
                                     </button>
                                 @endif
-                                @if ($lista->estado >= 3 && $lista->estado != 9)
+                                @if ($lista->estado >= 3)
                                     @if ($cotizacion)
                                         <button class="btn btn-info btn-sm text-white"
                                             onclick="window.open('{{ route('proyecto.pdf-cotizacion', ['id' => $cotizacion->id]) }}', '_blank')"
@@ -251,7 +252,7 @@
                             <td>
                                 @if ($lista->estado < 4)
                                     <label for="">...</label>
-                                @elseif ($lista->estado > 3 && $lista->estado != 9)
+                                @elseif ($lista->estado > 3)
                                     <button class="btn btn-info btn-sm text-white"
                                         wire:click="generarPDF({{ $lista->id }})"
                                         title="Generar PDF de la cotización">
@@ -259,7 +260,7 @@
                                     </button>
                                 @endif
                                 @if ($lista->estado == 4)
-                                    <button class="btn btn-danger btn-sm" wire:click="cancelar({{ $lista->id }})"
+                                    <button class="btn btn-danger btn-sm" wire:click="cancelarOrdenVenta({{ $ordenVenta->id }})"
                                         title="Cancelar cotización">
                                         <i class="fas fa-times me-1"></i> Cancelar
                                     </button>
@@ -276,4 +277,5 @@
             @endif
         </div>
     </div>
+    @include('livewire.ventas.recepsion-cotizacio.modalCreacionOrdenVenta')
 </div>

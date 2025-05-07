@@ -44,20 +44,22 @@
                                     <td>
                                         <label>
                                             {!! $lista->estado == 0
-                                                ? '<span class="badge badge-success">Activa</span>'
+                                                ? '<span class="badge badge-primary">Activa</span>'
                                                 : ($lista->estado == 1
-                                                    ? '<span class="badge badge-secondary">Enviada</span>'
+                                                    ? '<span class="badge badge-primary">Enviada</span>'
                                                     : ($lista->estado == 2
                                                         ? '<span class="badge badge-warning">Aceptada pendiente de pago</span>'
                                                         : ($lista->estado == 3
-                                                            ? '<span class="badge badge-danger">Cancelada</span>'
+                                                            ? '<span class="badge badge-primary">Pagado</span>'
                                                             : ($lista->estado == 4
-                                                                ? '<span class="badge badge-success">Compra terminada</span>'
+                                                                ? '<span class="badge badge-warning">Comprando</span>'
                                                                 : ($lista->estado == 5
-                                                                    ? '<span class="badge badge-primary">Pagada</span>'
+                                                                    ? '<span class="badge badge-warning">En proceso de entrega</span>'
                                                                     : ($lista->estado == 6
-                                                                        ? '<span class="badge badge-primary">Comprando</span>'
-                                                                        : '<span class="badge badge-secondary">Estado desconocido</span>')))))) !!}
+                                                                        ? '<span class="badge badge-success">Terminado</span>'
+                                                                        : ($lista->estado == 7
+                                                                        ? '<span class="badge badge-primary">Cancelado</span>'
+                                                                        : '<span class="badge badge-secondary">Estado desconocido</span>'))))))) !!}
                                         </label>
                                     </td>
                                     <td>

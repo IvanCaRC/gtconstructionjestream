@@ -18,6 +18,7 @@ class OrdenVentaVista extends Component
     use WithPagination;
     public $searchTerm = '';
     public $statusFiltro = 0;
+    public $statusFiltro2 = 0;
     public $precioStock = 0;
     public $precioProveedor = 0;
     public $precioTotal = 0;
@@ -81,31 +82,33 @@ class OrdenVentaVista extends Component
      * Renderiza la vista principal del componente
      * @return \Illuminate\View\View
      */
+
+
     public function render()
-    {
-        $query = Auth::user()->hasRole('Administrador')
-            ? $this->getQueryForAdmin()
-            : $this->getQueryForRegularUser();
+{
+    $query = Auth::user()->hasRole('Administrador')
+        ? $this->getQueryForAdmin()
+        : $this->getQueryForRegularUser();
 
-        // Aplicar búsqueda
-        // if (!empty($this->searchTerm)) {
-        //     $query->where(function ($q) {
-        //         $q->where('nombre', 'like', '%' . $this->searchTerm . '%')
-        //             ->orWhereDate('created_at', 'like', '%' . $this->searchTerm . '%');
-        //     });
-        // }
-
-        // Aplicar filtro de preferencia
-        // if ($this->statusFiltro != 0) {
-        //     $query->whereHas('proyecto', function ($q) {
-        //         $q->where('preferencia', $this->statusFiltro);
-        //     });
-        // }
-
-        $ordenesVenta = $query->paginate(10);
-
-        return view('livewire.ventas.ordene-venta.orden-venta-vista', compact('ordenesVenta'));
+    if (!empty($this->searchTerm)) {
+        $query->whereHas('cliente', function ($q) {
+            $q->where('nombre', 'like', '%' . $this->searchTerm . '%');
+        });
     }
+
+    if ($this->statusFiltro ) {
+        $query->where('estado', $this->statusFiltro);
+    }
+
+    if ($this->statusFiltro2 ) {
+        $query->where('metodoPago', $this->statusFiltro2);
+    }
+
+    $ordenesVenta = $query->paginate(10);
+
+    return view('livewire.ventas.ordene-venta.orden-venta-vista', compact('ordenesVenta'));
+}
+
 
     /**
      * Construye la consulta para administradores
@@ -146,7 +149,7 @@ class OrdenVentaVista extends Component
 
     public function cerrarModal()
     {
-        $this->reset(['openModalPagar', 'ordenVentaSelecionada', 'cantidadPagar','montoPagar']);
+        $this->reset(['openModalPagar', 'ordenVentaSelecionada', 'cantidadPagar', 'montoPagar']);
     }
 
     public function aceptar()
@@ -176,7 +179,7 @@ class OrdenVentaVista extends Component
 
             $this->cerrarModal();
             $this->emit('pagoRealizado'); // Para actualizar listas si es necesario
-            $this->reset(['openModalPagar', 'ordenVentaSelecionada', 'cantidadPagar','montoPagar']);
+            $this->reset(['openModalPagar', 'ordenVentaSelecionada', 'cantidadPagar', 'montoPagar']);
             return true;
         } catch (\Exception $e) {
             DB::rollBack();
@@ -185,7 +188,7 @@ class OrdenVentaVista extends Component
                 'titulo' => 'Error',
                 'texto' => 'Ocurrió un error: ' . $e->getMessage()
             ]);
-            $this->reset(['openModalPagar', 'ordenVentaSelecionada', 'cantidadPagar','montoPagar']);
+            $this->reset(['openModalPagar', 'ordenVentaSelecionada', 'cantidadPagar', 'montoPagar']);
             return false;
         }
     }
@@ -198,18 +201,34 @@ class OrdenVentaVista extends Component
         ]);
 
         $cotisacion = Cotizacion::findOrFail($this->ordenVentaSelecionada->id_cotizacion);
-        $cotisacion->update([
-            'estado' => 3, // 1 = Liquidada
-        ]);
-        $ListaCotisar = ListasCotizar::findOrFail($cotisacion->lista_cotizar_id);
-        $ListaCotisar->update([
-            'estado' => 5, // 1 = Liquidada
-        ]);
-        $proyecto = Proyecto::findOrFail($ListaCotisar->proyecto_id);
-        $proyecto->update([
-            'proceso' => 4, // 1 = Liquidada
-        ]);
 
+        $itemsDeProveedor = json_decode($cotisacion->items_cotizar_proveedor, true) ?? [];
+        $cantidadDeItemsCotizacionProveedor = count($itemsDeProveedor);
+        if ($cantidadDeItemsCotizacionProveedor == 0) {
+            $cotisacion->update([
+                'estado' => 5, // 1 = Liquidada
+            ]);
+            $ListaCotisar = ListasCotizar::findOrFail($cotisacion->lista_cotizar_id);
+            $ListaCotisar->update([
+                'estado' => 7, // 1 = Liquidada
+            ]);
+            $proyecto = Proyecto::findOrFail($ListaCotisar->proyecto_id);
+            $proyecto->update([
+                'proceso' => 6, // 1 = Liquidada
+            ]);
+        } else {
+            $cotisacion->update([
+                'estado' => 3, // 1 = Liquidada
+            ]);
+            $ListaCotisar = ListasCotizar::findOrFail($cotisacion->lista_cotizar_id);
+            $ListaCotisar->update([
+                'estado' => 5, // 1 = Liquidada
+            ]);
+            $proyecto = Proyecto::findOrFail($ListaCotisar->proyecto_id);
+            $proyecto->update([
+                'proceso' => 4, // 1 = Liquidada
+            ]);
+        }
     }
 
     public function Abonar4cantidad($cantidad)

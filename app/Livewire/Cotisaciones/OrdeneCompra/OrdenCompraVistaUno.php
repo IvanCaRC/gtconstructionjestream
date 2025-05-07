@@ -106,38 +106,41 @@ class OrdenCompraVistaUno extends Component
     public function asignarMetodoPago($valor)
     {
         $this->metodoPago = $valor;
-    } 
+    }
 
     public function createOrdenCompra()
     {
         $cotizacion = Cotizacion::findOrFail($this->cotisacionSelecionada->id);
-    
+
         $items = json_decode($cotizacion->items_cotizar_proveedor, true);
-    
+
         // Mapear cada item para agregar el proveedor real y el precio_compra
         $itemsConProveedorReal = collect($items)->map(function ($item) {
             $pivot = DB::table('item_especifico_proveedor')->where('id', $item['proveedor_id'])->first();
-    
+
             if (!$pivot) {
                 throw new \Exception("No se encontró item_especifico_proveedor con id {$item['proveedor_id']}");
             }
-    
+
             // Usar el proveedor real y el precio de compra de la tabla pivote
             $item['proveedor_real_id'] = $pivot->proveedor_id;
-            $item['precio_compra'] = $pivot->precio_compra;
-    
+            $item['precio_compra'] = ceil($pivot->precio_compra * 10) / 10;
+
+
             return $item;
         });
-    
+
         // Agrupar por proveedor real
         $itemsPorProveedor = $itemsConProveedorReal->groupBy('proveedor_real_id');
-    
+
         foreach ($itemsPorProveedor as $proveedorId => $itemsProveedor) {
             // Calcular el monto total usando precio_compra
             $monto = collect($itemsProveedor)->reduce(function ($carry, $item) {
                 return $carry + ($item['precio_compra'] * $item['cantidad']);
             }, 0);
-    
+
+
+
             ordenCompra::create([
                 'id_provedor' => $proveedorId,
                 'id_cotizacion' => $cotizacion->id,
@@ -150,19 +153,19 @@ class OrdenCompraVistaUno extends Component
                 'estado' => 0,
             ]);
         }
-    
+
         $cotizacion->update(['estado' => 4]);
-    
+
         $ListaCotisar = ListasCotizar::findOrFail($cotizacion->lista_cotizar_id);
         $ListaCotisar->update(['estado' => 6]);
-    
+
         $proyecto = Proyecto::findOrFail($ListaCotisar->proyecto_id);
         $proyecto->update(['proceso' => 5]);
-    
+
         $this->reset('openModalCrearOrdenCompra', 'cotisacionSelecionada', 'metodoPago', 'cantidadPagar');
     }
-    
-    
+
+
     public function verOrdenCOmpra($idCotisacion)
     {
         $cotizacion = Cotizacion::findOrFail($idCotisacion);
@@ -172,6 +175,4 @@ class OrdenCompraVistaUno extends Component
         }
         return redirect()->route('compras.cotisaciones.vistaEspecificaOrdenesCompra', ['idCotisacion' => $cotizacion]);
     }
-
-    
 }

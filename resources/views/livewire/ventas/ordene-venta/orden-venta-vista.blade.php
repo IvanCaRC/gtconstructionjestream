@@ -4,7 +4,7 @@
     <div class="card">
         <div class="card-body">
             <div class="row mb-3">
-                <div class="col-md-10">
+                <div class="col-md-8">
                     <!-- Input de búsqueda -->
                     <input type="text" class="form-control mr-2" id="searchInput" placeholder="Buscar lista..."
                         wire:model='searchTerm' wire:keydown='search'>
@@ -12,9 +12,18 @@
                 </div>
                 <div class="col-md-2">
                     <select class="form-control mr-2" wire:model="statusFiltro" wire:change="search">
-                        <option value="0">Preferencia</option>
-                        <option value="1">Tiempo de entrega</option>
-                        <option value="2">Precio</option>
+                        <option value="">Estado</option>
+                        <option value="0">Pendiente de pago</option>
+                        <option value="1">Pagado</option>
+                        <option value="2">Cancelado</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <select class="form-control mr-2" wire:model="statusFiltro2" wire:change="search">
+                        <option value="">Metodo de pago</option>
+                        <option value="0">Deposito</option>
+                        <option value="1">Efectivo</option>
+                        <option value="2">Transferencia</option>
                     </select>
                 </div>
             </div>
