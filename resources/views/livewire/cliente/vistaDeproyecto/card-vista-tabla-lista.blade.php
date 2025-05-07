@@ -217,7 +217,7 @@
                                         Aceptar
                                     </button>
                                 @endif
-                                @if ($lista->estado >= 3)
+                                @if ($lista->estado >= 3 && $lista->estado != 9)
                                     @if ($cotizacion)
                                         <button class="btn btn-info btn-sm text-white"
                                             onclick="window.open('{{ route('proyecto.pdf-cotizacion', ['id' => $lista->id]) }}', '_blank')"
