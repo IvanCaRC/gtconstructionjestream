@@ -133,6 +133,9 @@ class OrdenCompraVistaUno extends Component
         // Agrupar por proveedor real
         $itemsPorProveedor = $itemsConProveedorReal->groupBy('proveedor_real_id');
 
+        $proyectoConsulta = Proyecto::findOrFail($cotizacion->proyecto_id ?? null);
+        $nombre = strtoupper(substr(strval($proyectoConsulta->nombre), 0, 1)) . 'ODC';
+        
         foreach ($itemsPorProveedor as $proveedorId => $itemsProveedor) {
             // Calcular el monto total usando precio_compra
             $monto = collect($itemsProveedor)->reduce(function ($carry, $item) {
@@ -145,6 +148,7 @@ class OrdenCompraVistaUno extends Component
                 'id_provedor' => $proveedorId,
                 'id_cotizacion' => $cotizacion->id,
                 'id_usuario' => Auth::id(),
+                'nombre' => $nombre . strval($proveedorId),
                 'formaPago' => $this->metodoPago,
                 'modalidad' => $this->cantidadPagar,
                 'monto' => $monto,

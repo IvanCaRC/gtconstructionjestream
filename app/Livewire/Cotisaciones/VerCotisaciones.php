@@ -131,10 +131,11 @@ class VerCotisaciones extends Component
         // Guardar los cambios en la base de datos
         $lista->save();
 
+        $proyectoConsulta = Proyecto::findOrFail($lista->proyecto_id);
+        $nombre = strtoupper(substr(strval($proyectoConsulta->nombre), 0, 1)) . 'C' . strval($proyectoConsulta->cotisaciones + 1);;
         $proyecto = Proyecto::find($lista->proyecto_id);
         $cotisacionNumero = strval($proyecto->cotisaciones + 1); // No necesita el punto al inicio
-
-        $nombre = $lista->nombre . $cotisacionNumero . $usuarioVentas; // Usar `.` para concatenar
+        $nombre = $nombre . $cotisacionNumero . $usuarioVentas; // Usar `.` para concatenar
 
 
 

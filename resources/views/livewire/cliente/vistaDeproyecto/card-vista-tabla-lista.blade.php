@@ -246,10 +246,10 @@
                                     <label for="">...</label>
                                 @elseif ($lista->estado == 9)
                                     <span class="fw-bold">
-                                        {{ $ordenVenta->id ?? 'No hay orden de venta recuperada' }}</span>
+                                        {{ $ordenVenta->nombre ?? 'No hay orden de venta recuperada' }}</span>
                                 @elseif ($lista->estado >= 4 && $lista->estado != 9)
                                     <span class="fw-bold">
-                                        {{ $ordenVenta->id ?? 'No hay orden de venta recuperada' }}</span>
+                                        {{ $ordenVenta->nombre ?? 'No hay orden de venta recuperada' }}</span>
                                 @endif
                             </td>
                             <td>

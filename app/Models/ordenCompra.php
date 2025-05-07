@@ -21,6 +21,7 @@ class ordenCompra extends Model
         'montoPagar',
         'items_cotizar_proveedor',
         'estado',
+        'nombre',
     ];
 
     public function usuario()

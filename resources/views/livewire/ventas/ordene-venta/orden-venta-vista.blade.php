@@ -36,8 +36,8 @@
                                 @if (Auth::user()->hasRole('Administrador'))
                                     <th>Usuario</th>
                                 @endif
-                                <th>Cliente</th>
-                                <th>Lista</th>
+                                <th>Nombre</th>
+                                <th>Cotisacion</th>
                                 <th>Forma de pago</th>
                                 <th>Metodo de pago</th>
                                 <th>Monto Total</th>
@@ -57,9 +57,9 @@
                                         </td>
                                     @endif
 
-                                    <td>{{ $lista->cliente->nombre }}</td>
+                                    <td>{{ $lista->nombre }}</td>
                                     <td>
-                                        Cotisacion {{ $lista->cotizacion->nombre }}
+                                        {{ $lista->cotizacion->nombre }}
                                     </td>
                                     <td>
                                         <label>

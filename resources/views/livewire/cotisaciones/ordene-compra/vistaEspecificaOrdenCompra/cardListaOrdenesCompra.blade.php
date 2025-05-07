@@ -96,7 +96,7 @@
                             <th>Forma de pago</th>
                             <th>Monto</th>
                             <th>Monto por pagar</th>
-                            <th>Proveedor</th>
+                            <th>Nombre</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -136,7 +136,7 @@
                                 {{ number_format($lista->montoPagar, 2) }} MXN
                             </td>
                             <td>
-                                {{ $lista->proveedor->nombre }}
+                                {{ $lista->nombre }}
                             </td>
                             <td>
                                 @if ($lista->estado == 1 || $lista->estado == 0)
