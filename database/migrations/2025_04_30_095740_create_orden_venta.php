@@ -17,6 +17,7 @@ return new class extends Migration
             $table->unsignedBigInteger('id_usuario');
             $table->unsignedBigInteger('id_cotizacion');
             $table->unsignedBigInteger('direccion_id')->nullable();
+            $table->string('nombre')->nullable();
             $table->string('formaPago')->nullable();
             $table->string('metodoPago')->nullable();
             $table->string('monto')->nullable();

@@ -263,11 +263,17 @@ class Recepcioncotiosacion extends Component
         if ($lista) $lista->update(['estado' => 4]);
         if ($proyecto) $proyecto->update(['proceso' => 3]);
 
+
+        $proyectoConsulta = Proyecto::findOrFail($lista->proyecto_id ?? null);
+        $nombre = strtoupper(substr(strval($proyectoConsulta->nombre), 0, 1)) . 'ODV' . strval($proyectoConsulta->ordenes + 1);
+
+        $proyecto = Proyecto::find($lista->proyecto_id);
         // Crear orden de venta
         $ordenVenta = OrdenVenta::create([
             'id_cliente' => $proyecto->cliente_id,
             'id_usuario' => $cotizacion->usuario_id,
             'id_cotizacion' => $cotizacion->id,
+            'nombre' => $nombre,
             'direccion_id' => $proyecto->direccion_id,
             'monto' => $this->precioTotal,
             'montoPagar' => $this->precioTotal,

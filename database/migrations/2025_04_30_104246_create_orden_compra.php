@@ -16,6 +16,7 @@ return new class extends Migration
             $table->unsignedBigInteger('id_provedor'); // Clave foránea
             $table->unsignedBigInteger('id_cotizacion');
             $table->unsignedBigInteger('id_usuario');
+            $table->string('nombre')->nullable();
             $table->string('formaPago')->nullable();
             $table->string('modalidad')->nullable();
             $table->string('monto')->nullable();

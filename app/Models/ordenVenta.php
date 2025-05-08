@@ -21,6 +21,7 @@ class ordenVenta extends Model
         'monto',
         'montoPagar',
         'estado',
+        'nombre',
     ];
 
   public function usuario(){
