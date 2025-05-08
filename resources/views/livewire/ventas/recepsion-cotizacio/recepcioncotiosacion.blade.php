@@ -67,38 +67,32 @@
                                         </label>
                                     </td>
                                     <td>
-                                        @if ($lista->estado == 1)
-                                            <button class="btn btn-primary btn-sm"
-                                                wire:click="abrirModal({{ $lista->id }})"
-                                                title="Cancelar cotización">
-                                                Aceptar
-                                            </button>
-                                        @endif
-
-                                        <button class="btn btn-primary btn-sm"
-                                            wire:click="viewProyecto({{ $lista->proyecto->id }})"
-                                            title="Ver detalles del proyecto">
-                                            <i class="fas fa-eye me-1"></i> Proyecto
-                                        </button>
-                                        <!-- Botón de Cancelar (existente) -->
-                                        <button class="btn btn-danger btn-sm" wire:click="cancelar({{ $lista->id }})"
-                                            title="Cancelar cotización">
-                                            <i class="fas fa-times me-1"></i> Cancelar
-                                        </button>
-
-
-                                        {{-- <button class="btn btn-info btn-sm text-white"
-                                            wire:click="generarPDFCotizacion({{ $lista->id }})"
-                                            title="Ver el documento de la cotizacion">
-                                            <i class="fas fa-file-pdf me-1"></i> PDF
-                                        </button> --}}
 
                                         <button class="btn btn-info btn-sm text-white"
                                             onclick="window.open('{{ route('proyecto.pdf-cotizacion', ['id' => $lista->id]) }}', '_blank')"
                                             title="Ver el documento de la cotización">
                                             <i class="fas fa-file-pdf me-1"></i> PDF
                                         </button>
+
                                         <!-- Botón para Ver Proyecto -->
+                                        <button class="btn btn-primary btn-sm"
+                                            wire:click="viewProyecto({{ $lista->proyecto->id }})"
+                                            title="Ver detalles del proyecto">
+                                            <i class="fas fa-eye me-1"></i> Proyecto
+                                        </button>
+
+                                        @if ($lista->estado == 1)
+                                            <button class="btn btn-primary btn-sm"
+                                                wire:click="abrirModal({{ $lista->id }})" title="Aceptar cotización">
+                                                <i class="fas fa-check-circle"></i> Aceptar
+                                            </button>
+                                        @endif
+
+                                        <!-- Botón de Cancelar (existente) -->
+                                        <button class="btn btn-danger btn-sm" wire:click="cancelar({{ $lista->id }})"
+                                            title="Cancelar cotización">
+                                            <i class="fas fa-times-circle"></i> Cancelar
+                                        </button>
 
                                     </td>
                                 </tr>
