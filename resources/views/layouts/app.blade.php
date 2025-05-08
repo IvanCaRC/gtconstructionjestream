@@ -299,17 +299,17 @@
                         <i class="fas fa-fw fa-building"></i>
                         <span>Finanzas</span>
                     </a>
-                    <div id="collapseFinanzas" class="collapse @yield('activeCollapseFinanzas') container-flex2" aria-labelledby="headingPages"
-                        data-parent="#accordionSidebar">
+                    <div id="collapseFinanzas" class="collapse @yield('activeCollapseFinanzas') container-flex2"
+                        aria-labelledby="headingPages" data-parent="#accordionSidebar">
                         <div class="bg-primary-dark text-white py-2 collapse-inner rounded">
-                            
+
                             <a class="collapse-item @yield('activeIngresosEgresos') text-white @yield('activeFondoPermanenteIngresosEgresos2') mb-2"
                                 href="{{ route('finanzas.ingresosEgresos.ingresosEgeresosVistaGeneral') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
                                 onmouseout="this.style.backgroundColor='@yield('activeBackgroundIngresosEgresos')';">
                                 Ingresos/Egresos
                             </a>
-                            
+
                             <a class="collapse-item @yield('activeAregister') text-white"
                                 href="{{ route('mantenimiento.enconstruccion') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
@@ -382,14 +382,16 @@
                                         href="{{ route('notifications.markAsRead', $notification->id) }}?redirect_to={{ urlencode($notification->data['url']) }}">
                                         <div class="mr-3">
                                             <div
-                                                class="icon-circle 
-                        {{ $notification->data['type'] === 'proveedor_desactualizado'
-                            ? 'bg-warning'
-                            : ($notification->data['type'] === 'item_especifico_desactualizado'
-                                ? 'bg-primary'
-                                : ($notification->data['type'] === 'seleccion_lista'
-                                    ? 'bg-success'
-                                    : 'bg-secondary')) }}">
+                                                class="icon-circle  
+                                                {{ $notification->data['type'] === 'proveedor_desactualizado'
+                                                    ? 'bg-warning'
+                                                        : ($notification->data['type'] === 'item_especifico_desactualizado'
+                                                            ? 'bg-primary'
+                                                                : ($notification->data['type'] === 'seleccion_lista'
+                                                                    ? 'bg-success'
+                                                                        : ($notification->data['type'] === 'cotizacion_enviada'
+                                                                            ? 'bg-success' // Fondo verde para cotización
+                                                                                : 'bg-secondary'))) }}">
                                                 <i
                                                     class="{{ $notification->data['type'] === 'proveedor_desactualizado'
                                                         ? 'fas fa-truck'
@@ -397,7 +399,9 @@
                                                             ? 'fas fa-box-open'
                                                             : ($notification->data['type'] === 'seleccion_lista'
                                                                 ? 'fas fa-list-alt'
-                                                                : 'fas fa-cube')) }} text-white"></i>
+                                                                : ($notification->data['type'] === 'cotizacion_enviada'
+                                                                    ? 'fas fa-file-alt' // Ícono de documento recibido
+                                                                    : 'fas fa-cube'))) }} text-white"></i>
                                             </div>
                                         </div>
                                         <div>
