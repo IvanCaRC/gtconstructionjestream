@@ -1,3 +1,16 @@
+@php
+    $notificationStyles = [
+        'proveedor_desactualizado' => ['bg-warning', 'fas fa-truck'],
+        'item_especifico_desactualizado' => ['bg-primary', 'fas fa-box-open'],
+        'seleccion_lista' => ['bg-success', 'fas fa-list-alt'],
+        'cotizacion_enviada' => ['bg-success', 'fas fa-file-alt'],
+        'orden_venta_recibida' => ['bg-dark', 'fas fa-file-invoice-dollar'], // Documento financiero
+    ];
+
+    $type = $notification->data['type'] ?? 'default';
+    $bgColor = $notificationStyles[$type][0] ?? 'bg-secondary';
+    $icon = $notificationStyles[$type][1] ?? 'fas fa-cube';
+@endphp
 <!DOCTYPE html>
 <html>
 
@@ -299,17 +312,17 @@
                         <i class="fas fa-fw fa-building"></i>
                         <span>Finanzas</span>
                     </a>
-                    <div id="collapseFinanzas" class="collapse @yield('activeCollapseFinanzas') container-flex2" aria-labelledby="headingPages"
-                        data-parent="#accordionSidebar">
+                    <div id="collapseFinanzas" class="collapse @yield('activeCollapseFinanzas') container-flex2"
+                        aria-labelledby="headingPages" data-parent="#accordionSidebar">
                         <div class="bg-primary-dark text-white py-2 collapse-inner rounded">
-                            
+
                             <a class="collapse-item @yield('activeIngresosEgresos') text-white @yield('activeFondoPermanenteIngresosEgresos2') mb-2"
                                 href="{{ route('finanzas.ingresosEgresos.ingresosEgeresosVistaGeneral') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
                                 onmouseout="this.style.backgroundColor='@yield('activeBackgroundIngresosEgresos')';">
                                 Ingresos/Egresos
                             </a>
-                            
+
                             <a class="collapse-item @yield('activeAregister') text-white"
                                 href="{{ route('mantenimiento.enconstruccion') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
@@ -378,26 +391,16 @@
                                 aria-labelledby="alertsDropdown">
                                 <h6 class="dropdown-header">Notificaciones</h6>
                                 @forelse (Auth::user()->unreadNotifications->whereNotIn('data.type', ['solicitud_cancelacion', 'rechazo_cancelacion', 'confirmacion_cancelacion', 'solicitudCotizacion_notificacion', 'mensaje_general']) as $notification)
+                                    @php
+                                        $type = $notification->data['type'] ?? 'default';
+                                        $bgColor = $notificationStyles[$type][0] ?? 'bg-secondary';
+                                        $icon = $notificationStyles[$type][1] ?? 'fas fa-cube';
+                                    @endphp
                                     <a class="dropdown-item d-flex align-items-center bg-light text-dark"
                                         href="{{ route('notifications.markAsRead', $notification->id) }}?redirect_to={{ urlencode($notification->data['url']) }}">
                                         <div class="mr-3">
-                                            <div
-                                                class="icon-circle 
-                        {{ $notification->data['type'] === 'proveedor_desactualizado'
-                            ? 'bg-warning'
-                            : ($notification->data['type'] === 'item_especifico_desactualizado'
-                                ? 'bg-primary'
-                                : ($notification->data['type'] === 'seleccion_lista'
-                                    ? 'bg-success'
-                                    : 'bg-secondary')) }}">
-                                                <i
-                                                    class="{{ $notification->data['type'] === 'proveedor_desactualizado'
-                                                        ? 'fas fa-truck'
-                                                        : ($notification->data['type'] === 'item_especifico_desactualizado'
-                                                            ? 'fas fa-box-open'
-                                                            : ($notification->data['type'] === 'seleccion_lista'
-                                                                ? 'fas fa-list-alt'
-                                                                : 'fas fa-cube')) }} text-white"></i>
+                                            <div class="icon-circle {{ $bgColor }}">
+                                                <i class="{{ $icon }} text-white"></i>
                                             </div>
                                         </div>
                                         <div>

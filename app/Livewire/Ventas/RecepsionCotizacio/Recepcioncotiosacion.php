@@ -8,11 +8,14 @@ use App\Models\ItemEspecifico;
 use App\Models\ListasCotizar;
 use App\Models\ordenVenta;
 use App\Models\Proyecto;
+use App\Models\Role;
+use App\Notifications\OrdenVentaRecibida;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Livewire\Component;
 use Livewire\WithPagination;
 
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Notification;
 
 class Recepcioncotiosacion extends Component
 {
@@ -236,10 +239,9 @@ class Recepcioncotiosacion extends Component
         $subtotal = $this->precioStock + $this->precioProveedor;
         $iva = $subtotal * 0.16;
         $totalConIva = $subtotal + $iva;
-        
+
         // Redondear al próximo múltiplo de 0.10 hacia arriba
         $this->precioTotal = ceil($totalConIva * 10) / 10;
-        
     }
     /**
      * Acepta una cotización y crea una orden de venta
@@ -281,7 +283,13 @@ class Recepcioncotiosacion extends Component
             'metodoPago' => $this->metodoPago, // Estado inicial de la cotización
             'estado' => 0, // Estado inicial de la cotización
         ]);
+        //Incrementar ordenes del proyecto
         $proyecto->increment('ordenes');
+
+        // Crear notificación para Administrador y Finanzas
+        $usuariosDestino = Role::whereIn('name', ['Administrador', 'Finanzas'])->first()->users;
+        Notification::send($usuariosDestino, new OrdenVentaRecibida($proyecto->nombre));
+        //Restablecer valores del modal
         $this->reset('openModalOrdenVenta', 'cotisacionSelecionada', 'metodoPago', 'formaPago');
         return true;
     }
