@@ -54,17 +54,22 @@
                                             {!! $lista->estado == 0
                                                 ? '<span class="badge badge-success">Activa</span>'
                                                 : ($lista->estado == 1
-                                                    ? '<span class="badge badge-secondary">Recibida</span>'
+                                                    ? '<span class="badge badge-secondary">Enviada</span>'
                                                     : ($lista->estado == 2
                                                         ? '<span class="badge badge-warning">Aceptada pendiente de pago</span>'
                                                         : ($lista->estado == 3
-                                                            ? '<span class="badge badge-danger">Cancelada</span>'
+                                                            ? '<span class="badge badge-danger">Pagado</span>'
                                                             : ($lista->estado == 4
-                                                                ? '<span class="badge badge-success">Compra terminada</span>'
+                                                                ? '<span class="badge badge-success">Comprando</span>'
                                                                 : ($lista->estado == 5
-                                                                    ? '<span class="badge badge-primary">Pagada</span>'
-                                                                    : '<span class="badge badge-secondary">Estado desconocido</span>'))))) !!}
+                                                                    ? '<span class="badge badge-primary">En proceso de entrega</span>'
+                                                                    : ($lista->estado == 6
+                                                                        ? '<span class="badge badge-primary">Terminado</span>'
+                                                                        : ($lista->estado == 7
+                                                                            ? '<span class="badge badge-primary">Cancelado</span>'
+                                                                            : '<span class="badge badge-secondary">Estado desconocido</span>'))))))) !!}
                                         </label>
+
                                     </td>
                                     <td>
                                         @if ($lista->estado == 1)
@@ -81,11 +86,12 @@
                                             <i class="fas fa-eye me-1"></i> Proyecto
                                         </button>
                                         <!-- Botón de Cancelar (existente) -->
-                                        <button class="btn btn-danger btn-sm" wire:click="cancelar({{ $lista->id }})"
-                                            title="Cancelar cotización">
-                                            <i class="fas fa-times me-1"></i> Cancelar
-                                        </button>
-
+                                        @if ($lista->estado != 7 && $lista->estado != 6)
+                                            <button class="btn btn-danger btn-sm"
+                                                wire:click="cancelar({{ $lista->id }})" title="Cancelar cotización">
+                                                <i class="fas fa-times me-1"></i> Cancelar
+                                            </button>
+                                        @endif
 
                                         {{-- <button class="btn btn-info btn-sm text-white"
                                             wire:click="generarPDFCotizacion({{ $lista->id }})"

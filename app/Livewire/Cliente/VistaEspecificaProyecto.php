@@ -98,16 +98,10 @@ class VistaEspecificaProyecto extends Component
         ], ['listas' => $listas]);
     }
 
-    public function search()
-    {
+    public function search() {}
 
-    }
+    public function filter() {}
 
-    public function filter()
-    {
-
-    }
-    
     //Visualizar PDF.
     public function prepararPDFLista($lista_id)
     {
@@ -521,6 +515,27 @@ class VistaEspecificaProyecto extends Component
         $this->dispatch('refresh');
     }
 
+    public function Terminar($id)
+    {
+
+        $ordenVenta = ordenVenta::findOrFail($id);
+        
+        $cotisacion = Cotizacion::findOrFail($ordenVenta->id_cotizacion);
+        $cotisacion->update([
+            'estado' => 6, // 1 = Liquidada
+        ]);
+        $ListaCotisar = ListasCotizar::findOrFail($cotisacion->lista_cotizar_id);
+        $ListaCotisar->update([
+            'estado' => 8, // 1 = Liquidada
+        ]);
+        $proyecto = Proyecto::findOrFail($ListaCotisar->proyecto_id);
+        $proyecto->update([
+            'proceso' => 9, // 1 = Liquidada
+        ]);
+        $this->dispatch('refresh');
+    }
+
+
     public function editarlista($id)
     {
         // Buscar la lista actual
@@ -647,7 +662,7 @@ class VistaEspecificaProyecto extends Component
         $itemsDeStock = json_decode($cotizacion->items_cotizar_stock, true) ?? [];
 
         try {
-            
+
             foreach ($itemsDeStock as $item) {
                 $itemEspecifico = ItemEspecifico::find($item['id']);
 

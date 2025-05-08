@@ -153,9 +153,11 @@
                                         Pagar
                                     </button>
                                 @endif
-                                <button class="btn btn-info btn-sm mr-1" title="Ver PDF" wire:click="prepararPDFLista">
-                                    <i class="fas fa-file-pdf"></i>
-                                </button>
+                                <button class="btn btn-info btn-sm text-white"
+                                onclick="window.open('{{ route('proyecto.pdf-orden-venta', ['id' => $lista->id]) }}', '_blank')"
+                                title="Generar y ver el documento de la orden de venta">
+                                <i class="fas fa-file-pdf me-1"></i> PDF
+                            </button>
                             </td>
                             </tr>
                         @endforeach

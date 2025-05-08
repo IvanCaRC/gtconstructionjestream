@@ -84,7 +84,8 @@
 
             <div class="row m   b-3">
                 <div class="col-md-10">
-                    <input type="text" class="form-control mr-2" id="searchInput" placeholder="Buscar lista..." wire:model='searchTerm' wire:keydown='search'>
+                    <input type="text" class="form-control mr-2" id="searchInput" placeholder="Buscar lista..."
+                        wire:model='searchTerm' wire:keydown='search'>
                 </div>
                 <div class="col-md-2">
                     <select class="form-control" wire:model="statusFiltro" wire:change="filter">
@@ -121,16 +122,29 @@
                     </thead>
                     <tbody>
                         @foreach ($listas as $lista)
+                            @php
+                                $cotizacion = App\Models\Cotizacion::where('lista_cotizar_id', $lista->id)->first();
+                            @endphp
+                            @php
+                                if ($cotizacion) {
+                                    $ordenVenta = App\Models\ordenVenta::where(
+                                        'id_cotizacion',
+                                        $cotizacion->id,
+                                    )->first();
+                                }
+
+                            @endphp
                             </tr>
                             <td>
                                 @if ($lista->estado == 7)
-                                    <button class="btn btn-primary btn-sm" wire:click="cancelar({{ $lista->id }})"
+                                    <button class="btn btn-primary btn-sm" wire:click="Terminar({{ $ordenVenta->id }})"
                                         title="Cancelar cotización">
                                         Terminar
                                     </button>
-                                    <button class="btn btn-danger btn-sm" wire:click="cancelar({{ $lista->id }})"
+                                    <button class="btn btn-danger btn-sm"
+                                        wire:click="cancelarOrdenVenta({{ $ordenVenta->id }})"
                                         title="Cancelar cotización">
-                                        Cancelar
+                                        <i class="fas fa-times me-1"></i> Cancelar
                                     </button>
                                 @endif
                             </td>
@@ -192,9 +206,7 @@
                             </td>
 
                             <td class="columna-estatica">
-                                @php
-                                    $cotizacion = App\Models\Cotizacion::where('lista_cotizar_id', $lista->id)->first();
-                                @endphp
+
                                 @if ($lista->estado == 1)
                                     <label for="">Creando lista...</label>
                                 @elseif ($lista->estado == 2)
@@ -210,14 +222,15 @@
                             <td class="columna-estatica-columna">
                                 @if ($lista->estado == 3 && $lista->estado != 9)
                                     <!-- Botón de Cancelar (existente) -->
-                                    <button class="btn btn-danger btn-sm" wire:click="cancelarCotisacion({{ $cotizacion->id }})"
+                                    <button class="btn btn-danger btn-sm"
+                                        wire:click="cancelarCotisacion({{ $cotizacion->id }})"
                                         title="Cancelar cotización">
                                         <i class="fas fa-times me-1"></i> Cancelar
                                     </button>
                                 @endif
                                 @if ($lista->estado == 3)
-                                    <button class="btn btn-primary btn-sm" wire:click="abrirModal({{ $cotizacion->id }})"
-                                        title="Cancelar cotización">
+                                    <button class="btn btn-primary btn-sm"
+                                        wire:click="abrirModal({{ $cotizacion->id }})" title="Cancelar cotización">
                                         Aceptar
                                     </button>
                                 @endif
@@ -233,15 +246,7 @@
                             </td>
                             {{-- ////// --}}
                             <td class="">
-                                @php
-                                    if ($cotizacion) {
-                                        $ordenVenta = App\Models\ordenVenta::where(
-                                            'id_cotizacion',
-                                            $cotizacion->id,
-                                        )->first();
-                                    }
 
-                                @endphp
                                 @if ($lista->estado < 3)
                                     <label for="">...</label>
                                 @elseif ($lista->estado == 9)
@@ -264,7 +269,8 @@
                                     </button>
                                 @endif
                                 @if ($lista->estado == 4)
-                                    <button class="btn btn-danger btn-sm" wire:click="cancelarOrdenVenta({{ $ordenVenta->id }})"
+                                    <button class="btn btn-danger btn-sm"
+                                        wire:click="cancelarOrdenVenta({{ $ordenVenta->id }})"
                                         title="Cancelar cotización">
                                         <i class="fas fa-times me-1"></i> Cancelar
                                     </button>

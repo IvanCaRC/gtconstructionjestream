@@ -54,13 +54,13 @@ class OrdenCompraVistaUno extends Component
         if (Auth::user()->hasRole('Administrador')) {
             $query2 = Cotizacion::with('proyecto')
                 ->orderBy('created_at', 'desc')
-                ->whereIn('estado', [4]);
+;
         } else {
             $usuarioId = Auth::id();
             $query2 = Cotizacion::where('id_usuario_compras', $usuarioId)
                 ->with('proyecto')
                 ->orderBy('created_at', 'desc')
-                ->whereIn('estado', [4]);
+;
         }
         if (!empty($this->searchTerm)) {
             $query2->where(function ($q) {

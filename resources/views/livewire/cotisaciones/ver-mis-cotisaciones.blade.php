@@ -106,7 +106,7 @@
                                                 </button>
                                             @endif
                                         @endif
-                                        @if ($lista->estado != 2)
+                                        @if ($lista->estado != 7 && $lista->estado != 6) 
                                             <button class="btn btn-danger btn-sm"
                                                 wire:click="cancelar({{ $lista->id }})">Cancelar</button>
                                         @endif

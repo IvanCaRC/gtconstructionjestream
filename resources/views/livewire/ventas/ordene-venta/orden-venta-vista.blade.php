@@ -109,7 +109,7 @@
                                             </button>
                                         @endif
 
-                                        @if (!$esVistaFinanzas && ($lista->estado == 0 || $lista->estado == 1))
+                                        @if (!$esVistaFinanzas && ($lista->estado != 3 && $lista->estado !=1))
                                             <button class="btn btn-danger btn-sm"
                                                 wire:click="cancelar({{ $lista->id }})" title="Cancelar cotización">
                                                 <i class="fas fa-times me-1"></i> Cancelar
@@ -119,7 +119,7 @@
                                         <button class="btn btn-info btn-sm text-white"
                                             onclick="window.open('{{ route('proyecto.pdf-orden-venta', ['id' => $lista->id]) }}', '_blank')"
                                             title="Generar y ver el documento de la orden de venta">
-                                            <i class="fas fa-file-pdf me-1"></i> PDF Orden Venta
+                                            <i class="fas fa-file-pdf me-1"></i> PDF
                                         </button>
 
                                     </td>

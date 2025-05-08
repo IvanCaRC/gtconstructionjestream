@@ -106,7 +106,7 @@
                             <td>
                                 {{ $lista->created_at }}
                             </td>
-                            <td >
+                            <td>
                                 {!! $lista->estado == 0
                                     ? '<span class="badge badge-danger">Por pagar</span>'
                                     : ($lista->estado == 1
@@ -115,7 +115,7 @@
                                             ? '<span class="badge badge-danger">Cancelado</span>'
                                             : '<span class="badge badge-secondary">Estado desconocido</span>')) !!}
                             </td>
-                            <td >
+                            <td>
                                 {{ $lista->modalidad }}
                             </td>
                             <td>
@@ -139,15 +139,17 @@
                                 {{ $lista->nombre }}
                             </td>
                             <td>
-                                @if ($lista->estado == 1 || $lista->estado == 0)
+                                @if ($lista->estado == 0)
                                     <button class="btn btn-danger btn-sm" title="Cancelar"
                                         wire:click="cancelar({{ $lista->id }})">
                                         Cancelar
                                     </button>
                                 @endif
 
-                                <button class="btn btn-info btn-sm mr-1" title="Ver PDF" wire:click="prepararPDFLista">
-                                    <i class="fas fa-file-pdf"></i>
+                                <button class="btn btn-info btn-sm text-white"
+                                    onclick="window.open('{{ route('proyecto.pdf-orden-venta', ['id' => $lista->id]) }}', '_blank')"
+                                    title="Generar y ver el documento de la orden de venta">
+                                    <i class="fas fa-file-pdf me-1"></i> PDF
                                 </button>
                             </td>
                             </tr>
