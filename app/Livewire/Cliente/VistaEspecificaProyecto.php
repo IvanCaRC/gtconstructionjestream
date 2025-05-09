@@ -400,7 +400,14 @@ class VistaEspecificaProyecto extends Component
 
     public function regresarGestionClientes()
     {
-        return redirect()->route('ventas.clientes.gestionClientes');
+
+
+
+        if ($this->clienteEspecifico === null) {
+            abort(404, 'Cliente no encontrado');
+        }
+
+        return redirect()->route('ventas.clientes.vistaEspecificaCliente', ['idCliente' => $this->clienteEspecifico->id]);
     }
 
     public function saveListaNueva()
@@ -519,7 +526,7 @@ class VistaEspecificaProyecto extends Component
     {
 
         $ordenVenta = ordenVenta::findOrFail($id);
-        
+
         $cotisacion = Cotizacion::findOrFail($ordenVenta->id_cotizacion);
         $cotisacion->update([
             'estado' => 6, // 1 = Liquidada

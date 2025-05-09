@@ -441,18 +441,20 @@ class VistaEspecificaListaCotizar extends Component
         }
 
         // Generar el nombre de la nueva lista basándose en el número de listas del proyecto
-        $nuevoNombreLista = 'Número ' . ($proyecto->listas + 1);
+        $nombre = strtoupper(substr(strval($this->proyecto->nombre), 0, 1)) . 'LAC' . strval($$proyecto->listas + 1);
 
         // Actualizar la lista
         $lista->update([
             'proyecto_id' => $proyectoId,
-            'nombre' => $nuevoNombreLista,
+            'nombre' => $nombre,
+            'estado' => 1,
         ]);
 
         $proyecto->update([
             'listas' => $proyecto->listas + 1,
-
+            'proceso' => 0,
         ]);
+
 
         // Mensaje de éxito
         session()->flash('success', 'Lista asignada correctamente al proyecto.');

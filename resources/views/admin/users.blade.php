@@ -21,5 +21,6 @@
     /* Ajusta el margen para acercar los botones entre sí */
 }
 </style>
+<br>
 @livewire('show-users')
 @endsection

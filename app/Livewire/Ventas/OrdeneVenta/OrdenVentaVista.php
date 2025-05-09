@@ -204,6 +204,7 @@ class OrdenVentaVista extends Component
 
         $itemsDeProveedor = json_decode($cotisacion->items_cotizar_proveedor, true) ?? [];
         $cantidadDeItemsCotizacionProveedor = count($itemsDeProveedor);
+        
         if ($cantidadDeItemsCotizacionProveedor == 0) {
             $cotisacion->update([
                 'estado' => 5, // 1 = Liquidada

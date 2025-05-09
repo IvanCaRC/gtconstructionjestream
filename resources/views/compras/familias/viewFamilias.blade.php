@@ -71,6 +71,7 @@
 @section('activeCategorias', 'active')
 @section('activeFondoPermanente', 'background-permanent')
 @section('contend')
+<br>
     @livewire('familia.familia-component')
     <script>
         function toggleVisibility(id) {

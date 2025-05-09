@@ -13,7 +13,7 @@ class Cotizacion extends Model
     
     // <label>
     //                                         {!! $lista->estado == 0
-    //                                             ? '<span class="badge badge-success">Activa</span>'zzzzz
+    //                                             ? '<span class="badge badge-success">Activa</span>'
     //                                             : ($lista->estado == 1
     //                                                 ? '<span class="badge badge-secondary">Enviada</span>'
     //                                                 : ($lista->estado == 2
