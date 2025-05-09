@@ -104,7 +104,7 @@
     <table>
         <tr>
             <td class="highlight">No. de Orden:</td>
-            <td>{{ $orden->id ?? '-' }}</td>
+            <td>{{ $numeroOrden ?? '-' }}</td>
             <td class="highlight">Fecha de Emisión:</td>
             <td>{{ \Carbon\Carbon::now()->format('d/m/Y') }}</td>
         </tr>

@@ -16,15 +16,24 @@ class PDFOrdenVentaController extends Controller
             $cotizacion = $ordenVenta->cotizacion;
             $cliente = $ordenVenta->cliente->nombre ?? 'Nombre no disponible';
 
-            // ✅ Formateamos la dirección correctamente
-            $direccion = $ordenVenta->direccion
-                ? implode(', ', array_filter([
-                    $ordenVenta->direccion->calle ?? '',
-                    $ordenVenta->direccion->numero ?? '',
-                    $ordenVenta->direccion->colonia ?? '',
-                    "CP: {$ordenVenta->direccion->cp}" ?? ''
-                ]))
-                : 'Sin dirección asignada';
+            // ✅ Recuperación y limpieza de la dirección en `generarPDFOrdenVenta`
+            $direccion = $ordenVenta->direccion;
+
+            $componentesDireccion = [
+                $direccion?->calle,
+                $direccion?->numero,
+                $direccion?->colonia,
+                $direccion?->municipio,
+                $direccion?->estado,
+                $direccion?->pais,
+                "CP: {$direccion?->cp}"
+            ];
+
+            // ✅ Filtrar cualquier campo que contenga "Campo no recuperado" o que esté vacío
+            $componentesDireccion = array_filter($componentesDireccion, fn($valor) => $valor !== "Campo no recuperado" && trim($valor) !== '');
+
+            // ✅ Convertimos en una dirección limpia o mostramos "Dirección no registrada"
+            $direccion = !empty($componentesDireccion) ? implode(', ', $componentesDireccion) : "Dirección no registrada";
 
             // ✅ Información de la orden de venta
             $numeroOrden = $ordenVenta->id;
@@ -63,7 +72,7 @@ class PDFOrdenVentaController extends Controller
             // ✅ Pasamos los datos a la vista del PDF
             $data = [
                 'title' => 'Orden Venta',
-                'numeroOrden' => $numeroOrden,
+                'numeroOrden' => $ordenVenta->id, // ✅ Aquí aseguramos que el ID se pase correctamente
                 'fechaEmision' => $fechaEmision,
                 'cliente' => $cliente,
                 'direccion' => $direccion,

@@ -95,22 +95,22 @@
             <td>{{ \Carbon\Carbon::now()->format('d/m/Y') }}</td>
         </tr>
         <tr>
-            <td class="highlight">Válido Hasta:</td>
-            <td>{{ \Carbon\Carbon::now()->addDays(30)->format('d/m/Y') }}</td>
+            <td class="highlight">Proyecto:</td>
+            <td>{{ $proyecto }}</td>
+            <td class="highlight">Tipo de Proyecto:</td>
+            <td>{{ $tipo_proyecto }}</td>
+        </tr>
+        <tr>
             <td class="highlight">Atendido por:</td>
             <td>{{ $usuario_atendio }}</td>
+            <td class="highlight">Válido Hasta:</td>
+            <td>{{ \Carbon\Carbon::now()->addDays(7)->format('d/m/Y') }}</td>
         </tr>
         <tr>
             <td class="highlight">Cliente:</td>
             <td>{{ $cliente }}</td>
             <td class="highlight">Dirección:</td>
-            <td>{{ $direccion }}</td>
-        </tr>
-        <tr>
-            <td class="highlight">Proyecto:</td>
-            <td>{{ $proyecto }}</td>
-            <td class="highlight">Tipo de Proyecto:</td>
-            <td>{{ $tipo_proyecto }}</td>
+            <td>{{ $direccionEntrega }}</td>
         </tr>
     </table>
 

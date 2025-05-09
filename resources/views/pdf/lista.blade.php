@@ -100,7 +100,9 @@
                         <td style="padding: 8px; text-align: center;">
                             <strong>Teléfonos de contacto:</strong> {{ $cliente_contacto_1 }} -
                             {{ $cliente_telefono_1 }}<br>
-                            {{ $cliente_contacto_2 ? $cliente_contacto_2 . ' - ' . $cliente_telefono_2 : '' }}
+                            @if ($cliente_contacto_2 !== 'No registrado' && $cliente_telefono_2 !== 'No registrado')
+                                {{ $cliente_contacto_2 }} - {{ $cliente_telefono_2 }}
+                            @endif
                         </td>
                     </tr>
                 </table>
@@ -231,9 +233,8 @@
         </table>
 
         <div style="clear: both;"></div> <!-- Asegura que las tablas no causen desbordamiento -->
-    @endif
 
-    <!-- Adicionales de la Obra -->
+        <!-- Adicionales de la Obra -->
     <p class="section">Adicionales de la obra</p>
 
     @if (array_filter($estructuras) && array_filter($cantidades))
@@ -251,6 +252,8 @@
         </table>
     @else
         <p style="text-align: center; padding: 10px; font-style: italic;">Sin datos adicionales registrados</p>
+    @endif
+
     @endif
 
 </body>

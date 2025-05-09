@@ -43,6 +43,14 @@ class PDFCotizacionController extends Controller
                 "CP: {$direccion->cp}" ?? ''
             ]);
 
+            // ✅ Filtrar cualquier campo que contenga "Campo no recuperado"
+            $componentes_direccion = array_filter($componentes_direccion, function ($valor) {
+                return $valor !== "Campo no recuperado";
+            });
+
+            // ✅ Convertir en una dirección limpia o mostrar "Dirección no registrada"
+            $direccionEntrega = !empty($componentes_direccion) ? implode(', ', $componentes_direccion) : "Dirección no registrada";
+
             // ✅ Recuperación del tipo de proyecto
             $tipo_proyecto = $cotizacion->proyecto->tipo == 1 ? 'Suministro' : 'Obra';
 
@@ -92,7 +100,7 @@ class PDFCotizacionController extends Controller
                 'cotizacion' => $cotizacion,
                 'usuario_atendio' => $usuario_atendio,
                 'cliente' => $cliente->nombre,
-                'direccion' => implode(', ', $componentes_direccion),
+                'direccionEntrega' => $direccionEntrega,
                 'proyecto' => $cotizacion->proyecto->nombre,
                 'tipo_proyecto' => $tipo_proyecto,
                 'items_cotizacion' => $items_cotizacion, // ✅ Ahora apuntamos a la lista fusionada
