@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\adminController;
+use App\Http\Controllers\ChartController;
 use App\Http\Controllers\ClienteController;
 use App\Http\Controllers\ComprasController;
 use App\Http\Controllers\Cotisaciones;
@@ -33,6 +34,7 @@ use App\Http\Controllers\PDFOrdenVentaController;
 |
 */
 
+Route::get('/api/projects', [ChartController::class, 'getProjectData']);
 
 Route::get('/proyecto/{id}/pdf', [PdfController::class, 'generarPdf'])->name('proyecto.pdf');
 
