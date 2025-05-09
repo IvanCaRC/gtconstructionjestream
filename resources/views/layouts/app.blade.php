@@ -323,10 +323,7 @@
                                 Ingresos/Egresos
                             </a>
 
-                            <a class="collapse-item @yield('activeAregister') text-white"
-                                href="{{ route('mantenimiento.enconstruccion') }}"
-                                onmouseover="this.style.backgroundColor='#003366';"
-                                onmouseout="this.style.backgroundColor='';">Seguimiento Mensual</a>
+
 
                             <a class="collapse-item @yield('activeOrdenesCompra2') text-white @yield('activeFondoPermanenteOrdenesCompraa2') mb-2"
                                 href="{{ route('finanzas.ordenCompra.vistaOrdenCompraFin') }}"

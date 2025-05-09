@@ -57,7 +57,9 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 });
-
+Route::get('/finanzas/filtrar-datos', [FinanzasController::class, 'filtrarDatosGrafica'])
+    ->name('finanzas.filtrarDatos');
+    Route::get('/finanzas/filtrar', [FinanzasController::class, 'filtrarDatos'])->name('finanzas.filtrar');
 Route::get('admin/dashboardAdmin', [adminController::class, 'index'])->middleware('auth', 'nocache')->name('admin.dashboardAdmin');
 Route::get('admin/users', [UserController::class, 'index'])->middleware('auth', 'nocache')->name('admin.users');
 
