@@ -139,18 +139,17 @@
                                 {{ $lista->nombre }}
                             </td>
                             <td>
+                                <button class="btn btn-info btn-sm text-white"
+                                    onclick="window.open('{{ route('proyecto.pdf-orden-compra', ['cotizacionId' => $lista->id_cotizacion, 'proveedorId' => $lista->id_provedor]) }}', '_blank')"
+                                    title="Generar y ver el documento de la orden de compra">
+                                    <i class="fas fa-file-pdf me-1"></i> PDF
+                                </button>
                                 @if ($lista->estado == 0)
                                     <button class="btn btn-danger btn-sm" title="Cancelar"
                                         wire:click="cancelar({{ $lista->id }})">
                                         Cancelar
                                     </button>
                                 @endif
-
-                                <button class="btn btn-info btn-sm text-white"
-                                    onclick="window.open('{{ route('proyecto.pdf-orden-venta', ['id' => $lista->id]) }}', '_blank')"
-                                    title="Generar y ver el documento de la orden de venta">
-                                    <i class="fas fa-file-pdf me-1"></i> PDF
-                                </button>
                             </td>
                             </tr>
                         @endforeach
