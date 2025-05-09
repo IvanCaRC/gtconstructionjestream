@@ -45,7 +45,7 @@ Route::get('/proyecto/{id}/pdf-cotizacion', [PDFCotizacionController::class, 'ge
 
 Route::get('/proyecto/{id}/pdf-orden-venta', [PDFOrdenVentaController::class, 'generarPDFOrdenVenta'])->name('proyecto.pdf-orden-venta');
 
-Route::get('/proyecto/{cotizacionId}/{proveedorId}/pdf-orden-compra', [PDFOrdenCompraController::class, 'generarOrdenCompraPDF'])->name('proyecto.pdf-orden-compra');
+Route::get('/proyecto/{idOrdencompra}/pdf-orden-compra', [PDFOrdenCompraController::class, 'generarOrdenCompraPDF'])->name('proyecto.pdf-orden-compra');
 
 Route::get('/', function () {
     return redirect()->route('login');

@@ -6,14 +6,20 @@ use App\Models\Cotizacion;
 use App\Models\Direccion;
 use App\Models\Item;
 use App\Models\ItemEspecifico;
+use App\Models\ordenCompra;
+use App\Models\Proveedor;
 use Barryvdh\DomPDF\Facade\Pdf;
 
 
 class PDFOrdenCompraController extends Controller
 {
-    public function generarOrdenCompraPDF($cotizacionId, $proveedorId)
+    
+    public function generarOrdenCompraPDF($ordenComraId)
     {
-        $cotizacion = Cotizacion::findOrFail($cotizacionId);
+        
+        $ordencompra = ordenCompra::findOrFail($ordenComraId);
+        $provedorActual = Proveedor::findOrFail($ordencompra->id_provedor);
+        $cotizacion = Cotizacion::findOrFail($ordencompra->id_cotizacion);
         $proyecto = $cotizacion->proyecto; // Obtener el proyecto desde la cotización
         $direccion = Direccion::find($proyecto->direccion_id);
 
@@ -45,48 +51,63 @@ class PDFOrdenCompraController extends Controller
         $telefonos = json_decode($cliente->telefono, true);
         $clienteContacto = isset($telefonos[0]) ? $telefonos[0]['nombre'] . ' - ' . $telefonos[0]['numero'] : 'Contacto no disponible';
 
+
+
         // Filtrar los ítems por proveedor
-        $itemsProveedor = collect(json_decode($cotizacion->items_cotizar_proveedor, true))
-            ->where('proveedor_id', $proveedorId)
-            ->map(function ($item) {
-                // Buscar el ItemEspecifico usando el id del ítem en la lista
-                $itemEspecifico = ItemEspecifico::where('id', $item['id'])->first();
+        // $itemsProveedor = collect(json_decode($ordencompra->items_cotizar_proveedor, true))
+        //     ->where('proveedor_id', $proveedorId)
+        //     ->map(function ($item) {
+        //         // Buscar el ItemEspecifico usando el id del ítem en la lista
+        //         $itemEspecifico = ItemEspecifico::where('id', $item['id'])->first();
 
-                // Recuperar el nombre y descripción desde la tabla Item usando item_id
-                $itemBase = $itemEspecifico
-                    ? Item::where('id', $itemEspecifico->item_id)->first()
-                    : null;
+        //         // Recuperar el nombre y descripción desde la tabla Item usando item_id
+        //         $itemBase = $itemEspecifico
+        //             ? Item::where('id', $itemEspecifico->item_id)->first()
+        //             : null;
 
-                // Asignar los valores con respaldo si no existen
-                $item['nombre'] = $itemBase->nombre ?? 'Nombre no disponible';
-                $item['descripcion'] = $itemBase->descripcion ?? 'Sin descripción';
-                $item['unidad'] = $itemEspecifico->unidad ?? 'Unidad no especificada';
+        //         // Asignar los valores con respaldo si no existen
+        //         $item['nombre'] = $itemBase->nombre ?? 'Nombre no disponible';
+        //         $item['descripcion'] = $itemBase->descripcion ?? 'Sin descripción';
+        //         $item['unidad'] = $itemEspecifico->unidad ?? 'Unidad no especificada';
 
-                return $item;
-            })
-            ->values();
+        //         return $item;
+        //     })
+        //     ->values();
 
-        if ($itemsProveedor->isEmpty()) {
-            return back()->with('error', 'No hay ítems registrados para este proveedor.');
+
+        // $proveedorNombre = $itemsProveedor->first()['nombreProveedor'] ?? 'Proveedor desconocido';
+        // $total = $itemsProveedor->sum(fn($item) => $item['precio'] * $item['cantidad']);
+
+        $items_proveedor = json_decode($ordencompra->items_cotizar_proveedor ?? '[]', true);
+        foreach ($items_proveedor as $item) {
+            $item_especifico = ItemEspecifico::find($item['id']); // 🔹 Primero buscamos el ItemEspecifico
+            $item_base = $item_especifico ? Item::find($item_especifico->item_id) : null; // 🔹 Luego recuperamos el Item asociado
+
+            $items_cotizacion[] = [
+                'cantidad' => $item['cantidad'] ?? '-',
+                'nombre' => $item['nombreDeItem'] ?? $item_base?->nombre ?? 'Nombre no disponible',
+                'unidad'=>  $item['unidad'] ?? 'Unidad no especificada',
+                'descripcion' => $item_base?->descripcion ?? 'Descripción no disponible',
+                'marca' => $item_especifico?->marca ?? 'Sin marca', // 🔹 Ahora agregamos la marca correctamente
+                'precio' => $item['precio'] ?? $item_base?->precio ?? 0,
+            ];
         }
-
-        $proveedorNombre = $itemsProveedor->first()['nombreProveedor'] ?? 'Proveedor desconocido';
-        $total = $itemsProveedor->sum(fn($item) => $item['precio'] * $item['cantidad']);
-
         // Datos dinámicos para la vista PDF
+
+
         $data = [
-            'proveedorNombre' => $proveedorNombre,
+            'proveedorNombre' => $provedorActual->nombre,
             'clienteNombre' => $clienteNombre,
             'clienteCorreo' => $clienteCorreo,
             'clienteRFC' => $clienteRFC,
             'clienteContacto' => $clienteContacto,
             'direccionEntrega' => $direccionEntrega,
-            'items' => $itemsProveedor->toArray(),
-            'total' => $total,
+            'items_cotizacion' => $items_cotizacion,
+            'total' => $ordencompra->monto,
         ];
 
         $pdf = Pdf::loadView('pdf.ordencompra', $data)->setPaper('a4', 'portrait');
 
-        return $pdf->stream("OrdenCompra_Proveedor_{$proveedorId}.pdf");
+        return $pdf->stream("ordencompra.pdf");
     }
 }

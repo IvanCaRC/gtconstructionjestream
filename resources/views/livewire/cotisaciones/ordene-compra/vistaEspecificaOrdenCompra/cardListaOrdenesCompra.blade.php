@@ -140,7 +140,7 @@
                             </td>
                             <td>
                                 <button class="btn btn-info btn-sm text-white"
-                                    onclick="window.open('{{ route('proyecto.pdf-orden-compra', ['cotizacionId' => $lista->id_cotizacion, 'proveedorId' => $lista->id_provedor]) }}', '_blank')"
+                                    onclick="window.open('{{ route('proyecto.pdf-orden-compra', ['idOrdencompra' => $lista->id]) }}', '_blank')"
                                     title="Generar y ver el documento de la orden de compra">
                                     <i class="fas fa-file-pdf me-1"></i> PDF
                                 </button>

@@ -106,7 +106,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach ($items as $item)
+                @foreach ($items_cotizacion as $item)
                     <tr>
                         <td>{{ $item['nombre'] }}</td>
                         <td>{{ $item['descripcion'] ?? 'Sin descripción' }}</td>
