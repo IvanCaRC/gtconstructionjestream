@@ -106,11 +106,11 @@
                                             <i class="fas fa-file-pdf me-1"></i> PDF
                                         </button> --}}
 
-                                        <button class="btn btn-info btn-sm text-white"
+                                        {{-- <button class="btn btn-info btn-sm text-white"
                                             onclick="window.open('{{ route('proyecto.pdf-cotizacion', ['id' => $lista->id]) }}', '_blank')"
                                             title="Ver el documento de la cotización">
                                             <i class="fas fa-file-pdf me-1"></i> PDF
-                                        </button>
+                                        </button> --}}
                                         <!-- Botón para Ver Proyecto -->
 
                                     </td>

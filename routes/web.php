@@ -21,6 +21,7 @@ use App\Http\Controllers\VentasRecepcionCotisaciones;
 use App\Http\Controllers\PdfController;
 use App\Http\Controllers\PDFListaController;
 use App\Http\Controllers\PDFCotizacionController;
+use App\Http\Controllers\PDFOrdenCompraController;
 use App\Http\Controllers\PDFOrdenVentaController;
 
 /*
@@ -43,6 +44,8 @@ Route::get('/proyecto/{id}/pdf-lista', [PDFListaController::class, 'generarPDFLi
 Route::get('/proyecto/{id}/pdf-cotizacion', [PDFCotizacionController::class, 'generarPDFCotizacion'])->name('proyecto.pdf-cotizacion');
 
 Route::get('/proyecto/{id}/pdf-orden-venta', [PDFOrdenVentaController::class, 'generarPDFOrdenVenta'])->name('proyecto.pdf-orden-venta');
+
+Route::get('/proyecto/{cotizacionId}/{proveedorId}/pdf-orden-compra', [PDFOrdenCompraController::class, 'generarOrdenCompraPDF'])->name('proyecto.pdf-orden-compra');
 
 Route::get('/', function () {
     return redirect()->route('login');
@@ -122,7 +125,7 @@ Route::get('ventas/clientes/gestionClientes', [RecpecioLlamadas::class, 'vista']
 Route::get('ventas/fichasTecnicas/fichasTecnicas', [FichasTecnicas::class, 'index'])->middleware('auth', 'nocache')->name('ventas.fichasTecnicas.fichasTecnicas');
 
 Route::get('ventas/fichasTecnicas/vistaEspecificaItem/{idItem}', [FichasTecnicas::class, 'viewEspecItem'])->middleware('auth', 'nocache')->name('ventas.fichasTecnicas.fichaEspecificaItem');
-                                                                                                                            
+
 Route::get('ventas/recepcionCotizaciones/recepcionCotizacion', [VentasRecepcionCotisaciones::class, 'index'])->middleware('auth', 'nocache')->name('ventas.recepcionCotizaciones.recepcionCotizacion');
 
 Route::get('ventas/clientes/EditCliente/{idcliente}', [ClienteController::class, 'editCliente'])

@@ -63,25 +63,26 @@
                                                                     : ($lista->estado == 6
                                                                         ? '<span class="badge badge-success">Terminado</span>'
                                                                         : ($lista->estado == 7
-                                                                        ? '<span class="badge badge-primary">Cancelado</span>'
-                                                                        : '<span class="badge badge-secondary">Estado desconocido</span>'))))))) !!}
+                                                                            ? '<span class="badge badge-primary">Cancelado</span>'
+                                                                            : '<span class="badge badge-secondary">Estado desconocido</span>'))))))) !!}
                                         </label>
 
                                     </td>
                                     <td>
 
 
-                                        <button class="btn btn-primary btn-sm mr-1"
-                                            wire:click="verDetalles({{ $lista->id }})">
-                                            Ver lista
+                                        <button class="btn btn-info btn-sm text-white"
+                                            onclick="window.open('{{ route('proyecto.pdf-cotizacion', ['id' => $lista->id]) }}', '_blank')"
+                                            title="Ver el documento de la cotización">
+                                            <i class="fas fa-file-pdf me-1"></i> Cotizacion PDF
                                         </button>
                                         <button class="btn btn-primary btn-sm mr-1"
-                                        wire:click="abrirModal({{ $lista->id }})">
+                                            wire:click="abrirModal({{ $lista->id }})">
                                             Crear ordenes de compra
                                         </button>
 
-                                    
-                                        
+
+
                                         @if ($lista->estado != 2)
                                             <button class="btn btn-danger btn-sm"
                                                 wire:click="cancelar({{ $lista->id }})">Cancelar</button>
@@ -105,7 +106,7 @@
             <!-- Enlace de paginación -->
 
         </div>
-    </div>    
-    
-    
+    </div>
+
+
 </div>
