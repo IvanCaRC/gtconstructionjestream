@@ -8,9 +8,13 @@ use Illuminate\Http\Request;
 class ComprasController extends Controller
 {
 
-    public function index()
+    public function index(Request $request)
     {
-        return view('compras.dashboardCompras');
+        $filtroTiempo = $request->input('filtro_tiempo', 'todos');
+        return view('compras.dashboardCompras', [
+
+            'filtroTiempo' => $filtroTiempo,
+        ]);
     }
 
     public function ordenesCompra()

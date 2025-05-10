@@ -6,8 +6,14 @@ use Illuminate\Http\Request;
 
 class VentasController extends Controller
 {
-    public function index()
+
+    public function index(Request $request)
     {
-        return view('ventas.dashboardVentas');
+        $filtroTiempo = $request->input('filtro_tiempo', 'todos');
+
+        return view('ventas.dashboardVentas', [
+
+            'filtroTiempo' => $filtroTiempo,
+        ]);
     }
 }

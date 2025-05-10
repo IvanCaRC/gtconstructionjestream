@@ -11,15 +11,15 @@ use Illuminate\View\Component;
 use Illuminate\Support\Facades\DB;
 
 class TarjetaOrdenesUsuario extends Component
-{
-    public $iduser;
+    {
+        public $iduser;
     public $clientesCount;
     public $ordenesCount;
     public $proyectosCount;
     public $ordenesCulminadasCount;
     public $montoTotalCulminadas;
     public $ventasPorMes = [];
-
+    public $estadosProyectos;
 
     public function __construct($iduser, $filtroTiempo = 'todos')
     {
@@ -67,6 +67,10 @@ class TarjetaOrdenesUsuario extends Component
         $this->ordenesCulminadasCount = $ordenesCulminadasQuery->count();
         $this->montoTotalCulminadas = $ordenesCulminadasQuery->sum('monto');
 
+        $proyectos = $proyectosQuery->get();
+
+        // Contar por estado
+        $this->estadosProyectos = $proyectos->groupBy('proceso')->map->count();
 
         $ventasQuery = ordenVenta::select(
             DB::raw("DATE_FORMAT(created_at, '%Y-%m') as mes"),

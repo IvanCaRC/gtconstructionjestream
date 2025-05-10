@@ -11,7 +11,22 @@ class FinanzasController extends Controller
 
     public function index()
     {
-        return view('finanzas.dashboardFinanzas');
+        // Datos iniciales (general)
+        $ventasTotales = DB::table('orden_venta')
+            ->where('estado', 1)
+            ->sum('monto');
+
+        $comprasTotales = DB::table('orden_compra')
+            ->where('estado', 1)
+            ->sum('monto');
+
+        $ganancias = $ventasTotales - $comprasTotales;
+
+        return view('finanzas.dashboardFinanzas', [
+            'ventasTotales' => $ventasTotales,
+            'comprasTotales' => $comprasTotales,
+            'ganancias' => $ganancias,
+        ]);
     }
 
     public function ingresosEgresos()
