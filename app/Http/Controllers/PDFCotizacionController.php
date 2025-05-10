@@ -19,7 +19,7 @@ class PDFCotizacionController extends Controller
             // ✅ Recuperar cotización con relaciones necesarias
             $cotizacion = Cotizacion::with('usuario', 'proyecto', 'listaCotizar')->findOrFail($id);
             $cliente = Cliente::findOrFail($cotizacion->proyecto->cliente_id);
-            $direccion = Direccion::where('cliente_id', $cliente->id)->first();
+            $direccion = optional(Direccion::find($cotizacion->proyecto->direccion_id));
             $lista = ListasCotizar::where('proyecto_id', $cotizacion->proyecto->id)
                 ->where('id', $cotizacion->lista_cotizar_id)
                 ->first();
@@ -31,7 +31,7 @@ class PDFCotizacionController extends Controller
             // ✅ Usuario que atendió la solicitud (nombre + apellidos)
             $usuario_atendio = "{$cotizacion->usuario->name} {$cotizacion->usuario->first_last_name} {$cotizacion->usuario->second_last_name}";
 
-            // ✅ Recuperación de dirección
+            // Filtrar y limpiar dirección
             $componentes_direccion = array_filter([
                 $direccion->calle ?? '',
                 $direccion->numero ?? '',
@@ -40,15 +40,10 @@ class PDFCotizacionController extends Controller
                 $direccion->ciudad ?? '',
                 $direccion->estado ?? '',
                 $direccion->pais ?? '',
-                "CP: {$direccion->cp}" ?? ''
-            ]);
+                $direccion->cp ? "CP: {$direccion->cp}" : ''
+            ], fn($valor) => $valor !== 'Campo no recuperado' && trim($valor) !== '');
 
-            // ✅ Filtrar cualquier campo que contenga "Campo no recuperado"
-            $componentes_direccion = array_filter($componentes_direccion, function ($valor) {
-                return $valor !== "Campo no recuperado";
-            });
-
-            // ✅ Convertir en una dirección limpia o mostrar "Dirección no registrada"
+            //Obtener la direccion en limpio
             $direccionEntrega = !empty($componentes_direccion) ? implode(', ', $componentes_direccion) : "Dirección no registrada";
 
             // ✅ Recuperación del tipo de proyecto
