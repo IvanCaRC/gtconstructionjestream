@@ -62,7 +62,7 @@
                 <small class="form-text text-muted">Describe con detalle tus impresiones acerca de lo que mas favorecio
                     para que el cliente nos otorge su preferencia.</small>
                 <x-slot name='footer'>
-                    @if ($estadoProyecto !== 2)
+                    @if ($estadoProyecto == 4)
                         <button type="button" class="btn btn-success disabled:opacity-50" wire:loading.attr="disabled"
                             wire:click="removeEvaluarCulminacion">
                             Aceptar

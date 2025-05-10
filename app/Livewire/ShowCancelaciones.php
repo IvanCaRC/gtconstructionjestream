@@ -22,6 +22,7 @@ class ShowCancelaciones extends Component
     public $idProyectoActual;
     public $nombreProyecto;
     public $estadoProyecto;
+
     public $motivo_finalizacion;
     public $motivo_finalizacion_alterno;
     public $motivo_detallado;
@@ -74,6 +75,9 @@ class ShowCancelaciones extends Component
             }
         });
 
+        // **Ordenar resultados**
+        $query->orderBy('created_at', 'desc'); // Orden descendente (más recientes primero)
+
         $proyectos =  $query->paginate(10);
 
         return view('livewire.show-cancelaciones', [
@@ -124,6 +128,7 @@ class ShowCancelaciones extends Component
         }
 
         $this->nombreProyecto = $proyecto->nombre;
+        $this->estadoProyecto = $proyecto->estado;
         // Verificar si el motivo tiene el formato "Otro: ..."
         if (str_starts_with($proyecto->motivo_finalizacion, 'Otro: ')) {
             $this->motivo_finalizacion = 'otro';
@@ -148,6 +153,7 @@ class ShowCancelaciones extends Component
         }
 
         $this->nombreProyecto = $proyecto->nombre;
+        $this->estadoProyecto = $proyecto->estado;
         // Verificar si el motivo tiene el formato "Otro: ..."
         if (str_starts_with($proyecto->motivo_finalizacion, 'Otro: ')) {
             $this->motivo_finalizacion = 'otro';
@@ -308,6 +314,5 @@ class ShowCancelaciones extends Component
         $this->reset('openModalRespuestaCulminacion', 'motivo_finalizacion', 'motivo_detallado');
         $this->dispatch('refresh');
         $this->resetValidation();
-
     }
 }

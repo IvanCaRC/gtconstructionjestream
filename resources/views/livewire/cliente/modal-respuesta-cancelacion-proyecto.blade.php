@@ -61,7 +61,7 @@
                 <small class="form-text text-muted">Describe con detalle el motivo de dicha cancelacion para que el
                     administrador pueda dar seguimiento al proceso de cancelacion en cuestion.</small>
                 <x-slot name='footer'>
-                    @if ($estadoProyecto !== 2)
+                    @if ($estadoProyecto == 3)
                         <button type="button" class="btn btn-success disabled:opacity-50" wire:loading.attr="disabled"
                             wire:click="removeEvaluarCancelacion">
                             Aceptar
