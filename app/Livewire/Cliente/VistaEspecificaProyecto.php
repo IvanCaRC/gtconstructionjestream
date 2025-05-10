@@ -134,8 +134,8 @@ class VistaEspecificaProyecto extends Component
             $numero_2 = 'No registrado';
         }
 
-        //Obtener la direccion en funcion del id del cliente
-        $direccion = Direccion::where('cliente_id', $cliente->id)->first();
+        //Obtener la direccion que se encuentra asociada al proyecto.
+        $direccion = optional(Direccion::find($this->proyecto->direccion_id));
         // Recuperar items de la lista a cotizar
         $items = json_decode($lista?->items_cotizar ?? '[]', true);
         $items_data = [];
@@ -186,13 +186,18 @@ class VistaEspecificaProyecto extends Component
             $direccion->ciudad ?? '',
             $direccion->estado ?? '',
             $direccion->pais ?? '',
-            "CP: {$direccion->cp}" ?? ''
+            $direccion->cp ? "CP: {$direccion->cp}" : ''
         ];
 
         // Eliminamos "Campo no recuperado" y espacios en blanco innecesarios
         $componentes_direccion_filtrados = array_filter($componentes_direccion, function ($valor) {
             return $valor !== 'Campo no recuperado' && trim($valor) !== '';
         });
+
+        // Definir mensaje por defecto si la dirección no está disponible
+        $direccion_depurada = !empty($componentes_direccion_filtrados)
+            ? implode(', ', $componentes_direccion_filtrados)
+            : 'Dirección no registrada';
 
         // Recuperar items temporales de la lista a cotizar
         $items_temporales = json_decode($lista?->items_cotizar_temporales ?? '[]', true);
@@ -242,6 +247,7 @@ class VistaEspecificaProyecto extends Component
         Session::put('proyecto_nombre', $this->proyecto->nombre);
         Session::put('proyecto_fecha', $this->proyecto->created_at->format('d/m/Y'));
         Session::put('proyecto_tipo', $this->proyecto->tipo == 1 ? 'Suministro' : 'Obra');
+        Session::put('proyecto_direccion', $direccion_depurada);
         Session::put('frentes', implode(', ', $frentes));
         Session::put('fondos', implode(', ', $fondos));
         Session::put('alturasTecho', implode(', ', $alturasTecho));
@@ -258,7 +264,7 @@ class VistaEspecificaProyecto extends Component
         Session::put('usuario_second_last_name', auth()->user()->second_last_name);
         Session::put('cliente_nombre', $cliente->nombre);
         Session::put('cliente_correo', $cliente->correo ?? 'No disponible');
-        Session::put('cliente_direccion', implode(', ', $componentes_direccion_filtrados));
+        // Session::put('cliente_direccion', implode(', ', $componentes_direccion_filtrados));
         Session::put('cliente_contacto_1', $nombre_contacto_1);
         Session::put('cliente_telefono_1', $numero_1);
         Session::put('cliente_contacto_2', $nombre_contacto_2);
