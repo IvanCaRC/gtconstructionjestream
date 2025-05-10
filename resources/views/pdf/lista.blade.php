@@ -237,7 +237,7 @@
         <!-- Adicionales de la Obra -->
         <p class="section">Adicionales de la obra</p>
 
-        @if (array_filter($estructuras) && array_filter($cantidades))
+        @if (array_filter((array) json_decode(Session::get('estructuras', '[]'), true)) && array_filter((array) json_decode(Session::get('cantidades', '[]'), true)))
             <table>
                 <tr style="background-color: #f4f4f4;">
                     <th style="width: 50%; text-align: center; padding: 8px;">Elementos</th>

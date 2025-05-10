@@ -41,6 +41,8 @@ Route::get('/proyecto/{id}/pdf', [PdfController::class, 'generarPdf'])->name('pr
 
 Route::get('/proyecto/{id}/pdf-lista', [PDFListaController::class, 'generarPDFLista'])->name('proyecto.pdf-lista');
 
+Route::get('/proyecto/pdf-lista-compras/{id}', [PDFListaController::class, 'generarPDFListaCompras'])->name('proyecto.pdf-lista-compras');
+
 Route::get('/proyecto/{id}/pdf-cotizacion', [PDFCotizacionController::class, 'generarPDFCotizacion'])->name('proyecto.pdf-cotizacion');
 
 Route::get('/proyecto/{id}/pdf-orden-venta', [PDFOrdenVentaController::class, 'generarPDFOrdenVenta'])->name('proyecto.pdf-orden-venta');

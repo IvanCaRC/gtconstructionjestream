@@ -39,7 +39,7 @@ class VerCotisaciones extends Component
         $query = ListasCotizar::where('estado', 2)
             ->whereNull('id_usuario_compras')
             ->with('proyecto') // Cargar la relación con el proyecto
-            ->orderBy('created_at', 'desc'); // Ordenar por fecha de creación descendente
+            ->orderBy('created_at', 'asc'); // Ordenar por fecha de creación descendente
 
         // Aplicar búsqueda por nombre o fecha de creación
         if (!empty($this->searchTerm)) {
