@@ -1,5 +1,11 @@
 <div>
     @include('livewire.cliente.modal-respuesta-cancelacion-proyecto')
+    @include('livewire.cliente.modal-respuesta-culminacion-proyecto')
+    @if ($mensajeError)
+        <div class="alert alert-danger">
+            {{ $mensajeError }}
+        </div>
+    @endif
     <h1 class="pl-4">Culminaciones y cancelaciones de proyectos</h1>
     <div class="container-fluid px-4 sm:px-6 lg:px-8 py-12">
         <div class="card">
@@ -47,14 +53,17 @@
                             </thead>
                             <tbody>
                                 @foreach ($proyectos as $proyecto)
-                                    <tr style="{{ $proyecto->estado === 3 ? 'background-color: #ffbbbb;' : '' }}">
+                                    <tr
+                                        style="
+                                            {{ $proyecto->estado === 3 ? 'background-color: #ffbbbb;' : '' }}
+                                                {{ $proyecto->estado === 4 ? 'background-color: #bbffbb;' : '' }}">
                                         <td>
                                             @if ($proyecto->culminacion == 0)
                                                 <span class="badge"
-                                                    style="background-color: #fa0000; color: white;">Cancelacion</span>
+                                                    style="background-color: #c00000; color: white;">Cancelacion</span>
                                             @elseif ($proyecto->culminacion == 1)
                                                 <span class="badge"
-                                                    style="background-color: #34ff63; color: white;">Culminacion</span>
+                                                    style="background-color: #25ba48; color: white;">Culminacion</span>
                                             @else
                                                 <span class="badge badge-danger">Sin asignar</span>
                                             @endif
@@ -101,14 +110,21 @@
                                                     style="background-color:#1a1ca7; color: white;">Cotizado</span>
                                             @elseif ($proyecto->proceso == 3)
                                                 <span class="badge" style="background-color:#15d4db; color: white;">En
-                                                    proceso de venta</span>
+                                                    espera de pago</span>
                                             @elseif ($proyecto->proceso == 4)
                                                 <span class="badge"
-                                                    style="background-color: #28a745; color: white;">Venta
-                                                    terminada</span>
+                                                    style="background-color: #5ac773; color: white;">Pagado</span>
                                             @elseif ($proyecto->proceso == 5)
                                                 <span class="badge"
-                                                    style="background-color: #f10808; color: white;">Cancelado</span>
+                                                    style="background-color: #a5b865; color: white;">Preparando
+                                                    pedido</span>
+                                            @elseif ($proyecto->proceso == 6)
+                                                <span class="badge" style="background-color: #e28529; color: white;">En
+                                                    proceso de entrega</span>
+                                            @elseif ($proyecto->proceso == 7)
+                                                <span class="badge"
+                                                    style="background-color: #06e33a; color: white;">Venta
+                                                    terminada</span>
                                             @else
                                                 <span class="badge"
                                                     style="background-color: #742532; color: white;">Estado
@@ -128,15 +144,16 @@
                                         @if ($proyecto->estado === 2)
                                             <td>
                                                 <button class="btn btn-warning btn-custom"
-                                                    wire:click="evaluarCancelacion({{ $proyecto->id }})"
-                                                    title="Ver motivos de cancelacion">
+                                                    wire:click="evaluarSolicitud({{ $proyecto->id }})"
+                                                    title="Ver motivos de la solicitud">
                                                     <i class="fas fa-file-alt"></i> Ver motivos
                                                 </button>
                                             </td>
-                                        @elseif ($proyecto->estado === 1 || $proyecto->estado === 3)
+                                        @elseif ($proyecto->estado !== 2)
                                             <td>
-                                                <button class="btn btn-success btn-custom"
+                                                <button class="btn btn-success btn-sm btn-custom"
                                                     onclick="mostrarNotificacion()"
+                                                    wire:click="evaluarSolicitud({{ $proyecto->id }})"
                                                     title="Ya has respondido a esta solicitud">
                                                     <i class="fas fa-check-circle"></i> Solicitud respondida
                                                 </button>

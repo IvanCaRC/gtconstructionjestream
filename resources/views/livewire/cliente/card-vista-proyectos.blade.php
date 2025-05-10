@@ -63,7 +63,10 @@
                     </thead>
                     <tbody>
                         @foreach ($proyectos as $proyecto)
-                            <tr style="{{ $proyecto->estado === 3 ? 'background-color: #ffbbbb;' : '' }}">
+                            <tr
+                                style="
+                                {{ $proyecto->estado === 3 ? 'background-color: #ffbbbb;' : '' }}
+                                {{ $proyecto->estado === 4 ? 'background-color: #bbffbb;' : '' }}">
                                 <td>{{ $proyecto->nombre }}</td>
                                 <td>
                                     {{ $proyecto->fecha }}
@@ -74,9 +77,10 @@
                                         : ($proyecto->estado == 2
                                             ? '<span class="badge badge-warning">Inactivo</span>'
                                             : ($proyecto->estado == 3
-                                                ? '<span class="badge"
-                                                                                                                                                                                                                                                                            style="background-color: #f10808; color: white;">Cancelado</span>'
-                                                : '<span class="badge badge-secondary">Estado desconocido</span>')) !!}
+                                                ? '<span class="badge" style="background-color: #f10808; color: white;">Cancelado</span>'
+                                                : ($proyecto->estado == 4
+                                                    ? '<span class="badge" style="background-color: #0bd20b; color: rgb(255, 255, 255);">Concluido</span>'
+                                                    : '<span class="badge badge-secondary">Estado desconocido</span>'))) !!}
                                 </td>
                                 <td>
                                     <label>
@@ -141,17 +145,36 @@
                                             <i class="fas fa-times-circle"></i>
                                         </button>
                                     </td>
+                                    <td>
+                                        <button class="btn btn-success btn-custom"
+                                            wire:click="culminarProyecto({{ $proyecto->id }})"
+                                            title="Terminar proyecto exitosamente (tener al menos una lista concluida)"
+                                            @if ($proyecto->listasCotizar->where('estado', 8)->isEmpty()) disabled @endif>
+                                            <i class="fas fa-check-circle"></i>
+                                        </button>
+                                    </td>
                                     <td></td> {{-- Espacio reservado para alineación --}}
-                                @elseif($proyecto->culminacion === 0 && $proyecto->estado !== 3)
+                                @elseif($proyecto->culminacion === 0 && $proyecto->estado === 2)
                                     <td colspan="2"></td> {{-- Espacio vacío para mantener alineación --}}
                                     <td>
                                         <span class="badge bg-warning text-dark">Cancelación pendiente</span>
+                                    </td>
+                                @elseif($proyecto->culminacion === 1 && $proyecto->estado === 2)
+                                    <td colspan="2"></td> {{-- Espacio vacío para mantener alineación --}}
+                                    <td>
+                                        <span class="badge bg-success text-white">Culminación pendiente</span>
                                     </td>
                                 @elseif ($proyecto->culminacion === 0 && $proyecto->estado === 3)
                                     <td colspan="2"></td> {{-- Espacio vacío para mantener alineación --}}
                                     <td>
                                         <span class="badge" style="background-color: #f10808; color: white;">Proyecto
                                             Cancelado</span>
+                                    </td>
+                                @elseif ($proyecto->culminacion === 1 && $proyecto->estado === 4)
+                                    <td colspan="2"></td> {{-- Espacio vacío para mantener alineación --}}
+                                    <td>
+                                        <span class="badge" style="background-color: #49c80e; color: white;">Proyecto
+                                            Concretado</span>
                                     </td>
                                 @endif
                             </tr>

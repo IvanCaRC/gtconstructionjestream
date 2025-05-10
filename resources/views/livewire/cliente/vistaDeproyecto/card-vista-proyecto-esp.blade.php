@@ -11,7 +11,8 @@
                     <h3>Nombre: {{ $proyecto->nombre }}</h3>
                 </div>
                 <div class="col-md-1">
-                    <button class="btn btn-primary d-block mb-3" wire:click="editarProyecto({{ $proyecto->id }})">
+                    <button class="btn btn-primary d-block mb-3" wire:click="editarProyecto({{ $proyecto->id }})" 
+                        @if($proyecto->estado !== 1) disabled @endif>
                         Editar proyecto
                     </button>
                 </div>

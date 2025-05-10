@@ -37,7 +37,7 @@ class VistaEspecifica extends Component
     public $motivo_finalizacion;
     public $motivo_finalizacion_alterno;
     public $motivo_detallado;
-
+    public $openModalCulminarProyecto = false;
 
     public $tipoDeProyectoSelecionado;
     public $fileNamePdf;
@@ -149,11 +149,30 @@ class VistaEspecifica extends Component
         $this->openModalCancelarProyecto = true;
     }
 
+    public function culminarProyecto($idProyecto)
+    {
+        $this->idProyectoActual = $idProyecto;
+
+        $proyecto = Proyecto::find($idProyecto);
+
+        $this->nombreProyecto = $proyecto->nombre;
+        $this->motivo_finalizacion = '';
+        $this->motivo_detallado = '';
+        $this->openModalCulminarProyecto = true;
+    }
+
     public function removeCancelacion()
     {
         $this->reset('openModalCancelarProyecto');
         $this->resetValidation();
         $this->openModalCancelarProyecto = false;
+    }
+
+    public function removeCulminacion()
+    {
+        $this->reset('openModalCulminarProyecto');
+        $this->resetValidation();
+        $this->openModalCulminarProyecto = false;
     }
 
     //Asociar los motivos de la cancelacion al proyecto actual mediante su ID
@@ -176,10 +195,10 @@ class VistaEspecifica extends Component
 
         // Insertar los valores en los campos específicos sin crear un nuevo registro
         $proyecto->fill([
-            'culminacion' => 0,
+            'culminacion' => 0, //Culminacion por fracaso
             'motivo_finalizacion' => $motivoFinalizacion,
             'motivo_detallado' => $this->motivo_detallado,
-            'estado' => 2,
+            'estado' => 2, //Proyecto inactivo
         ]);
         $proyecto->save();
 
@@ -189,6 +208,38 @@ class VistaEspecifica extends Component
 
         // Limpiar valores después de la actualización
         $this->reset('openModalCancelarProyecto', 'culminacion', 'motivo_finalizacion', 'motivo_detallado');
+        $this->dispatch('refresh');
+        $this->resetValidation();
+    }
+
+    public function enviarSolicitudCulminar()
+    {
+        // Validar los campos del formulario
+        $this->validate(Proyecto::rulesSolicitoCancelacion(), Proyecto::messagesSolicitoCulminacion());
+        // Obtener el proyecto existente en la base de datos
+        $proyecto = Proyecto::find($this->idProyectoActual);
+
+        if (!$proyecto) {
+            session()->flash('error', 'El proyecto no fue encontrado.');
+            return redirect()->route('ventas.clientes.vistaProyectos');
+        }
+        //Almacenar el motivo de finalizacion en particularo
+        $motivoFinalizacion = $this->motivo_finalizacion === 'otro'
+            ? 'Otro: ' . $this->motivo_finalizacion_alterno
+            : $this->motivo_finalizacion;
+        // Insertar los valores en los campos específicos sin crear un nuevo registro
+        $proyecto->fill([
+            'culminacion' => 1, //Culminacion por exito
+            'motivo_finalizacion' => $motivoFinalizacion,
+            'motivo_detallado' => $this->motivo_detallado,
+            'estado' => 2, //Proyecto inactivo
+        ]);
+        $proyecto->save();
+        //Crear notificacion para el administrador
+        // $adminUsers = Role::where('name', 'Administrador')->first()->users;
+        // Notification::send($adminUsers, new SolicitudCancelacion($proyecto->id, $proyecto->nombre, auth()->user()->name));
+        // Limpiar valores después de la actualización
+        $this->reset('openModalCulminarProyecto', 'culminacion', 'motivo_finalizacion', 'motivo_detallado');
         $this->dispatch('refresh');
         $this->resetValidation();
     }

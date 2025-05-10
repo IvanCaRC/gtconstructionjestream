@@ -44,4 +44,5 @@
     @include('livewire.cliente.modal-creacion-proyecto')
     @include('livewire.cliente.modal-actualizacion-proyecto')
     @include('livewire.cliente.modal-cancelacion-proyecto')
+    @include('livewire.cliente.modal-culminacion-proyecto')
 </div>

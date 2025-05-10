@@ -9,27 +9,27 @@ class Proyecto extends Model
 {
     use HasFactory;
 
-//     <label>
-//     {!! $proyecto->proceso == 0
-//         ? '<span class="badge badge-primary">Creando lista a cotizar</span>'
-//         : ($proyecto->proceso == 1
-//             ? '<span class="badge badge-primary">Creando cotización</span>'
-//             : ($proyecto->proceso == 2
-//                 ? '<span class="badge badge-primary">Cotizado</span>'
-//                 : ($proyecto->proceso == 3
-//                     ? '<span class="badge badge-warning">Esperando pago</span>'
-//                     : ($proyecto->proceso == 4
-//                         ? '<span class="badge badge-primary">Pagado/span>'
-//                         : ($proyecto->proceso == 5
-//                             ? '<span class="badge badge-warning">Preparando</span>'
-//                             : ($proyecto->proceso == 6
-//                                 ? '<span class="badge badge-warning">En proceso de entrga</span>'
-//                                 : ($proyecto->proceso == 7
-//                                     ? '<span class="badge badge-success">Venta terminada</span>'
-//                                     : ($proyecto->proceso == 8
-//                                         ? '<span class="badge badge-danger">Cancelado</span>'
-//                                         : '<span class="badge badge-secondary">Estado desconocido</span>')))))))) !!}
-// </label>
+    //     <label>
+    //     {!! $proyecto->proceso == 0
+    //         ? '<span class="badge badge-primary">Creando lista a cotizar</span>'
+    //         : ($proyecto->proceso == 1
+    //             ? '<span class="badge badge-primary">Creando cotización</span>'
+    //             : ($proyecto->proceso == 2
+    //                 ? '<span class="badge badge-primary">Cotizado</span>'
+    //                 : ($proyecto->proceso == 3
+    //                     ? '<span class="badge badge-warning">Esperando pago</span>'
+    //                     : ($proyecto->proceso == 4
+    //                         ? '<span class="badge badge-primary">Pagado/span>'
+    //                         : ($proyecto->proceso == 5
+    //                             ? '<span class="badge badge-warning">Preparando</span>'
+    //                             : ($proyecto->proceso == 6
+    //                                 ? '<span class="badge badge-warning">En proceso de entrga</span>'
+    //                                 : ($proyecto->proceso == 7
+    //                                     ? '<span class="badge badge-success">Venta terminada</span>'
+    //                                     : ($proyecto->proceso == 8
+    //                                         ? '<span class="badge badge-danger">Cancelado</span>'
+    //                                         : '<span class="badge badge-secondary">Estado desconocido</span>')))))))) !!}
+    // </label>
 
 
     protected $fillable = [
@@ -60,6 +60,11 @@ class Proyecto extends Model
     public function direccion()
     {
         return $this->belongsTo(Direccion::class, 'direccion_id');
+    }
+
+    public function listasCotizar()
+    {
+        return $this->hasMany(ListasCotizar::class, 'proyecto_id');
     }
 
     public static function rules()
@@ -114,6 +119,18 @@ class Proyecto extends Model
             'motivo_finalizacion.required' => 'Registra el motivo de tu cancelacion.',
             'motivo_finalizacion.max' => 'Resume un poco tu motivo de finalizacion.',
             'motivo_detallado.required' => 'Describe los detalles de dicha cancelacion para poder enviarla.',
+            'motivo_detallado.string' => 'Los detalles deben ser un texto.',
+            'motivo_detallado.max' => 'Resume un poco la descripcion del motivo',
+            'motivo_finalizacion_alterno.required_if' => 'Describe el motivo especifico alterno.',
+        ];
+    }
+
+    public static function messagesSolicitoCulminacion()
+    {
+        return [
+            'motivo_finalizacion.required' => 'Registra el motivo de la culminacion.',
+            'motivo_finalizacion.max' => 'Resume un poco tu motivo de finalizacion.',
+            'motivo_detallado.required' => 'Describe los detalles de dicha culminacion para poder enviarla.',
             'motivo_detallado.string' => 'Los detalles deben ser un texto.',
             'motivo_detallado.max' => 'Resume un poco la descripcion del motivo',
             'motivo_finalizacion_alterno.required_if' => 'Describe el motivo especifico alterno.',
