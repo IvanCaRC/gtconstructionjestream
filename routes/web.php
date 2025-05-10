@@ -9,6 +9,9 @@ use App\Http\Controllers\Cotisaciones;
 use App\Http\Controllers\FamiliaController;
 use App\Http\Controllers\FichasTecnicas;
 use App\Http\Controllers\FinanzasController;
+use App\Http\Controllers\graficasUserCompras;
+use App\Http\Controllers\graficasUserFinanzas;
+use App\Http\Controllers\graficasUserVentas;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ItemCotizar;
 use App\Http\Controllers\MantenimientoController;
@@ -156,3 +159,10 @@ Route::get('compras/cotisaciones/vistaEspecificaOrdenesCompra/{idCotisacion}', [
 Route::get('finanzas/ordenCompra/vistaOrdenCompraFin', [FinanzasController::class, 'ordenescompra'])->middleware('auth', 'nocache')->name('finanzas.ordenCompra.vistaOrdenCompraFin');
 
 Route::get('finanzas/ingresosEgresos/ingresosEgeresosVistaGeneral', [FinanzasController::class, 'ingresosEgresos'])->middleware('auth', 'nocache')->name('finanzas.ingresosEgresos.ingresosEgeresosVistaGeneral');
+
+// routes/web.php
+// routes/web.php
+Route::get('/user/{idUser}/contar-ordenes', [graficasUserCompras::class, 'contarOrdenes']);
+Route::get('graficasDasboards/graficasUserVentas/{idUser}', [graficasUserVentas::class, 'verGraficas'])->middleware('auth', 'nocache')->name('graficasDasboards.graficasUserVentas');
+
+Route::get('graficasDasboards/graficasUserFinanzas/{idUser}', [graficasUserFinanzas::class, 'verGraficas'])->middleware('auth', 'nocache')->name('graficasDasboards.graficasUserFinanzas');
