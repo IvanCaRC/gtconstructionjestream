@@ -1,0 +1,10 @@
+@extends('layouts.app')
+@section('title', 'Item catalogo para cotizar')
+@section('activedesplegablecotizaciones', 'active')
+@section('activeCollapseCotizaciones', 'show')
+@section('activeItemsCotizar', 'active')
+@section('activeFondoPermanenteItemsCotizar', 'background-permanent')
+@section('contend')
+@livewire('items-cotizar.vista-de-catalogo')
+@livewire('items-cotizar.catalogo')
+@endsection

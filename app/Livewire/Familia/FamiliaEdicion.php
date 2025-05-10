@@ -71,7 +71,6 @@ class FamiliaEdicion extends Component
         }
 
         // Cargar el nivel inicial si no hay padres
-
     }
 
     public function update()

@@ -1,8 +1,21 @@
+@php
+    $notificationStyles = [
+        'proveedor_desactualizado' => ['bg-warning', 'fas fa-truck'],
+        'item_especifico_desactualizado' => ['bg-primary', 'fas fa-box-open'],
+        'seleccion_lista' => ['bg-success', 'fas fa-list-alt'],
+        'cotizacion_enviada' => ['bg-success', 'fas fa-file-alt'],
+        'orden_venta_recibida' => ['bg-dark', 'fas fa-file-invoice-dollar'], // Documento financiero
+    ];
+
+    $type = $notification->data['type'] ?? 'default';
+    $bgColor = $notificationStyles[$type][0] ?? 'bg-secondary';
+    $icon = $notificationStyles[$type][1] ?? 'fas fa-cube';
+@endphp
 <!DOCTYPE html>
 <html>
 
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
@@ -10,7 +23,7 @@
 
     <!-- Leaflet CSS -->
 
-
+    <link rel="icon" type="image/png" href="{{ asset('storage/StockImages/stockUser.png') }}">
 
 
     <!-- Fonts -->
@@ -87,28 +100,31 @@
 
             @can('ventas.dashboardVentas')
                 <!-- Nav Item - Icono de Administracion -->
-                <li class="nav-item @yield('activeAdministracion')">
-                    <a class="nav-link" href="#">
+                <li class="nav-item @yield('activeVentas')">
+                    <a class="nav-link" href="{{ route('ventas.dashboardVentas') }}">
                         <i class="fas fa-fw fa-tachometer-alt"></i>
-                        <span>Dep. Ventas</span></a>
+                        <span>Dep. Ventas</span>
+                    </a>
                 </li>
             @endcan
 
             @can('compras.dashboardCompras')
                 <!-- Nav Item - Icono de Administracion -->
-                <li class="nav-item @yield('activeAdministracion')">
-                    <a class="nav-link" href="#">
-                        <i class="fas fa-fw fa-tachometer-alt"></i>
-                        <span>Dep. Compras</span></a>
+                <li class="nav-item @yield('activeCompras')">
+                    <a class="nav-link" href="{{ route('compras.dashboardCompras') }}">
+                        <i class="fas fa-fw fa-shopping-cart"></i>
+                        <span>Dep. Compras</span>
+                    </a>
                 </li>
             @endcan
 
             @can('finanzas.dashboardFinanzas')
                 <!-- Nav Item - Icono de Administracion -->
-                <li class="nav-item @yield('activeAdministracion')">
-                    <a class="nav-link" href="#">
+                <li class="nav-item @yield('activeFinanzas')">
+                    <a class="nav-link" href="{{ route('finanzas.dashboardFinanzas') }}">
                         <i class="fas fa-fw fa-tachometer-alt"></i>
-                        <span>Dep. Finanzas</span></a>
+                        <span>Dep. Finanzas</span>
+                    </a>
                 </li>
             @endcan
 
@@ -143,6 +159,16 @@
                     </a>
                 </li>
             @endcan
+            {{-- Recepcion de cancelacion de proyectos --}}
+            @can('admin.dashboardAdmin')
+                <!-- Nav Item - Icono de proyectos -->
+                <li class="nav-item @yield('activeCancelaciones')">
+                    <a class="nav-link" href="{{ route('admin.cancelaciones') }}">
+                        <i class="fas fa-clipboard-check"></i>
+                        <span>Culminación de Proyectos</span>
+                    </a>
+                </li>
+            @endcan
 
             @can('compras.collapsed')
                 <!-- Nav Item - Pagina colapsada de departamentos-->
@@ -174,17 +200,49 @@
                                 onmouseout="this.style.backgroundColor='@yield('activeBackgroundMateriales')';">
                                 Materiales
                             </a>
-                            <a class="collapse-item @yield('activeAforgot') text-white mb-2"
-                                href="{{ route('mantenimiento.enconstruccion') }}"
+
+                            <div class="collapse-divider"></div>
+                        </div>
+                    </div>
+                </li>
+            @endcan
+
+            @can('compras.collapsed')
+                <!-- Nav Item - Página colapsada de Cotizaciones -->
+                <li class="nav-item @yield('activedesplegablecotizaciones')">
+                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCotizaciones"
+                        aria-expanded="false" aria-controls="collapseCotizaciones">
+                        <i class="fas fa-fw fa-file-invoice"></i>
+                        <span>Cotizaciones</span>
+                    </a>
+                    <div id="collapseCotizaciones" class="collapse @yield('activeCollapseCotizaciones') container-flex2"
+                        aria-labelledby="headingCotizaciones" data-parent="#accordionSidebar">
+                        <div class="bg-primary-dark text-white py-2 collapse-inner rounded">
+                            <a class="collapse-item @yield('activeCortisaciones') text-white @yield('activeFondoPermanentecotisaciones') mb-2"
+                                href="{{ route('compras.cotisaciones.verCotisaciones') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
                                 onmouseout="this.style.backgroundColor='';">
                                 Cotizaciones
                             </a>
-                            <a class="collapse-item @yield('activeAforgot') text-white mb-2"
-                                href="{{ route('mantenimiento.enconstruccion') }}"
+                            <a class="collapse-item @yield('activeMisCortisaciones') text-white @yield('activeFondoPermanenteMiscotisaciones') mb-2"
+                                href="{{ route('compras.cotisaciones.verMisCotisaciones') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
                                 onmouseout="this.style.backgroundColor='';">
-                                Ordenes de Compra
+                                Mis cotizaciones
+                            </a>
+
+                            <a class="collapse-item @yield('activeItemsCotizar') text-white @yield('activeFondoPermanenteItemsCotizar') mb-2"
+                                href="{{ route('compras.catalogoCotisacion.catalogoItem') }}"
+                                onmouseover="this.style.backgroundColor='#003366';"
+                                onmouseout="this.style.backgroundColor='@yield('activeBackgroundItemsCOtizar')';">
+                                Items para cotizar
+                            </a>
+
+                            <a class="collapse-item @yield('activeOrdenesCompra') text-white @yield('activeFondoPermanenteOrdenesCompra') mb-2"
+                                href="{{ route('compras.cotisaciones.verOrdenesCompra') }}"
+                                onmouseover="this.style.backgroundColor='#003366';"
+                                onmouseout="this.style.backgroundColor='@yield('activeBackgroundOrdenesCompra')';">
+                                Ordenes de compra
                             </a>
                             <div class="collapse-divider"></div>
                         </div>
@@ -192,32 +250,56 @@
                 </li>
             @endcan
 
+
             @can('ventas.collapsed')
                 <!-- Nav Item - Pagina colapsada de departamentos-->
-                <li class="nav-item">
+                <li class="nav-item @yield('activedesplegableVentas')">
                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseVentas"
                         aria-expanded="true" aria-controls="collapseVentas">
                         <i class="fas fa-fw fa-building"></i>
                         <span>Ventas</span>
                     </a>
-                    <div id="collapseVentas" class="collapse" aria-labelledby="headingPages"
-                        data-parent="#accordionSidebar">
+                    <div id="collapseVentas" class="collapse @yield('activeCollapseVentas') container-flex2"
+                        aria-labelledby="headingPages" data-parent="#accordionSidebar">
                         <div class="bg-primary-dark text-white py-2 collapse-inner rounded">
-                            <a class="collapse-item @yield('activeAlogin') text-white"href="{{ route('mantenimiento.enconstruccion') }}"
+
+                            <a class="collapse-item @yield('activeGestionClientes') text-white @yield('activeFondoPermanenteGestionCLientes') mb-2"
+                                href="{{ route('ventas.clientes.gestionClientes') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
-                                onmouseout="this.style.backgroundColor='';">Gestion de proyectos</a>
-                            <a class="collapse-item @yield('activeAregister') text-white"
-                                href="{{ route('mantenimiento.enconstruccion') }}"
+                                onmouseout="this.style.backgroundColor='@yield('activeBackgroundGestionClientes')';">
+                                Gestion de clientes
+                            </a>
+
+                            <a class="collapse-item @yield('activeRecepcion') text-white @yield('activeFondoPermanenteRecepcion') mb-2"
+                                href="{{ route('ventas.clientes.recepcionLlamadas') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
-                                onmouseout="this.style.backgroundColor='';">Recepcion de llamadas</a>
-                            <a class="collapse-item @yield('activeAforgot') text-white"
-                                href="{{ route('mantenimiento.enconstruccion') }}"
+                                onmouseout="this.style.backgroundColor='@yield('activeBackgroundRecepcion')';">
+                                Recepcion de llamadas
+                            </a>
+
+                            <a class="collapse-item @yield('activeFichasTecnicas') text-white @yield('activeFondoPermanenteFichasTecnicas') mb-2"
+                                href="{{ route('ventas.fichasTecnicas.fichasTecnicas') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
-                                onmouseout="this.style.backgroundColor='';">Fichas tecnicas</a>
-                            <a class="collapse-item @yield('activeAforgot') text-white"
-                                href="{{ route('mantenimiento.enconstruccion') }}"
+                                onmouseout="this.style.backgroundColor='@yield('activeBackgroundFichasTecnicas')';">
+                                Fichas tecnicas
+                            </a>
+
+
+
+                            <a class="collapse-item @yield('activeRecepcionCotizacion') text-white @yield('activeFondoPermanenteRecepcionCotizacion') mb-2"
+                                href="{{ route('ventas.recepcionCotizaciones.recepcionCotizacion') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
-                                onmouseout="this.style.backgroundColor='';">Recepcion de Cotizaciones</a>
+                                onmouseout="this.style.backgroundColor='@yield('activeBackgroundRecepcionCotizacion')';">
+                                Recepcion Cotizaciones
+                            </a>
+
+                            <a class="collapse-item @yield('activeOrdenesVenta') text-white @yield('activeFondoPermanenteOrdenesVenta') mb-2"
+                                href="{{ route('ventas.ordenesVenta.vistaOrdenVenta') }}"
+                                onmouseover="this.style.backgroundColor='#003366';"
+                                onmouseout="this.style.backgroundColor='@yield('activeBackgroundOrdenesVenta')';">
+                                Órdenes de venta
+                            </a>
+
                             <div class="collapse-divider"></div>
                         </div>
                     </div>
@@ -226,27 +308,39 @@
 
             @can('finanzas.collapsed')
                 <!-- Nav Item - Pagina colapsada de departamentos-->
-                <li class="nav-item">
-                    <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseFinanzas"
-                        aria-expanded="true" aria-controls="collapseFinanzas">
+                <li class="nav-item @yield('activedesplegableFinansas')">
+
+                    <a class="nav-link collapsed  " href="#" data-toggle="collapse"
+                        data-target="#collapseFinanzas" aria-expanded="true" aria-controls="collapseFinanzas">
                         <i class="fas fa-fw fa-building"></i>
                         <span>Finanzas</span>
                     </a>
-                    <div id="collapseFinanzas" class="collapse" aria-labelledby="headingPages"
-                        data-parent="#accordionSidebar">
+                    <div id="collapseFinanzas" class="collapse @yield('activeCollapseFinanzas') container-flex2"
+                        aria-labelledby="headingPages" data-parent="#accordionSidebar">
                         <div class="bg-primary-dark text-white py-2 collapse-inner rounded">
-                            <a class="collapse-item @yield('activeAlogin') text-white"
-                                href="{{ route('mantenimiento.enconstruccion') }}"
+
+                            <a class="collapse-item @yield('activeIngresosEgresos') text-white @yield('activeFondoPermanenteIngresosEgresos2') mb-2"
+                                href="{{ route('finanzas.ingresosEgresos.ingresosEgeresosVistaGeneral') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
-                                onmouseout="this.style.backgroundColor='';">Control de Ingresos/Egresos</a>
-                            <a class="collapse-item @yield('activeAregister') text-white"
-                                href="{{ route('mantenimiento.enconstruccion') }}"
+                                onmouseout="this.style.backgroundColor='@yield('activeBackgroundIngresosEgresos')';">
+                                Ingresos/Egresos
+                            </a>
+
+
+
+                            <a class="collapse-item @yield('activeOrdenesCompra2') text-white @yield('activeFondoPermanenteOrdenesCompraa2') mb-2"
+                                href="{{ route('finanzas.ordenCompra.vistaOrdenCompraFin') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
-                                onmouseout="this.style.backgroundColor='';">Seguimiento Mensual</a>
-                            <a class="collapse-item @yield('activeAforgot') text-white"
-                                href="{{ route('mantenimiento.enconstruccion') }}"
+                                onmouseout="this.style.backgroundColor='@yield('activeBackgroundOrdenesCompra2')';">
+                                Órdenes de Compra
+                            </a>
+                            <a class="collapse-item @yield('activeOrdenesVenta2') text-white @yield('activeFondoPermanenteOrdenesVenta2') mb-2"
+                                href="{{ route('finanzas.ordenesVenta.vistaOrdenVentaFin') }}"
                                 onmouseover="this.style.backgroundColor='#003366';"
-                                onmouseout="this.style.backgroundColor='';">Reportes</a>
+                                onmouseout="this.style.backgroundColor='@yield('activeBackgroundOrdenesVenta2')';">
+                                Órdenes de venta
+                            </a>
+
                             <div class="collapse-divider"></div>
                         </div>
                     </div>
@@ -271,7 +365,7 @@
             <div id="content">
 
                 <!-- Topbar -->
-                <nav class="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">
+                <nav class="navbar navbar-expand navbar-light bg-white topbar  static-top shadow">
 
                     <!-- Sidebar Toggle (Topbar) -->
                     <button id="sidebarToggleTop" class="btn btn-link d-md-none rounded-circle mr-3">
@@ -284,112 +378,86 @@
                     <!-- Topbar Navbar -->
                     <ul class="navbar-nav ml-auto">
 
-                        <!-- Nav Item - Search Dropdown (Visible Only XS) -->
+                        <!-- Sección de Notificaciones Generales (Ítems, Proveedores y listas a cotizar) -->
                         <li class="nav-item dropdown no-arrow mx-1">
                             <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-bell fa-fw"></i>
-                                <!-- Counter - Alerts -->
-                                <span
-                                    class="badge badge-danger badge-counter">{{ Auth::user()->unreadNotifications->count() }}</span>
+                                <span class="badge badge-danger badge-counter">
+                                    {{ Auth::user()->unreadNotifications->whereNotIn('data.type', ['solicitud_cancelacion', 'rechazo_cancelacion', 'confirmacion_cancelacion', 'solicitudCotizacion_notificacion', 'mensaje_general'])->count() }}
+                                </span>
                             </a>
-                            <!-- Dropdown - Alerts -->
                             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="alertsDropdown">
-                                <h6 class="dropdown-header">
-                                    Notificaciones
-                                </h6>
-                                @if (Auth::check())
-                                    <div class="notification-list">
-                                        @forelse (Auth::user()->unreadNotifications as $notification)
-                                            <a class="dropdown-item d-flex align-items-center"
-                                                href="{{ route('notifications.markAsRead', $notification->id) }}?redirect_to={{ urlencode($notification->data['url']) }}">
-                                                <div class="mr-3">
-                                                    <div class="icon-circle bg-primary">
-                                                        <i class="fas fa-file-alt text-white"></i>
-                                                    </div>
-                                                </div>
-                                                <div>
-                                                    <div class="small text-gray-500">
-                                                        {{ $notification->created_at->diffForHumans() }}</div>
-                                                    <span
-                                                        class="font-weight-bold">{{ $notification->data['message'] }}</span>
-                                                </div>
-                                            </a>
-                                        @empty
-                                            <p class="dropdown-item">No hay notificaciones.</p>
-                                        @endforelse
-                                    </div>
-                                @else
-                                    <p class="dropdown-item">No hay un usuario autenticado.</p>
-                                @endif
+                                <h6 class="dropdown-header">Notificaciones</h6>
+                                @forelse (Auth::user()->unreadNotifications->whereNotIn('data.type', ['solicitud_cancelacion', 'rechazo_cancelacion', 'confirmacion_cancelacion', 'solicitudCotizacion_notificacion', 'mensaje_general']) as $notification)
+                                    @php
+                                        $type = $notification->data['type'] ?? 'default';
+                                        $bgColor = $notificationStyles[$type][0] ?? 'bg-secondary';
+                                        $icon = $notificationStyles[$type][1] ?? 'fas fa-cube';
+                                    @endphp
+                                    <a class="dropdown-item d-flex align-items-center bg-light text-dark"
+                                        href="{{ route('notifications.markAsRead', $notification->id) }}?redirect_to={{ urlencode($notification->data['url']) }}">
+                                        <div class="mr-3">
+                                            <div class="icon-circle {{ $bgColor }}">
+                                                <i class="{{ $icon }} text-white"></i>
+                                            </div>
+                                        </div>
+                                        <div>
+                                            <div class="small text-gray-500">
+                                                {{ $notification->created_at->diffForHumans() }}</div>
+                                            <span class="font-weight-bold">{{ $notification->data['message'] }}</span>
+                                        </div>
+                                    </a>
+                                @empty
+                                    <p class="dropdown-item">Sin notificaciones.</p>
+                                @endforelse
                             </div>
                         </li>
 
-                        <!-- Nav Item - Messages -->
+                        <!-- Sección de Mensajes -->
                         <li class="nav-item dropdown no-arrow mx-1">
                             <a class="nav-link dropdown-toggle" href="#" id="messagesDropdown" role="button"
                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fas fa-envelope fa-fw"></i>
-                                <!-- Counter - Messages -->
-                                <span class="badge badge-danger badge-counter">4</span>
+                                <span class="badge badge-danger badge-counter">
+                                    {{ Auth::user()->unreadNotifications->whereIn('data.type', ['solicitud_cancelacion', 'rechazo_cancelacion', 'confirmacion_cancelacion', 'solicitudCotizacion_notificacion', 'mensaje_general'])->count() }}
+                                </span>
                             </a>
-                            <!-- Dropdown - Messages -->
                             <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in"
                                 aria-labelledby="messagesDropdown">
-                                <h6 class="dropdown-header">
-                                    Mensajes
-                                </h6>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle"
-                                            src="https://source.unsplash.com/fn_BT9fwg_E/60x60" alt="">
-                                        <div class="status-indicator bg-success"></div>
-                                    </div>
-                                    <div class="font-weight-bold">
-                                        <div class="text-truncate">Hi there! I am wondering if you can help me with a
-                                            problem I've been having.</div>
-                                        <div class="small text-gray-500">Emily Fowler · 58m</div>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle"
-                                            src="https://source.unsplash.com/AU4VPcFN4LE/60x60" alt="">
-                                        <div class="status-indicator"></div>
-                                    </div>
-                                    <div>
-                                        <div class="text-truncate">I have the photos that you ordered last month, how
-                                            would you like them sent to you?</div>
-                                        <div class="small text-gray-500">Jae Chun · 1d</div>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle"
-                                            src="https://source.unsplash.com/CS2uCrpNzJY/60x60" alt="">
-                                        <div class="status-indicator bg-warning"></div>
-                                    </div>
-                                    <div>
-                                        <div class="text-truncate">Last month's report looks great, I am very happy
-                                            with the progress so far, keep up the good work!</div>
-                                        <div class="small text-gray-500">Morgan Alvarez · 2d</div>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item d-flex align-items-center" href="#">
-                                    <div class="dropdown-list-image mr-3">
-                                        <img class="rounded-circle"
-                                            src="https://source.unsplash.com/Mv9hjnEUHR4/60x60" alt="">
-                                        <div class="status-indicator bg-success"></div>
-                                    </div>
-                                    <div>
-                                        <div class="text-truncate">Am I a good boy? The reason I ask is because someone
-                                            told me that people say this to all dogs, even if they aren't good...</div>
-                                        <div class="small text-gray-500">Chicken the Dog · 2w</div>
-                                    </div>
-                                </a>
-                                <a class="dropdown-item text-center small text-gray-500" href="#">Ver todos los
-                                    mensajes</a>
+                                <h6 class="dropdown-header">Mensajes</h6>
+                                @forelse (Auth::user()->unreadNotifications->whereIn('data.type', ['solicitudCotizacion_notificacion', 'solicitud_cancelacion', 'rechazo_cancelacion', 'confirmacion_cancelacion', 'mensaje_general']) as $notification)
+                                    <a class="dropdown-item d-flex align-items-center bg-light text-dark"
+                                        href="{{ isset($notification->data['url']) ? route('notifications.markAsRead', $notification->id) . '?redirect_to=' . urlencode($notification->data['url']) : '#' }}">
+
+                                        <div class="mr-3">
+                                            <div
+                                                class="icon-circle 
+                @if ($notification->data['type'] === 'solicitudCotizacion_notificacion') bg-info
+                @elseif($notification->data['type'] === 'solicitud_cancelacion') bg-warning
+                @elseif($notification->data['type'] === 'rechazo_cancelacion') bg-danger
+                @elseif($notification->data['type'] === 'confirmacion_cancelacion') bg-success
+                @else bg-primary @endif">
+                                                <i
+                                                    class="
+                    @if ($notification->data['type'] === 'solicitudCotizacion_notificacion') fas fa-file-invoice-dollar
+                    @elseif($notification->data['type'] === 'solicitud_cancelacion') fas fa-exclamation-triangle
+                    @elseif($notification->data['type'] === 'rechazo_cancelacion') fas fa-times-circle
+                    @elseif($notification->data['type'] === 'confirmacion_cancelacion') fas fa-check-circle
+                    @else fas fa-envelope @endif text-white"></i>
+                                            </div>
+                                        </div>
+
+                                        <div>
+                                            <div class="small text-gray-500">
+                                                {{ $notification->created_at->diffForHumans() }}</div>
+                                            <span class="font-weight-bold">{{ $notification->data['message'] }}</span>
+                                        </div>
+                                    </a>
+                                @empty
+                                    <p class="dropdown-item">No hay mensajes.</p>
+                                @endforelse
                             </div>
                         </li>
 

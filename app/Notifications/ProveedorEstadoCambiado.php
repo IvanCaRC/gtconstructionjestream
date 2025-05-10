@@ -31,7 +31,8 @@ class ProveedorEstadoCambiado extends Notification
         Log::info('Generando URL para ProveedorEstadoCambiado: ' . $url);
 
         return [
-            'message' => 'El proveedor "' . $this->nombreProveedor . '" se encuentra desactualizado',
+            'type' => 'proveedor_desactualizado',
+            'message' => 'El proveedor "' . $this->nombreProveedor . '" se encuentra desactualizado.',
             'url' => $url
         ];
     }

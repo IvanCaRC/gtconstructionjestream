@@ -26,6 +26,8 @@ class User extends Authenticatable
         'status',
         'password',
         'estadoEliminacion',
+        'lista',
+        'cotizaciones',
     ];
 
     protected $hidden = [

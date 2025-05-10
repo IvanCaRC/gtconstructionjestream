@@ -92,7 +92,7 @@ class CreateItem extends Component
         }
     }
 
-    
+
 
     public function removeFamilia($index)
     {
@@ -123,6 +123,20 @@ class CreateItem extends Component
         } else {
             $this->allFieldsFilled = $this->tiempoMinEntrega && $this->tiempoMaxEntrega && $this->precioCompra && $this->unidadSeleccionada !== '' && $this->unidadPersonalizada !== '';
         }
+    }
+
+    protected function rules()
+    {
+        return array_merge(Item::rules(), ItemEspecifico::rules());
+        // return Item::rules();
+        // return ItemEspecifico::rules();
+    }
+
+    protected function messages()
+    {
+        return array_merge(Item::messages(), ItemEspecifico::messages());
+        // return Item::messages();
+        // return ItemEspecifico::messages();
     }
 
     public function save()
@@ -272,7 +286,7 @@ class CreateItem extends Component
 
         if ($this->searchTerm) {
             $this->proveedores = Proveedor::where('estado_eliminacion', 1)
-                ->whereNotIn('id',$this->proveedoresAsignadosIds) // Excluir los proveedores asignados
+                ->whereNotIn('id', $this->proveedoresAsignadosIds) // Excluir los proveedores asignados
                 ->where(function ($query) {
                     $query->where('nombre', 'LIKE', "%{$this->searchTerm}%")
                         ->orWhere('rfc', 'LIKE', "%{$this->searchTerm}%");
@@ -282,7 +296,7 @@ class CreateItem extends Component
             $this->proveedores = [];
         }
     }
-    
+
 
 
     public function asignarValor($id, $name)

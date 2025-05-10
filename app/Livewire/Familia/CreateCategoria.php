@@ -38,7 +38,8 @@ class CreateCategoria extends Component
     //Funcion de validacion en tiempo real
     public function updated($propertyName)
     {
-        $this->validateOnly($propertyName);
+        //Implementar mensajes personalizados
+        $this->validateOnly($propertyName, Familia::rules(''), Familia::messages());
     }
 
     public function validateField($field)
@@ -46,7 +47,17 @@ class CreateCategoria extends Component
         $this->validateOnly($field);
     }
 
-    
+    //Mandar a llamar las reglas del modelo de manera local
+    protected function rules()
+    {
+        return Familia::rules('');
+    }
+    //Llamar los mensajes personalizados de manera local
+    protected function messages()
+    {
+        return Familia::messages('');
+    }
+
     public function save()
     {
         // Validar los datos del formulario

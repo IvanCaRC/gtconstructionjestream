@@ -123,13 +123,9 @@
                                                         onclick="confirmDeletion({{ $itemEspecifico->id }}, '{{ $itemEspecifico->item->nombre }}')">
                                                         <i class="fas fa-trash-alt"></i>
                                                     </button>
-
                                                 </td>
                                             </tr>
                                         @endforeach
-
-
-
                                     </tbody>
                                 </table>
                             @else

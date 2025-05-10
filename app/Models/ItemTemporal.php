@@ -13,6 +13,7 @@ class ItemTemporal extends Model
 
     protected $fillable = [
         'item_id',
+        'unidad'
     ];
 
     // Definir relación con el modelo Item

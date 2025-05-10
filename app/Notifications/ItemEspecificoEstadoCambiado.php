@@ -31,7 +31,8 @@ class ItemEspecificoEstadoCambiado extends Notification
         Log::info('Generando URL para ItemEspecificoEstadoCambiado: ' . $url);
 
         return [
-            'message' => 'El ítem: "' . $this->nombreItem . '" se encuentra desactualizado',
+            'type' => 'item_especifico_desactualizado',
+            'message' => 'El ítem: "' . $this->nombreItem . '" se encuentra desactualizado.',
             'url' => $url
         ];
     }

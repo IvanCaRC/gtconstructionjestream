@@ -23,6 +23,8 @@ return new class extends Migration
             $table->boolean('estadoEliminacion')->default(false);
             $table->string('password'); 
             $table->timestamp('email_verified_at')->nullable();
+            $table->unsignedBigInteger('lista')->nullable();
+            $table->unsignedBigInteger('cotizaciones')->nullable();
             $table->rememberToken();
             $table->timestamps();        
         });

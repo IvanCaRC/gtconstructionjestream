@@ -123,8 +123,7 @@
         <x-slot name='footer'>
             <button class="btn btn-secondary mr-2 disabled:opacity-50" wire:click="resetManual"
                 wire:loading.attr="disabled">Cancelar</button>
-            <button class="btn btn-primary disabled:opacity-50" onclick="confirmSave()"
-                wire:loading.attr="disabled">Guardar</button>
+            <button class="btn btn-primary" onclick="confirmSave()">Guardar</button>
 
         </x-slot>
     </x-dialog-modal>
@@ -218,12 +217,12 @@
         function validatePhoneInput(element) {
             // Permitir solo números, espacios y el signo de +
             element.value = element.value.replace(/[^0-9\s+]/g, '');
-    
+
             // Limitar la longitud a 16 caracteres
             if (element.value.length > 20) {
                 element.value = element.value.substring(0, 20);
             }
         }
     </script>
-    
+
 </div>
