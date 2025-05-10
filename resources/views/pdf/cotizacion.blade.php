@@ -91,8 +91,10 @@
         <tr>
             <td class="highlight">No. de Cotización:</td>
             <td>{{ $cotizacion->id ?? '-' }}</td>
-            <td class="highlight">Fecha de Emisión:</td>
-            <td>{{ \Carbon\Carbon::now()->format('d/m/Y') }}</td>
+            <td>Fecha de Emisión:</td>
+            <td>{{ $cotizacion->created_at->format('d/m/Y') }}</td>
+            {{-- <td class="highlight">Fecha de Emisión:</td>
+            <td>{{ \Carbon\Carbon::now()->format('d/m/Y') }}</td> --}}
         </tr>
         <tr>
             <td class="highlight">Proyecto:</td>
@@ -104,7 +106,9 @@
             <td class="highlight">Atendido por:</td>
             <td>{{ $usuario_atendio }}</td>
             <td class="highlight">Válido Hasta:</td>
-            <td>{{ \Carbon\Carbon::now()->addDays(7)->format('d/m/Y') }}</td>
+            <td>{{ $cotizacion->created_at->addDays(7)->format('d/m/Y') }}</td>
+            {{-- <td class="highlight">Válido Hasta:</td>
+            <td>{{ \Carbon\Carbon::now()->addDays(7)->format('d/m/Y') }}</td> --}}
         </tr>
         <tr>
             <td class="highlight">Cliente:</td>

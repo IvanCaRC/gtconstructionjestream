@@ -133,8 +133,8 @@
                     <td>{{ $item['nombre'] }}</td> <!-- 🔹 Mostramos el nombre -->
                     <td>{{ $item['descripcion'] }}</td>
                     <td>{{ $item['marca'] }}</td> <!-- 🔹 Mostramos la marca -->
-                    <td>${{ number_format($item['precio'], 2) }}</td>
-                    <td>${{ number_format(($item['precio'] ?? 0) * ($item['cantidad'] ?? 1), 2) }}</td>
+                    <td>${{ number_format($item['precio_unitario'], 2) }}</td>
+                    <td>${{ number_format(($item['precio_unitario'] ?? 0) * ($item['cantidad'] ?? 1), 2) }}</td>
                     <!-- 🔹 Cálculo de precio total -->
                 </tr>
             @endforeach
