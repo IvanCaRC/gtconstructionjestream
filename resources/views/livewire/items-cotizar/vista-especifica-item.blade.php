@@ -208,7 +208,7 @@
                     <div class="col-md-3 mb-3">
                         <label for="stock" class="mr-2">Stock Actual del Producto</label>
                         <br>
-                        <label for="">{{ $itemEspecifico->stock }}</label>
+                        <label for="">{{ $itemEspecifico->stock ?? 'N/A' }}</label>
                     </div>
                     <div class="col-md-3 mb-3">
                         <label for="moc" class="mr-2">MOC (Mínimo de venta a cliente)</label>

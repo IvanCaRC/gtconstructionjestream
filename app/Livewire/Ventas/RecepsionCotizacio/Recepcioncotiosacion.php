@@ -164,7 +164,7 @@ class Recepcioncotiosacion extends Component
     private function getQueryForAdmin()
     {
         return Cotizacion::with(['proyecto', 'proyecto.cliente'])
-            ->orderBy('created_at', 'desc')
+            ->orderBy('created_at', 'asc')
             ->whereIn('estado', [1, 2, 3, 4, 5, 6,]);
     }
 
@@ -180,7 +180,7 @@ class Recepcioncotiosacion extends Component
             ->whereHas('proyecto.cliente', function ($q) use ($usuarioId) {
                 $q->where('user_id', $usuarioId);
             })
-            ->orderBy('created_at', 'desc')
+            ->orderBy('created_at', 'asc')
             ->whereIn('estado', [1, 2, 3, 4, 5, 6,]);
     }
 

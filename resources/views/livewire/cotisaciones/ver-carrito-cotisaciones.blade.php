@@ -19,22 +19,22 @@
                             <label for="">Cantidad de items de la lista: {{ $cantidadDeItemsLista }}</label>
                         </div>
                         <div>
-                            <label for="">Cantidad de items de la lista cotisados:
+                            <label for="">Cantidad de items de la lista cotizados:
                                 {{ $cantidadItemsActivos }}</label>
                         </div>
                         <div>
-                            <label for="">Cantidad de items faltantes por cotisar:
+                            <label for="">Cantidad de items faltantes por cotizar:
                                 {{ $cantidadItemsInactivos }}</label>
                         </div>
                     </div>
                     <div class="col-md-3">
                         <h5>Cotizacion</h5>
                         <div>
-                            <label for="">Items de cotizacion usando el Stock:
+                            <label for="">Items cotizados mediante nuestro Stock:
                                 {{ $cantidadDeItemsCotizacionStock }}</label>
                         </div>
                         <div>
-                            <label for="">Items de cotizacion usando el Proveedor:
+                            <label for="">Items cotizados mediante Proveedor:
                                 {{ $cantidadDeItemsCotizacionProveedor }}</label>
                         </div>
                         <div>
@@ -45,14 +45,14 @@
                     <div class="col-md-3">
                         <h5>Precios</h5>
                         <div>
-                            <label for="">Precios totales Stock: {{ number_format($precioStock, 2) }}</label>
+                            <label for="">Precios por items de Stock: {{ number_format($precioStock, 2) }}</label>
                         </div>
                         <div>
-                            <label for="">Precios totales Proveedor:
+                            <label for="">Precios por items de Proveedor:
                                 {{ number_format($precioProveedor, 2) }}</label>
                         </div>
                         <div>
-                            <label for="">Precio total:
+                            <label for="">Precio total cotizado:
                                 {{ number_format($precioProveedor + $precioStock, 2) }}</label>
                         </div>
                     </div>

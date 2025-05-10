@@ -33,7 +33,7 @@ class VerMisCotisaciones extends Component
     {
         if (Auth::user()->hasRole('Administrador')) {
             $query = Cotizacion::with('proyecto')
-                ->orderBy('created_at', 'desc')
+                ->orderBy('created_at', 'asc')
                 ->when($this->estado, function ($q) {
                     $q->where('estado', $this->estado);
                 });
