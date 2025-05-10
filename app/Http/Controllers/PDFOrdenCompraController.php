@@ -89,7 +89,7 @@ class PDFOrdenCompraController extends Controller
                 'unidad'=>  $item['unidad'] ?? 'Unidad no especificada',
                 'descripcion' => $item_base?->descripcion ?? 'Descripción no disponible',
                 'marca' => $item_especifico?->marca ?? 'Sin marca', // 🔹 Ahora agregamos la marca correctamente
-                'precio' => $item['precio'] ?? $item_base?->precio ?? 0,
+                'precio' => $item['precio_compra'] ?? $item_base?->precio ?? 0,
             ];
         }
         // Datos dinámicos para la vista PDF

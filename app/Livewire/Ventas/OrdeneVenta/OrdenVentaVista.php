@@ -86,7 +86,7 @@ class OrdenVentaVista extends Component
 
     public function render()
 {
-    $query = Auth::user()->hasRole('Administrador')
+    $query = Auth::user()->hasAnyRole(['Administrador', 'Finanzas'])
         ? $this->getQueryForAdmin()
         : $this->getQueryForRegularUser();
 

@@ -17,14 +17,15 @@ class OrdenCompraFin extends Component
 
     public function render()
     {
-        $query = Auth::user()->hasRole('Administrador')
+        $query = Auth::user()->hasAnyRole(['Administrador', 'Finanzas'])
             ? $this->getQueryForAdmin()
             : $this->getQueryForRegularUser();
+            
         $listas = $query->paginate(10);
-
+    
         return view('livewire.finanzas.orden-compra-fin', compact('listas'));
     }
-
+    
     private function getQueryForAdmin()
     {
         return ordenCompra::query()

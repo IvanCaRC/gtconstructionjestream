@@ -29,10 +29,10 @@ class OrdenCompraVistaUno extends Component
 
     public function render()
     {
-        if (Auth::user()->hasRole('Administrador')) {
+        if (Auth::user()->hasAnyRole(['Administrador', 'Compras'])) {
             $query = Cotizacion::with('proyecto')
-                ->orderBy('created_at', 'desc')
-                ->whereIn('estado', [3]);
+                ->whereIn('estado', [3])
+                ->orderBy('created_at', 'desc');
         } else {
             $usuarioId = Auth::id();
             // Obtener las listas a cotizar con estado igual a 3
@@ -53,14 +53,14 @@ class OrdenCompraVistaUno extends Component
 
         if (Auth::user()->hasRole('Administrador')) {
             $query2 = Cotizacion::with('proyecto')
-                ->orderBy('created_at', 'desc')
-;
+                ->whereHas('ordenesCompra') // Solo cotizaciones con órdenes de compra
+                ->orderBy('created_at', 'desc');
         } else {
             $usuarioId = Auth::id();
             $query2 = Cotizacion::where('id_usuario_compras', $usuarioId)
                 ->with('proyecto')
-                ->orderBy('created_at', 'desc')
-;
+                ->whereHas('ordenesCompra') // Solo cotizaciones con órdenes de compra
+                ->orderBy('created_at', 'desc');
         }
         if (!empty($this->searchTerm)) {
             $query2->where(function ($q) {
@@ -135,7 +135,7 @@ class OrdenCompraVistaUno extends Component
 
         $proyectoConsulta = Proyecto::findOrFail($cotizacion->proyecto_id ?? null);
         $nombre = strtoupper(substr(strval($proyectoConsulta->nombre), 0, 1)) . 'ODC';
-        
+
         foreach ($itemsPorProveedor as $proveedorId => $itemsProveedor) {
             // Calcular el monto total usando precio_compra
             $monto = collect($itemsProveedor)->reduce(function ($carry, $item) {

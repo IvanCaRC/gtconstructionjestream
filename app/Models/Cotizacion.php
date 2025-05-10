@@ -71,4 +71,10 @@ class Cotizacion extends Model
     {
         return $this->belongsTo(ListasCotizar::class, 'lista_cotizar_id');
     }
+
+    // En el modelo Cotizacion.php
+public function ordenesCompra()
+{
+    return $this->hasMany(ordenCompra::class, 'id_cotizacion');
+}
 }
