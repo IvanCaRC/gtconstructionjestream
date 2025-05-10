@@ -8,6 +8,12 @@ use Carbon\Carbon;
 
 class FinanzasController extends Controller
 {
+
+    public function index()
+    {
+        return view('finanzas.dashboardFinanzas');
+    }
+
     public function ingresosEgresos()
     {
         // Datos iniciales (general)
@@ -32,7 +38,7 @@ class FinanzasController extends Controller
         $filtro = $request->input('filtro');
         $fechaFin = Carbon::now();
         $fechaInicio = null;
-    
+
         switch ($filtro) {
             case 'ultimo_mes':
                 $fechaInicio = $fechaFin->copy()->subMonth();
@@ -48,7 +54,7 @@ class FinanzasController extends Controller
                 $fechaInicio = $fechaFin->copy()->subMonth();
                 break;
         }
-    
+
         // Consultas para datos mensuales (gráfica)
         $ventasPorMes = DB::table('orden_venta')
             ->select(
@@ -64,7 +70,7 @@ class FinanzasController extends Controller
             ->orderBy('año', 'asc')
             ->orderBy('mes', 'asc')
             ->get();
-    
+
         $comprasPorMes = DB::table('orden_compra')
             ->select(
                 DB::raw('MONTH(created_at) as mes'),
@@ -79,33 +85,33 @@ class FinanzasController extends Controller
             ->orderBy('año', 'asc')
             ->orderBy('mes', 'asc')
             ->get();
-    
+
         // Totales generales (para las tarjetas)
         $ventasTotales = $ventasPorMes->sum('total');
         $comprasTotales = $comprasPorMes->sum('total');
         $ganancias = $ventasTotales - $comprasTotales;
-    
+
         // Formatear datos para la gráfica (meses)
         $meses = [];
         $ventas = [];
         $compras = [];
-    
+
         if ($fechaInicio) {
             $currentDate = $fechaInicio->copy();
             while ($currentDate <= $fechaFin) {
                 $mesNombre = $currentDate->translatedFormat('F Y'); // Ej: "Enero 2024"
                 $meses[] = $mesNombre;
-    
+
                 $ventaMes = $ventasPorMes->first(function ($item) use ($currentDate) {
                     return $item->mes == $currentDate->month && $item->año == $currentDate->year;
                 });
                 $ventas[] = $ventaMes ? round($ventaMes->total, 2) : 0;
-    
+
                 $compraMes = $comprasPorMes->first(function ($item) use ($currentDate) {
                     return $item->mes == $currentDate->month && $item->año == $currentDate->year;
                 });
                 $compras[] = $compraMes ? round($compraMes->total, 2) : 0;
-    
+
                 $currentDate->addMonth();
             }
         } else {
@@ -119,7 +125,7 @@ class FinanzasController extends Controller
                 $compras[] = round($compra->total, 2);
             }
         }
-    
+
         return response()->json([
             'meses' => $meses,
             'ventas' => $ventas,

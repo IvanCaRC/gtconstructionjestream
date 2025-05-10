@@ -100,28 +100,31 @@
 
             @can('ventas.dashboardVentas')
                 <!-- Nav Item - Icono de Administracion -->
-                <li class="nav-item @yield('activeAdministracion')">
-                    <a class="nav-link" href="#">
+                <li class="nav-item @yield('activeVentas')">
+                    <a class="nav-link" href="{{ route('ventas.dashboardVentas') }}">
                         <i class="fas fa-fw fa-tachometer-alt"></i>
-                        <span>Dep. Ventas</span></a>
+                        <span>Dep. Ventas</span>
+                    </a>
                 </li>
             @endcan
 
             @can('compras.dashboardCompras')
                 <!-- Nav Item - Icono de Administracion -->
-                <li class="nav-item @yield('activeAdministracion')">
-                    <a class="nav-link" href="#">
-                        <i class="fas fa-fw fa-tachometer-alt"></i>
-                        <span>Dep. Compras</span></a>
+                <li class="nav-item @yield('activeCompras')">
+                    <a class="nav-link" href="{{ route('compras.dashboardCompras') }}">
+                        <i class="fas fa-fw fa-shopping-cart"></i>
+                        <span>Dep. Compras</span>
+                    </a>
                 </li>
             @endcan
 
             @can('finanzas.dashboardFinanzas')
                 <!-- Nav Item - Icono de Administracion -->
-                <li class="nav-item @yield('activeAdministracion')">
-                    <a class="nav-link" href="#">
+                <li class="nav-item @yield('activeFinanzas')">
+                    <a class="nav-link" href="{{ route('finanzas.dashboardFinanzas') }}">
                         <i class="fas fa-fw fa-tachometer-alt"></i>
-                        <span>Dep. Finanzas</span></a>
+                        <span>Dep. Finanzas</span>
+                    </a>
                 </li>
             @endcan
 

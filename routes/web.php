@@ -26,6 +26,7 @@ use App\Http\Controllers\PDFListaController;
 use App\Http\Controllers\PDFCotizacionController;
 use App\Http\Controllers\PDFOrdenCompraController;
 use App\Http\Controllers\PDFOrdenVentaController;
+use App\Http\Controllers\VentasController;
 
 /*
 |--------------------------------------------------------------------------
@@ -37,8 +38,6 @@ use App\Http\Controllers\PDFOrdenVentaController;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
-
 
 Route::get('/proyecto/{id}/pdf', [PdfController::class, 'generarPdf'])->name('proyecto.pdf');
 
@@ -65,10 +64,18 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 });
-Route::get('/finanzas/filtrar-datos', [FinanzasController::class, 'filtrarDatosGrafica'])
-    ->name('finanzas.filtrarDatos');
-    Route::get('/finanzas/filtrar', [FinanzasController::class, 'filtrarDatos'])->name('finanzas.filtrar');
+Route::get('/finanzas/filtrar-datos', [FinanzasController::class, 'filtrarDatosGrafica'])->name('finanzas.filtrarDatos');
+
+Route::get('/finanzas/filtrar', [FinanzasController::class, 'filtrarDatos'])->name('finanzas.filtrar');
+
 Route::get('admin/dashboardAdmin', [adminController::class, 'index'])->middleware('auth', 'nocache')->name('admin.dashboardAdmin');
+
+Route::get('compras/dashboardCompras', [ComprasController::class, 'index'])->middleware('auth', 'nocache')->name('compras.dashboardCompras');
+
+Route::get('ventas/dashboardVentas', [VentasController::class, 'index'])->middleware('auth', 'nocache')->name('ventas.dashboardVentas');
+
+Route::get('finanzas/dashboardFinanzas', [FinanzasController::class, 'index'])->middleware('auth', 'nocache')->name('finanzas.dashboardFinanzas');
+
 Route::get('admin/users', [UserController::class, 'index'])->middleware('auth', 'nocache')->name('admin.users');
 
 Route::get('admin/userView/{iduser}', [UserController::class, 'verUsuario'])
