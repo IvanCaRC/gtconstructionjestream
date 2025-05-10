@@ -38,7 +38,7 @@ use App\Http\Controllers\PDFOrdenVentaController;
 |
 */
 
-Route::get('/api/projects', [ChartController::class, 'getProjectData']);
+
 
 Route::get('/proyecto/{id}/pdf', [PdfController::class, 'generarPdf'])->name('proyecto.pdf');
 

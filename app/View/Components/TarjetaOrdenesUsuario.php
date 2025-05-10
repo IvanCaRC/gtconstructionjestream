@@ -8,6 +8,7 @@ use App\Models\Cliente;
 use App\Models\ordenVenta;
 use Carbon\Carbon;
 use Illuminate\View\Component;
+use Illuminate\Support\Facades\DB;
 
 class TarjetaOrdenesUsuario extends Component
 {
@@ -17,6 +18,8 @@ class TarjetaOrdenesUsuario extends Component
     public $proyectosCount;
     public $ordenesCulminadasCount;
     public $montoTotalCulminadas;
+    public $ventasPorMes = [];
+
 
     public function __construct($iduser, $filtroTiempo = 'todos')
     {
@@ -56,13 +59,29 @@ class TarjetaOrdenesUsuario extends Component
         $this->ordenesCount = $ordenesQuery->count();
 
         // Ordenes culminadas (estado = 1)
-        $ordenesCulminadasQuery = OrdenVenta::where('id_usuario', $iduser)
+        $ordenesCulminadasQuery = ordenVenta::where('id_usuario', $iduser)
             ->where('estado', 1);
         if ($fechaInicio) {
             $ordenesCulminadasQuery->where('created_at', '>=', $fechaInicio);
         }
         $this->ordenesCulminadasCount = $ordenesCulminadasQuery->count();
         $this->montoTotalCulminadas = $ordenesCulminadasQuery->sum('monto');
+
+
+        $ventasQuery = ordenVenta::select(
+            DB::raw("DATE_FORMAT(created_at, '%Y-%m') as mes"),
+            DB::raw("SUM(monto) as total")
+        )
+            ->where('id_usuario', $iduser)
+            ->where('estado', 1)
+            ->groupBy('mes')
+            ->orderBy('mes');
+
+        if ($fechaInicio) {
+            $ventasQuery->where('created_at', '>=', $fechaInicio);
+        }
+
+        $this->ventasPorMes = $ventasQuery->pluck('total', 'mes')->toArray();
     }
 
     public function render()
