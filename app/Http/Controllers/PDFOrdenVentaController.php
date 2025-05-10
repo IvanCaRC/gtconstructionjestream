@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Direccion;
 use App\Models\Item;
 use App\Models\ItemEspecifico;
 use App\Models\ordenVenta;
@@ -17,7 +18,7 @@ class PDFOrdenVentaController extends Controller
             $cliente = $ordenVenta->cliente->nombre ?? 'Nombre no disponible';
 
             // ✅ Recuperación y limpieza de la dirección en `generarPDFOrdenVenta`
-            $direccion = $ordenVenta->direccion;
+            $direccion = optional(Direccion::find($cotizacion->proyecto->direccion_id));
 
             $componentesDireccion = [
                 $direccion?->calle,
@@ -26,7 +27,7 @@ class PDFOrdenVentaController extends Controller
                 $direccion?->municipio,
                 $direccion?->estado,
                 $direccion?->pais,
-                "CP: {$direccion?->cp}"
+                $direccion?->cp ? "CP: {$direccion->cp}" : ''
             ];
 
             // ✅ Filtrar cualquier campo que contenga "Campo no recuperado" o que esté vacío
