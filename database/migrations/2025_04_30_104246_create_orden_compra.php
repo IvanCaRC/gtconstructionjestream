@@ -19,8 +19,8 @@ return new class extends Migration
             $table->string('nombre')->nullable();
             $table->string('formaPago')->nullable();
             $table->string('modalidad')->nullable();
-            $table->string('monto')->nullable();
-            $table->string('montoPagar')->nullable();
+            $table->decimal('monto', 10, 2)->nullable();
+            $table->decimal('montoPagar', 10, 2)->nullable();
             $table->text('items_cotizar_proveedor')->nullable();
             $table->integer('estado');
 

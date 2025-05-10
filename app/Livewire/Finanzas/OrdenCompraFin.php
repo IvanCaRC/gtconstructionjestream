@@ -20,12 +20,12 @@ class OrdenCompraFin extends Component
         $query = Auth::user()->hasAnyRole(['Administrador', 'Finanzas'])
             ? $this->getQueryForAdmin()
             : $this->getQueryForRegularUser();
-            
+
         $listas = $query->paginate(10);
-    
+
         return view('livewire.finanzas.orden-compra-fin', compact('listas'));
     }
-    
+
     private function getQueryForAdmin()
     {
         return ordenCompra::query()
@@ -61,7 +61,7 @@ class OrdenCompraFin extends Component
 
     public function cerrarModal()
     {
-        $this->reset(['openModalPagar', 'ordenCompraSeleccionada', 'cantidadPagar','montoPagar']);
+        $this->reset(['openModalPagar', 'ordenCompraSeleccionada', 'cantidadPagar', 'montoPagar']);
     }
 
     public function aceptar()
@@ -69,10 +69,10 @@ class OrdenCompraFin extends Component
         $this->validate([
             'cantidadPagar' => 'required|numeric|min:0.01|max:' . $this->ordenCompraSeleccionada->montoPagar
         ]);
-    
+
         try {
             DB::beginTransaction();
-    
+
             if ($this->cantidadPagar < $this->ordenCompraSeleccionada->montoPagar) {
                 $this->Abonar4cantidad($this->cantidadPagar);
                 $mensaje = "Abono registrado correctamente";
@@ -80,19 +80,19 @@ class OrdenCompraFin extends Component
                 $this->liquidar();
                 $mensaje = "Orden liquidada completamente";
             }
-    
+
             DB::commit();
-    
+
             $this->dispatch('mostrarAlerta', [
                 'icono' => 'success',
                 'titulo' => 'Éxito',
                 'texto' => $mensaje
             ]);
-    
+
             $cotisacion = Cotizacion::findOrFail($this->ordenCompraSeleccionada->id_cotizacion);
-    
+
             $ordenes = ordenCompra::where('id_cotizacion', $cotisacion->id)->get();
-    
+
             if ($ordenes->every(fn($orden) => $orden->estado == 1)) {
                 $cotisacion->update(['estado' => 5]);
                 $ListaCotisar = ListasCotizar::findOrFail($cotisacion->lista_cotizar_id);
@@ -104,10 +104,10 @@ class OrdenCompraFin extends Component
                     'proceso' => 6, // 1 = Liquidada
                 ]);
             }
-    
+
             $this->cerrarModal();
             $this->emit('pagoRealizado');
-            $this->reset(['openModalPagar', 'ordenCompraSeleccionada', 'cantidadPagar','montoPagar']);
+            $this->reset(['openModalPagar', 'ordenCompraSeleccionada', 'cantidadPagar', 'montoPagar']);
             return true;
         } catch (\Exception $e) {
             DB::rollBack();
@@ -116,11 +116,11 @@ class OrdenCompraFin extends Component
                 'titulo' => 'Error',
                 'texto' => 'Ocurrió un error: ' . $e->getMessage()
             ]);
-            $this->reset(['openModalPagar', 'ordenCompraSeleccionada', 'cantidadPagar','montoPagar']);
+            $this->reset(['openModalPagar', 'ordenCompraSeleccionada', 'cantidadPagar', 'montoPagar']);
             return false;
         }
     }
-    
+
     public function liquidar()
     {
         $this->ordenCompraSeleccionada->update([
@@ -131,11 +131,17 @@ class OrdenCompraFin extends Component
 
     public function Abonar4cantidad($cantidad)
     {
-        $nuevoMonto = $this->ordenCompraSeleccionada->montoPagar - $cantidad;
-
+        $cantidad = round(floatval($cantidad), 2);
+        $montoActual = round(floatval($this->ordenCompraSeleccionada->montoPagar), 2);
+        $nuevoMonto = round($montoActual - $cantidad, 2);
+        if (abs($nuevoMonto) < 0.01) {
+            $nuevoMonto = 0.00;
+        }
         $this->ordenCompraSeleccionada->update([
             'montoPagar' => $nuevoMonto,
             'estado' => 0, // 0 = Pendiente
         ]);
     }
+
+
 }

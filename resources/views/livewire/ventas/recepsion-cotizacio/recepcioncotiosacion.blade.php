@@ -28,7 +28,7 @@
                                 @endif
                                 <th>Cliente</th>
                                 <th>Proyecto</th>
-                                <th>Lista</th>
+                                <th>Cotisacion</th>
                                 <th>Estado</th>
                                 <th></th>
                             </tr>
@@ -47,7 +47,7 @@
                                     <td>{{ $lista->proyecto->cliente->nombre }}</td>
                                     <td>{{ $lista->proyecto->nombre }}</td>
                                     <td>
-                                        Lista {{ $lista->listaCotizar->nombre }}
+                                        {{ $lista->nombre }}
                                     </td>
                                     <td>
                                         <label>

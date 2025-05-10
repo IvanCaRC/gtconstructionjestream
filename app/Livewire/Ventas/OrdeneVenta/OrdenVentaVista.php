@@ -234,11 +234,17 @@ class OrdenVentaVista extends Component
 
     public function Abonar4cantidad($cantidad)
     {
-        $nuevoMonto = $this->ordenVentaSelecionada->montoPagar - $cantidad;
-
+        $cantidad = round(floatval($cantidad), 2);
+        $montoActual = round(floatval($this->ordenVentaSelecionada->montoPagar), 2);
+        $nuevoMonto = round($montoActual - $cantidad, 2);
+        if (abs($nuevoMonto) < 0.01) {
+            $nuevoMonto = 0.00;
+        }
         $this->ordenVentaSelecionada->update([
             'montoPagar' => $nuevoMonto,
             'estado' => 0, // 0 = Pendiente
         ]);
     }
+    
+
 }

@@ -146,7 +146,7 @@
                                 </button>
                                 @if ($lista->estado == 0)
                                     <button class="btn btn-danger btn-sm" title="Cancelar"
-                                        wire:click="cancelar({{ $lista->id }})">
+                                        wire:click="cancelarOrdenoOmpra({{ $lista->id }})">
                                         Cancelar
                                     </button>
                                 @endif

@@ -4,7 +4,9 @@ namespace App\Livewire\Cotisaciones\OrdeneCompra;
 
 use App\Http\Controllers\Cotisaciones;
 use App\Models\Cotizacion;
+use App\Models\ListasCotizar;
 use App\Models\ordenCompra;
+use App\Models\Proyecto;
 use Livewire\Component;
 
 class VistaEspecificaDeOrden extends Component
@@ -37,6 +39,17 @@ class VistaEspecificaDeOrden extends Component
         return view('livewire.cotisaciones.ordene-compra.vista-especifica-de-orden',['listas' => $listas]);
     }
 
+
+    public function cancelarOrdenoOmpra($id)
+    {
+
+        $ordenVenta = ordenCompra::findOrFail($id);
+        $ordenVenta->update([
+            'estado' => 3, // 1 = Liquidada
+        ]);
+        
+        $this->dispatch('refresh');
+    }
 
 
 }

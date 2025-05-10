@@ -20,8 +20,8 @@ return new class extends Migration
             $table->string('nombre')->nullable();
             $table->string('formaPago')->nullable();
             $table->string('metodoPago')->nullable();
-            $table->string('monto')->nullable();
-            $table->string('montoPagar')->nullable();
+            $table->decimal('monto', 10, 2)->nullable();
+            $table->decimal('montoPagar', 10, 2)->nullable();
             $table->integer('estado');
             $table->timestamps();
             
