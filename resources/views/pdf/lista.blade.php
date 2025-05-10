@@ -93,7 +93,7 @@
                     </tr>
                     <tr style="background-color: #eaeaea;">
                         <td style="border-bottom: 1px solid #ccc; padding: 8px; text-align: center;">
-                            <strong>Dirección:</strong> {{ $cliente_direccion }}
+                            <strong>Dirección:</strong> {{ $proyecto_direccion }}
                         </td>
                     </tr>
                     <tr style="background-color: #f9f9f9;">
@@ -235,26 +235,37 @@
         <div style="clear: both;"></div> <!-- Asegura que las tablas no causen desbordamiento -->
 
         <!-- Adicionales de la Obra -->
-    <p class="section">Adicionales de la obra</p>
+        <p class="section">Adicionales de la obra</p>
 
-    @if (array_filter($estructuras) && array_filter($cantidades))
-        <table>
-            <tr style="background-color: #f4f4f4;">
-                <th style="width: 50%; text-align: center; padding: 8px;">Elementos</th>
-                <th style="width: 50%; text-align: center; padding: 8px;">Cantidades</th>
-            </tr>
-            @foreach ($estructuras as $index => $estructura)
-                <tr>
-                    <td style="text-align: center; padding: 8px;">{{ $estructura }}</td>
-                    <td style="text-align: center; padding: 8px;">{{ $cantidades[$index] ?? 'N/A' }}</td>
+        @if (array_filter($estructuras) && array_filter($cantidades))
+            <table>
+                <tr style="background-color: #f4f4f4;">
+                    <th style="width: 50%; text-align: center; padding: 8px;">Elementos</th>
+                    <th style="width: 50%; text-align: center; padding: 8px;">Cantidades</th>
                 </tr>
-            @endforeach
-        </table>
-    @else
-        <p style="text-align: center; padding: 10px; font-style: italic;">Sin datos adicionales registrados</p>
-    @endif
+                @foreach ($estructuras as $index => $estructura)
+                    <tr>
+                        <td style="text-align: center; padding: 8px;">{{ $estructura }}</td>
+                        <td style="text-align: center; padding: 8px;">{{ $cantidades[$index] ?? 'N/A' }}</td>
+                    </tr>
+                @endforeach
+            </table>
+        @else
+            <p style="text-align: center; padding: 10px; font-style: italic;">Sin datos adicionales registrados</p>
+        @endif
 
     @endif
+    {{-- Pie de pagina de la Lista a cotizar --}}
+    <div
+        style="position: fixed; bottom: 10px; width: 100%; text-align: center; font-size: 8px; color: #555; line-height: 1.1;">
+        <strong>Este documento contiene información privada, confidencial y privilegiada, pudiendo incluir secretos
+            comerciales y/o industriales protegidos mediante la Ley Federal de la Propiedad Industrial.</strong><br>
+        Nuestra marca, logotipos y slogan publicitarios están protegidos como derechos de autor ante el IMPI. Este
+        mensaje está dirigido únicamente al destinatario.<br>
+        Si usted no es la persona indicada, la lectura, uso, divulgación, reenvío o copia de esta información está
+        estrictamente prohibida por la legislación vigente.<br>
+        <strong>GTConstructions©, El soporte de tu obra©, Copyright todos los derechos reservados.</strong>
+    </div>
 
 </body>
 
