@@ -17,7 +17,7 @@
 
 
     @if ($esCompras)
-        <div>login
+        <div>
             <div class="container mt-3">
                 <h4>¡Tus estadisticas de Ventas!</h4>
                 <form method="GET" action="{{ route('compras.dashboardCompras') }}" class="mb-4">

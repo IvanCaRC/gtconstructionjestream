@@ -97,39 +97,25 @@
                                             @endif
                                         </td>
                                         <td>
-                                            @if ($proyecto->proceso == 0)
-                                                <span class="badge"
-                                                    style="background-color: #6c757d; color: white;">Creando lista a
-                                                    cotizar</span>
-                                            @elseif ($proyecto->proceso == 1)
-                                                <span class="badge"
-                                                    style="background-color: #fd7e14; color: white;">Creando
-                                                    cotizacion</span>
-                                            @elseif ($proyecto->proceso == 2)
-                                                <span class="badge"
-                                                    style="background-color:#1a1ca7; color: white;">Cotizado</span>
-                                            @elseif ($proyecto->proceso == 3)
-                                                <span class="badge" style="background-color:#15d4db; color: white;">En
-                                                    espera de pago</span>
-                                            @elseif ($proyecto->proceso == 4)
-                                                <span class="badge"
-                                                    style="background-color: #5ac773; color: white;">Pagado</span>
-                                            @elseif ($proyecto->proceso == 5)
-                                                <span class="badge"
-                                                    style="background-color: #a5b865; color: white;">Preparando
-                                                    pedido</span>
-                                            @elseif ($proyecto->proceso == 6)
-                                                <span class="badge" style="background-color: #e28529; color: white;">En
-                                                    proceso de entrega</span>
-                                            @elseif ($proyecto->proceso == 7)
-                                                <span class="badge"
-                                                    style="background-color: #06e33a; color: white;">Venta
-                                                    terminada</span>
-                                            @else
-                                                <span class="badge"
-                                                    style="background-color: #742532; color: white;">Estado
-                                                    desconocido</span>
-                                            @endif
+                                            {!! $proyecto->proceso == 0
+                                                ? '<span class="badge badge-primary">Creando lista a cotizar</span>'
+                                                : ($proyecto->proceso == 1
+                                                    ? '<span class="badge badge-primary">Creando cotización</span>'
+                                                    : ($proyecto->proceso == 2
+                                                        ? '<span class="badge badge-primary">Cotizado</span>'
+                                                        : ($proyecto->proceso == 3
+                                                            ? '<span class="badge badge-warning">Esperando pago</span>'
+                                                            : ($proyecto->proceso == 4
+                                                                ? '<span class="badge badge-primary">Pagado/span>'
+                                                                : ($proyecto->proceso == 5
+                                                                    ? '<span class="badge badge-warning">Preparando</span>'
+                                                                    : ($proyecto->proceso == 6
+                                                                        ? '<span class="badge badge-warning">En proceso de entrga</span>'
+                                                                        : ($proyecto->proceso == 7
+                                                                            ? '<span class="badge badge-success">Venta terminada</span>'
+                                                                            : ($proyecto->proceso == 8
+                                                                                ? '<span class="badge badge-danger">Cancelado</span>'
+                                                                                : '<span class="badge badge-secondary">Estado desconocido</span>')))))))) !!}
                                         </td>
                                         <td>{{ $proyecto->cliente->user->name ?? '' }}
                                             {{ $proyecto->cliente->user->first_last_name ?? '' }}

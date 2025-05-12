@@ -10,18 +10,28 @@ use App\Models\Proyecto;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
+use Livewire\Features\SupportFileUploads\WithFileUploads;
 use Livewire\WithPagination;
 
 class OrdenVentaVista extends Component
 {
 
     use WithPagination;
+    use WithFileUploads;
+
     public $searchTerm = '';
     public $statusFiltro = 0;
     public $statusFiltro2 = 0;
     public $precioStock = 0;
     public $precioProveedor = 0;
     public $precioTotal = 0;
+    public $fileNamePdf;
+
+
+    public function updatedArchivoSubido()
+    {
+        $this->fileNamePdf = $this->archivoSubido ? $this->archivoSubido->getClientOriginalName() : '';
+    }
 
     public function search()
     {
@@ -35,25 +45,19 @@ class OrdenVentaVista extends Component
         $this->esVistaFinanzas = \Route::currentRouteName() === 'finanzas.ordenesVenta.vistaOrdenVentaFin';
     }
 
-
-    /**
-     * Redirige a editar la lista de cotización
-     * @param int $id ID de la cotización
-     * @return \Illuminate\Http\RedirectResponse
-     */
-
-
     /**
      * Cancela una cotización
      * @param int $id ID de la cotización
      */
     public function cancelar($id)
     {
-        $cotizacion = Cotizacion::find($id);
+        $cotizacion = ordenVenta::find($id);
         if ($cotizacion) {
-            $cotizacion->estado = 2; // Estado "Cancelada"
+            $cotizacion->estado = 3; // Estado "Cancelada"
             $cotizacion->save();
-
+            $cotizacionCons = Cotizacion::find($cotizacion->id_cotizacion);
+            $cotizacionCons->estado = 7; // Estado "Cancelada"
+            $cotizacionCons->save();
             if (Auth::user()->cotizaciones == $id) {
                 Auth::user()->update(['cotizaciones' => null]);
             }
@@ -76,39 +80,45 @@ class OrdenVentaVista extends Component
         return redirect()->route('ventas.clientes.vistaEspecProyecto', ['idProyecto' => $idProyecto]);
     }
 
-
-
-    /**
-     * Renderiza la vista principal del componente
-     * @return \Illuminate\View\View
-     */
-
-
     public function render()
-{
-    $query = Auth::user()->hasAnyRole(['Administrador', 'Finanzas'])
-        ? $this->getQueryForAdmin()
-        : $this->getQueryForRegularUser();
+    {
+        $query = Auth::user()->hasAnyRole(['Administrador', 'Finanzas'])
+            ? $this->getQueryForAdmin()
+            : $this->getQueryForRegularUser();
 
-    if (!empty($this->searchTerm)) {
-        $query->whereHas('cliente', function ($q) {
-            $q->where('nombre', 'like', '%' . $this->searchTerm . '%');
-        });
+            if (!empty($this->searchTerm)) {
+                $query->where(function($q) {
+                    $q->where('nombre', 'like', '%' . $this->searchTerm . '%')
+                      ->orWhereHas('cliente', function ($subQuery) {
+                          $subQuery->where('nombre', 'like', '%' . $this->searchTerm . '%');
+                      });
+                      
+                });
+            }
+
+        if ($this->statusFiltro) {
+            $query->where('estado', $this->statusFiltro);
+        }
+
+        if ($this->statusFiltro2) {
+            $query->where('metodoPago', $this->statusFiltro2);
+        }
+
+        $ordenesVenta = $query->paginate(10);
+
+        return view('livewire.ventas.ordene-venta.orden-venta-vista', compact('ordenesVenta'));
     }
 
-    if ($this->statusFiltro ) {
-        $query->where('estado', $this->statusFiltro);
+    public function viewOrden($idProyecto)
+    {
+        $proyecto = ordenVenta::find($idProyecto);
+
+        if ($proyecto === null) {
+            abort(404, 'proyecto no encontrado');
+        }
+
+        return redirect()->route('finanzas.verPagos.verPagosOrdenVenta', ['id' => $idProyecto]);
     }
-
-    if ($this->statusFiltro2 ) {
-        $query->where('metodoPago', $this->statusFiltro2);
-    }
-
-    $ordenesVenta = $query->paginate(10);
-
-    return view('livewire.ventas.ordene-venta.orden-venta-vista', compact('ordenesVenta'));
-}
-
 
     /**
      * Construye la consulta para administradores
@@ -129,27 +139,32 @@ class OrdenVentaVista extends Component
     {
         $usuarioId = Auth::id();
 
-        return OrdenVenta::query()
+        return ordenVenta::query()
             ->where('id_usuario', $usuarioId) // Filtrar por usuario
             ->orderBy('created_at', 'desc')
-            ->whereIn('estado', [1, 2]);
+            ->whereIn('estado', [0,1, 2]);
     }
 
     public $openModalPagar = false;
     public $ordenVentaSelecionada;
     public $cantidadPagar = 0;
     public $montoPagar = 0;
+    public $archivoSubido;
+    public $datosParaPagra;
 
     public function abrirModalPagar($ordenVentaId)
     {
-        $this->ordenVentaSelecionada = OrdenVenta::findOrFail($ordenVentaId);
+        $this->ordenVentaSelecionada = ordenVenta::findOrFail($ordenVentaId);
         $this->montoPagar = $this->ordenVentaSelecionada->montoPagar;
         $this->openModalPagar = true;
+        $this->datosParaPagra = json_decode($this->ordenVentaSelecionada->historial, true) ?: [];
+
+
     }
 
     public function cerrarModal()
     {
-        $this->reset(['openModalPagar', 'ordenVentaSelecionada', 'cantidadPagar', 'montoPagar']);
+        $this->reset(['openModalPagar', 'ordenVentaSelecionada', 'cantidadPagar', 'montoPagar','archivoSubido','datosParaPagra','fileNamePdf']);
     }
 
     public function aceptar()
@@ -165,7 +180,7 @@ class OrdenVentaVista extends Component
                 $this->Abonar4cantidad($this->cantidadPagar);
                 $mensaje = "Abono registrado correctamente";
             } else {
-                $this->liquidar();
+                $this->liquidar($this->cantidadPagar);
                 $mensaje = "Orden liquidada completamente";
             }
 
@@ -177,9 +192,11 @@ class OrdenVentaVista extends Component
                 'texto' => $mensaje
             ]);
 
+
             $this->cerrarModal();
             $this->emit('pagoRealizado'); // Para actualizar listas si es necesario
-            $this->reset(['openModalPagar', 'ordenVentaSelecionada', 'cantidadPagar', 'montoPagar']);
+            $this->reset(['openModalPagar', 'ordenVentaSelecionada', 'cantidadPagar', 'montoPagar','archivoSubido','datosParaPagra']);
+
             return true;
         } catch (\Exception $e) {
             DB::rollBack();
@@ -188,23 +205,33 @@ class OrdenVentaVista extends Component
                 'titulo' => 'Error',
                 'texto' => 'Ocurrió un error: ' . $e->getMessage()
             ]);
-            $this->reset(['openModalPagar', 'ordenVentaSelecionada', 'cantidadPagar', 'montoPagar']);
+            $this->reset(['openModalPagar', 'ordenVentaSelecionada', 'cantidadPagar', 'montoPagar','archivoSubido','datosParaPagra']);
             return false;
         }
     }
 
-    public function liquidar()
+    public function liquidar($cantidad)
     {
+
+        $archivoSubido = $this->archivoSubido ? $this->archivoSubido->store('archivosFacturacionProveedores', 'public') : null;
+
+
+        $this->datosParaPagra[] = [
+            'monto' => number_format($this->ordenVentaSelecionada->montoPagar, 2, '.', ''), // genera "1.30" como string
+            'Archivo' => $archivoSubido,
+        ];
+        
         $this->ordenVentaSelecionada->update([
             'montoPagar' => 0,
             'estado' => 1, // 1 = Liquidada
+            'historial' => json_encode($this->datosParaPagra),
         ]);
 
         $cotisacion = Cotizacion::findOrFail($this->ordenVentaSelecionada->id_cotizacion);
 
         $itemsDeProveedor = json_decode($cotisacion->items_cotizar_proveedor, true) ?? [];
         $cantidadDeItemsCotizacionProveedor = count($itemsDeProveedor);
-        
+
         if ($cantidadDeItemsCotizacionProveedor == 0) {
             $cotisacion->update([
                 'estado' => 5, // 1 = Liquidada
@@ -234,17 +261,24 @@ class OrdenVentaVista extends Component
 
     public function Abonar4cantidad($cantidad)
     {
-        $cantidad = round(floatval($cantidad), 2);
+        $cantidad2 = round(floatval($cantidad), 2);
         $montoActual = round(floatval($this->ordenVentaSelecionada->montoPagar), 2);
-        $nuevoMonto = round($montoActual - $cantidad, 2);
+        $nuevoMonto = round($montoActual - $cantidad2, 2);
+
+       
         if (abs($nuevoMonto) < 0.01) {
             $nuevoMonto = 0.00;
         }
+        $archivoSubido = $this->archivoSubido ? $this->archivoSubido->store('archivosFacturacionProveedores', 'public') : null;
+        $this->datosParaPagra[] = [
+            'monto' => number_format($cantidad2, 2, '.', ''), // genera "1.30" como string
+            'Archivo' => $archivoSubido,
+        ];
+
         $this->ordenVentaSelecionada->update([
             'montoPagar' => $nuevoMonto,
             'estado' => 0, // 0 = Pendiente
+            'historial' => json_encode($this->datosParaPagra),
         ]);
     }
-    
-
 }

@@ -30,6 +30,7 @@
             margin-left: 1rem;
         }
     </style>
+    <br>
     <div class="ml-3">
         <div class="row align-items-center">
             <button type="button" class="btn-icon" wire:click="regresarGestionClientes">
@@ -45,4 +46,17 @@
     @include('livewire.cliente.modal-actualizacion-proyecto')
     @include('livewire.cliente.modal-cancelacion-proyecto')
     @include('livewire.cliente.modal-culminacion-proyecto')
+
+    <script>
+        function validatePhoneInput(element) {
+            // Permitir solo números, espacios y el signo de +
+            element.value = element.value.replace(/[^0-9\s.]/g, '');
+
+            // Limitar la longitud a 16 caracteres
+            if (element.value.length > 20) {
+                element.value = element.value.substring(0, 20);
+            }
+        }
+    </script>
 </div>
+

@@ -1,4 +1,37 @@
 <div class="container-fluid px-4 sm:px-6 lg:px-8 py-3">
+    <link rel="stylesheet" href="{{ asset('css/crearClienteProyecto.css') }}">
+
+    <style>
+        .btn-icon {
+            display: flex;
+            align-items: center;
+            background-color: transparent;
+            color: #6c757d;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 24px;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .btn-icon:hover {
+            color: #5a6268;
+        }
+
+        .btn-icon i {
+            margin-right: 5px;
+        }
+
+        .row.align-items-center {
+            display: flex;
+            align-items: center;
+        }
+
+        .ml-3 {
+            margin-left: 1rem;
+        }
+    </style>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <h2 class="ml-3">Ordenes de venta</h2>
     <div class="card">
@@ -109,7 +142,7 @@
                                             </button>
                                         @endif
 
-                                        @if (!$esVistaFinanzas && ($lista->estado != 3 && $lista->estado !=1))
+                                        @if (!$esVistaFinanzas && ($lista->estado != 3 && $lista->estado != 1))
                                             <button class="btn btn-danger btn-sm"
                                                 wire:click="cancelar({{ $lista->id }})" title="Cancelar cotización">
                                                 <i class="fas fa-times me-1"></i> Cancelar
@@ -121,7 +154,10 @@
                                             title="Generar y ver el documento de la orden de venta">
                                             <i class="fas fa-file-pdf me-1"></i> PDF
                                         </button>
-
+                                        <button class="btn btn-info btn-sm"
+                                            wire:click="viewOrden({{ $lista->id }})" title="Ver proyecto">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
                                     </td>
                                 </tr>
                             @endforeach

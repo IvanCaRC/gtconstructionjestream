@@ -157,7 +157,10 @@
                                                             </a>
                                                         </label>
                                                     </div>
-
+                                                    <div>
+                                                        <strong>Descripcion:</strong>
+                                                        {{ $itemEspecifico->item->descripcion}}
+                                                    </div>
                                                     <div>
                                                         <label>
                                                             <strong>Marca:</strong>

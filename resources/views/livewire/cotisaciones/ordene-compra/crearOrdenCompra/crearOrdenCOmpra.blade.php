@@ -29,7 +29,7 @@
                                 <th></th>
                             </tr>
                         </thead>
-                        <tbody>listasCotizarCompradas
+                        <tbody>
                             @foreach ($listasCotizar as $lista)
                                 <tr>
                                     @if (Auth::user()->hasRole('Administrador'))
@@ -83,7 +83,7 @@
 
 
 
-                                        @if ($lista->estado != 2)
+                                        @if (!in_array($lista->estado, [6, 7]))
                                             <button class="btn btn-danger btn-sm"
                                                 wire:click="cancelar({{ $lista->id }})">Cancelar</button>
                                         @endif

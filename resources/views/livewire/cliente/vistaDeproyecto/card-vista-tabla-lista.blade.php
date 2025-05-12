@@ -78,7 +78,7 @@
         <div class="card-body">
             <div class="text-left mb-3">
                 <button class="btn btn-custom" style="background-color: #4c72de; color: white;"
-                    wire:click="saveListaNueva">Registrar lista</button>
+                    wire:click="saveListaNueva"  @if($proyecto->estado !== 1) disabled @endif>Registrar lista</button>
             </div>
 
 
@@ -263,7 +263,7 @@
                                     <label for="">...</label>
                                 @elseif ($cotizacion && $lista->estado > 3)
                                     <button class="btn btn-info btn-sm text-white"
-                                        onclick="window.open('{{ route('proyecto.pdf-orden-venta', ['id' => $ordenVenta->id]) }}', '_blank')"
+                                       onclick="@if($ordenVenta) window.open('{{ route('proyecto.pdf-orden-venta', ['id' => $ordenVenta->id]) }}', '_blank'); @else alert('No hay orden de venta disponible'); @endif"
                                         title="Ver el documento de orden de venta">
                                         <i class="fas fa-file-pdf me-1"></i> PDF
                                     </button>

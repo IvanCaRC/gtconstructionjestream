@@ -44,8 +44,7 @@
             </div>
             @if ($tipoDeProyectoSelecionado === '1')
                 <div class="form-group">
-                    <div class="form-group"> <label for="archivosFacturacion">Fichas tecnicas o
-                            atributos adicionales</label>
+                    <div class="form-group"> <label for="archivosFacturacion">Archivos Adicionales</label>
                         @if (!$archivoSubido)
                             <div class="file-upload"
                                 onclick="document.getElementById('archivoDeListaDeItemsPdf').click();">
@@ -101,8 +100,7 @@
             @endif
             @if ($tipoDeProyectoSelecionado === '0')
                 <div class="form-group">
-                    <div class="form-group"> <label for="archivosFacturacion">Fichas tecnicas o
-                            atributos adicionales</label>
+                    <div class="form-group"> <label for="archivosFacturacion">Archivos Adicionales</label>
                         @if (!$archivoSubido)
                             <div class="file-upload" onclick="document.getElementById('archivoDeProyecto').click();">
                                 <span class="file-upload-icon">&#x1F4C2;</span>
@@ -146,44 +144,44 @@
                                     <div class="col-md-3">
                                         <label for="frente">(A) Frente</label>
                                         <input type="text" id="frente" class="form-control"
-                                            wire:model.defer="datosGenrales.{{ $index }}.frente">
+                                            wire:model.defer="datosGenrales.{{ $index }}.frente" oninput="validatePhoneInput(this)">
                                     </div>
                                     <div class="col-md-3">
                                         <label for="fondo">(B) Fondo</label>
                                         <input type="text" id="fondo" class="form-control"
-                                            wire:model.defer="datosGenrales.{{ $index }}.fondo">
+                                            wire:model.defer="datosGenrales.{{ $index }}.fondo" oninput="validatePhoneInput(this)">
                                     </div>
                                     <div class="col-md-3">
                                         <label for="alturaTecho">(C) Altura techo</label>
                                         <input type="text" id="alturaTecho" class="form-control"
-                                            wire:model.defer="datosGenrales.{{ $index }}.alturaTecho">
+                                            wire:model.defer="datosGenrales.{{ $index }}.alturaTecho" oninput="validatePhoneInput(this)">
                                     </div>
                                     <div class="col-md-3">
                                         <label for="areaTotal">Area total</label>
                                         <input type="text" id="areaTotal" class="form-control"
-                                            wire:model.defer="datosGenrales.{{ $index }}.areaTotal">
+                                            wire:model.defer="datosGenrales.{{ $index }}.areaTotal" oninput="validatePhoneInput(this)">
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="col-md-3">
                                         <label for="alturaMuros">Altura de muros</label>
                                         <input type="text" id="alturaMuros" class="form-control"
-                                            wire:model.defer="datosGenrales.{{ $index }}.alturaMuros">
+                                            wire:model.defer="datosGenrales.{{ $index }}.alturaMuros" oninput="validatePhoneInput(this)">
                                     </div>
                                     <div class="col-md-3">
                                         <label for="canalon">Canalón</label>
                                         <input type="text" id="canalon" class="form-control"
-                                            wire:model.defer="datosGenrales.{{ $index }}.canalon">
+                                            wire:model.defer="datosGenrales.{{ $index }}.canalon" oninput="validatePhoneInput(this)">
                                     </div>
                                     <div class="col-md-3">
                                         <label for="perimetral">Perimetral</label>
                                         <input type="text" id="perimetral" class="form-control"
-                                            wire:model.defer="datosGenrales.{{ $index }}.perimetral">
+                                            wire:model.defer="datosGenrales.{{ $index }}.perimetral" oninput="validatePhoneInput(this)">
                                     </div>
                                     <div class="col-md-3">
                                         <label for="caballete">Caballete</label>
                                         <input type="text" id="caballete" class="form-control"
-                                            wire:model.defer="datosGenrales.{{ $index }}.caballete">
+                                            wire:model.defer="datosGenrales.{{ $index }}.caballete" oninput="validatePhoneInput(this)">
                                     </div>
                                 </div>
                             @endforeach
@@ -203,7 +201,7 @@
                                     <div class="col-md-3">
                                         <input type="text" id="descripcion" class="form-control"
                                             placeholder="Cantidad"
-                                            wire:model.defer="adicionales.{{ $index }}.cantidad"></input>
+                                            wire:model.defer="adicionales.{{ $index }}.cantidad" oninput="validatePhoneInput(this)"></input>
                                     </div>
                                     <div class="col-md-1">
                                         @if ($index > 0)

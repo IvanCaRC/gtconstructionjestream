@@ -39,6 +39,10 @@ class VistaEspecificaDeOrden extends Component
         return view('livewire.cotisaciones.ordene-compra.vista-especifica-de-orden',['listas' => $listas]);
     }
 
+    public function search()
+    {
+        
+    }
 
     public function cancelarOrdenoOmpra($id)
     {
@@ -51,5 +55,20 @@ class VistaEspecificaDeOrden extends Component
         $this->dispatch('refresh');
     }
 
+    public function regresarGestionClientes()
+    {
+        return redirect()->route('compras.cotisaciones.verOrdenesCompra');
+    }
+
+    public function viewOrden($idProyecto)
+    {
+        $proyecto = ordenCompra::find($idProyecto);
+
+        if ($proyecto === null) {
+            abort(404, 'proyecto no encontrado');
+        }
+
+        return redirect()->route('finanzas.verPagos.verPagosOrdenCompra', ['id' => $idProyecto]);
+    }
 
 }

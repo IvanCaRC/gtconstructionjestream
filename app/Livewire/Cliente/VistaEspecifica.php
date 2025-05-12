@@ -21,7 +21,7 @@ class VistaEspecifica extends Component
 
     public $statusFiltro = 0; // Filtro de estado
     public $statusProcesos = 6; // Filtro de procesos
-    public $statusTipos = 3; // Filtro de tipos
+    public $statusTipos = 0; // Filtro de tipos
 
     public $clienteEspecifico;
     public $telefonos = [['nombre' => '', 'numero' => '']];
@@ -85,7 +85,7 @@ class VistaEspecifica extends Component
             ->when($this->statusProcesos != 6, function ($query) {
                 $query->where('proceso', $this->statusProcesos);
             })
-            ->when($this->statusTipos != 3, function ($query) {
+            ->when($this->statusTipos != 0, function ($query) {
                 $query->where('tipo', $this->statusTipos);
             })
             ->orderBy('created_at', 'desc')

@@ -1,7 +1,7 @@
 <div class="container-fluid px-4 sm:px-6 lg:px-8 py-1">
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-
+    <link rel="stylesheet" href="{{ asset('css/crearClienteProyecto.css') }}">
     <style>
         .switch-toggle {
             position: relative;
@@ -120,7 +120,18 @@
                                             : '<span class="badge badge-secondary">Estado desconocido</span>')) !!}
                             </td>
                             <td>
-                                {{ $lista->modalidad }}
+                                @switch($lista->modalidad)
+                                    @case(1)
+                                        PPD
+                                    @break
+
+                                    @case(2)
+                                        PUE
+                                    @break
+
+                                    @default
+                                        Estado desconocido
+                                @endswitch
                             </td>
                             <td>
                                 {!! $lista->formaPago == 0
@@ -154,10 +165,14 @@
                                     </button>
                                 @endif
                                 <button class="btn btn-info btn-sm text-white"
-                                onclick="window.open('{{ route('proyecto.pdf-orden-venta', ['id' => $lista->id]) }}', '_blank')"
-                                title="Generar y ver el documento de la orden de venta">
-                                <i class="fas fa-file-pdf me-1"></i> PDF
-                            </button>
+                                    onclick="window.open('{{ route('proyecto.pdf-orden-venta', ['id' => $lista->id]) }}', '_blank')"
+                                    title="Generar y ver el documento de la orden de venta">
+                                    <i class="fas fa-file-pdf me-1"></i> PDF
+                                </button>
+                                <button class="btn btn-info btn-sm" wire:click="viewOrden({{ $lista->id }})"
+                                    title="Ver proyecto">
+                                    <i class="fas fa-eye"></i>
+                                </button>
                             </td>
                             </tr>
                         @endforeach

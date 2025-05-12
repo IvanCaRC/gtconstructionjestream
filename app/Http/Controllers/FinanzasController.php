@@ -161,4 +161,18 @@ class FinanzasController extends Controller
         // Retornar la vista de la lista de proveedores
         return view('finanzas.ordenCompra.vistaOrdenCompraFin');
     }
+
+    public function pagosOrdenVenta($id)
+    {
+        // Retornar la vista de la lista de proveedores
+        return view('finanzas.verPagos.verPagosOrdenVenta', ['id' => $id]);
+    }
+
+    public function pagosOrdenCompra($id)
+    {
+        // Retornar la vista de la lista de proveedores
+        return view('finanzas.verPagos.verPagosOrdenCompra', ['id' => $id]);
+
+    }
 }
+

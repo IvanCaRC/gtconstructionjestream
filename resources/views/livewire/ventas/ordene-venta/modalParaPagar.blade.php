@@ -20,14 +20,43 @@
                     <span class="text-red-500 text-sm">{{ $message }}</span>
                 @enderror
             </div>
+            <div>
+                <div class="form-group"> <label for="archivosFacturacion">Comprobante de pago</label>
+                    @if (!$archivoSubido)
+                        <div class="file-upload" onclick="document.getElementById('archivoDeListaDeItemsPdf').click();">
+                            <span class="file-upload-icon">&#x1F4C2;</span>
+                            <span class="file-upload-text">Buscar
+                                archivos<br>Arrastre y suelte archivos aquí</span>
+                            <input type="file" id="archivoDeListaDeItemsPdf" class="form-control-file"
+                                wire:model="archivoSubido" accept=".pdf">
+                        </div>
+                        <small class="form-text text-muted">Por favor, suba archivos en
+                            formato PDF solamente.</small>
+                    @else
+                        <div class="form-group">
+                            <div class="file-upload"
+                                onclick="document.getElementById('archivoDeListaDeItemsPdfCar').click();">
+                                <span class="file-upload-icon">&#x1F4C4;</span>
+                                <span class="file-upload-text">Archivo
+                                    Cargado<br>{{ $fileNamePdf }}</span>
+                                <input type="file" id="archivoDeListaDeItemsPdfCar" class="form-control-file"
+                                    wire:model="archivoSubido" accept=".pdf">
+                            </div>
+                            <small class="form-text text-muted">Por favor, suba archivos en formato
+                                PDF solamente.</small>
+                        </div>
+                    @endif
+                </div>
+            </div>
         </x-slot>
 
         <x-slot name='footer'>
             <button type="button" class="btn btn-secondary mr-2" wire:click="cerrarModal" wire:loading.attr="disabled">
                 Cancelar
             </button>
-            
-            <button type="button" class="btn btn-primary" onclick="confirmarPago({{$montoPagar}})" wire:loading.attr="disabled">
+
+            <button type="button" class="btn btn-primary" onclick="confirmarPago({{ $montoPagar }})"
+                wire:loading.attr="disabled">
                 <span wire:loading.remove>Pagar</span>
                 <span wire:loading>
                     <i class="fas fa-spinner fa-spin"></i> Procesando...
