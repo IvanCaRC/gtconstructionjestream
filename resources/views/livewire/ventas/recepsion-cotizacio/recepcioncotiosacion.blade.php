@@ -92,12 +92,14 @@
                                                 <i class="fas fa-check-circle"></i> Aceptar
                                             </button>
                                         @endif
-
+                                        @if (!in_array($lista->estado, [6, 7]))
+                                            <button class="btn btn-danger btn-sm"
+                                                wire:click="cancelar({{ $lista->id }})" title="Cancelar cotización">
+                                                <i class="fas fa-times me-1"></i> Cancelar
+                                            </button>
+                                        @endif
                                         <!-- Botón de Cancelar (existente) -->
-                                        <button class="btn btn-danger btn-sm" wire:click="cancelar({{ $lista->id }})"
-                                            title="Cancelar cotización">
-                                            <i class="fas fa-times me-1"></i> Cancelar
-                                        </button>
+
 
 
                                         {{-- <button class="btn btn-info btn-sm text-white"

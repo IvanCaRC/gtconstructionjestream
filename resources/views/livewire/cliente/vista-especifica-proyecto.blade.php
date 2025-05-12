@@ -30,6 +30,7 @@
             margin-left: 1rem;
         }
     </style>
+    <br>
     <div class="ml-3">
         <div class="row align-items-center">
             <button type="button" class="btn-icon" wire:click="regresarGestionClientes">

@@ -85,7 +85,7 @@
                                                 </td>
 
                                                 <td class="align-middle d-none d-md-table-cell">
-                                                    {{ $itemEspecifico->MOC ?? 'N/A' }}
+                                                    {{ $itemEspecifico->moc ?? 'N/A' }}
                                                 </td>
 
                                                 <td class="align-middle d-none d-md-table-cell">
@@ -176,7 +176,7 @@
                                                         {{ $itemEspecifico->unidad ?? 'N/A' }} <br>
                                                         <strong>MOC:</strong>
 
-                                                        {{ $itemEspecifico->MOC ?? 'N/A' }} <br>
+                                                        {{ $itemEspecifico->moc ?? 'N/A' }} <br>
 
                                                         <strong>Cant. Pz Mayoreo:</strong>
                                                         {{ $itemEspecifico->cantidad_piezas_mayoreo ?? 'N/A' }} <br>

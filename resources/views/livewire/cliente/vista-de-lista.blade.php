@@ -42,7 +42,7 @@
                 </div>
             @else
                 <div class="col-md-8 mx-3"> <!-- Reducimos el ancho y agregamos margen lateral -->
-                    <div class="card shadow-sm border-0 bg-light p-2">
+                    <div class="card border-0  p-2">
                         <h5 class="text-dark fw-bold">
                             <i class="fas fa-user-circle text-primary"></i> Cliente:
                             <span class="fw-bold text-primary">{{ $nombreCliente }}</span>

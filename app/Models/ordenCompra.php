@@ -22,6 +22,8 @@ class ordenCompra extends Model
         'items_cotizar_proveedor',
         'estado',
         'nombre',
+        'historial',
+        'cfdi',
     ];
 
     public function usuario()

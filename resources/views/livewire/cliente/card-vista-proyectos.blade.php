@@ -24,7 +24,7 @@
                     </select>
                 </div>
                 <div class="col-md-2">
-                    <select class="form-control mr-2" wire:model="statusProcesos" wire:change="filter">
+                    <select class="form-control mr-2" wire:model="statusProcesos" wire:change="search">
                         <option value="6">Todos los procesos</option>
                         <option value="0">Creando lista a cotizar</option>
                         <option value="1">Creando cotización</option>
@@ -35,11 +35,10 @@
                     </select>
                 </div>
                 <div class="col-md-2">
-                    <select class="form-control mr-2" wire:model="statusTipos" wire:change="filter">
-                        <option value="3">Todos los tipos</option>
-                        <option value="2">Cancelados</option>
-                        <option value="1">Activo</option>
-                        <option value="0">Inactivo</option>
+                    <select class="form-control mr-2" wire:model="statusTipos" wire:change="search">
+                        <option value="0">Todos los tipos</option>
+                        <option value="1">Suministro</option>
+                        <option value="2">Obra</option>
                     </select>
                 </div>
             </div>

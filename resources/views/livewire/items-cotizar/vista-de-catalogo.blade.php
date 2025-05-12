@@ -3,7 +3,7 @@
 
         @if ($listadeUsuarioActiva == null)
             <div class="col-md-12">
-                <div class="text-center p-2 border rounded bg-light shadow-sm">
+                <div class="text-center p-2  rounded ">
                     <h5 class="text-danger font-weight-bold">⚠ No tienes ninguna cotización activa</h5>
                     <p class="text-muted small">Activa una lista para poder realizar la cotización.</p>
                     <a href="{{ route('compras.cotisaciones.verMisCotisaciones') }}" class="btn btn-primary btn-sm mt-2">
@@ -43,7 +43,7 @@
     <script>
         function accionCotisacion() {
             Swal.fire({
-                title: "<strong>¿Confirmas el envío al departamento de compras?</strong>",
+                title: "<strong>¿Confirmas el envío al departamento de ventas?</strong>",
                 html: "<p class='text-muted'>Esta acción no se puede deshacer.</p>",
                 icon: "warning",
                 showCancelButton: true,

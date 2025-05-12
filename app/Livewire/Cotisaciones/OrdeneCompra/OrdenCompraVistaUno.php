@@ -17,10 +17,39 @@ class OrdenCompraVistaUno extends Component
 {
 
     use WithPagination;
+    
+    public $usosCfdi = [
+        'G01' => 'Adquisición de mercancías',
+        'G02' => 'Devoluciones, descuentos o bonificaciones',
+        'G03' => 'Gastos en general',
+        'I01' => 'Construcciones',
+        'I02' => 'Mobiliario y equipo de oficina por inversiones',
+        'I03' => 'Equipo de transporte',
+        'I04' => 'Equipo de cómputo y accesorios',
+        'I05' => 'Dados, troqueles, moldes, matrices y herramental',
+        'I06' => 'Comunicaciones telefónicas',
+        'I07' => 'Comunicaciones satelitales',
+        'I08' => 'Otra maquinaria y equipo',
+        'D01' => 'Honorarios médicos, dentales y gastos hospitalarios',
+        'D02' => 'Gastos médicos por incapacidad o discapacidad',
+        'D03' => 'Gastos funerales',
+        'D04' => 'Donativos',
+        'D05' => 'Intereses reales por créditos hipotecarios',
+        'D06' => 'Aportaciones voluntarias al SAR',
+        'D07' => 'Primas por seguros de gastos médicos',
+        'D08' => 'Gastos de transportación escolar obligatoria',
+        'D09' => 'Depósitos para el ahorro, planes de pensiones',
+        'D10' => 'Pagos por servicios educativos (colegiaturas)',
+        'S01' => 'Sin efectos fiscales',
+        'CP01' => 'Pagos',
+        'CN01' => 'Nómina',
+    ];
+    public $usoCfdi = '';
+
 
     public $searchTerm = ''; // Término de búsqueda
     public $estado;
-
+    public $searchTerm2;
 
     public function search()
     {
@@ -62,10 +91,10 @@ class OrdenCompraVistaUno extends Component
                 ->whereHas('ordenesCompra') // Solo cotizaciones con órdenes de compra
                 ->orderBy('created_at', 'desc');
         }
-        if (!empty($this->searchTerm)) {
+        if (!empty($this->searchTerm2)) {
             $query2->where(function ($q) {
-                $q->where('nombre', 'like', '%' . $this->searchTerm . '%')
-                    ->orWhereDate('created_at', 'like', '%' . $this->searchTerm . '%');
+                $q->where('nombre', 'like', '%' . $this->searchTerm2 . '%')
+                    ->orWhereDate('created_at', 'like', '%' . $this->searchTerm2 . '%');
             });
         }
 
@@ -78,7 +107,7 @@ class OrdenCompraVistaUno extends Component
     {
         $cotizacion = Cotizacion::find($id);
         if ($cotizacion) {
-            $cotizacion->estado = 2; // Estado "Cancelada"
+            $cotizacion->estado = 7; // Estado "Cancelada"
             $cotizacion->save();
             if (Auth::user()->cotizaciones == $id) {
                 Auth::user()->update(['cotizaciones' => null]);
@@ -90,6 +119,7 @@ class OrdenCompraVistaUno extends Component
     public $cotisacionSelecionada;
     public $metodoPago = 1;
     public $cantidadPagar;
+    public $modalida=1;
 
     public function abrirModal($id)
     {
@@ -108,8 +138,22 @@ class OrdenCompraVistaUno extends Component
         $this->metodoPago = $valor;
     }
 
+    public function asignarModalida($valor)
+    {
+        $this->modalida = $valor;
+    }
+
     public function createOrdenCompra()
     {
+        $this->validate([
+            'usoCfdi' => 'required',
+            'metodoPago' => 'required',
+            'modalida' => 'required',
+        ], [
+            'usoCfdi.required' => 'Debes seleccionar un uso de CFDI.',
+            'metodoPago.required' => 'Debes seleccionar una forma de pago.',
+            'modalida.required' => 'Debes seleccionar la modalidad.',
+        ]);
         $cotizacion = Cotizacion::findOrFail($this->cotisacionSelecionada->id);
 
         $items = json_decode($cotizacion->items_cotizar_proveedor, true);
@@ -150,7 +194,8 @@ class OrdenCompraVistaUno extends Component
                 'id_usuario' => Auth::id(),
                 'nombre' => $nombre . strval($proveedorId),
                 'formaPago' => $this->metodoPago,
-                'modalidad' => $this->cantidadPagar,
+                'modalidad' => $this->modalida,
+                'cfdi' => $this->usoCfdi,
                 'monto' => $monto,
                 'montoPagar' => $monto,
                 'items_cotizar_proveedor' => json_encode($itemsProveedor),

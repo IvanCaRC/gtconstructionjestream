@@ -15,9 +15,23 @@
                 </select>
             </div>
             <div class="mb-4">
-                <label for="cantidadPagar" class="block font-medium">Ingresa el metodo de pago:</label>
-                <input type="text" id="cantidadPagar" class="form-control" wire:model.defer="cantidadPagar">
-
+                <label class="block font-medium">Ingresa la modalidad:</label>
+                <select id="unidad" wire:model="modalida" class="form-control"
+                    wire:change="asignarModalida($event.target.value)">
+                    <option value="1">PPD</option>
+                    <option value="2">PUE</option>
+                </select>
+            </div>
+            <div class="mb-4">
+                <label class="block font-medium">Uso de CFDI:</label>
+                <select wire:model="usoCfdi" class="form-control">
+                    <option value="">-- Selecciona un uso de CFDI --</option>
+                    @foreach ($usosCfdi as $clave => $descripcion)
+                        <option value="{{ $clave }}">{{ $clave }} - {{ $descripcion }}</option>
+                    @endforeach
+                </select>
+                @error('usoCfdi') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                
             </div>
         </x-slot>
         <x-slot name='footer'>

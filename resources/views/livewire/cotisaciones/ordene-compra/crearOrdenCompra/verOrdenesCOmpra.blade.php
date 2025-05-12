@@ -6,7 +6,7 @@
                 <div class="col-md-12">
                     <!-- Input de búsqueda -->
                     <input type="text" class="form-control mr-2" id="searchInput" placeholder="Buscar lista..."
-                        wire:model='searchTerm' wire:keydown='search'>
+                        wire:model='searchTerm2' wire:keydown='search'>
 
                     <!-- Filtro de Estado -->
                 </div>
@@ -68,7 +68,7 @@
                                             Ver
                                         </button>
 
-                                        @if ($lista->estado != 2)
+                                        @if (!in_array($lista->estado, [6, 7]))
                                             <button class="btn btn-danger btn-sm"
                                                 wire:click="cancelar({{ $lista->id }})">Cancelar</button>
                                         @endif

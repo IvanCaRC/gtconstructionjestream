@@ -2,6 +2,9 @@
 
 namespace App\Livewire;
 
+use App\Models\Cotizacion;
+use App\Models\ListasCotizar;
+use App\Models\ordenVenta;
 use App\Models\Proyecto;
 use App\Notifications\ConfirmacionCancelacionNotification;
 use Livewire\Component;
@@ -261,13 +264,64 @@ class ShowCancelaciones extends Component
         // Remover los campos de la cancelacion para reactivar el proyecto
         $proyecto->fill([
             'estado' => 3,
+            'proceso' => 8,
         ]);
         $proyecto->save();
 
-        // Obtener el usuario asignado al proyecto
+        // ============================
+        // 1. Actualizar listas a cotizar (estado != 8 → 9)
+        // ============================
+        $listas = ListasCotizar::where('proyecto_id', $proyecto->id)->get();
+        foreach ($listas as $lista) {
+            if ($lista->estado != 8) {
+                $lista->update(['estado' => 9]);
+            }
+        }
+
+        // ============================
+        // 2. Cotizaciones relacionadas al proyecto
+        // ============================
+        $cotizaciones = Cotizacion::where('proyecto_id', $proyecto->id)->get();
+
+        foreach ($cotizaciones as $cotizacion) {
+            // Estado != 6 → 7
+            if ($cotizacion->estado != 6) {
+                $cotizacion->update(['estado' => 7]);
+            }
+
+            // ============================
+            // 3. Órdenes de compra (estado != 1 → 3)
+            // ============================
+            foreach ($cotizacion->ordenesCompra as $ordenCompra) {
+                if ($ordenCompra->estado != 1) {
+                    $ordenCompra->update(['estado' => 3]);
+                }
+            }
+
+            // ============================
+            // 4. Órdenes de venta (estado != 1 → 3)
+            // ============================
+            $ordenesVenta = ordenVenta::where('id_cotizacion', $cotizacion->id)->get();
+            foreach ($ordenesVenta as $ordenVenta) {
+                if ($ordenVenta->estado != 1) {
+                    $ordenVenta->update(['estado' => 3]);
+                }
+            }
+        }
+        // Reactivar el proyecto
+
+        // Disminuir en 1 el número de proyectos activos del cliente
+        $cliente = $proyecto->cliente;
+        if ($cliente && $cliente->proyectos_activos > 0) {
+            $cliente->decrement('proyectos_activos');
+        }
+
+
+        // ============================
+        // 5. Notificar al cliente asignado
+        // ============================
         $cliente = $proyecto->cliente;
         $usuario = $cliente->user;
-
         // Enviar la notificación si el usuario existe
         if ($usuario) {
             $usuario->notify(new ConfirmacionCancelacionNotification($proyecto->id, $proyecto->nombre, $cliente->id));
@@ -296,8 +350,56 @@ class ShowCancelaciones extends Component
         // Remover los campos de la cancelacion para reactivar el proyecto
         $proyecto->fill([
             'estado' => 4,
+            'proceso' => 7,
         ]);
         $proyecto->save();
+         // ============================
+        // 1. Actualizar listas a cotizar (estado != 8 → 9)
+        // ============================
+        $listas = ListasCotizar::where('proyecto_id', $proyecto->id)->get();
+        foreach ($listas as $lista) {
+            if ($lista->estado != 8) {
+                $lista->update(['estado' => 9]);
+            }
+        }
+
+        // ============================
+        // 2. Cotizaciones relacionadas al proyecto
+        // ============================
+        $cotizaciones = Cotizacion::where('proyecto_id', $proyecto->id)->get();
+
+        foreach ($cotizaciones as $cotizacion) {
+            // Estado != 6 → 7
+            if ($cotizacion->estado != 6) {
+                $cotizacion->update(['estado' => 7]);
+            }
+
+            // ============================
+            // 3. Órdenes de compra (estado != 1 → 3)
+            // ============================
+            foreach ($cotizacion->ordenesCompra as $ordenCompra) {
+                if ($ordenCompra->estado != 1) {
+                    $ordenCompra->update(['estado' => 3]);
+                }
+            }
+
+            // ============================
+            // 4. Órdenes de venta (estado != 1 → 3)
+            // ============================
+            $ordenesVenta = ordenVenta::where('id_cotizacion', $cotizacion->id)->get();
+            foreach ($ordenesVenta as $ordenVenta) {
+                if ($ordenVenta->estado != 1) {
+                    $ordenVenta->update(['estado' => 3]);
+                }
+            }
+        }
+        // Reactivar el proyecto
+
+        // Disminuir en 1 el número de proyectos activos del cliente
+        $cliente = $proyecto->cliente;
+        if ($cliente && $cliente->proyectos_activos > 0) {
+            $cliente->decrement('proyectos_activos');
+        }
 
         // Obtener el usuario asignado al proyecto
         $cliente = $proyecto->cliente;

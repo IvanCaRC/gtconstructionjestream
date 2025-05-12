@@ -53,14 +53,16 @@
                                         : ($proyecto->proceso == 3
                                             ? '<span class="badge badge-warning">Esperando pago</span>'
                                             : ($proyecto->proceso == 4
-                                                ? '<span class="badge badge-primary">Pagado</span>'
+                                                ? '<span class="badge badge-primary">Pagado/span>'
                                                 : ($proyecto->proceso == 5
                                                     ? '<span class="badge badge-warning">Preparando</span>'
                                                     : ($proyecto->proceso == 6
                                                         ? '<span class="badge badge-warning">En proceso de entrga</span>'
                                                         : ($proyecto->proceso == 7
                                                             ? '<span class="badge badge-success">Venta terminada</span>'
-                                                            : '<span class="badge badge-secondary">Estado desconocido</span>'))))))) !!}
+                                                            : ($proyecto->proceso == 8
+                                                                ? '<span class="badge badge-danger">Cancelado</span>'
+                                                                : '<span class="badge badge-secondary">Estado desconocido</span>')))))))) !!}
                         </label>
                     </div>
                 </div>

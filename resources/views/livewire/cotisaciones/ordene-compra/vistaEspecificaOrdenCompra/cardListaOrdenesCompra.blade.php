@@ -72,20 +72,19 @@
         <div class="card-body">
             <div class="row m   b-3">
                 <div class="col-md-10">
-                    <input type="text" class="form-control mr-2" id="searchInput" placeholder="Buscar lista...">
+                    <input type="text" class="form-control mr-2" id="searchInput" placeholder="Buscar lista..."
+                        wire:model='searchTerm' wire:keydown='search'>
                 </div>
                 <div class="col-md-2">
-                    <select class="form-control mr-2">
-                        <option value="0">Todos los estados</option>
-                        <option value="1">Activo</option>
-                        <option value="2">Cotizando</option>
-                        <option value="3">Cotizado</option>
-                        <option value="5">En proceso de venta</option>
-                        <option value="6">Terminado</option>
-                        <option value="4">Cancelado</option>
+                    <select class="form-control mr-2" wire:model="statusFiltro" wire:change="search">
+                        <option value="">Estado</option>
+                        <option value="0">Por pagar</option>
+                        <option value="1">Pagado</option>
+                        <option value="2">Cancelado</option>
                     </select>
                 </div>
             </div>
+            <br>
             @if ($listas && $listas->count() > 0)
                 <table class="table">
                     <thead>
@@ -116,7 +115,19 @@
                                             : '<span class="badge badge-secondary">Estado desconocido</span>')) !!}
                             </td>
                             <td>
-                                {{ $lista->modalidad }}
+                                @switch($lista->modalidad)
+                                    @case(1)
+                                        PPD
+                                    @break
+
+                                    @case(2)
+                                        PUE
+                                    @break
+
+                                    @default
+                                        Estado desconocido
+                                @endswitch
+
                             </td>
                             <td>
                                 {!! $lista->estado == 0
@@ -144,12 +155,11 @@
                                     title="Generar y ver el documento de la orden de compra">
                                     <i class="fas fa-file-pdf me-1"></i> PDF
                                 </button>
-                                @if ($lista->estado == 0)
-                                    <button class="btn btn-danger btn-sm" title="Cancelar"
-                                        wire:click="cancelarOrdenoOmpra({{ $lista->id }})">
-                                        Cancelar
-                                    </button>
-                                @endif
+                                <button class="btn btn-info btn-sm" wire:click="viewOrden({{ $lista->id }})"
+                                    title="Ver proyecto">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+
                             </td>
                             </tr>
                         @endforeach

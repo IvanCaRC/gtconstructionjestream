@@ -22,8 +22,9 @@ return new class extends Migration
             $table->decimal('monto', 10, 2)->nullable();
             $table->decimal('montoPagar', 10, 2)->nullable();
             $table->text('items_cotizar_proveedor')->nullable();
+            $table->text('cfdi')->nullable();
             $table->integer('estado');
-
+            $table->text('historial')->nullable();
             $table->timestamps();
 
             $table->foreign('id_usuario')->references('id')->on('users')->onDelete('cascade');

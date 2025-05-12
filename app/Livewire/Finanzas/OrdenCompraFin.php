@@ -9,11 +9,13 @@ use App\Models\Proyecto;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
+use Livewire\Features\SupportFileUploads\WithFileUploads;
 use Livewire\WithPagination;
 
 class OrdenCompraFin extends Component
 {
     use WithPagination;
+    use WithFileUploads;
 
     public function render()
     {
@@ -51,17 +53,22 @@ class OrdenCompraFin extends Component
     public $ordenCompraSeleccionada;
     public $cantidadPagar = 0;
     public $montoPagar = 0;
+    public $archivoSubido;
+    public $datosParaPagra;
+    public $fileNamePdf;
+
 
     public function abrirModalPagar($ordenCompraId)
     {
         $this->ordenCompraSeleccionada = ordenCompra::findOrFail($ordenCompraId);
         $this->montoPagar = $this->ordenCompraSeleccionada->montoPagar;
         $this->openModalPagar = true;
+        $this->datosParaPagra = json_decode($this->ordenCompraSeleccionada->historial, true) ?: [];
     }
 
     public function cerrarModal()
     {
-        $this->reset(['openModalPagar', 'ordenCompraSeleccionada', 'cantidadPagar', 'montoPagar']);
+        $this->reset(['openModalPagar', 'ordenCompraSeleccionada', 'cantidadPagar', 'montoPagar', 'archivoSubido', 'datosParaPagra', 'fileNamePdf']);
     }
 
     public function aceptar()
@@ -107,7 +114,7 @@ class OrdenCompraFin extends Component
 
             $this->cerrarModal();
             $this->emit('pagoRealizado');
-            $this->reset(['openModalPagar', 'ordenCompraSeleccionada', 'cantidadPagar', 'montoPagar']);
+            $this->reset(['openModalPagar', 'ordenCompraSeleccionada', 'cantidadPagar', 'montoPagar', 'archivoSubido', 'datosParaPagra', 'fileNamePdf']);
             return true;
         } catch (\Exception $e) {
             DB::rollBack();
@@ -116,32 +123,55 @@ class OrdenCompraFin extends Component
                 'titulo' => 'Error',
                 'texto' => 'Ocurrió un error: ' . $e->getMessage()
             ]);
-            $this->reset(['openModalPagar', 'ordenCompraSeleccionada', 'cantidadPagar', 'montoPagar']);
+            $this->reset(['openModalPagar', 'ordenCompraSeleccionada', 'cantidadPagar', 'montoPagar', 'archivoSubido', 'datosParaPagra', 'fileNamePdf']);
             return false;
         }
     }
 
     public function liquidar()
     {
+        $archivoSubido = $this->archivoSubido ? $this->archivoSubido->store('archivosFacturacionProveedores', 'public') : null;
+
+
+        $this->datosParaPagra[] = [
+            'monto' => number_format($this->ordenCompraSeleccionada->montoPagar, 2, '.', ''), // genera "1.30" como string
+            'Archivo' => $archivoSubido,
+        ];
+
         $this->ordenCompraSeleccionada->update([
             'montoPagar' => 0,
             'estado' => 1, // 1 = Liquidada
+            'historial' => json_encode($this->datosParaPagra),
         ]);
     }
 
     public function Abonar4cantidad($cantidad)
     {
-        $cantidad = round(floatval($cantidad), 2);
+        $cantidad2 = round(floatval($cantidad), 2);
         $montoActual = round(floatval($this->ordenCompraSeleccionada->montoPagar), 2);
-        $nuevoMonto = round($montoActual - $cantidad, 2);
+        $nuevoMonto = round($montoActual - $cantidad2, 2);
         if (abs($nuevoMonto) < 0.01) {
             $nuevoMonto = 0.00;
         }
+        $archivoSubido = $this->archivoSubido ? $this->archivoSubido->store('archivosFacturacionProveedores', 'public') : null;
+        $this->datosParaPagra[] = [
+            'monto' => number_format($cantidad2, 2, '.', ''), // genera "1.30" como string
+            'Archivo' => $archivoSubido,
+        ];
         $this->ordenCompraSeleccionada->update([
             'montoPagar' => $nuevoMonto,
             'estado' => 0, // 0 = Pendiente
+            'historial' => json_encode($this->datosParaPagra),
         ]);
     }
+    public function viewOrden($idProyecto)
+    {
+        $proyecto = ordenCompra::find($idProyecto);
 
+        if ($proyecto === null) {
+            abort(404, 'proyecto no encontrado');
+        }
 
+        return redirect()->route('finanzas.verPagos.verPagosOrdenCompra', ['id' => $idProyecto]);
+    }
 }
