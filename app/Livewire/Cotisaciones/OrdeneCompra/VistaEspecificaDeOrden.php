@@ -18,31 +18,33 @@ class VistaEspecificaDeOrden extends Component
 
     public function mount($idCotisaciones)
     {
-        $this->cotisacion = Cotizacion::findOrFail($idCotisaciones);
+        $this->cotisacion = Cotizacion::find($idCotisaciones);
+
+        if (!$this->cotisacion) {
+            abort(404, 'Cotización no encontrada');
+        }
     }
+
     public function render()
     {
 
         $listas = ordenCompra::where('id_cotizacion', $this->cotisacion->id)
-        ->when($this->searchTerm, function ($query) {
-            $query->where(function ($q) {
-                $q->where('nombre', 'like', '%' . $this->searchTerm . '%')
-                    ->orWhere('estado', 'like', '%' . $this->searchTerm . '%');
-            });
-        })
-        ->when($this->statusFiltro != 0, function ($query) {
-            $query->where('estado', $this->statusFiltro);
-        })
-        ->orderBy('created_at', 'desc')
-        ->paginate(10); // Usar paginate() con el trait WithPagination
+            ->when($this->searchTerm, function ($query) {
+                $query->where(function ($q) {
+                    $q->where('nombre', 'like', '%' . $this->searchTerm . '%')
+                        ->orWhere('estado', 'like', '%' . $this->searchTerm . '%');
+                });
+            })
+            ->when($this->statusFiltro != 0, function ($query) {
+                $query->where('estado', $this->statusFiltro);
+            })
+            ->orderBy('created_at', 'desc')
+            ->paginate(10); // Usar paginate() con el trait WithPagination
 
-        return view('livewire.cotisaciones.ordene-compra.vista-especifica-de-orden',['listas' => $listas]);
+        return view('livewire.cotisaciones.ordene-compra.vista-especifica-de-orden', ['listas' => $listas]);
     }
 
-    public function search()
-    {
-        
-    }
+    public function search() {}
 
     public function cancelarOrdenoOmpra($id)
     {
@@ -51,7 +53,7 @@ class VistaEspecificaDeOrden extends Component
         $ordenVenta->update([
             'estado' => 3, // 1 = Liquidada
         ]);
-        
+
         $this->dispatch('refresh');
     }
 
@@ -70,5 +72,4 @@ class VistaEspecificaDeOrden extends Component
 
         return redirect()->route('finanzas.verPagos.verPagosOrdenCompra', ['id' => $idProyecto]);
     }
-
 }

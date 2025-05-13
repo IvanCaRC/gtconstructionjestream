@@ -109,9 +109,12 @@ class VistaEspecificaFichasTecnicas extends Component
         $especificaciones = json_decode($this->itemEspecifico->especificaciones, true);
 
         // Filtrar especificaciones vacías
-        $especificaciones = array_filter($especificaciones, function ($especificacion) {
-            return !empty($especificacion['enunciado']) || !empty($especificacion['concepto']);
-        });
+        $especificaciones = is_array($especificaciones) ? $especificaciones : [];
+
+$especificaciones = array_filter($especificaciones, function ($especificacion) {
+    return !empty($especificacion['enunciado']) || !empty($especificacion['concepto']);
+});
+
 
         if (!empty($especificaciones)) {
             $this->especificaciones = $especificaciones;

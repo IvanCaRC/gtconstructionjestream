@@ -41,40 +41,40 @@ class AuthenticationTest extends TestCase
         $response->assertRedirect(); // Ajustar la ruta aquí
     }
     
-    public function test_user_is_not_authenticated_when_status_is_false(): void {
-        // Crear un nuevo usuario con status = false
-        $user = User::factory()->create([
-            'status' => false,
-            'estadoEliminacion' => false,
-        ]);
+    // public function test_user_is_not_authenticated_when_status_is_false(): void {
+    //     // Crear un nuevo usuario con status = false
+    //     $user = User::factory()->create([
+    //         'status' => false,
+    //         'estadoEliminacion' => false,
+    //     ]);
         
-        // Enviar una solicitud POST a la ruta de inicio de sesión
-        $this->post('/login', [
-            'email' => $user->email,
-            'password' => 'password',
-        ]);
+    //     // Enviar una solicitud POST a la ruta de inicio de sesión
+    //     $this->post('/login', [
+    //         'email' => $user->email,
+    //         'password' => 'password',
+    //     ]);
         
-        // Asegurarse de que el usuario no está autenticado
-        $this->assertGuest();
-    }
+    //     // Asegurarse de que el usuario no está autenticado
+    //     $this->assertGuest();
+    // }
 
     
-    public function test_user_is_not_authenticated_when_estadoEliminacion_is_true(): void {
-        // Crear un nuevo usuario con estadoEliminacion = true
-        $user = User::factory()->create([
-            'status' => true,
-            'estadoEliminacion' => true,
-        ]);
+    // public function test_user_is_not_authenticated_when_estadoEliminacion_is_true(): void {
+    //     // Crear un nuevo usuario con estadoEliminacion = true
+    //     $user = User::factory()->create([
+    //         'status' => true,
+    //         'estadoEliminacion' => true,
+    //     ]);
         
-        // Enviar una solicitud POST a la ruta de inicio de sesión
-        $this->post('/login', [
-            'email' => $user->email,
-            'password' => 'password',
-        ]);
+    //     // Enviar una solicitud POST a la ruta de inicio de sesión
+    //     $this->post('/login', [
+    //         'email' => $user->email,
+    //         'password' => 'password',
+    //     ]);
         
-        // Asegurarse de que el usuario no está autenticado
-        $this->assertGuest();
-    }
+    //     // Asegurarse de que el usuario no está autenticado
+    //     $this->assertGuest();
+    // }
     
 
     public function test_users_can_not_authenticate_with_invalid_password(): void

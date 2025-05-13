@@ -105,7 +105,7 @@
 
                                                 <td>
                                                     <button class="btn btn-success btn-custom"
-                                                        wire:click="addToCart({{ $itemEspecifico->id }})"
+                                                      wire:click="agregarItemLista({{ $itemEspecifico->id }})"
                                                         title="Añadir a tu lista">
                                                         <i class="fas fa-plus"></i>
                                                     </button>
