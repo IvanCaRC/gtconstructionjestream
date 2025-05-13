@@ -130,7 +130,7 @@
                             class="form-control @error("bancarios.{$index}.clave") is-invalid @enderror"
                             wire:model.defer="bancarios.{{ $index }}.clave"
                             wire:blur="validateField('bancarios.{{ $index }}.clave')"
-                            placeholder="Ingresa la clave" oninput="validatePhoneInput(this)">
+                            placeholder="Ingresa la clabe" oninput="validatePhoneInput2(this)">
                         @error("bancarios.{$index}.clave")
                             <span class="text-danger">{{ $message }}</span>
                         @enderror
@@ -200,6 +200,17 @@
             }
         }
     </script>
+        <script>
+            function validatePhoneInput2(element) {
+                // Permitir solo números, espacios y el signo de +
+                element.value = element.value.replace(/[^0-9\s+]/g, '');
+    
+                // Limitar la longitud a 16 caracteres
+                if (element.value.length > 18) {
+                    element.value = element.value.substring(0, 18);
+                }
+            }
+        </script>
     <script>
         function cancelar() {
             // Llamar al método update2 de Livewire

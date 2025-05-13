@@ -44,6 +44,19 @@ class ListasCotizar extends Model
     {
         return $this->hasOneThrough(Cliente::class, Proyecto::class, 'id', 'id', 'proyecto_id', 'cliente_id');
     }
+    protected $table = 'listas_cotizars';
+
+
+
+    public function usuario()
+    {
+        return $this->belongsTo(User::class, 'usuario_id');
+    }
+
+    public function usuarioCompras()
+    {
+        return $this->belongsTo(User::class, 'id_usuario_compras');
+    }
 
 
 

@@ -1,5 +1,5 @@
 <?php
-
+//Ya se hicieron priebas
 namespace App\Livewire\Cliente;
 
 use App\Models\Cliente;

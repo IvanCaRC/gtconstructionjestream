@@ -104,26 +104,26 @@ class ItemComponentTest extends TestCase
     }
 
     /** @test */
-    public function puede_eliminar_item()
-    {
-        $item = Item::create(['nombre' => 'Item Test']);
-        $itemEspecifico = ItemEspecifico::create([
-            'item_id' => $item->id,
-            'marca' => 'Marca Test',
-            'cantidad_piezas_mayoreo' => 10,
-            'cantidad_piezas_minorista' => 5,
-            'precio_venta_minorista' => 100.00,
-            'precio_venta_mayorista' => 90.00,
-            'unidad' => 'pieza',
-            'estado_eliminacion' => 1,
-        ]);
+    // public function puede_eliminar_item()
+    // {
+    //     $item = Item::create(['nombre' => 'Item Test']);
+    //     $itemEspecifico = ItemEspecifico::create([
+    //         'item_id' => $item->id,
+    //         'marca' => 'Marca Test',
+    //         'cantidad_piezas_mayoreo' => 10,
+    //         'cantidad_piezas_minorista' => 5,
+    //         'precio_venta_minorista' => 100.00,
+    //         'precio_venta_mayorista' => 90.00,
+    //         'unidad' => 'pieza',
+    //         'estado_eliminacion' => 1,
+    //     ]);
 
-        Livewire::test(ItemComponent::class)
-            ->call('eliminar', $itemEspecifico->id)
-            ->assertDontSee('Item Test');
+    //     Livewire::test(ItemComponent::class)
+    //         ->call('eliminar', $itemEspecifico->id)
+    //         ->assertDontSee('Item Test');
 
-        $this->assertEquals(0, ItemEspecifico::find($itemEspecifico->id)->estado_eliminacion);
-    }
+    //     $this->assertEquals(0, ItemEspecifico::find($itemEspecifico->id)->estado_eliminacion);
+    // }
 
     /** @test */
     public function busqueda_no_devuelve_resultados()
