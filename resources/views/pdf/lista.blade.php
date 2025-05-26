@@ -11,6 +11,32 @@
     <meta charset="UTF-8">
     <title>{{ $title }}</title>
     <style>
+        @page {
+            margin-top: 0px;
+            /* Elimina margen superior para que la imagen esté más arriba */
+        }
+
+        header {
+            position: fixed;
+            top: 10;
+            left: 0;
+            width: 100%;
+            text-align: center;
+            margin-bottom: 10px;
+            /* Mantiene el espacio inferior */
+        }
+
+        img {
+            max-width: 700px;
+            height: auto;
+        }
+
+        body {
+            margin-top: 120px;
+            /* Ajusta el contenido para que no se superponga con el encabezado */
+        }
+    </style>
+    <style>
         body {
             font-family: DejaVu Sans, sans-serif;
             font-size: 12px;
@@ -64,9 +90,9 @@
 
     <!-- Espacio para membretado -->
     @if ($base64)
-        <div style="text-align: center; margin-bottom: 20px;">
-            <img src="{{ $base64 }}" style="max-width: 700px; height: auto;">
-        </div>
+        <header>
+            <img src="{{ $base64 }}" style="max-width: 750px; height: auto;">
+        </header>
     @endif
 
     <!-- Datos del Cliente -->
@@ -237,7 +263,8 @@
         <!-- Adicionales de la Obra -->
         <p class="section">Adicionales de la obra</p>
 
-        @if (array_filter((array) json_decode(Session::get('estructuras', '[]'), true)) && array_filter((array) json_decode(Session::get('cantidades', '[]'), true)))
+        @if (array_filter((array) json_decode(Session::get('estructuras', '[]'), true)) &&
+                array_filter((array) json_decode(Session::get('cantidades', '[]'), true)))
             <table>
                 <tr style="background-color: #f4f4f4;">
                     <th style="width: 50%; text-align: center; padding: 8px;">Elementos</th>
