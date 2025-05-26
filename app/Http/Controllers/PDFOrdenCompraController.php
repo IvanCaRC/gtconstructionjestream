@@ -13,10 +13,10 @@ use Barryvdh\DomPDF\Facade\Pdf;
 
 class PDFOrdenCompraController extends Controller
 {
-    
+
     public function generarOrdenCompraPDF($ordenComraId)
     {
-        
+
         $ordencompra = ordenCompra::findOrFail($ordenComraId);
         $provedorActual = Proveedor::findOrFail($ordencompra->id_provedor);
         $cotizacion = Cotizacion::findOrFail($ordencompra->id_cotizacion);
@@ -24,23 +24,19 @@ class PDFOrdenCompraController extends Controller
         $direccion = Direccion::find($proyecto->direccion_id);
 
         // Formatear la dirección eliminando los valores que contengan "Campo no recuperado"
-        $componentesDireccion = [
-            $direccion->calle,
-            $direccion->numero,
-            $direccion->colonia,
-            $direccion->municipio,
-            $direccion->estado,
-            $direccion->pais,
-            "CP: {$direccion->cp}"
-        ];
+        $componentes_direccion = array_filter([
+                $direccion->calle ?? '',
+                $direccion->numero ?? '',
+                $direccion->colonia ?? '',
+                $direccion->municipio ?? '',
+                $direccion->ciudad ?? '',
+                $direccion->estado ?? '',
+                $direccion->pais ?? '',
+                $direccion->cp ??  '',
+            ], fn($valor) => $valor !== 'Campo no recuperado' && trim($valor) !== '');
 
-        // Filtrar cualquier campo con el texto "Campo no recuperado"
-        $componentesDireccion = array_filter($componentesDireccion, function ($valor) {
-            return $valor !== "Campo no recuperado";
-        });
-
-        // Convertir la dirección en un string limpio
-        $direccionEntrega = !empty($componentesDireccion) ? implode(', ', $componentesDireccion) : "Dirección no registrada";
+            //Obtener la direccion en limpio
+            $direccionEntrega = !empty($componentes_direccion) ? implode(', ', $componentes_direccion) : "Dirección no registrada";
 
         $cliente = $proyecto->cliente; // Obtener el cliente desde el proyecto
         $clienteNombre = $cliente->nombre ?? 'Cliente no registrado';
@@ -86,7 +82,7 @@ class PDFOrdenCompraController extends Controller
             $items_cotizacion[] = [
                 'cantidad' => $item['cantidad'] ?? '-',
                 'nombre' => $item['nombreDeItem'] ?? $item_base?->nombre ?? 'Nombre no disponible',
-                'unidad'=>  $item['unidad'] ?? 'Unidad no especificada',
+                'unidad' =>  $item['unidad'] ?? 'Unidad no especificada',
                 'descripcion' => $item_base?->descripcion ?? 'Descripción no disponible',
                 'marca' => $item_especifico?->marca ?? 'Sin marca', // 🔹 Ahora agregamos la marca correctamente
                 'precio' => $item['precio_compra'] ?? $item_base?->precio ?? 0,

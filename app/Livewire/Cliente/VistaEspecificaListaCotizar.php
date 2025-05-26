@@ -441,7 +441,7 @@ class VistaEspecificaListaCotizar extends Component
         }
 
         // Generar el nombre de la nueva lista basándose en el número de listas del proyecto
-        $nombre = strtoupper(substr(strval($this->proyecto->nombre), 0, 1)) . 'LAC' . strval($$proyecto->listas + 1);
+        $nombre = 'LAC' ;
 
         // Actualizar la lista
         $lista->update([
