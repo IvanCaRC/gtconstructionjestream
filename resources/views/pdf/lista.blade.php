@@ -35,6 +35,12 @@
             margin-top: 120px;
             /* Ajusta el contenido para que no se superponga con el encabezado */
         }
+
+        .last-page {
+            page-break-before: always;
+            /* Fuerza un salto de página antes de mostrar este contenido */
+            position: relative;
+        }
     </style>
     <style>
         body {
