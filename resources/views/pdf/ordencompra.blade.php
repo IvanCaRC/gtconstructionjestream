@@ -98,15 +98,15 @@
 
 <body>
 
-    <div class="container">
-        <div class="membrete">
-            @if ($base64)
-                <header>
-                    <img src="{{ $base64 }}" style="max-width: 750px; height: auto;">
-                </header>
-            @endif
-        </div>
+    <div class="membrete">
+        @if ($base64)
+            <header>
+                <img src="{{ $base64 }}" style="max-width: 750px; height: auto;">
+            </header>
+        @endif
+    </div>
 
+    <div class="container">
         <div class="title">Orden de Compra - {{ $proveedorNombre }}</div>
 
         <div class="details">
