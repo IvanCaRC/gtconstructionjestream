@@ -283,15 +283,17 @@
 
     @endif
     {{-- Pie de pagina de la Lista a cotizar --}}
-    <div
-        style="position: fixed; bottom: 10px; width: 100%; text-align: center; font-size: 8px; color: #555; line-height: 1.1;">
-        <strong>Este documento contiene información privada, confidencial y privilegiada, pudiendo incluir secretos
-            comerciales y/o industriales protegidos mediante la Ley Federal de la Propiedad Industrial.</strong><br>
-        Nuestra marca, logotipos y slogan publicitarios están protegidos como derechos de autor ante el IMPI. Este
-        mensaje está dirigido únicamente al destinatario.<br>
-        Si usted no es la persona indicada, la lectura, uso, divulgación, reenvío o copia de esta información está
-        estrictamente prohibida por la legislación vigente.<br>
-        <strong>GTConstructions©, El soporte de tu obra©, Copyright todos los derechos reservados.</strong>
+    <div class="last-page">
+        <div
+            style="position: fixed; bottom: 10px; width: 100%; text-align: center; font-size: 8px; color: #555; line-height: 1.1;">
+            <strong>Este documento contiene información privada, confidencial y privilegiada, pudiendo incluir secretos
+                comerciales y/o industriales protegidos mediante la Ley Federal de la Propiedad Industrial.</strong><br>
+            Nuestra marca, logotipos y slogan publicitarios están protegidos como derechos de autor ante el IMPI. Este
+            mensaje está dirigido únicamente al destinatario.<br>
+            Si usted no es la persona indicada, la lectura, uso, divulgación, reenvío o copia de esta información está
+            estrictamente prohibida por la legislación vigente.<br>
+            <strong>GTConstructions©, El soporte de tu obra©, Copyright todos los derechos reservados.</strong>
+        </div>
     </div>
 
 </body>
